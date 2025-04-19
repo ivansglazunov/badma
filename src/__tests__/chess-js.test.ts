@@ -1,4 +1,4 @@
-import { Chess, ChessMove } from '../chess';
+import { Chess, ChessMove } from '../chess.js';
 
 describe('Chess', () => {
   let chess: Chess;

@@ -1,6 +1,6 @@
-import { Chess } from '../chess';
+import { Chess } from '../chess-engine.js';
 
-describe('Chess Game Over Tests', () => {
+describe('Chess Engine Game Over Tests', () => {
   let chess: Chess;
 
   beforeEach(() => {
