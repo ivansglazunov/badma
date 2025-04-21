@@ -262,7 +262,7 @@ export class ChessClient {
     debug('asyncCreate:response', result);
     return result;
   }
-  private async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
+  protected async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_create:fake', request);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
@@ -393,7 +393,7 @@ export class ChessClient {
       return { error: 'unknown response' };
     }
   }
-  private async _join(request: ChessClientRequest): Promise<ChessServerResponse> {
+  protected async _join(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_join:fake', request);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
@@ -570,7 +570,7 @@ export class ChessClient {
     debug('asyncLeave:response', result);
     return result;
   }
-  private async _leave(request: ChessClientRequest): Promise<ChessServerResponse> {
+  protected async _leave(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_leave:fake', request);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
@@ -740,7 +740,7 @@ export class ChessClient {
     debug('asyncMove:response', result);
     return result;
   }
-  private async _move(request: ChessClientRequest): Promise<ChessServerResponse> {
+  protected async _move(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_move:fake', request);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };

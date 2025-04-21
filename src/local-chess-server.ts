@@ -45,9 +45,10 @@ export class LocalChessServer extends ChessServer {
 
     protected async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
         debug('_create processing', request);
-        // User handling (simulated registration)
+        // User handling: Ensure user exists before proceeding
         if (request.userId && !(await this.__checkUser(request.userId))) {
-            await this.__addUser(request.userId);
+             debug(`Error: User ${request.userId} does not exist for create operation.`);
+            return { error: '!user' };
         }
 
         const gameId = request.gameId || uuidv4();
@@ -75,6 +76,7 @@ export class LocalChessServer extends ChessServer {
             const clientForJoin = await this.__registerClient(request.clientId);
             clientForJoin.userId = request.userId!;
             clientForJoin.gameId = gameId;
+            clientForJoin.joinId = joinId;
 
             // Initial client state comes from the new game data
             await this.__updateClientState(clientForJoin, {
@@ -92,11 +94,11 @@ export class LocalChessServer extends ChessServer {
                  await this.__deleteGame(gameId); // Clean up game if initial join fails
                  return { error: clientJoinResponse.error || 'Initial client join simulation failed' };
             }
-            joinId = clientJoinResponse.data.joinId!;
 
             await this.__addJoinRecord({
                 gameId: gameId, userId: request.userId!, side: request.side, role: request.role,
-                joinId: joinId, clientId: clientForJoin.clientId,
+                joinId: joinId,
+                clientId: clientForJoin.clientId,
                 createdAt: request.createdAt, updatedAt: request.updatedAt,
             });
 
@@ -107,7 +109,7 @@ export class LocalChessServer extends ChessServer {
              }
 
              // Prepare response data from the successful join simulation result
-             responseData = { ...clientJoinResponse.data, gameId: gameId };
+             responseData = { ...clientJoinResponse.data, gameId: gameId, joinId: joinId };
 
         } else {
             // Directly use server game state if no initial join
@@ -166,13 +168,16 @@ export class LocalChessServer extends ChessServer {
         }
 
         // Call client's asyncJoin to simulate action
+        // Assign the request joinId to the client instance BEFORE simulation
+        clientForThisJoin.joinId = request.joinId!;
         const clientJoinResponse = await clientForThisJoin.asyncJoin(request.side!, request.role!); // Assume side/role are valid
 
         if (clientJoinResponse.error || !clientJoinResponse.data) {
              debug('Error from internal client.asyncJoin simulation:', clientJoinResponse.error);
              return { error: clientJoinResponse.error || 'Internal client join simulation failed' };
         }
-        const joinId = clientJoinResponse.data.joinId!;
+        // const joinId = clientJoinResponse.data.joinId!; // DO NOT use joinId from fake simulation
+        const joinId = request.joinId!; // USE the joinId from the original request
 
         // Add the server-side join record
         await this.__addJoinRecord({
@@ -201,7 +206,7 @@ export class LocalChessServer extends ChessServer {
         const responseData: ChessServerResponse['data'] = {
             clientId: request.clientId,
             gameId: gameId,
-            joinId: joinId,
+            joinId: joinId, // Use the consistent joinId from request
             side: request.side!,
             role: request.role!,
             fen: game.fen, // Use current server FEN
@@ -211,7 +216,6 @@ export class LocalChessServer extends ChessServer {
         };
 
          debug(`_join RETURNING responseData with status: ${responseData.status} (Server game status is: ${serverStatus})`);
-         console.log('[Server _join] Returning Response Data:', JSON.stringify(responseData));
          return { data: responseData };
     }
 
@@ -274,14 +278,15 @@ export class LocalChessServer extends ChessServer {
         let serverFen = game.fen;
         const serverUpdatedAt = currentTime;
 
-        if (leavingJoin.role === ChessClientRole.Player) {
+        // Player leaving determines status change (surrender or revert to await)
+        if (leavingJoin.role === ChessClientRole.Player && leavingJoin.side !== 0) {
             if (game.status === 'continue') {
                  serverStatus = leavingJoin.side === 1 ? 'white_surrender' : 'black_surrender';
                  debug(`Player ${request.userId} (side ${leavingJoin.side}) left/surrendered game ${gameId}. Server status changed to ${serverStatus}`);
-            } else if (game.status === 'ready') {
-                 serverStatus = 'await';
-                 debug(`Player ${request.userId} (side ${leavingJoin.side}) left before game start. Server status reverted to ${serverStatus}`);
-            } else {
+            } else if (game.status === 'ready') { // If player leaves before first move, it's also a surrender
+                 serverStatus = leavingJoin.side === 1 ? 'white_surrender' : 'black_surrender';
+                 debug(`Player ${request.userId} (side ${leavingJoin.side}) left game ${gameId} from ready state. Server status changed to ${serverStatus}`);
+            } else { // Handle other states like await, checkmate, etc. (typically no status change on player leave)
                  debug(`Player ${request.userId} (side ${leavingJoin.side}) left game ${gameId} from state ${game.status}. Status unchanged.`);
             }
         } else {
