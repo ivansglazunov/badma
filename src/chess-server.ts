@@ -4,14 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 const debug = Debug('badma:chess-server');
 
-// Define the type for the Chess logic class constructor
-// We assume it has a constructor compatible with the `Chess` class from chess.ts
-type ChessLogicClassConstructor = typeof ChessClient;
+export abstract class ChessServer<T extends ChessClient> {
+    public _ChessLogicClass: new (server: ChessServer<T>) => T;
 
-export abstract class ChessServer {
-    protected _ChessLogicClass: ChessLogicClassConstructor;
-
-    constructor(ChessLogicClass: ChessLogicClassConstructor) {
+    constructor(ChessLogicClass: new (server: ChessServer<T>) => T) {
         this._ChessLogicClass = ChessLogicClass;
         debug('ChessServer initialized with ChessLogicClass:', ChessLogicClass.name);
     }
@@ -22,6 +18,7 @@ export abstract class ChessServer {
     protected abstract _join(request: ChessClientRequest): Promise<ChessServerResponse>;
     protected abstract _leave(request: ChessClientRequest): Promise<ChessServerResponse>;
     protected abstract _move(request: ChessClientRequest): Promise<ChessServerResponse>;
+    protected abstract _sync(request: ChessClientRequest): Promise<ChessServerResponse>;
 
     // --- Public API methods with validation ---
 
@@ -124,6 +121,27 @@ export abstract class ChessServer {
         } catch (error: any) {
             debug('API: move error', error);
             return { error: error.message || 'An unexpected error occurred during move' };
+        }
+    }
+
+    // --- New Sync Method --- //
+    async sync(request: ChessClientRequest): Promise<ChessServerResponse> {
+        debug('API: sync request received', request);
+        // Validation
+        if (!request.clientId) return { error: 'clientId is required' };
+        if (!request.userId) return { error: 'userId is required' };
+        if (!request.gameId) return { error: 'gameId is required for sync' };
+        if (!request.updatedAt || typeof request.updatedAt !== 'number') return { error: 'updatedAt (number) is required' };
+        if (!request.createdAt || typeof request.createdAt !== 'number') return { error: 'createdAt (number) is required' };
+        // Note: joinId is not required for sync request itself
+
+        try {
+            const response = await this._sync(request);
+            debug('API: sync response', response);
+            return response;
+        } catch (error: any) {
+            debug('API: sync error', error);
+            return { error: error.message || 'An unexpected error occurred during sync' };
         }
     }
 

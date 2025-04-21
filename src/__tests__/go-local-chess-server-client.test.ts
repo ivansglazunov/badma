@@ -55,11 +55,15 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
         blackClient.status = joinResponse.data!.status; // Update black client status
 
         // Manually sync white client status from server state
-        const serverGameState = await server.__getGameState(gameId);
-        expect(serverGameState?.status).toBe('ready');
-        whiteClient.status = serverGameState!.status;
-        whiteClient.fen = serverGameState!.fen; // Sync FEN too
-        blackClient.fen = serverGameState!.fen; // Sync FEN for black client too
+        // const serverGameState = await server.__getGameState(gameId);
+        // expect(serverGameState?.status).toBe('ready');
+        // whiteClient.status = serverGameState!.status;
+        // whiteClient.fen = serverGameState!.fen; // Sync FEN too
+        // blackClient.fen = serverGameState!.fen; // Sync FEN for black client too
+        await whiteClient.asyncSync(); // Use sync for initial state
+        await blackClient.asyncSync(); // Sync black too just in case
+        expect(whiteClient.status).toBe('ready');
+        expect(blackClient.status).toBe('ready');
 
         debug(`Game ready! White FEN: ${whiteClient.fen}, Black FEN: ${blackClient.fen}`);
 
@@ -132,10 +136,15 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
             currentStatus = moveResponse.data!.status;
             const updatedFen = moveResponse.data!.fen;
 
-            activeClient.fen = updatedFen;
-            activeClient.status = currentStatus;
-            opponentClient.fen = updatedFen; // Sync opponent
-            opponentClient.status = currentStatus; // Sync opponent
+            // Active client is already updated internally by asyncMove response
+            // We only need to sync the opponent
+            const syncResponse = await opponentClient.asyncSync();
+            expect(syncResponse.error).toBeUndefined();
+            expect(opponentClient.status).toBe(currentStatus);
+            expect(opponentClient.fen).toBe(updatedFen);
+            // Verify active client state just in case
+            expect(activeClient.status).toBe(currentStatus);
+            expect(activeClient.fen).toBe(updatedFen);
 
             debug(`[Move ${moveCount}] ✅ Move successful. New Status: ${currentStatus}, New FEN: ${updatedFen}`);
         }

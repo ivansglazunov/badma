@@ -5,11 +5,11 @@ import Debug from './debug.js';
 const debug = Debug('badma:local-client');
 
 export class LocalChessClient extends ChessClient {
-    private _server: ChessServer;
+    private _server: ChessServer<ChessClient>;
 
-    constructor(server: ChessServer) {
-        super(); // Call the base class constructor
-        this._server = server;
+    constructor(server: ChessServer<ChessClient>) {
+        super(server as any); // Call the base class constructor
+        this._server = server as any;
         debug('LocalChessClient initialized with server:', server.constructor.name);
     }
 
@@ -60,6 +60,20 @@ export class LocalChessClient extends ChessClient {
         } catch (error: any) {
             debug('LocalChessClient _move error calling server:', error);
             return { error: error.message || 'Server communication error during move' };
+        }
+    }
+
+    // --- Sync Implementation --- //
+    protected override async _sync(request: ChessClientRequest): Promise<ChessServerResponse> {
+        debug('LocalChessClient _sync sending request to server:', request);
+        try {
+            // Directly call the server's public sync method
+            const response = await this._server.sync(request);
+            debug('LocalChessClient _sync received response from server:', response);
+            return response;
+        } catch (error: any) {
+            debug('LocalChessClient _sync error calling server:', error);
+            return { error: error.message || 'Server communication error during sync' };
         }
     }
 }

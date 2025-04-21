@@ -2,6 +2,7 @@ import assert from 'assert';
 import { Chess, ChessPossibleSide, ChessSide, ChessStatus } from './chess.js';
 import Debug from './debug.js';
 import { v4 as uuidv4 } from 'uuid';
+import { ChessServer } from './chess-server.js';
 const debug = Debug('badma:client');
 
 export type ChessClientSide = 0 | 1 | 2;
@@ -66,9 +67,9 @@ export type ChessClientRequest = {
   createdAt: number; // !
 }
 
-export class ChessClient {
+export abstract class ChessClient {
   _chess: Chess;
-  constructor() {
+  constructor(server: ChessServer<ChessClient>) {
     this._chess = new Chess();
   }
   get chess() {
@@ -764,4 +765,112 @@ export class ChessClient {
     debug('_move:fake:result', result);
     return result;
   }
+
+  // --- Sync Methods --- //
+
+  /**
+   * Requests the current game state from the server and updates the client's local state.
+   * @returns {Promise<ChessClientResponse>} A response containing the updated client state or an error.
+   */
+  async asyncSync(): Promise<ChessClientResponse> {
+    debug('asyncSync initiated');
+    if (!this.clientId) return { error: '!this.clientId for sync' };
+    if (!this.userId) return { error: '!this.userId for sync' };
+    if (!this.gameId) return { error: '!this.gameId for sync' };
+
+    const request: ChessClientRequest = {
+        operation: 'sync',
+        clientId: this.clientId,
+        userId: this.userId,
+        gameId: this.gameId,
+        // joinId is not strictly needed in the request if clientId uniquely identifies the active connection on the server
+        updatedAt: Date.now(),
+        createdAt: this.createdAt, // Keep client's original creation time
+    };
+
+    try {
+        const response = await this._sync(request);
+        debug('asyncSync received server response:', response);
+
+        if (response.error) {
+            this.status = 'error'; // Optionally mark client status as error on sync failure
+            this._error(request, response);
+            return { error: response.error, recommend: response.recommend };
+        } else if (response.data) {
+            // Apply the received state
+            this.applySyncResponse(response.data);
+            // Return the new state of *this* client
+            const resultData: ChessClientResponse['data'] = {
+                clientId: this.clientId,
+                userId: this.userId,
+                gameId: this.gameId,
+                joinId: this.joinId,
+                side: this.side,
+                role: this.role,
+                fen: this.fen,
+                status: this.status,
+                updatedAt: this.updatedAt,
+                createdAt: this.createdAt,
+            };
+            debug('asyncSync successful, new client state:', resultData);
+            return { data: resultData };
+        } else {
+            debug('asyncSync received unknown response format');
+            return { error: 'Unknown response from server during sync' };
+        }
+    } catch (error: any) {
+        debug('asyncSync error calling _sync:', error);
+        this.status = 'error';
+        this._error(request, { error: error.message || 'Sync request failed' });
+        return { error: error.message || 'Sync request failed' };
+    }
+  }
+
+  /**
+   * Updates the client's internal state based on data received from a sync response.
+   * @param {ChessServerResponse['data']} data The data part of the server response.
+   * @protected
+   */
+  protected applySyncResponse(data: ChessServerResponse['data']): void {
+      debug(`Applying sync response:`, data);
+      // Add null/undefined check for data
+      if (!data) {
+          debug('Error: applySyncResponse called with null or undefined data.');
+          return; // Cannot apply null data
+      }
+
+      if (data.gameId !== this.gameId) {
+          debug(`Warning: Sync response gameId ${data.gameId} differs from client gameId ${this.gameId}`);
+          // Potentially handle this error state, for now just log it.
+          // Maybe update this.gameId? Or throw error?
+      }
+      if (data.clientId !== this.clientId) {
+          debug(`Warning: Sync response clientId ${data.clientId} differs from client clientId ${this.clientId}`);
+      }
+
+      // --- Update core state --- //
+      if (this.fen !== data.fen) {
+          debug(`Sync updating FEN from ${this.fen} to ${data.fen}`);
+          this.fen = data.fen; // This implicitly updates the internal chess.js instance
+      } else {
+          debug(`Sync FEN matches, no update.`);
+      }
+      this.status = data.status;
+      this.side = data.side ?? 0; // Default to spectator if undefined
+      this.role = data.role ?? ChessClientRole.Anonymous; // Default to Anonymous if undefined
+      this.joinId = data.joinId; // Can be undefined if not joined/left
+      this.updatedAt = data.updatedAt;
+      // this.createdAt remains the client's creation time
+
+      debug(`Client state after applySyncResponse: side=${this.side}, role=${this.role}, joinId=${this.joinId}, status=${this.status}, fen=${this.fen}`);
+  }
+
+  /**
+   * Abstract method to be implemented by subclasses for handling the sync request.
+   * @param {ChessClientRequest} request The sync request object.
+   * @returns {Promise<ChessServerResponse>} The server's response.
+   * @protected
+   * @abstract
+   */
+  protected abstract _sync(request: ChessClientRequest): Promise<ChessServerResponse>;
 }

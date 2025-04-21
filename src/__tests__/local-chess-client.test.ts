@@ -12,7 +12,7 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
         debug('Starting Fool\'s Mate test');
 
         // 1. Setup Server and Clients
-        const server = new LocalChessServer(ChessClient); // Use base ChessClient for server logic
+        const server = new LocalChessServer(ChessClient); // Pass LocalChessClient constructor
 
         // ---> ADD USERS TO SERVER BEFORE CLIENT OPERATIONS <---
         await server.__addUser('user-white-fools');
@@ -55,9 +55,11 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
         expect(whiteClient.status).toBe('ready');
         // We also need to update black's status, normally this happens via events/sync,
         // but for this test, let's manually sync it based on server state
-        const serverGameState = await server.__getGameState(gameId);
-        expect(serverGameState?.status).toBe('ready');
-        blackClient.status = serverGameState!.status;
+        // const serverGameState = await server.__getGameState(gameId);
+        // expect(serverGameState?.status).toBe('ready');
+        // blackClient.status = serverGameState!.status;
+        const syncResponseBlack = await blackClient.asyncSync(); // Use asyncSync instead of manual update
+        expect(syncResponseBlack.error).toBeUndefined();
         expect(blackClient.status).toBe('ready');
 
         // 4. Play Fool's Mate
@@ -66,41 +68,60 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
         let moveResponse = await whiteClient.asyncMove({ from: 'f2', to: 'f3' });
         expect(moveResponse.error).toBeUndefined();
         expect(moveResponse.data?.status).toBe('continue');
-        // Update clients based on response FEN/status
-        whiteClient.fen = moveResponse.data!.fen;
-        whiteClient.status = moveResponse.data!.status;
-        blackClient.fen = moveResponse.data!.fen;
-        blackClient.status = moveResponse.data!.status;
+        // Update clients based on response FEN/status - REMOVED MANUAL SYNC
+        // whiteClient.fen = moveResponse.data!.fen;
+        // whiteClient.status = moveResponse.data!.status;
+        // blackClient.fen = moveResponse.data!.fen;
+        // blackClient.status = moveResponse.data!.status;
+        // Sync black client after white's move
+        await blackClient.asyncSync();
+        expect(blackClient.status).toBe('continue');
+        expect(blackClient.fen).toBe(whiteClient.fen); // White client updated internally
 
         // Move 1: Black e7-e5
         debug('Move 1: Black e7-e5');
         moveResponse = await blackClient.asyncMove({ from: 'e7', to: 'e5' });
         expect(moveResponse.error).toBeUndefined();
         expect(moveResponse.data?.status).toBe('continue');
-        whiteClient.fen = moveResponse.data!.fen;
-        whiteClient.status = moveResponse.data!.status;
-        blackClient.fen = moveResponse.data!.fen;
-        blackClient.status = moveResponse.data!.status;
+        // REMOVED MANUAL SYNC
+        // whiteClient.fen = moveResponse.data!.fen;
+        // whiteClient.status = moveResponse.data!.status;
+        // blackClient.fen = moveResponse.data!.fen;
+        // blackClient.status = moveResponse.data!.status;
+        // Sync white client after black's move
+        await whiteClient.asyncSync();
+        expect(whiteClient.status).toBe('continue');
+        expect(whiteClient.fen).toBe(blackClient.fen);
 
         // Move 2: White g2-g4
         debug('Move 2: White g2-g4');
         moveResponse = await whiteClient.asyncMove({ from: 'g2', to: 'g4' });
         expect(moveResponse.error).toBeUndefined();
         expect(moveResponse.data?.status).toBe('continue');
-        whiteClient.fen = moveResponse.data!.fen;
-        whiteClient.status = moveResponse.data!.status;
-        blackClient.fen = moveResponse.data!.fen;
-        blackClient.status = moveResponse.data!.status;
+        // REMOVED MANUAL SYNC
+        // whiteClient.fen = moveResponse.data!.fen;
+        // whiteClient.status = moveResponse.data!.status;
+        // blackClient.fen = moveResponse.data!.fen;
+        // blackClient.status = moveResponse.data!.status;
+        // Sync black client after white's move
+        await blackClient.asyncSync();
+        expect(blackClient.status).toBe('continue');
+        expect(blackClient.fen).toBe(whiteClient.fen);
 
         // Move 2: Black d8-h4# (Checkmate)
         debug('Move 2: Black d8-h4#');
         moveResponse = await blackClient.asyncMove({ from: 'd8', to: 'h4' });
         expect(moveResponse.error).toBeUndefined();
         expect(moveResponse.data?.status).toBe('checkmate');
-        whiteClient.fen = moveResponse.data!.fen;
-        whiteClient.status = moveResponse.data!.status;
-        blackClient.fen = moveResponse.data!.fen;
-        blackClient.status = moveResponse.data!.status;
+        // REMOVED MANUAL SYNC
+        // whiteClient.fen = moveResponse.data!.fen;
+        // whiteClient.status = moveResponse.data!.status;
+        // blackClient.fen = moveResponse.data!.fen;
+        // blackClient.status = moveResponse.data!.status;
+        // Sync white client after black's move
+        await whiteClient.asyncSync();
+        expect(whiteClient.status).toBe('checkmate');
+        expect(whiteClient.fen).toBe(blackClient.fen);
 
         // 5. Verify Final State
         debug('Verifying final state...');
@@ -122,7 +143,7 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
 
     it('should update client state correctly after leave/surrender', async () => {
         debug('Starting client state after leave test');
-        const server = new LocalChessServer(ChessClient);
+        const server = new LocalChessServer(ChessClient); // Pass LocalChessClient constructor
         await server.__addUser('user-leaver');
         await server.__addUser('user-opponent');
 
@@ -147,7 +168,8 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
         opponentClient.gameId = gameId;
         await opponentClient.asyncJoin(2, ChessClientRole.Player);
         // Manually sync status after opponent joins for leaver
-        leavingClient.status = (await server.__getGameState(gameId))!.status;
+        // leavingClient.status = (await server.__getGameState(gameId))!.status;
+        await leavingClient.asyncSync(); // Sync leaver after opponent joins
         expect(leavingClient.status).toBe('ready');
 
         // Leaver leaves/surrenders

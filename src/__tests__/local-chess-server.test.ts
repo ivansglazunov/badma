@@ -3,6 +3,7 @@ import { Chess } from '../chess.js'; // Using the actual Chess class for testing
 import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus } from '../chess-client.js';
 import { v4 as uuidv4 } from 'uuid';
 import Debug from '../debug.js'; // Import the Debug function
+import { LocalChessClient } from '../local-chess-client.js'; // Import LocalChessClient for constructor
 
 const debug = Debug('badma:test:local-server'); // Create a debug instance for this test file
 
@@ -15,7 +16,7 @@ describe('LocalChessServer', () => {
 
     // Reset server state before each test
     beforeEach(async () => {
-        server = new LocalChessServer(ChessClient);
+        server = new LocalChessServer(ChessClient); // Pass LocalChessClient constructor
         // No need to reset specific fields, just create a new instance
     });
 

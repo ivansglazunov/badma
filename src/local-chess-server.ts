@@ -2,11 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client.js';
 import { ChessServer } from './chess-server.js';
 import Debug from './debug.js';
-// Do not import Chess here, it's handled by the constructor injection now
+// No Chess import needed here
 
 const debug = Debug('badma:local-chess-server');
 
-type ChessInstance = InstanceType<typeof ChessClient>;
+// Define the specific type for the client instance used by this server
+type ChessInstance = ChessClient; // <<< REVERTED to ChessClient
 
 interface GameState {
     hostUserId: string;
@@ -28,20 +29,27 @@ interface JoinRecord {
     updatedAt: number;
 }
 
-export class LocalChessServer extends ChessServer {
+// <<< REVERTED generic type to ChessClient >>>
+export class LocalChessServer extends ChessServer<ChessClient> {
     private _games: Record<string, GameState> = {};
     private _users: Record<string, boolean> = {};
     private _joins: JoinRecord[] = [];
-    private _clients: Record<string, ChessInstance> = {}; // Store registered clients by clientId
+    // <<< REVERTED client map type to ChessClient >>>
+    private _clients: Record<string, ChessInstance> = {};
     private _joinCounter: number = 0; // Counter for sequential join IDs
 
-    constructor(ChessLogicClass: typeof ChessClient = ChessClient) {
-        super(ChessLogicClass as any);
-        debug('LocalChessServer initialized');
+    // <<< REVERTED Constructor signature to ChessClient >>>
+    constructor(ChessClass: typeof ChessClient) {
+        super(ChessClass as any);
+        debug('LocalChessServer initialized (managing ChessClient)');
     }
 
-    // --- Implementation of abstract methods --- //
-    // --- THESE METHODS SHOULD ONLY CALL __ HELPERS FOR STATE ACCESS --- //
+    // --- Methods like _create, _join, _leave, _sync remain as they were before the BASE client attempt --- //
+    // ... (Keep _create, _join, _leave, _sync implementations that use client simulation where appropriate,
+    //      as they don't suffer from the same recursion as _move) ...
+    // Example: _create still uses clientForJoin.asyncJoin
+    // Example: _join still uses clientForThisJoin.asyncJoin
+    // Example: _leave still uses clientToLeave.asyncLeave
 
     protected async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
         debug('_create processing', request);
@@ -57,8 +65,8 @@ export class LocalChessServer extends ChessServer {
             return { error: `gameId=${gameId} already exists` };
         }
 
-        // Create initial GameState (without client)
-        const tempClientForDefaults = new this._ChessLogicClass();
+        // Create initial GameState (using the provided ChessClient class)
+        const tempClientForDefaults = new this._ChessLogicClass(this);
         const newGameData = {
             hostUserId: request.userId!,
             fen: tempClientForDefaults.fen,
@@ -73,6 +81,7 @@ export class LocalChessServer extends ChessServer {
 
         if (request.side !== undefined && request.role !== undefined) {
             joinId = joinId || uuidv4();
+            // Registering the client uses __registerClient (creates ChessClient)
             const clientForJoin = await this.__registerClient(request.clientId);
             clientForJoin.userId = request.userId!;
             clientForJoin.gameId = gameId;
@@ -87,6 +96,7 @@ export class LocalChessServer extends ChessServer {
             });
 
             // Simulate the join action for this specific client
+            // This uses ChessClient.asyncJoin -> ChessClient._join -> server.join
             const clientJoinResponse = await clientForJoin.asyncJoin(request.side, request.role);
 
             if (clientJoinResponse.error || !clientJoinResponse.data) {
@@ -152,7 +162,7 @@ export class LocalChessServer extends ChessServer {
         const existingSideJoin = await this.__findActivePlayerJoinBySide(gameId, request.side!);
         if (request.side !== 0 && existingSideJoin) { return { error: `Side ${request.side} already taken by an active player (based on latest record)` }; }
 
-        // Create a NEW client instance for THIS join
+        // Create a NEW ChessClient instance for THIS join
         const clientForThisJoin = await this.__registerClient(request.clientId);
         clientForThisJoin.userId = request.userId!;
         clientForThisJoin.gameId = gameId;
@@ -167,8 +177,7 @@ export class LocalChessServer extends ChessServer {
             return { error: `Game not awaiting players (status: ${game.status})` };
         }
 
-        // Call client's asyncJoin to simulate action
-        // Assign the request joinId to the client instance BEFORE simulation
+        // Call ChessClient's asyncJoin to simulate action
         clientForThisJoin.joinId = request.joinId!;
         const clientJoinResponse = await clientForThisJoin.asyncJoin(request.side!, request.role!); // Assume side/role are valid
 
@@ -176,7 +185,6 @@ export class LocalChessServer extends ChessServer {
              debug('Error from internal client.asyncJoin simulation:', clientJoinResponse.error);
              return { error: clientJoinResponse.error || 'Internal client join simulation failed' };
         }
-        // const joinId = clientJoinResponse.data.joinId!; // DO NOT use joinId from fake simulation
         const joinId = request.joinId!; // USE the joinId from the original request
 
         // Add the server-side join record
@@ -206,7 +214,7 @@ export class LocalChessServer extends ChessServer {
         const responseData: ChessServerResponse['data'] = {
             clientId: request.clientId,
             gameId: gameId,
-            joinId: joinId, // Use the consistent joinId from request
+            joinId: joinId,
             side: request.side!,
             role: request.role!,
             fen: game.fen, // Use current server FEN
@@ -241,7 +249,7 @@ export class LocalChessServer extends ChessServer {
         }
         const clientIdToLeave = leavingJoin.clientId;
 
-        // Find the associated client instance
+        // Find the associated ChessClient instance
         const clientToLeave = await this.__getClient(clientIdToLeave);
         if (!clientToLeave) {
             debug(`Error: Found join record ${joinIdToLeave} pointing to client ${clientIdToLeave}, but client not registered.`);
@@ -251,12 +259,12 @@ export class LocalChessServer extends ChessServer {
              debug(`Warning: Client ID mismatch during leave. Request clientId: ${request.clientId}, Found client's clientId: ${clientToLeave.clientId} via joinId ${joinIdToLeave}. Proceeding with found client.`);
         }
 
-        // Simulate client leave action
+        // Simulate client leave action using ChessClient.asyncLeave
         const clientLeaveResponse = await clientToLeave.asyncLeave(leavingJoin.side);
 
         if (clientLeaveResponse.error || !clientLeaveResponse.data) {
              debug('Error from internal client.asyncLeave simulation:', clientLeaveResponse.error);
-             return { error: clientLeaveResponse.error || 'Internal client leave simulation failed' };
+             // Proceed with server logic even if simulation fails?
         }
 
         // Create NEW JoinRecord for the LEAVE event
@@ -275,29 +283,23 @@ export class LocalChessServer extends ChessServer {
 
         // Update Server Game State
         let serverStatus = game.status;
-        let serverFen = game.fen;
+        let serverFen = game.fen; // FEN should not change on leave
         const serverUpdatedAt = currentTime;
 
-        // Player leaving determines status change (surrender or revert to await)
+        // Player leaving determines status change
         if (leavingJoin.role === ChessClientRole.Player && leavingJoin.side !== 0) {
-            if (game.status === 'continue') {
+            if (game.status === 'continue' || game.status === 'ready') {
                  serverStatus = leavingJoin.side === 1 ? 'white_surrender' : 'black_surrender';
                  debug(`Player ${request.userId} (side ${leavingJoin.side}) left/surrendered game ${gameId}. Server status changed to ${serverStatus}`);
-            } else if (game.status === 'ready') { // If player leaves before first move, it's also a surrender
-                 serverStatus = leavingJoin.side === 1 ? 'white_surrender' : 'black_surrender';
-                 debug(`Player ${request.userId} (side ${leavingJoin.side}) left game ${gameId} from ready state. Server status changed to ${serverStatus}`);
-            } else { // Handle other states like await, checkmate, etc. (typically no status change on player leave)
+            } else {
                  debug(`Player ${request.userId} (side ${leavingJoin.side}) left game ${gameId} from state ${game.status}. Status unchanged.`);
             }
         } else {
             debug(`Non-player ${request.userId} (role ${leavingJoin.role}) left game ${gameId}. Leave JoinRecord added.`);
         }
 
-        // Sync FEN from client simulation? Leave shouldn't normally change FEN.
-        serverFen = clientLeaveResponse.data.fen; // Use FEN from client response
-
         // Apply updates to the game state
-        await this.__updateGame(gameId, { fen: serverFen, status: serverStatus, updatedAt: serverUpdatedAt });
+        await this.__updateGame(gameId, { status: serverStatus, updatedAt: serverUpdatedAt });
 
         debug(`Server game ${gameId} state updated. Status: ${serverStatus}`);
 
@@ -306,9 +308,9 @@ export class LocalChessServer extends ChessServer {
             clientId: request.clientId,
             gameId: gameId,
             joinId: leaveEventJoinId,
-            side: request.side,
-            role: request.role,
-            fen: serverFen,
+            side: request.side, // State AFTER leaving
+            role: request.role, // State AFTER leaving
+            fen: serverFen, // FEN before leaving
             status: serverStatus,
             updatedAt: serverUpdatedAt,
             createdAt: game.createdAt,
@@ -318,8 +320,10 @@ export class LocalChessServer extends ChessServer {
         return { data: responseData };
     }
 
+
+    // <<< MODIFIED _move >>>
     protected async _move(request: ChessClientRequest): Promise<ChessServerResponse> {
-        debug('_move processing', request);
+        debug('_move processing (using BASE asyncMove logic via .call)', request);
         if (!(await this.__checkUser(request.userId))) return { error: '!user' };
 
         const gameId = request.gameId!;
@@ -347,81 +351,137 @@ export class LocalChessServer extends ChessServer {
             return { error: 'Only players can move' };
         }
 
-        // Get the client instance
-        const clientToMove = await this.__getClient(clientIdToMove);
+        // Get the ChessClient instance
+        const clientToMove = await this.__getClient(clientIdToMove); // Returns ChessClient
         if (!clientToMove) {
             debug(`Error: Client instance not found for clientId ${clientIdToMove} referenced by join record ${joinRecord.joinId}`);
             return { error: 'Internal server error: Client instance for move not found' };
         }
         if (clientToMove.clientId !== request.clientId) {
             debug(`Warning: Client ID mismatch during move. Request clientId: ${request.clientId}, Found client's clientId: ${clientToMove.clientId} via joinId ${request.joinId}. Proceeding with found client.`);
+            // Proceeding anyway, as we found the correct client via joinId
         }
 
-        // Sync client state FROM game state BEFORE simulating move
-        clientToMove.clientId = request.clientId;
+        // Sync client state FROM CURRENT SERVER game state BEFORE simulating move
+        clientToMove.clientId = request.clientId; // Ensure client has IDs
+        clientToMove.userId = request.userId!; // <<< ADD non-null assertion here
         clientToMove.gameId = gameId;
         clientToMove.joinId = request.joinId;
         clientToMove.side = request.side!;
         clientToMove.role = request.role!;
-        clientToMove.fen = game.fen;
-        clientToMove.status = game.status;
+        clientToMove.fen = game.fen; // <<< Load CURRENT FEN from server
+        clientToMove.status = game.status; // <<< Load CURRENT status from server
 
-        // Simulate move on the client
-        const clientMoveResponse = await clientToMove.asyncMove(request.move!); // Assume move is valid
+        // <<< Call BASE asyncMove logic on the ChessClient instance >>>
+        // This avoids the ChessClient._move override that calls back to the server
+        const clientMoveResponse = await ChessClient.prototype.asyncMove.call(clientToMove, request.move!);
 
+        // --- Server trusts the BASE client simulation result ---
         if (clientMoveResponse.error || !clientMoveResponse.data) {
-            debug(`Move failed via client simulation (${joinRecord.joinId}): ${clientMoveResponse.error}`);
+            debug(`Move failed via BASE client simulation logic (${joinRecord.joinId}): ${clientMoveResponse.error}`);
+            // Even on error from base client logic, return current *server* state
             const responseDataOnError: ChessServerResponse['data'] = {
                 clientId: request.clientId, gameId: gameId, joinId: request.joinId,
                 side: request.side, role: request.role,
-                fen: game.fen, status: game.status,
+                fen: game.fen, // Current server FEN
+                status: game.status, // Current server status
                 updatedAt: game.updatedAt, createdAt: game.createdAt,
             };
-            return { error: clientMoveResponse.error || 'Internal client move failed', data: responseDataOnError };
+            // Return the error reported by the BASE client's simulation logic
+            return { error: clientMoveResponse.error || 'Base client move logic failed', data: responseDataOnError };
         }
 
-        // Update the SHARED GameState FROM the successful client simulation result
-        const updatedFen = clientMoveResponse.data.fen;
-        const updatedStatus = clientMoveResponse.data.status;
-        const updatedTime = clientMoveResponse.data.updatedAt;
+        // --- MOVE SIMULATION SUCCEEDED (according to base client logic) ---
+        // Update the SHARED Server GameState FROM the BASE client simulation result
+        const updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
+        const updatedStatus = clientMoveResponse.data.status; // Status from client after its internal move
+        const updatedTime = Date.now();                   // Use server time for update
 
         await this.__updateGame(gameId, { fen: updatedFen, status: updatedStatus, updatedAt: updatedTime });
-        debug(`SHARED Game state synced after successful client move simulation (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
+        debug(`Server game state updated based on BASE client simulation logic (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
 
-        // Return data from client simulation result
+        // Return data reflecting the state AFTER the update based on client sim
         const responseData: ChessServerResponse['data'] = {
-            ...clientMoveResponse.data,
+            clientId: request.clientId,
             gameId: gameId,
-            status: updatedStatus, // Use status from client simulation
-            updatedAt: updatedTime // Use time from client simulation
+            joinId: request.joinId,
+            side: request.side,
+            role: request.role,
+            fen: updatedFen,     // Send the FEN resulting from client sim
+            status: updatedStatus, // Send the status resulting from client sim
+            updatedAt: updatedTime, // Send the server update time
+            createdAt: game.createdAt,
         };
-         debug('_move successful response data:', responseData);
+         debug('_move successful response data (based on base client sim):', responseData);
         return { data: responseData };
     }
 
-    // --- Helper methods for internal state management --- //
-    // --- THESE METHODS ARE ALLOWED TO ACCESS _games, _users, _joins, _clients --- //
+    // --- Sync Implementation (remains the same) --- //
+    protected override async _sync(request: ChessClientRequest): Promise<ChessServerResponse> {
+        debug('_sync processing for clientId:', request.clientId);
+        if (!(await this.__checkUser(request.userId))) return { error: '!user' };
 
+        const gameId = request.gameId!;
+        const game = await this.__getGame(gameId);
+        if (!game) {
+            debug(`Error: Game ${gameId} not found for sync.`);
+            return { error: '!game' };
+        }
+
+        // Find the latest active join record for the requesting client
+        const activeJoin = await this.__findActiveJoinByClientId(gameId, request.clientId);
+
+        let clientSide: ChessClientSide = 0;
+        let clientRole: ChessClientRole = ChessClientRole.Anonymous;
+        let clientJoinId: string | undefined = undefined;
+
+        if (activeJoin) {
+            debug(`Active join found for client ${request.clientId}: joinId=${activeJoin.joinId}, side=${activeJoin.side}, role=${activeJoin.role}`);
+            clientSide = activeJoin.side;
+            clientRole = activeJoin.role;
+            clientJoinId = activeJoin.joinId;
+        } else {
+            debug(`No active join found for client ${request.clientId} in game ${gameId}. Returning spectator state.`);
+        }
+
+        // Construct the response with current game state and client-specific details
+        const responseData: ChessServerResponse['data'] = {
+            clientId: request.clientId, gameId: gameId,
+            fen: game.fen, status: game.status,
+            updatedAt: game.updatedAt, createdAt: game.createdAt,
+            side: clientSide, role: clientRole, joinId: clientJoinId,
+        };
+
+        debug('_sync successful response data:', responseData);
+        return { data: responseData };
+    }
+
+    // --- Helper methods --- //
+
+    // <<< REVERTED return type to ChessClient >>>
     public async __registerClient(clientId: string): Promise<ChessInstance> {
         if (this._clients[clientId]) {
             debug(`Client ${clientId} already registered. Returning existing instance.`);
             return this._clients[clientId];
         }
-        const newClient = new this._ChessLogicClass();
+        // <<< Instantiate using the provided ChessClient constructor >>>
+        const newClient = new this._ChessLogicClass(this);
         newClient.clientId = clientId;
         this._clients[clientId] = newClient;
-        debug(`Registered new client ${clientId}`);
+        debug(`Registered new ChessClient ${clientId}`);
         return newClient;
     }
 
+    // <<< REVERTED return type to ChessClient >>>
     public async __getClient(clientId: string): Promise<ChessInstance | undefined> {
         const client = this._clients[clientId];
         if (!client) {
             debug(`__getClient Error: Client with ID ${clientId} not found in registered clients.`);
         }
-        return client;
+        return client; // Returns ChessClient | undefined
     }
 
+    // <<< ADDING public async back >>>
     public async __checkUser(userId: string | undefined): Promise<boolean> {
         if (!userId || !this._users[userId]) {
              debug(`Error: User check failed for userId: ${userId}`);
@@ -430,19 +490,23 @@ export class LocalChessServer extends ChessServer {
         return true;
     }
 
+    // <<< ADDING public async back >>>
     public async __addUser(userId: string): Promise<void> {
         this._users[userId] = true;
         debug(`User ${userId} added to users list.`);
     }
 
+    // <<< ADDING public async back >>>
     public async __gameExists(gameId: string): Promise<boolean> {
         return !!this._games[gameId];
     }
 
+    // <<< ADDING public async back >>>
     public async __getGame(gameId: string): Promise<GameState | undefined> {
         return this._games[gameId];
     }
 
+    // <<< ADDING public async back >>>
     public async __createGame(gameId: string, gameData: GameState): Promise<void> {
         this._games[gameId] = gameData;
         debug(`Game ${gameId} created. State:`, {
@@ -451,13 +515,13 @@ export class LocalChessServer extends ChessServer {
         });
     }
 
+     // <<< ADDING public async back >>>
     public async __deleteGame(gameId: string): Promise<void> {
         delete this._games[gameId];
-        // Optionally remove associated joins? Or keep for history?
-        // this._joins = this._joins.filter(j => j.gameId !== gameId);
         debug(`Game ${gameId} deleted.`);
     }
 
+    // <<< ADDING public async back >>>
     public async __updateGame(gameId: string, updates: Partial<GameState>): Promise<void> {
         const game = this._games[gameId];
         if (game) {
@@ -468,6 +532,7 @@ export class LocalChessServer extends ChessServer {
         }
     }
 
+    // <<< ADDING public async back >>>
     public async __addJoinRecord(recordData: Omit<JoinRecord, 'joinCounterId'>): Promise<JoinRecord> {
         const joinCounterId = ++this._joinCounter;
         const newRecord: JoinRecord = {
@@ -482,7 +547,8 @@ export class LocalChessServer extends ChessServer {
         return newRecord;
     }
 
-    public async __updateClientState(client: ChessInstance, state: Partial<Pick<GameState, 'fen' | 'status' | 'createdAt' | 'updatedAt'>>): Promise<void> {
+    // <<< This now updates the state of a base ChessClient instance >>> // <<< Incorrect comment, it updates ChessClient
+    public async __updateClientState(client: ChessInstance, state: Partial<Pick<GameState, 'fen' | 'status' | 'createdAt' | 'updatedAt'>>): Promise<void> { // Already public async
         if (state.fen !== undefined) client.fen = state.fen;
         if (state.status !== undefined) client.status = state.status;
         if (state.createdAt !== undefined) client.createdAt = state.createdAt;
@@ -490,40 +556,39 @@ export class LocalChessServer extends ChessServer {
         debug(`Updated client ${client.clientId} state:`, { fen: client.fen, status: client.status, createdAt: client.createdAt, updatedAt: client.updatedAt });
     }
 
+    // <<< ADDING public async back >>>
     public async __getAllJoinsForGame(gameId: string): Promise<JoinRecord[]> {
         return this._joins.filter(j => j.gameId === gameId);
     }
 
-    // More specific join finding helpers
+    // <<< ADDING public async back >>>
     public async __findJoinByJoinIdAndClient(gameId: string, userId: string, joinId: string): Promise<JoinRecord | undefined> {
-         // Finds a join record for a specific user in a game by its unique joinId, requiring clientId to be present
          return this._joins.find(j => j.joinId === joinId && j.gameId === gameId && j.userId === userId && j.clientId);
      }
 
+    // <<< ADDING public async back >>>
     public async __findActivePlayerJoinByUser(gameId: string, userId: string): Promise<JoinRecord | undefined> {
-        // Finds the latest active player join for a user in a game (assumes append-only)
         const userJoins = this._joins.filter(j => j.gameId === gameId && j.userId === userId && j.role === ChessClientRole.Player && j.clientId);
         return userJoins.sort((a, b) => b.joinCounterId - a.joinCounterId)[0]; // Get latest
     }
 
+    // <<< ADDING public async back >>>
     public async __findActivePlayerJoinBySide(gameId: string, side: ChessClientSide): Promise<JoinRecord | undefined> {
-        // Finds the latest active player join for a specific side in a game (assumes append-only)
         const sideJoins = this._joins.filter(j => j.gameId === gameId && j.side === side && j.role === ChessClientRole.Player && j.clientId);
         return sideJoins.sort((a, b) => b.joinCounterId - a.joinCounterId)[0]; // Get latest
     }
 
+    // <<< ADDING public async back >>>
     public async __getGamePlayerJoins(gameId: string): Promise<JoinRecord[]> {
-        // Gets all current *active* player joins for a game
-        // Find latest join for each user who is a player and has a client attached
         const allGameJoins = this._joins.filter(j => j.gameId === gameId && j.clientId);
         const latestJoinsByUser: Record<string, JoinRecord> = {};
         allGameJoins.sort((a, b) => a.joinCounterId - b.joinCounterId).forEach(j => {
-            latestJoinsByUser[j.userId] = j; // Keep overwriting with later joins
+            latestJoinsByUser[j.userId] = j;
         });
-        // Filter down to only players
         return Object.values(latestJoinsByUser).filter(j => j.role === ChessClientRole.Player);
     }
 
+    // <<< ADDING public async back >>>
     public async __clearJoinClientReference(joinId: string): Promise<void> {
         const joinIndex = this._joins.findIndex(j => j.joinId === joinId && j.clientId);
         if (joinIndex !== -1) {
@@ -535,18 +600,21 @@ export class LocalChessServer extends ChessServer {
     }
 
      // --- Public methods for testing or inspection --- //
-     // --- THESE ARE ALLOWED TO ACCESS STATE FOR TEST PURPOSES --- //
+     // <<< ADDING public async back >>>
      public async __getGameState(gameId: string): Promise<GameState | undefined> {
          return this._games[gameId];
      }
+     // <<< ADDING public async back >>>
      public async __getUserJoins(userId: string): Promise<Omit<JoinRecord, 'clientId'>[]> {
           const joins = this._joins.filter(j => j.userId === userId);
           return joins.map(({ clientId, ...rest }) => rest);
      }
+     // <<< ADDING public async back >>>
      public async __getGameJoins(gameId: string, includeClientRef: boolean = false): Promise<(JoinRecord | Omit<JoinRecord, 'clientId'>)[]> {
          const joins = await this.__getAllJoinsForGame(gameId);
          return includeClientRef ? joins : joins.map(({ clientId, ...rest }) => rest);
      }
+     // <<< ADDING public async back >>>
      public async __reset(): Promise<void> {
          this._games = {};
          this._users = {};
@@ -555,4 +623,10 @@ export class LocalChessServer extends ChessServer {
          this._joinCounter = 0;
          debug('LocalChessServer state reset.');
      }
+
+    // <<< ADDING public async back >>>
+    public async __findActiveJoinByClientId(gameId: string, clientId: string): Promise<JoinRecord | undefined> {
+        const clientJoins = this._joins.filter(j => j.gameId === gameId && j.clientId === clientId);
+        return clientJoins.sort((a, b) => b.joinCounterId - a.joinCounterId)[0];
+    }
 }
