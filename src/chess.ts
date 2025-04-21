@@ -13,7 +13,7 @@ export type ChessSide = 1 | 2;
 export interface ChessMove {
   from: string;
   to: string;
-  promotion?: string;
+  promotion?: string | undefined | null;
   side?: ChessSide;
   validation?: boolean;
 }
@@ -756,6 +756,9 @@ export default class Chess {
       debug(`❌ Invalid move: missing 'from' or 'to'`);
       return { success: false, error: "Move must include 'from' and 'to' positions" };
     }
+
+    move.from = move.from.toLowerCase();
+    move.to = move.to.toLowerCase();
     
     // Check if the game is over
     if (this.isGameOver) {
