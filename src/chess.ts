@@ -764,7 +764,7 @@ export default class Chess {
       return { success: false, error: `Game is already over: ${reason}` };
     }
 
-    // --- New Turn Check ---
+    // --- Turn Check ---
     const currentTurn = this.turn;
     const pieceToMove = this._chess.get(move.from);
 
@@ -783,77 +783,113 @@ export default class Chess {
         error: `It's ${expectedColor}'s turn to move, not ${actualColor}'s (tried to move ${pieceToMove.color}${pieceToMove.type} from ${move.from})` 
       };
     }
-    // --- End New Turn Check ---
+    // --- End Turn Check ---
     
-    // Check if the correct side is moving - This check becomes redundant with the one above, but kept for backward compatibility if move.side is explicitly passed
-    if (!!move.side) {
-      if (move.side !== currentTurn) {
-        debug(`❌ Wrong side to move (explicit side check): expected ${currentTurn}, got ${move.side}`);
-        return { 
-          success: false, 
-          error: `It's ${currentTurn === 1 ? 'white' : 'black'}'s turn to move, not ${move.side === 1 ? 'white' : 'black'}'s` 
-        };
-      }
-    }
-    
-    // Check for castling move
+    // --- Pre-move Validation (including Castling) ---
+    let preMoveValidationError: string | null = null;
+
+    // Check for castling move first
     if (this.isCastlingMove(move)) {
       const isKingside = (move.to === 'g1' || move.to === 'g8');
-      const side = this.turn;
+      const side = pieceSide;
       
       debug(`🏰 Castling move detected: ${isKingside ? 'kingside' : 'queenside'} for ${side === 1 ? 'white' : 'black'}`);
+      debug(`🛡️ Strict FIDE castling validation always enabled`);
       
-      // Comprehensive castling validation for strict mode - NOW ALWAYS ACTIVE
-      // if (this._config.strictFideCastling) { // Removed this condition
-        debug(`🛡️ Strict FIDE castling validation always enabled`);
-        // Use isCastlingLegal for comprehensive check
-        const castlingLegality = this.isCastlingLegal(isKingside, side);
-        
-        if (!castlingLegality.legal) {
-          debug(`❌ Castling not allowed: ${castlingLegality.reason}`);
-          return {
-            success: false,
-            error: `Castling not allowed: ${castlingLegality.reason}`
-          };
-        }
-        debug(`✅ Strict FIDE castling validation passed`);
-      // } // Removed this closing brace
+      const castlingLegality = this.isCastlingLegal(isKingside, side);
+      
+      if (!castlingLegality.legal) {
+        debug(`❌ Castling not allowed PRE-MOVE check: ${castlingLegality.reason}`);
+        preMoveValidationError = `Castling not allowed: ${castlingLegality.reason}`;
+      } else {
+        debug(`✅ Strict FIDE castling validation passed PRE-MOVE check`);
+      }
+    } // <-- End of specific castling validation
+    
+    // --- If any pre-move validation failed, return error immediately --- 
+    if (preMoveValidationError) {
+      // console.log('!!! PRE-MOVE VALIDATION FAILED, RETURNING ERROR:', preMoveValidationError); // <<< REMOVED DEBUG LOG
+      return { success: false, error: preMoveValidationError };
     }
+    // --- End Pre-move Validation ---
     
-    debug(`🎲 Attempting move: ${move.from} -> ${move.to}`);
+    debug(`🎲 Attempting move in chess.js: ${move.from} -> ${move.to}`);
     
-    // Create a clean move object, omitting props
-    const moveObj: {
-      from: string;
-      to: string;
-      promotion?: string;
-    } = {
+    // Create a clean move object for the underlying library
+    const moveObj: { from: string; to: string; promotion?: string; } = {
       from: move.from,
       to: move.to
     };
-    
-    if (move.promotion) {
-      moveObj.promotion = move.promotion;
-    }
+    if (move.promotion) moveObj.promotion = move.promotion;
     
     try {
+      // Now make the move using the underlying engine
       const result = this._chess.move(moveObj);
       
       if (result) {
-        debug(`✅ Move executed successfully: ${move.from} -> ${move.to}`);
+        // Move was successful in chess.js
+        debug(`✅ Move executed successfully by chess.js: ${move.from} -> ${move.to}.`);
+
+        // --- Post-move Castling Rights Update --- REMOVED BLOCK
+        // if (rightsToRemove) { // REMOVED BLOCK
+        //   const currentFen = this._chess.fen(); // Get FEN *after* successful move
+        //   const fenParts = currentFen.split(' ');
+        //   let currentRights = fenParts[2];
+        //   let changed = false;
+        //   
+        //   for (const right of rightsToRemove) {
+        //     if (currentRights.includes(right)) {
+        //       currentRights = currentRights.replace(right, '');
+        //       changed = true;
+        //     }
+        //   }
+        //   
+        //   if (changed) {
+        //     fenParts[2] = currentRights === '' ? '-' : currentRights;
+        //     const finalFen = fenParts.join(' ');
+        //     debug(`🔧 Updating FEN POST-MOVE to remove rights: ${finalFen}`);
+        //     // Load the final FEN. This should ideally not fail if FEN is valid.
+        //     try {
+        //         const loadSuccess = this._chess.load(finalFen);
+        //         if (!loadSuccess) {
+        //             debug(`❌ CRITICAL: Failed to load final FEN after rights update: ${finalFen}. State might be inconsistent.`);
+        //         } else {
+        //             debug(`✅ Final FEN with updated rights loaded.`);
+        //         }
+        //     } catch (loadError) {
+        //         const errorMsg = loadError instanceof Error ? loadError.message : String(loadError);
+        //         debug(`❌ CRITICAL: Error loading final FEN after rights update: ${errorMsg}. FEN: ${finalFen}.`);
+        //     }
+        //   } else {
+        //     debug(`🔧 No rights needed removal POST-MOVE, FEN remains: ${currentFen}`);
+        //   }
+        // }
+        // --- End Post-move Castling Rights Update ---
+
+        debug(`🏁 Final FEN after move: ${this.fen}`); // Updated log message
         return { success: true, error: '' };
       } else {
-        debug(`❌ Invalid move: ${move.from} -> ${move.to}`);
-        return { 
-          success: false, 
-          error: `Invalid move: ${move.from} -> ${move.to}. This move is not allowed in the current position.` 
-        };
+         // This block might be reached if chess.js has other reasons to reject the move
+         // (e.g., move leaves king in check, even if rights were correct)
+         debug(`❌ Invalid move reported by chess.js: ${move.from} -> ${move.to}`);
+         // Check if game is over AFTER the failed move attempt in chess.js
+         let errorReason = `Invalid move: ${move.from} -> ${move.to}. Move rejected by underlying chess engine.`;
+         if(this.isGameOver) {
+            errorReason = `Game is already over: ${this.status}`;
+            debug(`❌ Game over detected after invalid move by chess.js: ${this.status}`);
+         }
+         return { 
+           success: false, 
+           error: errorReason
+         };
       }
     } catch (error) {
+      // Catch errors from the underlying chess.js move execution
       const errorMsg = error instanceof Error ? error.message : String(error);
-      debug(`❌ Error executing move: ${errorMsg}`);
-      return { success: false, error: errorMsg };
+      debug(`❌ Error executing move via chess.js: ${errorMsg}`);
+      return { success: false, error: `Move execution error: ${errorMsg}` };
     }
+    // Implicit return removed, function now always returns ChessMoveResult
   }
 
   /**
