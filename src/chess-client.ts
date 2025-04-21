@@ -345,46 +345,53 @@ export class ChessClient {
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
     if (!this.gameId) return { error: '!this.gameId' };
-    if (!!this.joinId) return { error: '!!this.joinId' };
-    if (this.side !== undefined) return { error: 'side!=undefined' };
-    if (this.status !== 'await') return { error: 'status!=await' };
-    // <before async>
     this.side = side;
     this.role = role;
-    this.updatedAt = Date.now();
-    // </before async>
+    this.status = 'await';
+    this.updatedAt = Date.now()
+    this.createdAt = this.updatedAt
+    this.joinId = uuidv4();
     const request: ChessClientRequest = {
       operation: 'join',
-      clientId: this.clientId,
-      userId: this.userId,
-      gameId: this.gameId,
-      side: this.side,
-      role: this.role,
-      updatedAt: this.updatedAt,
-      createdAt: this.createdAt,
-    };
-    const response = await this._join(request);
-    if (response.data) {
-      if (response.data.joinId) this.joinId = response.data.joinId; // after async
-      if (response.data.side) this.side = response.data.side;
-      if (response.data.role) this.role = response.data.role;
-      if (response.data.fen) this.fen = response.data.fen;
-      if (response.data.status) this.status = response.data.status;
-    }
-    const result: ChessClientResponse = { data: {
       clientId: this.clientId,
       userId: this.userId,
       gameId: this.gameId,
       joinId: this.joinId,
       side: this.side,
       role: this.role,
-      fen: this.fen,
-      status: this.status,
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
-    } };
-    debug('asyncJoin:response', result);
-    return result;
+    };
+    const response = await this._join(request);
+    if (response.error) {
+      this.status = 'error';
+      debug('asyncJoin:error', response);
+      this._error(request, response);
+      return { error: response.error, recommend: response.recommend };
+    } else if (response.data) {
+      debug('asyncJoin:data', response);
+      if (response.data.gameId != this.gameId) this._error(request, { ...response, error: 'gameId!=this.gameId' });
+      if (response.data.joinId != this.joinId) this._error(request, { ...response, error: 'joinId!=this.joinId' });
+      if (response.data.fen) this.fen = response.data.fen;
+      if (response.data.status) this.status = response.data.status;
+      if (response.data.updatedAt) this.updatedAt = response.data.updatedAt;
+      return {
+        data: {
+          clientId: this.clientId,
+          userId: this.userId,
+          gameId: this.gameId,
+          joinId: this.joinId,
+          side: this.side,
+          role: this.role,
+          fen: this.fen,
+          status: this.status,
+          updatedAt: this.updatedAt,
+          createdAt: this.createdAt,
+        },
+      };
+    } else {
+      return { error: 'unknown response' };
+    }
   }
   private async _join(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_join:fake', request);
@@ -592,29 +599,28 @@ export class ChessClient {
     if (!this.userId) return { error: '!this.userId' };
     if (!this.gameId) return { error: '!this.gameId' };
     if (!this.joinId) return { error: '!this.joinId' };
-    if (!this.side) return { error: '!this.side client side not set' };
-    if (!this.role) return { error: '!this.role client role not set' };
+    if (!this.side) return { error: '!this.side' };
+    if (!this.role) return { error: '!this.role' };
     if (this.status !== 'ready' && this.status !== 'continue') return { error: `status(${this.status})!=ready|continue` };
-    this.updatedAt = Date.now();
-    
-    // Check if game is already over based on current client state/chess instance
+
+    // ---> ADDED CHECK FOR GAME OVER STATE <---
     if (this.chess.isGameOver) {
-      const reason = this.chess.status;
-      this.status = reason; // Update client status if game was already over
-      debug(`syncMove: game already over (${reason}), updated status`);
-      return { error: `Game is already over: ${reason}` };
+      const endReason = this.chess.status;
+      debug('syncMove: Game already over:', endReason);
+      this.status = endReason; // Update client status
+      this.updatedAt = Date.now();
+      return { error: `Game is already over: ${endReason}` };
     }
+    // ---> END ADDED CHECK <---
 
     const moved = this.chess.move(move);
     if (moved.error) {
       debug('syncMove:invalid move:', moved.error);
       // Check if the error was due to the game ending (e.g., stalemate/draw detection during move)
-      if (this.chess.isGameOver) {
-        this.status = this.chess.status; // Update status if move resulted in game over
-        debug(`syncMove: move resulted in game over (${this.status}), updated status`);
-      }
       return { error: moved.error };
     }
+    this.updatedAt = Date.now();
+
     // Update status only if the move was successful and didn't end the game immediately
     this.status = this.chess.status;
     debug('syncMove:success, new status:', this.status, 'new fen:', this.fen);
@@ -630,6 +636,17 @@ export class ChessClient {
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     };
+    this._move(request).then(response => {
+      if (response.error) {
+        debug('syncMove:error', response);
+        this._error(request, response);
+      } else if (response.data) {
+        debug('syncMove:success', response.data);
+      }
+    }).catch(error => {
+      debug('syncMove:error', error);
+      this._error(request, { ...error, recommend: 'retry' });
+    });
     const response: ChessClientResponse = {
       data: {
         clientId: this.clientId,
@@ -646,6 +663,82 @@ export class ChessClient {
     };
     debug('syncMove:response', response);
     return response;
+  }
+  async asyncMove(move: ChessClientMove): Promise<ChessClientResponse> {
+    debug('asyncMove', move);
+    if (!this.clientId) return { error: '!this.clientId' };
+    if (!this.userId) return { error: '!this.userId' };
+    if (!this.gameId) return { error: '!this.gameId' };
+    if (!this.joinId) return { error: '!this.joinId' };
+    if (!this.side) return { error: '!this.side' };
+    if (!this.role) return { error: '!this.role client role not set' };
+    if (this.status !== 'ready' && this.status !== 'continue') return { error: `status(${this.status})!=ready|continue` };
+
+    // ---> ADDED CHECK FOR GAME OVER STATE <---
+    if (this.chess.isGameOver) {
+      const endReason = this.chess.status;
+      debug('asyncMove: Game already over:', endReason);
+      this.status = endReason; // Update client status
+      this.updatedAt = Date.now();
+      return { error: `Game is already over: ${endReason}` };
+    }
+    // ---> END ADDED CHECK <---
+
+    const moved = this.chess.move(move);
+    if (moved.error) {
+      debug('syncMove:invalid move:', moved.error);
+      // Check if the error was due to the game ending (e.g., stalemate/draw detection during move)
+      return { error: moved.error };
+    }
+    this.updatedAt = Date.now();
+
+    // Update status only if the move was successful and didn't end the game immediately
+    this.status = this.chess.status;
+    debug('asyncMove:success, new status:', this.status, 'new fen:', this.fen);
+
+    const request: ChessClientRequest = {
+      operation: 'move',
+      clientId: this.clientId,
+      userId: this.userId,
+      gameId: this.gameId,
+      joinId: this.joinId,
+      side: this.side,
+      role: this.role,
+      move: move,
+      updatedAt: this.updatedAt,
+      createdAt: this.createdAt,
+    };
+
+    const response = await this._move(request);
+    if (response.error) {
+      debug('asyncMove:error', response);
+      this._error(request, response);
+    } else if (response.data) {
+      debug('asyncMove:success', response.data);
+      this.side = response.data.side ?? this.side;
+      this.role = response.data.role ?? this.role;
+      this.fen = response.data.fen ?? this.fen;
+      this.status = response.data.status ?? this.status;
+      this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+    }
+
+    const result: ChessClientResponse = {
+      error: response.error,
+      data: {
+        clientId: this.clientId,
+        userId: this.userId,
+        gameId: this.gameId,
+        joinId: this.joinId,
+        side: this.side,
+        role: this.role,
+        fen: this.fen,
+        status: this.status,
+        updatedAt: this.updatedAt,
+        createdAt: this.createdAt,
+      }
+    };
+    debug('asyncMove:response', result);
+    return result;
   }
   private async _move(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('_move:fake', request);

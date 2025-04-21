@@ -1,10 +1,9 @@
-import { Chess, ChessMove } from '../chess.js';
-import { 
-  ChessClient, 
-  ChessClientRole, 
-  ChessClientSide, 
-  ChessClientStatus,
+import {
+  ChessClient,
+  ChessClientMove,
+  ChessClientRole
 } from '../chess-client.js';
+import { Chess } from '../chess.js';
 
 // Helper function to simulate a delay (useful in async tests)
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -565,9 +564,9 @@ describe('ChessClient', () => {
       clientMove.gameId = 'id';
       expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('!this.joinId');
       clientMove.joinId = 'id';
-      expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('!this.side client side not set');
+      expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('!this.side');
       clientMove.side = 1;
-      expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('!this.role client role not set');
+      expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('!this.role');
       clientMove.role = ChessClientRole.Player;
       expect(clientMove.syncMove({from:'e2',to:'e4'}).error).toBe('status(unknown)!=ready|continue');
     });
@@ -583,7 +582,7 @@ describe('ChessClient', () => {
       // Missing role and status='unknown'
 
       let response = client.syncMove({ from: 'e2', to: 'e4' });
-      expect(response.error).toBe('!this.role client role not set');
+      expect(response.error).toBe('!this.role');
       
       client.role = ChessClientRole.Player;
       response = client.syncMove({ from: 'e2', to: 'e4' });
@@ -686,7 +685,7 @@ describe('ChessClient', () => {
     it(`should require both from and to properties in move`, () => {
       const client = setupClientWithFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
       // Need type assertion because TS expects correct type
-      const result = client.syncMove({ from: 'e2' } as ChessMove);
+      const result = client.syncMove({ from: 'e2' } as ChessClientMove);
       
       expect(result.error).toBeDefined();
       expect(result.error).toContain("Move must include 'from' and 'to' positions");
