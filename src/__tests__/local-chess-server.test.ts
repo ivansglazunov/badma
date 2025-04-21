@@ -110,11 +110,11 @@ describe('LocalChessServer', () => {
             expect(response.data?.joinId).toBeDefined();
             expect(response.data?.side).toBe(1);
             expect(response.data?.role).toBe(ChessClientRole.Player);
-            expect(server.getGameJoins(gameId).length).toBe(1);
-            expect(server.getGameJoins(gameId)[0].userId).toBe(testUserId1);
-             expect(server.getGameJoins(gameId)[0].side).toBe(1);
-             expect(server.getGameJoins(gameId)[0].role).toBe(ChessClientRole.Player);
-             expect(server.getGameState(gameId)?.status).toBe('await'); // Still awaiting 2nd player
+            expect((await server.__getGameJoins(gameId)).length).toBe(1);
+            expect((await server.__getGameJoins(gameId))[0].userId).toBe(testUserId1);
+             expect((await server.__getGameJoins(gameId))[0].side).toBe(1);
+             expect((await server.__getGameJoins(gameId))[0].role).toBe(ChessClientRole.Player);
+             expect((await server.__getGameState(gameId))?.status).toBe('await'); // Still awaiting 2nd player
         });
 
         it('should return error if creating a game with an existing gameId', async () => {
@@ -175,9 +175,9 @@ describe('LocalChessServer', () => {
             // The test logic here might need adjustment based on the CORRECTED server behavior.
             // Let's assume the new implementation correctly handles joins.
             // This join only adds User2. User1 (creator) is not a player yet unless they also join.
-            expect(server.getGameJoins(gameId).length).toBe(1);
-            expect(server.getGameJoins(gameId)[0].userId).toBe(testUserId2);
-            expect(server.getGameState(gameId)?.status).toBe('await'); // Still awaiting User1 to explicitly join as player or a second player
+            expect((await server.__getGameJoins(gameId)).length).toBe(1);
+            expect((await server.__getGameJoins(gameId))[0].userId).toBe(testUserId2);
+            expect((await server.__getGameState(gameId))?.status).toBe('await'); // Still awaiting User1 to explicitly join as player or a second player
         });
 
         it('should change game status to ready when the second player joins', async () => {
@@ -193,7 +193,7 @@ describe('LocalChessServer', () => {
             } as ChessClientRequest);
             // Assign gameId AFTER the response is received
             const gameId = createJoinResponse.data!.gameId;
-             expect(server.getGameState(gameId)?.status).toBe('await');
+             expect((await server.__getGameState(gameId))?.status).toBe('await');
              debug('[Test Log] After User1 create/join:', createJoinResponse); // <<< Added Debug Log
 
              // User2 joins as Black
@@ -207,12 +207,12 @@ describe('LocalChessServer', () => {
              debug('[Test Log] Before User2 join - Request:', joinRequest); // <<< Added Debug Log
              const joinResponse = await server.join(joinRequest);
              debug('[Test Log] After User2 join - Response:', joinResponse);
-             debug('[Test Log] After User2 join - Server Game State:', server.getGameState(gameId));
+             debug('[Test Log] After User2 join - Server Game State:', await server.__getGameState(gameId));
              
              expect(joinResponse.error).toBeUndefined();
              expect(joinResponse.data?.status).toBe('ready');
-             expect(server.getGameState(gameId)?.status).toBe('ready');
-             expect(server.getGameJoins(gameId).length).toBe(2);
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
+             expect((await server.__getGameJoins(gameId)).length).toBe(2);
         });
 
 
@@ -319,8 +319,8 @@ describe('LocalChessServer', () => {
                  side: 2, role: ChessClientRole.Player
              } as ChessClientRequest);
              const joinId2 = res2.data!.joinId!;
-             expect(server.getGameState(gameId)?.status).toBe('ready');
-              expect(server.getGameJoins(gameId).length).toBe(2);
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
+              expect((await server.__getGameJoins(gameId)).length).toBe(2);
 
              const request: ChessClientRequest = {
                  ...createBaseRequest(testUserId1, testClientId1),
@@ -344,16 +344,16 @@ describe('LocalChessServer', () => {
              expect(response.data?.role).toBe(ChessClientRole.Anonymous);
 
              // Check server state: Find the specific leave event record
-             const leaveRecord = server.getGameJoins(gameId).find(j => j.joinId === leaveEventJoinId);
+             const leaveRecord = (await server.__getGameJoins(gameId)).find(j => j.joinId === leaveEventJoinId);
              expect(leaveRecord).toBeDefined();
              expect(leaveRecord?.userId).toBe(testUserId1);
              expect(leaveRecord?.side).toBe(0);
              expect(leaveRecord?.role).toBe(ChessClientRole.Anonymous);
 
              // Game status should revert to 'await' as a player left before starting
-             expect(server.getGameState(gameId)?.status).toBe('await');
+             expect((await server.__getGameState(gameId))?.status).toBe('await');
              // Total joins increase due to append-only
-             expect(server.getGameJoins(gameId).length).toBe(3); // Initial P1, Initial P2, Leave P1
+             expect((await server.__getGameJoins(gameId)).length).toBe(3); // Initial P1, Initial P2, Leave P1
          });
 
          it('should set game status to surrender if a player leaves mid-game', async () => {
@@ -376,8 +376,8 @@ describe('LocalChessServer', () => {
                  side: 2, role: ChessClientRole.Player
              } as ChessClientRequest);
              const joinId2 = res2.data!.joinId!;
-             expect(server.getGameState(gameId)?.status).toBe('ready');
-             expect(server.getGameJoins(gameId).length).toBe(2);
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
+             expect((await server.__getGameJoins(gameId)).length).toBe(2);
 
              // Make one move to change status from 'ready' to 'continue'
              const moveRequest: ChessClientRequest = {
@@ -387,7 +387,7 @@ describe('LocalChessServer', () => {
                   move: { from: 'e2', to: 'e4' }
              } as ChessClientRequest;
              await server.move(moveRequest);
-             expect(server.getGameState(gameId)?.status).toBe('continue');
+             expect((await server.__getGameState(gameId))?.status).toBe('continue');
 
              // Now User 2 (Black) leaves
              const leaveRequest: ChessClientRequest = {
@@ -410,17 +410,17 @@ describe('LocalChessServer', () => {
 
              // Check game status updated correctly
              expect(response.data?.status).toBe('black_surrender'); // White wins as Black left
-             expect(server.getGameState(gameId)?.status).toBe('black_surrender');
+             expect((await server.__getGameState(gameId))?.status).toBe('black_surrender');
 
              // Verify the leave event record exists for User 2
-             const leaveRecord = server.getGameJoins(gameId).find(j => j.joinId === leaveEventJoinId);
+             const leaveRecord = (await server.__getGameJoins(gameId)).find(j => j.joinId === leaveEventJoinId);
              expect(leaveRecord).toBeDefined();
              expect(leaveRecord?.userId).toBe(testUserId2);
              expect(leaveRecord?.side).toBe(0);
              expect(leaveRecord?.role).toBe(ChessClientRole.Anonymous);
 
              // Total joins increase: P1 join, P2 join, P2 leave
-             expect(server.getGameJoins(gameId).length).toBe(3);
+             expect((await server.__getGameJoins(gameId)).length).toBe(3);
          });
 
 
@@ -459,7 +459,7 @@ describe('LocalChessServer', () => {
                    side: 2, role: ChessClientRole.Player
                } as ChessClientRequest);
                // const joinId2 = res2.data!.joinId!; // Not needed for this test
-               expect(server.getGameState(gameId)?.status).toBe('ready');
+               expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
                 const incorrectJoinId = uuidv4();
                 const request: ChessClientRequest = {
@@ -492,7 +492,7 @@ describe('LocalChessServer', () => {
                   operation: 'join', gameId: gameId, side: 2, role: ChessClientRole.Player
              } as ChessClientRequest);
              // const joinId2 = res2.data!.joinId!; // Not needed here
-             expect(server.getGameState(gameId)?.status).toBe('ready');
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
              const request: ChessClientRequest = {
                  ...createBaseRequest(testUserId1, testClientId1), // White's turn
@@ -511,8 +511,8 @@ describe('LocalChessServer', () => {
              expect(response.data?.gameId).toBe(gameId);
              expect(response.data?.fen).toContain('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3'); // FEN after e4
              expect(response.data?.status).toBe('continue');
-             expect(server.getGameState(gameId)?.fen).toBe(response.data!.fen);
-             expect(server.getGameState(gameId)?.status).toBe('continue');
+             expect((await server.__getGameState(gameId))?.fen).toBe(response.data!.fen);
+             expect((await server.__getGameState(gameId))?.status).toBe('continue');
          });
 
          it('should return error for an invalid move', async () => {
@@ -533,7 +533,7 @@ describe('LocalChessServer', () => {
                   operation: 'join', gameId: gameId, side: 2, role: ChessClientRole.Player
              } as ChessClientRequest);
              // const joinId2 = res2.data!.joinId!; // Not needed here
-             expect(server.getGameState(gameId)?.status).toBe('ready');
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
              const request: ChessClientRequest = {
                  ...createBaseRequest(testUserId1, testClientId1), // White's turn
@@ -546,7 +546,7 @@ describe('LocalChessServer', () => {
 
              expect(response.error).toContain('Invalid move');
              expect(response.data).toBeDefined(); // Should still return current state
-             expect(response.data?.fen).toBe(server.getGameState(gameId)?.fen); // FEN should not change
+             expect(response.data?.fen).toBe((await server.__getGameState(gameId))?.fen); // FEN should not change
              expect(response.data?.status).toBe('ready'); // Status should not change
          });
 
@@ -568,10 +568,10 @@ describe('LocalChessServer', () => {
                   operation: 'join', gameId: gameId, side: 2, role: ChessClientRole.Player
              } as ChessClientRequest);
              // const joinId2 = res2.data!.joinId!; // Not needed here
-             expect(server.getGameState(gameId)?.status).toBe('ready');
+             expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
               // Set status to 'await' manually for testing
-              server.getGameState(gameId)!.status = 'await';
+              (await server.__getGameState(gameId))!.status = 'await';
 
              const request: ChessClientRequest = {
                   ...createBaseRequest(testUserId1, testClientId1), // White's turn
@@ -602,7 +602,7 @@ describe('LocalChessServer', () => {
                    operation: 'join', gameId: gameId, side: 2, role: ChessClientRole.Player
               } as ChessClientRequest);
               const joinId2 = res2.data!.joinId!;
-              expect(server.getGameState(gameId)?.status).toBe('ready');
+              expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
                // It's White's turn initially
                const request: ChessClientRequest = {
@@ -635,7 +635,7 @@ describe('LocalChessServer', () => {
                     operation: 'join', gameId: gameId, side: 2, role: ChessClientRole.Player
                } as ChessClientRequest);
                // const joinId2 = res2.data!.joinId!; // Not needed here
-               expect(server.getGameState(gameId)?.status).toBe('ready');
+               expect((await server.__getGameState(gameId))?.status).toBe('ready');
 
                 const spectatorUserId = uuidv4();
                 server['_users'][spectatorUserId] = true;

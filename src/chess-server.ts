@@ -126,4 +126,30 @@ export abstract class ChessServer {
             return { error: error.message || 'An unexpected error occurred during move' };
         }
     }
+
+    // --- Abstract methods for database/state interaction (must be implemented by subclasses) ---
+
+    public abstract __registerClient(clientId: string): Promise<any>; // Return type depends on implementation (e.g., ChessInstance)
+    public abstract __getClient(clientId: string): Promise<any | undefined>;
+    public abstract __checkUser(userId: string | undefined): Promise<boolean>;
+    public abstract __addUser(userId: string): Promise<void>;
+    public abstract __gameExists(gameId: string): Promise<boolean>;
+    public abstract __getGame(gameId: string): Promise<any | undefined>; // Return type GameState or similar
+    public abstract __createGame(gameId: string, gameData: any): Promise<void>; // gameData type GameState or similar
+    public abstract __deleteGame(gameId: string): Promise<void>;
+    public abstract __updateGame(gameId: string, updates: Partial<any>): Promise<void>; // updates type GameState or similar
+    public abstract __addJoinRecord(recordData: Omit<any, 'joinCounterId'>): Promise<any>; // recordData/return JoinRecord or similar
+    public abstract __updateClientState(client: any, state: Partial<any>): Promise<void>; // client/state types based on implementation
+    public abstract __getAllJoinsForGame(gameId: string): Promise<any[]>; // Return JoinRecord[] or similar
+    public abstract __findJoinByJoinIdAndClient(gameId: string, userId: string, joinId: string): Promise<any | undefined>; // Return JoinRecord or similar
+    public abstract __findActivePlayerJoinByUser(gameId: string, userId: string): Promise<any | undefined>; // Return JoinRecord or similar
+    public abstract __findActivePlayerJoinBySide(gameId: string, side: ChessClientSide): Promise<any | undefined>; // Return JoinRecord or similar
+    public abstract __getGamePlayerJoins(gameId: string): Promise<any[]>; // Return JoinRecord[] or similar
+    public abstract __clearJoinClientReference(joinId: string): Promise<void>;
+
+    // --- Abstract methods for testing/inspection (must be implemented by subclasses) ---
+    public abstract __getGameState(gameId: string): Promise<any | undefined>; // Return type GameState or similar
+    public abstract __getUserJoins(userId: string): Promise<Omit<any, 'clientId'>[]>; // Return Omit<JoinRecord, 'clientId'>[] or similar
+    public abstract __getGameJoins(gameId: string, includeClientRef?: boolean): Promise<(any | Omit<any, 'clientId'>)[]>; // Return JoinRecord[] or similar
+    public abstract __reset(): Promise<void>;
 }
