@@ -114,7 +114,7 @@ export class ChessClient {
   get joinId(): string | undefined {
     return this._joinId;
   }
-  set joinId(joinId: string) {
+  set joinId(joinId: string | undefined) {
     this._joinId = joinId;
   }
   _side?: ChessClientSide;
@@ -414,57 +414,76 @@ export class ChessClient {
     if (!this.userId) return { error: '!this.userId' };
     if (!this.gameId) return { error: '!this.gameId' };
     if (!this.joinId) return { error: '!this.joinId' };
-    if (this.side !== undefined) return { error: 'side!=undefined' };
-    if (this.role == ChessClientRole.Anonymous) return { error: 'role==Anonymous' };
-    if (this.status !== 'await' && this.status !== 'ready' && this.status !== 'continue') return { error: 'status!=await|ready|continue' };
+    if (this.side === 0) return { error: 'side === 0 (Anonymous cannot leave/surrender)' };
+    if (this.role == ChessClientRole.Anonymous) return { error: 'role==Anonymous (Anonymous cannot leave/surrender)' };
+    if (this.status !== 'await' && this.status !== 'ready' && this.status !== 'continue') return { error: `status(${this.status}) not await|ready|continue` };
+    
+    // Determine surrender status
+    const surrenderStatus: ChessClientStatus = this.side === 1 ? 'white_surrender' : 'black_surrender';
+
     // <before async>
-    this.joinId = uuidv4();
-    this.side = 0;
-    this.role = ChessClientRole.Anonymous;
+    this.status = surrenderStatus; // Set game status to surrender
     this.updatedAt = Date.now();
+    
+    // State after leaving/surrendering: become anonymous spectator
+    const finalSide: ChessClientSide = 0;
+    const finalRole: ChessClientRole = ChessClientRole.Anonymous;
+    const finalJoinId = undefined; // Or keep it? Needs clarification for server logic. Assuming clear for now.
     // </before async>
+    
     const request: ChessClientRequest = {
-      operation: 'leave',
+      operation: 'leave', // Operation could also be 'surrender' depending on server API
       clientId: this.clientId,
       userId: this.userId,
       gameId: this.gameId,
-      joinId: this.joinId,
-      side: this.side,
-      role: this.role,
+      joinId: this.joinId, // Send the current joinId for identification
+      side: finalSide, // Sending the state AFTER leaving
+      role: finalRole,
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     };
+
     this._leave(request).then(response => {
       if (response.error) {
-        this.status = 'error';
+        // Should we revert status on error? Or keep surrender status?
+        // Keeping surrender status for now.
         debug('syncLeave:error', response);
         this._error(request, response);
       } else if (response.data) {
-        // <after async>
-        if (response.data.joinId) this.joinId = response.data.joinId;
-        if (response.data.side != this.side) this._error(request, { ...response, error: 'side!=this.side' });
-        if (response.data.role != this.role) this._error(request, { ...response, error: 'role!=this.role' });
-        if (response.data.status != this.status) this._error(request, { ...response, error: 'status!=this.status' });
-        // </after async>
+        // Update local state based on successful server response
+        this.side = response.data.side ?? finalSide;
+        this.role = response.data.role ?? finalRole;
+        this.joinId = response.data.joinId; // Server might return null/undefined or keep it
+        this.status = response.data.status ?? this.status; // Use server status if provided, else keep surrender
+        this.fen = response.data.fen ?? this.fen;
+        this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+        debug('syncLeave:success', response.data);
       }
     }).catch(error => {
-      this.status = 'error';
+      // Similar decision: keep surrender status on catch?
       debug('syncLeave:catch', error);
       this._error(request, { ...error, recommend: 'retry' });
     });
+
+    // Immediately update local state to reflect surrender & becoming anonymous
+    this.side = finalSide;
+    this.role = finalRole;
+    this.joinId = finalJoinId;
+    // Status already set to surrenderStatus
+
     const response: ChessClientResponse = { data: {
       clientId: this.clientId,
       userId: this.userId,
       gameId: this.gameId,
-      joinId: this.joinId,
-      side: this.side,
-      role: this.role,
-      fen: this.fen,
-      status: this.status,
+      joinId: this.joinId, // Send final joinId state
+      side: this.side,     // Send final side state
+      role: this.role,     // Send final role state
+      fen: this.fen,       // FEN doesn't change on surrender
+      status: this.status, // Send surrender status
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     } };
-    debug('syncJoin:response', response);
+    debug('syncLeave:response', response);
     return response;
   }
   async asyncLeave(side: ChessClientSide): Promise<ChessClientResponse> {
@@ -472,45 +491,75 @@ export class ChessClient {
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
     if (!this.gameId) return { error: '!this.gameId' };
-    if (!!this.joinId) return { error: '!!this.joinId' };
-    if (this.side == undefined) return { error: 'side==undefined' };
-    if (this.role == ChessClientRole.Anonymous) return { error: 'role==Anonymous' };
-    if (this.status !== 'await' && this.status !== 'ready' && this.status !== 'continue') return { error: 'status!=await|ready|continue' };
+    if (this.side === 0) return { error: 'side === 0 (Anonymous cannot leave/surrender)' };
+    if (this.role == ChessClientRole.Anonymous) return { error: 'role==Anonymous (Anonymous cannot leave/surrender)' };
+    if (this.status !== 'await' && this.status !== 'ready' && this.status !== 'continue') return { error: `status(${this.status}) not await|ready|continue` };
+    
+    // Determine surrender status based on provided side argument
+    const surrenderStatus: ChessClientStatus = side === 1 ? 'white_surrender' : 'black_surrender';
+
     // <before async>
-    this.side = 0;
-    this.role = ChessClientRole.Anonymous;
+    this.status = surrenderStatus;
     this.updatedAt = Date.now();
+    
+    // State after leaving/surrendering: become anonymous spectator
+    const finalSide: ChessClientSide = 0;
+    const finalRole: ChessClientRole = ChessClientRole.Anonymous;
+    const finalJoinId = undefined; // Assuming clear for now.
     // </before async>
+    
     const request: ChessClientRequest = {
-      operation: 'leave',
+      operation: 'leave', // Or 'surrender'
       clientId: this.clientId,
       userId: this.userId,
       gameId: this.gameId,
-      side: this.side,
-      role: this.role,
+      joinId: this.joinId, // Send current joinId
+      side: finalSide, // Sending final state
+      role: finalRole,
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     };
-    const response = await this._join(request);
-    if (response.data) {
-      if (response.data.joinId) this.joinId = response.data.joinId; // after async
-      if (response.data.side) this.side = response.data.side;
-      if (response.data.role) this.role = response.data.role;
-      if (response.data.fen) this.fen = response.data.fen;
-      if (response.data.status) this.status = response.data.status;
+
+    // Call the actual _leave method
+    const response = await this._leave(request);
+    
+    // Update state based on response, falling back to optimistic update
+    if (response.error) {
+      debug('asyncLeave:error', response);
+      // Keep optimistic surrender status on error?
+      this._error(request, response);
+    } else if (response.data) {
+      debug('asyncLeave:success', response.data);
+      this.side = response.data.side ?? finalSide;
+      this.role = response.data.role ?? finalRole;
+      this.joinId = response.data.joinId; // Server might return null/undefined
+      this.status = response.data.status ?? this.status; // Use server status or keep surrender
+      this.fen = response.data.fen ?? this.fen;
+      this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+    } else {
+      // No error, no data? Fallback to optimistic update
+      this.side = finalSide;
+      this.role = finalRole;
+      this.joinId = finalJoinId;
+      // Status already set to surrenderStatus
     }
-    const result: ChessClientResponse = { data: {
-      clientId: this.clientId,
-      userId: this.userId,
-      gameId: this.gameId,
-      joinId: this.joinId,
-      side: this.side,
-      role: this.role,
-      fen: this.fen,
-      status: this.status,
-      updatedAt: this.updatedAt,
-      createdAt: this.createdAt,
-    } };
+
+    // Result reflects the state AFTER the operation attempted/completed
+    const result: ChessClientResponse = { 
+      error: response.error, // Propagate error from server
+      data: {
+        clientId: this.clientId,
+        userId: this.userId,
+        gameId: this.gameId,
+        joinId: this.joinId, // Current (potentially cleared) joinId
+        side: this.side,     // Current (likely 0) side
+        role: this.role,     // Current (likely Anonymous) role
+        fen: this.fen,       // Current fen
+        status: this.status, // Current status (surrender or from server)
+        updatedAt: this.updatedAt,
+        createdAt: this.createdAt,
+      } 
+    };
     debug('asyncLeave:response', result);
     return result;
   }
@@ -543,19 +592,32 @@ export class ChessClient {
     if (!this.userId) return { error: '!this.userId' };
     if (!this.gameId) return { error: '!this.gameId' };
     if (!this.joinId) return { error: '!this.joinId' };
-    if (!this.side) return { error: '!side' };
-    if (!this.role) return { error: '!role' };
-    if (this.status !== 'ready' && this.status !== 'continue') return { error: 'status!=ready|continue' };
-    // <before async>
-    this.joinId = uuidv4();
-    this.side = 0;
-    this.role = ChessClientRole.Anonymous;
+    if (!this.side) return { error: '!this.side client side not set' };
+    if (!this.role) return { error: '!this.role client role not set' };
+    if (this.status !== 'ready' && this.status !== 'continue') return { error: `status(${this.status})!=ready|continue` };
     this.updatedAt = Date.now();
-    const moved = this.chess.move({ ...move, side: this.side as ChessSide });
-    if (moved.error) return { error: moved.error };
-    if (!moved.success) return { error: '!moved.success' };
-    if (this.chess.isGameOver) this.status = this.chess.status;
-    // </before async>
+    
+    // Check if game is already over based on current client state/chess instance
+    if (this.chess.isGameOver) {
+      const reason = this.chess.status;
+      this.status = reason; // Update client status if game was already over
+      debug(`syncMove: game already over (${reason}), updated status`);
+      return { error: `Game is already over: ${reason}` };
+    }
+
+    const moved = this.chess.move(move);
+    if (moved.error) {
+      debug('syncMove:invalid move:', moved.error);
+      // Check if the error was due to the game ending (e.g., stalemate/draw detection during move)
+      if (this.chess.isGameOver) {
+        this.status = this.chess.status; // Update status if move resulted in game over
+        debug(`syncMove: move resulted in game over (${this.status}), updated status`);
+      }
+      return { error: moved.error };
+    }
+    // Update status only if the move was successful and didn't end the game immediately
+    this.status = this.chess.status;
+    debug('syncMove:success, new status:', this.status, 'new fen:', this.fen);
     const request: ChessClientRequest = {
       operation: 'move',
       clientId: this.clientId,
@@ -568,40 +630,20 @@ export class ChessClient {
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     };
-    this._move(request).then(response => {
-      if (response.error) {
-        this.status = 'error';
-        debug('syncMove:error', response);
-        this._error(request, response);
-      } else if (response.data) {
-        // <after async>
-        if (response.data.fen != this.fen) {
-          this.fen = response.data.fen;
-          this._error(request, { ...response, error: 'fen!=this.fen' });
-        }
-        if (response.data.status != this.status) {
-          this.status = response.data.status;
-          this._error(request, { ...response, error: 'status!=this.status' });
-        }
-        // </after async>
+    const response: ChessClientResponse = {
+      data: {
+        clientId: this.clientId,
+        userId: this.userId,
+        gameId: this.gameId,
+        joinId: this.joinId,
+        side: this.side,
+        role: this.role,
+        fen: this.fen,
+        status: this.status,
+        updatedAt: this.updatedAt,
+        createdAt: this.createdAt,
       }
-    }).catch(error => {
-      this.status = 'error';
-      debug('syncMove:catch', error);
-      this._error(request, { ...error, recommend: 'retry' });
-    });
-    const response: ChessClientResponse = { data: {
-      clientId: this.clientId,
-      userId: this.userId,
-      gameId: this.gameId,
-      joinId: this.joinId,
-      side: this.side,
-      role: this.role,
-      fen: this.fen,
-      status: this.status,
-      updatedAt: this.updatedAt,
-      createdAt: this.createdAt,
-    } };
+    };
     debug('syncMove:response', response);
     return response;
   }

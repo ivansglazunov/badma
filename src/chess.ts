@@ -763,12 +763,32 @@ export default class Chess {
       debug(`❌ Game is already over: ${reason}`);
       return { success: false, error: `Game is already over: ${reason}` };
     }
+
+    // --- New Turn Check ---
+    const currentTurn = this.turn;
+    const pieceToMove = this._chess.get(move.from);
+
+    if (!pieceToMove) {
+      debug(`❌ Invalid move: no piece found at ${move.from}`);
+      return { success: false, error: `Invalid move: No piece at ${move.from}` };
+    }
+
+    const pieceSide = Chess.normalizeSide(pieceToMove.color);
+    if (pieceSide !== currentTurn) {
+      debug(`❌ Wrong side to move: expected ${currentTurn}, got ${pieceSide} (piece at ${move.from})`);
+      const expectedColor = currentTurn === 1 ? 'white' : 'black';
+      const actualColor = pieceSide === 1 ? 'white' : 'black';
+      return { 
+        success: false, 
+        error: `It's ${expectedColor}'s turn to move, not ${actualColor}'s (tried to move ${pieceToMove.color}${pieceToMove.type} from ${move.from})` 
+      };
+    }
+    // --- End New Turn Check ---
     
-    // Check if the correct side is moving
+    // Check if the correct side is moving - This check becomes redundant with the one above, but kept for backward compatibility if move.side is explicitly passed
     if (!!move.side) {
-      const currentTurn = this.turn;
       if (move.side !== currentTurn) {
-        debug(`❌ Wrong side to move: expected ${currentTurn}, got ${move.side}`);
+        debug(`❌ Wrong side to move (explicit side check): expected ${currentTurn}, got ${move.side}`);
         return { 
           success: false, 
           error: `It's ${currentTurn === 1 ? 'white' : 'black'}'s turn to move, not ${move.side === 1 ? 'white' : 'black'}'s` 
