@@ -11,9 +11,9 @@
   ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "build": "tsc -p tsconfig.lib.json; npx -y hasyx build",
+    "dev": "npx -y hasyx dev",
+    "start": "npx -y hasyx start"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "events": "^3.3.0",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "hasyx": "^0.1.23",
     "js-chess-engine": "^1.0.2",
     "react": "^18.3.0",
     "uuid": "^9.0.1"
