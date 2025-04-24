@@ -1,5 +1,5 @@
 import jsChessEngine from 'js-chess-engine';
-import Debug from './debug.js';
+import Debug from './debug';
 
 const debug = Debug('chess-engine');
 
@@ -28,7 +28,7 @@ interface ChessMoveResult {
 
 /**
  * Minimalistic game class for chess move validation.
- * Using js-chess-engine internally instead of chess.js
+ * Using js-chess-engine internally instead of chess
  */
 export default class Chess {
   private _chess!: jsChessEngine.Game;
@@ -229,7 +229,7 @@ export default class Chess {
       return;
     }
     
-    // js-chess-engine has limited draw detection compared to chess.js
+    // js-chess-engine has limited draw detection compared to chess
     // We'll need to implement our own for more advanced cases
     if (this._isInsufficientMaterial() || this._isDrawByRepetition() || this._isDrawByFiftyMoveRule()) {
       this._gameStatus = 'draw';

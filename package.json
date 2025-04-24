@@ -37,6 +37,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/chess.js": "^0.13.7",
     "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.5",

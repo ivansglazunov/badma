@@ -1,8 +1,8 @@
 import assert from 'assert';
-import { Chess, ChessPossibleSide, ChessSide, ChessStatus } from './chess.js';
-import Debug from './debug.js';
+import { Chess, ChessPossibleSide, ChessSide, ChessStatus } from './chess';
+import Debug from './debug';
 import { v4 as uuidv4 } from 'uuid';
-import { ChessServer } from './chess-server.js';
+import { ChessServer } from './chess-server';
 const debug = Debug('client');
 
 export type ChessClientSide = 0 | 1 | 2;
@@ -831,7 +831,7 @@ export abstract class ChessClient {
       // --- Update core state --- //
       if (this.fen !== data.fen) {
           debug(`Sync updating FEN from ${this.fen} to ${data.fen}`);
-          this.fen = data.fen; // This implicitly updates the internal chess.js instance
+          this.fen = data.fen; // This implicitly updates the internal chess instance
       } else {
           debug(`Sync FEN matches, no update.`);
       }

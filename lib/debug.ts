@@ -1,22 +1,24 @@
 import _debug from 'debug';
+// @ts-ignore
+import pckg from '../package.json'; // Using relative path
 
-// Default name if we can't import package.json
-const DEFAULT_NAME = 'badma';
+export type DebuggerFunction = (...args: any[]) => void;
 
-// Get app name from package.json
-let packageName = DEFAULT_NAME;
-try {
-  // Dynamic import for package.json
-  const packageJson = await import('../package.json', { assert: { type: 'json' } });
-  packageName = packageJson.default.name;
-} catch (error) {
-  console.warn('Could not load package.json, using default name for debug');
+// Initialize root debugger using package name
+const rootDebug = _debug(pckg.name);
+
+/**
+ * Debug utility factory.
+ *
+ * Always returns a debugger function for the specified namespace.
+ * If no namespace is provided, uses 'app' as the default.
+ *
+ * @param namespace - Namespace for the debugger.
+ * @returns A debugger function for the specified namespace.
+ */
+function Debug(namespace?: string): DebuggerFunction {
+  // Return the debugger function for that namespace, defaulting to 'app'
+  return rootDebug.extend(namespace || 'app') as DebuggerFunction;
 }
 
-// Initialize root debugger with package name
-const rootDebug = _debug(packageName);
-
-// Export function to create child debuggers
-export default function Debug(namespace: string) {
-  return rootDebug.extend(namespace);
-} 
+export default Debug; 

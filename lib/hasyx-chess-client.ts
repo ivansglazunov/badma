@@ -1,5 +1,5 @@
-import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client.js';
-import Debug from './debug.js';
+import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client';
+import Debug from './debug';
 import { Hasyx, GenerateOptions } from 'hasyx';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid'; // Needed for generating IDs if not provided

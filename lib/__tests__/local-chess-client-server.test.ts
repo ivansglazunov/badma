@@ -1,8 +1,8 @@
-import { LocalChessServer } from '../local-chess-server.js';
-import { LocalChessClient } from '../local-chess-client.js';
-import { ChessClient, ChessClientRole, ChessClientStatus } from '../chess-client.js'; // Import base class for server constructor
+import { LocalChessServer } from '../local-chess-server';
+import { LocalChessClient } from '../local-chess-client';
+import { ChessClient, ChessClientRole, ChessClientStatus } from '../chess-client'; // Import base class for server constructor
 import { v4 as uuidv4 } from 'uuid';
-import Debug from '../debug.js';
+import Debug from '../debug';
 
 const debug = Debug('test:local-chess-client');
 

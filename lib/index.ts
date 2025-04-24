@@ -1,5 +1,5 @@
-import Debug from './debug.js';
-import Chess from './chess.js';
+import Debug from './debug';
+import Chess from './chess';
 
 export {
   Debug,

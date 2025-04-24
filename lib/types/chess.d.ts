@@ -1,4 +1,4 @@
-declare module 'chess.js' {
+declare module 'chess' {
   export class Chess {
     constructor(fen?: string);
     

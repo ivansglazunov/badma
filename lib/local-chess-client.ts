@@ -1,6 +1,6 @@
-import { ChessClient, ChessClientRequest, ChessServerResponse } from './chess-client.js';
-import { ChessServer } from './chess-server.js';
-import Debug from './debug.js';
+import { ChessClient, ChessClientRequest, ChessServerResponse } from './chess-client';
+import { ChessServer } from './chess-server';
+import Debug from './debug';
 
 const debug = Debug('local-client');
 

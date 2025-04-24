@@ -1,10 +1,10 @@
-import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client.js';
-import { ChessServer } from './chess-server.js';
-import Debug from './debug.js';
+import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client';
+import { ChessServer } from './chess-server';
+import Debug from './debug';
 import { Hasyx, GenerateOptions, GenerateResult } from 'hasyx'; // Assuming 'hasyx' package and 'Client', 'GenerateOptions' export
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid'; // For generating IDs
-import { HasyxChessClient } from './hasyx-chess-client.js';
+import { HasyxChessClient } from './hasyx-chess-client';
 
 const debug = Debug('hasyx-server');
 
@@ -233,5 +233,41 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (join.client_id !== undefined) result.clientId = join.client_id; // Can be null/undefined
     if (join.created_at !== undefined) result.createdAt = new Date(join.created_at).getTime();
     return result;
+  }
+
+  // --- Public Request Handler ---
+
+  public async request(requestData: ChessClientRequest): Promise<ChessServerResponse> {
+    debug('HasyxChessServer received request:', requestData);
+    // Basic validation: Ensure operation exists
+    if (!requestData.operation) {
+      return { error: 'Operation field is missing' };
+    }
+
+    // Note: userId in requestData should be trusted ONLY if it comes from a verified source (like a token)
+    // The API route handler is responsible for injecting the correct userId.
+
+    try {
+      switch (requestData.operation) {
+        case 'create':
+          // Validation specific to create might be added here or inside 'create'
+          return await this.create(requestData);
+        case 'join':
+          return await this.join(requestData);
+        case 'leave':
+          return await this.leave(requestData);
+        case 'move':
+          return await this.move(requestData);
+        case 'sync':
+          return await this.sync(requestData);
+        // Add cases for other potential operations like 'surrender' if distinct from 'leave'
+        default:
+          debug(`Unsupported operation requested: ${requestData.operation}`);
+          return { error: `Unsupported operation: ${requestData.operation}` };
+      }
+    } catch (error: any) {
+      debug('Error processing request in HasyxChessServer:', error);
+      return { error: error.message || 'An internal server error occurred' };
+    }
   }
 } 

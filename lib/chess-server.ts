@@ -1,7 +1,7 @@
-import { ChessClientRequest, ChessServerResponse, ChessClientSide, ChessClientRole, ChessClient, ChessClientStatus } from './chess-client.js';
-import Debug from './debug.js';
+import { ChessClientRequest, ChessServerResponse, ChessClientSide, ChessClientRole, ChessClient, ChessClientStatus } from './chess-client';
+import Debug from './debug';
 import { v4 as uuidv4 } from 'uuid';
-import { GameState } from './local-chess-server.js';
+import { GameState } from './local-chess-server';
 
 const debug = Debug('chess-server');
 

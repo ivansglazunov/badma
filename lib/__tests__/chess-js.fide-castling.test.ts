@@ -1,4 +1,4 @@
-import { Chess } from '../chess.js';
+import { Chess } from '../chess';
 
 describe('Chess FIDE Castling Validation', () => {
   let chess: Chess;

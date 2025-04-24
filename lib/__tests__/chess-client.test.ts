@@ -2,8 +2,8 @@ import {
   ChessClient,
   ChessClientMove,
   ChessClientRole
-} from '../chess-client.js';
-import { Chess } from '../chess.js';
+} from '../chess-client';
+import { Chess } from '../chess';
 
 // Helper function to simulate a delay (useful in async tests)
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

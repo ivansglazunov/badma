@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { Hasura } from 'hasyx'; // Import from installed package
-import Debug from '../../lib/debug.js';
+import Debug from '../../lib/debug';
 
 // Initialize debug
 const debug = Debug('migration:up');
@@ -18,7 +18,7 @@ const hasura = new Hasura({
 const badmaSchema = 'badma';
 const publicSchema = 'public';
 
-// --- SQL Schema Definition (from init-sql.js) ---
+// --- SQL Schema Definition (from init-sql) ---
 const triggerFunctionSQL = `
 CREATE OR REPLACE FUNCTION _set_storage_updated_at() RETURNS TRIGGER AS $$
 BEGIN
@@ -106,7 +106,7 @@ const sqlSchema = `
   EXECUTE FUNCTION _set_storage_updated_at();
 `;
 
-// --- Tables to Track (from init-sql.js) ---
+// --- Tables to Track (from init-sql) ---
 const tablesToTrack = [
   { schema: badmaSchema, name: 'servers' },
   { schema: badmaSchema, name: 'games' },
@@ -116,7 +116,7 @@ const tablesToTrack = [
   { schema: badmaSchema, name: 'ai' }
 ];
 
-// --- Relationships Definition (from init-gql.js) ---
+// --- Relationships Definition (from init-gql) ---
 const relationships = [
   // Relationships between badma tables
   {
@@ -266,7 +266,7 @@ const relationships = [
   },
 ];
 
-// --- Permissions Definition (from init-gql.js) ---
+// --- Permissions Definition (from init-gql) ---
 // We only need select permissions for 'user' role on most tables
 const userPermissions = [
   { table: 'servers', columns: ['id', 'local_address', 'global_address', 'created_at', 'active_at'] },

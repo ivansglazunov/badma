@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client.js';
-import { ChessServer } from './chess-server.js';
-import Debug from './debug.js';
+import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client';
+import { ChessServer } from './chess-server';
+import Debug from './debug';
 // No Chess import needed here
 
 const debug = Debug('local-chess-server');

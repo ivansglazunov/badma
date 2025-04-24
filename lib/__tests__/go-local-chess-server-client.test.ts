@@ -1,9 +1,9 @@
-import { LocalChessServer } from '../local-chess-server.js';
-import { LocalChessClient } from '../local-chess-client.js';
-import { ChessClient, ChessClientRole, ChessClientStatus } from '../chess-client.js';
+import { LocalChessServer } from '../local-chess-server';
+import { LocalChessClient } from '../local-chess-client';
+import { ChessClient, ChessClientRole, ChessClientStatus } from '../chess-client';
 import { v4 as uuidv4 } from 'uuid';
-import Debug from '../debug.js';
-import { go } from '../go.js'; // Import the go function
+import Debug from '../debug';
+import { go } from '../go'; // Import the go function
 
 const debug = Debug('test:go-local-server-client');
 const goLevel = 1; // AI difficulty level for the test

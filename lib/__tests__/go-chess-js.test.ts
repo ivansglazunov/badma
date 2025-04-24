@@ -1,11 +1,11 @@
-import { Chess } from '../chess.js';
-import { go } from '../go.js';
-import Debug from '../debug.js';
+import { Chess } from '../chess';
+import { go } from '../go';
+import Debug from '../debug';
 
 const debug = Debug('test:go-chess-js');
 
-describe('Integration Test: Go vs Chess.js', () => {
-  it('should play 10 moves using js-chess-engine against Chess.js', () => {
+describe('Integration Test: Go vs Chess', () => {
+  it('should play 10 moves using js-chess-engine against Chess', () => {
     const chess = new Chess();
     const maxMoves = 10;
 

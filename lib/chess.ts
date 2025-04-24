@@ -1,5 +1,5 @@
 import * as chessJs from 'chess.js';
-import Debug from './debug.js';
+import Debug from './debug';
 
 const debug = Debug('chess');
 
@@ -31,7 +31,7 @@ export interface ChessConfig {
   // strictFideCastling?: boolean; // Removed this line
 }
 
-// Support for different chess.js import formats
+// Support for different chess import formats
 let ChessNative: any;
 try {
   // Determine where to find the Chess constructor
@@ -84,9 +84,9 @@ try {
     debug(`❌ Failed to create test instance: ${error instanceof Error ? error.stack || error.message : error}`);
   }
 } catch (error) {
-  debug(`❌ Critical error importing chess.js: ${error instanceof Error ? error.stack || error.message : error}`);
+  debug(`❌ Critical error importing chess: ${error instanceof Error ? error.stack || error.message : error}`);
   // No fallback to require, since this is ESM
-  throw new Error(`Cannot import chess.js: ${error instanceof Error ? error.message : String(error)}`);
+  throw new Error(`Cannot import chess: ${error instanceof Error ? error.message : String(error)}`);
 }
 
 debug(`✅ Chess successfully imported: ${typeof ChessNative}`);
@@ -818,7 +818,7 @@ export default class Chess {
     }
     // --- End Pre-move Validation ---
     
-    debug(`🎲 Attempting move in chess.js: ${move.from} -> ${move.to}`);
+    debug(`🎲 Attempting move in chess: ${move.from} -> ${move.to}`);
     
     // Create a clean move object for the underlying library
     const moveObj: { from: string; to: string; promotion?: string; } = {
@@ -832,8 +832,8 @@ export default class Chess {
       const result = this._chess.move(moveObj);
       
       if (result) {
-        // Move was successful in chess.js
-        debug(`✅ Move executed successfully by chess.js: ${move.from} -> ${move.to}.`);
+        // Move was successful in chess
+        debug(`✅ Move executed successfully by chess: ${move.from} -> ${move.to}.`);
 
         // --- Post-move Castling Rights Update --- REMOVED BLOCK
         // if (rightsToRemove) { // REMOVED BLOCK
@@ -874,14 +874,14 @@ export default class Chess {
         debug(`🏁 Final FEN after move: ${this.fen}`); // Updated log message
         return { success: true, error: '' };
       } else {
-         // This block might be reached if chess.js has other reasons to reject the move
+         // This block might be reached if chess has other reasons to reject the move
          // (e.g., move leaves king in check, even if rights were correct)
-         debug(`❌ Invalid move reported by chess.js: ${move.from} -> ${move.to}`);
-         // Check if game is over AFTER the failed move attempt in chess.js
+         debug(`❌ Invalid move reported by chess: ${move.from} -> ${move.to}`);
+         // Check if game is over AFTER the failed move attempt in chess
          let errorReason = `Invalid move: ${move.from} -> ${move.to}. Move rejected by underlying chess engine.`;
          if(this.isGameOver) {
             errorReason = `Game is already over: ${this.status}`;
-            debug(`❌ Game over detected after invalid move by chess.js: ${this.status}`);
+            debug(`❌ Game over detected after invalid move by chess: ${this.status}`);
          }
          return { 
            success: false, 
@@ -889,9 +889,9 @@ export default class Chess {
          };
       }
     } catch (error) {
-      // Catch errors from the underlying chess.js move execution
+      // Catch errors from the underlying chess move execution
       const errorMsg = error instanceof Error ? error.message : String(error);
-      debug(`❌ Error executing move via chess.js: ${errorMsg}`);
+      debug(`❌ Error executing move via chess: ${errorMsg}`);
       return { success: false, error: `Move execution error: ${errorMsg}` };
     }
     // Implicit return removed, function now always returns ChessMoveResult
@@ -905,7 +905,7 @@ export default class Chess {
    */
   put(piece: { type: string; color: string }, square: string): boolean {
     try {
-      // Type assertion to satisfy underlying chess.js method, though input types are simplified
+      // Type assertion to satisfy underlying chess method, though input types are simplified
       const result = this._chess.put(piece as { type: any; color: any }, square as any);
       if (result) {
         debug(`📥 Piece ${piece.color}${piece.type} placed on ${square}`);
@@ -926,7 +926,7 @@ export default class Chess {
    */
   remove(square: string): { type: string; color: string } | null {
     try {
-      // Type assertion to satisfy underlying chess.js method, though input types are simplified
+      // Type assertion to satisfy underlying chess method, though input types are simplified
       const piece = this._chess.remove(square as any);
       // We need to assert the return type as well if we want to keep the string signature
       if (piece) {

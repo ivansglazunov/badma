@@ -1,4 +1,4 @@
-import { Chess } from '../chess-engine.js';
+import { Chess } from '../chess-engine';
 
 describe('Chess Engine Castling', () => {
   let chess: Chess;

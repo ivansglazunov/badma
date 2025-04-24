@@ -1,9 +1,9 @@
-import { LocalChessServer } from '../local-chess-server.js';
-import { Chess } from '../chess.js'; // Using the actual Chess class for testing
-import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus } from '../chess-client.js';
+import { LocalChessServer } from '../local-chess-server';
+import { Chess } from '../chess'; // Using the actual Chess class for testing
+import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus } from '../chess-client';
 import { v4 as uuidv4 } from 'uuid';
-import Debug from '../debug.js'; // Import the Debug function
-import { LocalChessClient } from '../local-chess-client.js'; // Import LocalChessClient for constructor
+import Debug from '../debug'; // Import the Debug function
+import { LocalChessClient } from '../local-chess-client'; // Import LocalChessClient for constructor
 
 const debug = Debug('test:local-server'); // Create a debug instance for this test file
 
@@ -657,7 +657,7 @@ describe('LocalChessServer', () => {
                 move: { from: 'e7', to: 'e5' }
             } as ChessClientRequest;
             const response = await server.move(request);
-            expect(response.error).toContain("It's white's turn to move"); // Error from chess.js via server
+            expect(response.error).toContain("It's white's turn to move"); // Error from chess via server
             expect(response.data).toBeDefined();
             expect(response.data?.status).toBe('ready'); // Status doesn't change
         });

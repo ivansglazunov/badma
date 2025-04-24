@@ -224,7 +224,7 @@ describe('Chess Castling', () => {
       // White moves King out
       const move1 = localChessWhite.move({ from: 'e1', to: 'e2' }); 
       expect(move1.success).toBe(true); // Verify king moved
-      expect(localChessWhite.fen).toContain(' b kq - '); // Verify rights updated immediately by chess.js
+      expect(localChessWhite.fen).toContain(' b kq - '); // Verify rights updated immediately by chess
       
       // Simulate black move to pass turn
       expect(localChessWhite.turn).toBe(2); 

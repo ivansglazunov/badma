@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { Hasura } from 'hasyx'; // Try importing from dist/index
-import Debug from '../../lib/debug.js';
+import Debug from '../../lib/debug';
 
 // Initialize debug
 const debug = Debug('migration:down');
@@ -35,7 +35,7 @@ const adminPermissionsAiToDrop = [
   { type: 'pg_drop_delete_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin' } },
 ];
 
-// Relationships to drop (based on up.ts and clean.js)
+// Relationships to drop (based on up.ts and clean)
 const relationshipsToDrop = [
   // Relationships between badma tables
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'moves' }, relationship: 'game' } },
