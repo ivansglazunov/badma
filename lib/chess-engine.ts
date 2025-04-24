@@ -1,7 +1,7 @@
 import jsChessEngine from 'js-chess-engine';
 import Debug from './debug.js';
 
-const debug = Debug('badma:chess-engine');
+const debug = Debug('chess-engine');
 
 // Type for possible side values
 export type ChessPossibleSide = 'w' | 'b' | 'white' | 'black' | 1 | 2;

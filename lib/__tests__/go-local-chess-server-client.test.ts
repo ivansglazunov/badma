@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Debug from '../debug.js';
 import { go } from '../go.js'; // Import the go function
 
-const debug = Debug('badma:test:go-local-server-client');
+const debug = Debug('test:go-local-server-client');
 const goLevel = 1; // AI difficulty level for the test
 
 describe('Go AI vs Go AI via Local Server/Client', () => {
@@ -14,10 +14,8 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
 
         // 1. Setup Server and Users
         const server = new LocalChessServer(ChessClient);
-        const whiteUserId = uuidv4();
-        const blackUserId = uuidv4();
-        await server.__addUser(whiteUserId);
-        await server.__addUser(blackUserId);
+        const whiteUserId = await server.__addUser();
+        const blackUserId = await server.__addUser();
         debug(`Server created. Users added: White=${whiteUserId}, Black=${blackUserId}`);
 
         // 2. Setup Clients
@@ -32,27 +30,34 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
 
         // 3. White Creates Game
         debug('White creating game...');
-        const createResponse = await whiteClient.asyncCreate(1, ChessClientRole.Player); // White is side 1
+        const createResponse = await whiteClient.asyncCreate(1); // White is side 1
         expect(createResponse.error).toBeUndefined();
         expect(createResponse.data).toBeDefined();
         const gameId = createResponse.data!.gameId!;
         debug(`Game created by White. Game ID: ${gameId}, White Join ID: ${whiteClient.joinId}`);
         expect(whiteClient.gameId).toBe(gameId);
+
+        // 4. White Joins Game
+        debug('White joining game...');
+        const joinWhiteResponse = await whiteClient.asyncJoin(1, ChessClientRole.Player); // White is side 1
+        expect(joinWhiteResponse.error).toBeUndefined();
+        expect(joinWhiteResponse.data).toBeDefined();
+        debug(`White joined game. White Join ID: ${whiteClient.joinId}`);
         expect(whiteClient.side).toBe(1);
         expect(whiteClient.status).toBe('await');
 
-        // 4. Black Joins Game
+        // 5. Black Joins Game
         debug('Black joining game...');
         blackClient.gameId = gameId; // Manually set gameId for black client
-        const joinResponse = await blackClient.asyncJoin(2, ChessClientRole.Player); // Black is side 2
-        expect(joinResponse.error).toBeUndefined();
-        expect(joinResponse.data).toBeDefined();
+        const joinBlackResponse = await blackClient.asyncJoin(2, ChessClientRole.Player); // Black is side 2
+        expect(joinBlackResponse.error).toBeUndefined();
+        expect(joinBlackResponse.data).toBeDefined();
         debug(`Black joined game. Black Join ID: ${blackClient.joinId}`);
         expect(blackClient.gameId).toBe(gameId);
         expect(blackClient.side).toBe(2);
         // Server should set status to 'ready' now
-        expect(joinResponse.data?.status).toBe('ready');
-        blackClient.status = joinResponse.data!.status; // Update black client status
+        expect(joinBlackResponse.data?.status).toBe('ready');
+        blackClient.status = joinBlackResponse.data!.status; // Update black client status
 
         // Manually sync white client status from server state
         // const serverGameState = await server.__getGameState(gameId);
@@ -67,7 +72,7 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
 
         debug(`Game ready! White FEN: ${whiteClient.fen}, Black FEN: ${blackClient.fen}`);
 
-        // 5. Game Loop
+        // 6. Game Loop
         let moveCount = 0;
         const maxMoves = 1000; // Safety break for total successful moves
         let currentStatus = whiteClient.status;
@@ -149,7 +154,7 @@ describe('Go AI vs Go AI via Local Server/Client', () => {
             debug(`[Move ${moveCount}] ✅ Move successful. New Status: ${currentStatus}, New FEN: ${updatedFen}`);
         }
 
-        // 6. Verify Final State
+        // 7. Verify Final State
         debug(`🏁 Game finished after ${moveCount} moves. Final Status: ${currentStatus}`);
         const finalFen = whiteClient.fen; // Both clients should have the same final FEN
 

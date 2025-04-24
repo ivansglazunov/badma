@@ -1,7 +1,7 @@
 import * as chessJs from 'chess.js';
 import Debug from './debug.js';
 
-const debug = Debug('badma:chess');
+const debug = Debug('chess');
 
 // Type for possible side values
 export type ChessPossibleSide = 'w' | 'b' | 'white' | 'black' | 1 | 2;
@@ -176,6 +176,7 @@ export default class Chess {
    * @returns Current FEN string
    */
   get fen(): string {
+    debug(`get fen ${this._chess.fen()}`);
     return this._chess.fen();
   }
 
@@ -185,6 +186,7 @@ export default class Chess {
    * @returns Current FEN string
    */
   set fen(value: string) {
+    debug(`set fen = ${value}`);
     this._chess.load(value);
   }
   

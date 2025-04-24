@@ -4,10 +4,10 @@ import { Hasura } from 'hasyx'; // Try importing from dist/index
 import Debug from '../../lib/debug.js';
 
 // Initialize debug
-const debug = Debug('badma:migration:down');
+const debug = Debug('migration:down');
 
 // Load environment variables from the root .env file
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config();
 
 // Initialize Hasura client (validation happens inside constructor)
 const hasura = new Hasura({
@@ -65,6 +65,10 @@ const tablesToUntrack = badmaTables.map(table => ({
 }));
 
 // SQL to drop tables and schema
+const dropFunctionSQL = `
+DROP FUNCTION IF EXISTS _set_storage_updated_at() CASCADE;
+`;
+
 const dropTablesSQL = `
   DROP TABLE IF EXISTS badma.ai CASCADE;
   DROP TABLE IF EXISTS badma.moves CASCADE;
@@ -117,6 +121,9 @@ async function dropMetadata() {
 
 async function dropTablesFunc() {
   debug('🧹 Dropping badma tables and schema...');
+  debug('  🗑️ Dropping trigger function _set_storage_updated_at...');
+  await hasura.sql(dropFunctionSQL);
+  debug('  ✅ Trigger function dropped.');
   await hasura.sql(dropTablesSQL);
   debug('✅ Badma tables and schema dropped successfully.');
 }

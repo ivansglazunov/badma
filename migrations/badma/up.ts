@@ -4,10 +4,10 @@ import { Hasura } from 'hasyx'; // Import from installed package
 import Debug from '../../lib/debug.js';
 
 // Initialize debug
-const debug = Debug('badma:migration:up');
+const debug = Debug('migration:up');
 
 // Load environment variables from the root .env file
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config();
 
 // Initialize Hasura client (validation happens inside constructor)
 const hasura = new Hasura({
@@ -19,6 +19,15 @@ const badmaSchema = 'badma';
 const publicSchema = 'public';
 
 // --- SQL Schema Definition (from init-sql.js) ---
+const triggerFunctionSQL = `
+CREATE OR REPLACE FUNCTION _set_storage_updated_at() RETURNS TRIGGER AS $$
+BEGIN
+  NEW.storage_updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+`;
+
 const sqlSchema = `
   -- Create schema if not exists
   CREATE SCHEMA IF NOT EXISTS ${badmaSchema};
@@ -40,7 +49,11 @@ const sqlSchema = `
     side INTEGER NOT NULL DEFAULT 1,
     mode TEXT NOT NULL DEFAULT 'classic',
     fen TEXT, -- Dynamically updated with each move
+    status TEXT NOT NULL DEFAULT 'await',
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL,
+    storage_inserted_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    storage_updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT side_within_sides CHECK (side <= sides),
     CONSTRAINT side_min_value CHECK (side >= 1)
   );
@@ -64,6 +77,7 @@ const sqlSchema = `
     game_id UUID NOT NULL REFERENCES ${badmaSchema}.games(id) ON DELETE CASCADE,
     side INTEGER NOT NULL,
     role INTEGER NOT NULL,
+    client_id UUID NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
     -- Removed constraint side_valid_range as side can be 0 for spectator/observer
   );
@@ -83,6 +97,13 @@ const sqlSchema = `
     join_id UUID NOT NULL REFERENCES ${badmaSchema}.joins(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
+
+  -- <<< ADDED Trigger for badma.games storage_updated_at >>>
+  DROP TRIGGER IF EXISTS set_storage_updated_at_trigger ON ${badmaSchema}.games;
+  CREATE TRIGGER set_storage_updated_at_trigger
+  BEFORE UPDATE ON ${badmaSchema}.games
+  FOR EACH ROW
+  EXECUTE FUNCTION _set_storage_updated_at();
 `;
 
 // --- Tables to Track (from init-sql.js) ---
@@ -249,9 +270,9 @@ const relationships = [
 // We only need select permissions for 'user' role on most tables
 const userPermissions = [
   { table: 'servers', columns: ['id', 'local_address', 'global_address', 'created_at', 'active_at'] },
-  { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'created_at'] },
-  { table: 'moves', columns: ['id', 'from', 'to', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
-  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at'] },
+  { table: 'badma_games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at'] },
+  { table: 'badma_moves', columns: ['id', 'from', 'to', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
+  { table: 'badma_joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at'] },
   { table: 'conflicts', columns: ['id', 'game_id', 'user_id', 'error', 'created_at'] },
 ].map(p => ({
   type: 'pg_create_select_permission',
@@ -303,6 +324,9 @@ const aiAdminPermissions = [
 
 async function applySQLSchema() {
   debug('🔧 Applying SQL schema for badma...');
+  debug('   Applying trigger function _set_storage_updated_at...');
+  await hasura.sql(triggerFunctionSQL, 'default', true);
+  debug('   Trigger function applied.');
   await hasura.sql(sqlSchema, 'default', true); // cascade = true
   debug('✅ Badma SQL schema applied.');
 }

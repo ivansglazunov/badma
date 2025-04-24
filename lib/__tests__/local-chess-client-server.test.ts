@@ -4,7 +4,7 @@ import { ChessClient, ChessClientRole, ChessClientStatus } from '../chess-client
 import { v4 as uuidv4 } from 'uuid';
 import Debug from '../debug.js';
 
-const debug = Debug('badma:test:local-client');
+const debug = Debug('test:local-chess-client');
 
 describe('LocalChessClient <-> LocalChessServer Interaction', () => {
 
@@ -15,34 +15,45 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
         const server = new LocalChessServer(ChessClient); // Pass LocalChessClient constructor
 
         // ---> ADD USERS TO SERVER BEFORE CLIENT OPERATIONS <---
-        await server.__addUser('user-white-fools');
-        await server.__addUser('user-black-fools');
+        const userId1 = await server.__addUser();
+        const userId2 = await server.__addUser();
 
         const whiteClient = new LocalChessClient(server);
         whiteClient.clientId = uuidv4();
-        whiteClient.userId = 'user-white-fools';
+        whiteClient.userId = userId1;
 
         const blackClient = new LocalChessClient(server);
         blackClient.clientId = uuidv4();
-        blackClient.userId = 'user-black-fools';
+        blackClient.userId = userId2;
 
         debug(`White Client ID: ${whiteClient.clientId}, User ID: ${whiteClient.userId}`);
         debug(`Black Client ID: ${blackClient.clientId}, User ID: ${blackClient.userId}`);
 
         // 2. Black creates and joins the game
         debug('Black creating game...');
-        const createResponse = await blackClient.asyncCreate(2, ChessClientRole.Player); // Black is side 2
+        const createResponse = await blackClient.asyncCreate(1);
         expect(createResponse.error).toBeUndefined();
         expect(createResponse.data).toBeDefined();
         const gameId = createResponse.data!.gameId!;
         debug(`Game created by Black. Game ID: ${gameId}, Black Join ID: ${blackClient.joinId}`);
         expect(blackClient.gameId).toBe(gameId);
-        expect(blackClient.side).toBe(2);
-        expect(blackClient.role).toBe(ChessClientRole.Player);
+        expect(blackClient.side).toBe(0);
+        expect(blackClient.role).toBe(ChessClientRole.Anonymous);
         expect(blackClient.status).toBe('await'); // Still waiting for White
 
+        // 3. Black joins the game
+        debug('White black joining game...');
+        const joinResponseBlack = await blackClient.asyncJoin(2, ChessClientRole.Player);
+        expect(joinResponseBlack.error).toBeUndefined();
+        expect(joinResponseBlack.data).toBeDefined();
+        debug(`Black joined game. Black Join ID: ${blackClient.joinId}`);
+        expect(blackClient.gameId).toBe(gameId);
+        expect(blackClient.side).toBe(2);
+        expect(blackClient.role).toBe(ChessClientRole.Player);
+        expect(blackClient.status).toBe('await');
+
         // 3. White joins the game
-        debug('White joining game...');
+        debug('White white joining game...');
         whiteClient.gameId = gameId; // Manually set gameId for white client
         const joinResponse = await whiteClient.asyncJoin(1, ChessClientRole.Player); // White is side 1
         expect(joinResponse.error).toBeUndefined();
@@ -144,22 +155,32 @@ describe('LocalChessClient <-> LocalChessServer Interaction', () => {
     it('should update client state correctly after leave/surrender', async () => {
         debug('Starting client state after leave test');
         const server = new LocalChessServer(ChessClient); // Pass LocalChessClient constructor
-        await server.__addUser('user-leaver');
-        await server.__addUser('user-opponent');
+        const userId1 = await server.__addUser();
+        const userId2 = await server.__addUser();
 
         const leavingClient = new LocalChessClient(server);
         leavingClient.clientId = uuidv4();
-        leavingClient.userId = 'user-leaver';
+        leavingClient.userId = userId1;
 
         const opponentClient = new LocalChessClient(server);
         opponentClient.clientId = uuidv4();
-        opponentClient.userId = 'user-opponent';
+        opponentClient.userId = userId2;
 
         // Leaver creates and joins as White
-        const createRes = await leavingClient.asyncCreate(1, ChessClientRole.Player);
+        const createRes = await leavingClient.asyncCreate(1);
+        expect(createRes.error).toBeUndefined();
         const gameId = createRes.data!.gameId!;
+        expect(gameId).toBeDefined();
+        expect(leavingClient.side).toBe(0);
+        expect(leavingClient.role).toBe(0);
+        expect(leavingClient.status).toBe('await');
+
+        // User joins as White
+        const joinRes = await leavingClient.asyncJoin(1, ChessClientRole.Player);
         const initialJoinId = leavingClient.joinId;
         expect(initialJoinId).toBeDefined();
+        expect(joinRes.error).toBeUndefined();
+        expect(joinRes.data).toBeDefined();
         expect(leavingClient.side).toBe(1);
         expect(leavingClient.role).toBe(ChessClientRole.Player);
         expect(leavingClient.status).toBe('await');

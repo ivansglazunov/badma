@@ -3,7 +3,7 @@ import { Chess, ChessPossibleSide, ChessSide, ChessStatus } from './chess.js';
 import Debug from './debug.js';
 import { v4 as uuidv4 } from 'uuid';
 import { ChessServer } from './chess-server.js';
-const debug = Debug('badma:client');
+const debug = Debug('client');
 
 export type ChessClientSide = 0 | 1 | 2;
 
@@ -197,6 +197,7 @@ export abstract class ChessClient {
         if (response.data.role != this.role) this._error(request, { ...response, error: 'role!=this.role' });
         if (response.data.status != this.status) this._error(request, { ...response, error: 'status!=this.status' });
         // </after async>
+        this.applySyncResponse(response.data);
       }
     }).catch(error => {
       this.status = 'error';
@@ -218,12 +219,11 @@ export abstract class ChessClient {
     debug('syncCreate:response', response);
     return response;
   }
-  async asyncCreate(side?: ChessClientSide, role: ChessClientRole = ChessClientRole.Player): Promise<ChessClientResponse> {
-    debug('asyncCreate', side, role);
+  async asyncCreate(initSide: ChessClientSide = 1): Promise<ChessClientResponse> {
+    debug('asyncCreate', 'this.userId', this.userId);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
-    if (side !== undefined) this.side = side;
-    if (role !== undefined) this.role = role;
+    if (initSide) this.turn = initSide
     this.status = 'await';
     this.updatedAt = Date.now()
     this.createdAt = this.updatedAt
@@ -232,7 +232,6 @@ export abstract class ChessClient {
       clientId: this.clientId,
       userId: this.userId,
       side: this.side,
-      role: this.role,
       updatedAt: this.updatedAt,
       createdAt: this.createdAt,
     };
@@ -243,18 +242,13 @@ export abstract class ChessClient {
       this._error(request, response);
     } else if (response.data) {
       if (response.data.gameId) this.gameId = response.data.gameId; // after async
-      if (response.data.joinId) this.joinId = response.data.joinId;
-      if (response.data.side) this.side = response.data.side;
-      if (response.data.role) this.role = response.data.role;
       if (response.data.status) this.status = response.data.status;
+      this.applySyncResponse(response.data);
     }
     const result: ChessClientResponse = { data: {
       clientId: this.clientId,
       userId: this.userId,
       gameId: this.gameId,
-      joinId: this.joinId,
-      side: this.side,
-      role: this.role,
       fen: this.fen,
       status: this.status,
       updatedAt: this.updatedAt = Date.now(),
@@ -271,9 +265,6 @@ export abstract class ChessClient {
       data: {
         clientId: this.clientId, // from start
         gameId: this.gameId || uuidv4(), // fake
-        joinId: (request.side && request.role) ? this.joinId = uuidv4() : undefined, // fake
-        side: request.side || 0, // fake just trust request
-        role: request.role || 0, // fake just trust request
         fen: this.fen, // fake already
         status: this.status, // fake already
         updatedAt: request.updatedAt, // fake already
@@ -320,6 +311,7 @@ export abstract class ChessClient {
         if (response.data.role != this.role) this._error(request, { ...response, error: 'role!=this.role' });
         if (response.data.status != this.status) this._error(request, { ...response, error: 'status!=this.status' });
         // </after async>
+        this.applySyncResponse(response.data);
       }
     }).catch(error => {
       this.status = 'error';
@@ -373,9 +365,7 @@ export abstract class ChessClient {
       debug('asyncJoin:data', response);
       if (response.data.gameId != this.gameId) this._error(request, { ...response, error: 'gameId!=this.gameId' });
       if (response.data.joinId != this.joinId) this._error(request, { ...response, error: 'joinId!=this.joinId' });
-      if (response.data.fen) this.fen = response.data.fen;
-      if (response.data.status) this.status = response.data.status;
-      if (response.data.updatedAt) this.updatedAt = response.data.updatedAt;
+      this.applySyncResponse(response.data);
       return {
         data: {
           clientId: this.clientId,
@@ -458,13 +448,7 @@ export abstract class ChessClient {
         debug('syncLeave:error', response);
         this._error(request, response);
       } else if (response.data) {
-        // Update local state based on successful server response
-        this.side = response.data.side ?? finalSide;
-        this.role = response.data.role ?? finalRole;
-        this.joinId = response.data.joinId; // Server might return null/undefined or keep it
-        this.status = response.data.status ?? this.status; // Use server status if provided, else keep surrender
-        this.fen = response.data.fen ?? this.fen;
-        this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+        this.applySyncResponse(response.data);
         debug('syncLeave:success', response.data);
       }
     }).catch(error => {
@@ -538,12 +522,7 @@ export abstract class ChessClient {
       this._error(request, response);
     } else if (response.data) {
       debug('asyncLeave:success', response.data);
-      this.side = response.data.side ?? finalSide;
-      this.role = response.data.role ?? finalRole;
-      this.joinId = response.data.joinId; // Server might return null/undefined
-      this.status = response.data.status ?? this.status; // Use server status or keep surrender
-      this.fen = response.data.fen ?? this.fen;
-      this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+      this.applySyncResponse(response.data);
     } else {
       // No error, no data? Fallback to optimistic update
       this.side = finalSide;
@@ -594,6 +573,7 @@ export abstract class ChessClient {
     debug('_leave:fake:result', result);
     return result;
   }
+
   syncMove(move: ChessClientMove): ChessClientResponse {
     debug('syncMove', move);
     if (!this.clientId) return { error: '!this.clientId' };
@@ -643,6 +623,7 @@ export abstract class ChessClient {
         this._error(request, response);
       } else if (response.data) {
         debug('syncMove:success', response.data);
+        this.applySyncResponse(response.data);
       }
     }).catch(error => {
       debug('syncMove:error', error);
@@ -716,11 +697,7 @@ export abstract class ChessClient {
       this._error(request, response);
     } else if (response.data) {
       debug('asyncMove:success', response.data);
-      this.side = response.data.side ?? this.side;
-      this.role = response.data.role ?? this.role;
-      this.fen = response.data.fen ?? this.fen;
-      this.status = response.data.status ?? this.status;
-      this.updatedAt = response.data.updatedAt ?? this.updatedAt;
+      this.applySyncResponse(response.data);
     }
 
     const result: ChessClientResponse = {
@@ -839,12 +816,15 @@ export abstract class ChessClient {
           return; // Cannot apply null data
       }
 
-      if (data.gameId !== this.gameId) {
+      if (this.gameId && data.gameId) this.gameId = data.gameId;
+      else if (data.gameId !== this.gameId) {
           debug(`Warning: Sync response gameId ${data.gameId} differs from client gameId ${this.gameId}`);
           // Potentially handle this error state, for now just log it.
           // Maybe update this.gameId? Or throw error?
       }
-      if (data.clientId !== this.clientId) {
+
+      if (this.clientId && data.clientId) this.clientId = data.clientId;
+      else if (data.clientId !== this.clientId) {
           debug(`Warning: Sync response clientId ${data.clientId} differs from client clientId ${this.clientId}`);
       }
 

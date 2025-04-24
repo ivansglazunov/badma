@@ -2,18 +2,16 @@ import { ChessClient, ChessClientRequest, ChessServerResponse } from './chess-cl
 import { ChessServer } from './chess-server.js';
 import Debug from './debug.js';
 
-const debug = Debug('badma:local-client');
+const debug = Debug('local-client');
 
-export class LocalChessClient extends ChessClient {
-    private _server: ChessServer<ChessClient>;
+export class LocalChessClient<Server extends ChessServer<ChessClient>> extends ChessClient {
+    private _server: Server;
 
-    constructor(server: ChessServer<ChessClient>) {
+    constructor(server: Server) {
         super(server as any); // Call the base class constructor
         this._server = server as any;
         debug('LocalChessClient initialized with server:', server.constructor.name);
     }
-
-    // Override protected methods to delegate to the server's public API
 
     protected override async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
         debug('LocalChessClient _create sending request to server:', request);
@@ -63,7 +61,6 @@ export class LocalChessClient extends ChessClient {
         }
     }
 
-    // --- Sync Implementation --- //
     protected override async _sync(request: ChessClientRequest): Promise<ChessServerResponse> {
         debug('LocalChessClient _sync sending request to server:', request);
         try {

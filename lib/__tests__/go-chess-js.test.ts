@@ -2,7 +2,7 @@ import { Chess } from '../chess.js';
 import { go } from '../go.js';
 import Debug from '../debug.js';
 
-const debug = Debug('badma:test:go-chess-js');
+const debug = Debug('test:go-chess-js');
 
 describe('Integration Test: Go vs Chess.js', () => {
   it('should play 10 moves using js-chess-engine against Chess.js', () => {
