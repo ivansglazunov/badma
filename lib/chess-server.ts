@@ -188,20 +188,29 @@ export abstract class ChessServer<T extends ChessClient> {
             debug(`Server Game ${gameId} status remains ${game.status}. Players: ${gamePlayerJoins.length}`);
         }
 
-        // Construct response using server state
+        // --- NEW: Fetch updated game state AFTER potential update ---
+        const finalGame = await this.__getGame(gameId);
+        if (!finalGame) {
+            // This shouldn't happen, but handle defensively
+            debug(`Error: Game ${gameId} not found after attempting update.`);
+            return { error: 'Internal server error: Game state lost after update' };
+        }
+        // --- END NEW ---
+
+        // Construct response using the FINAL server state
         const responseData: ChessServerResponse['data'] = {
             clientId: request.clientId,
             gameId: gameId,
             joinId: joinId,
             side: request.side!,
             role: request.role!,
-            fen: game.fen, // Use current server FEN
-            status: serverStatus, // Use updated server status
-            updatedAt: serverUpdatedAt, // Use updated server timestamp
-            createdAt: game.createdAt,
+            fen: finalGame.fen,         // <<< Use finalGame.fen
+            status: finalGame.status,   // <<< Use finalGame.status
+            updatedAt: finalGame.updatedAt, // <<< Use finalGame.updatedAt
+            createdAt: finalGame.createdAt, // <<< Use finalGame.createdAt
         };
 
-         debug(`_join RETURNING responseData with status: ${responseData.status} (Server game status is: ${serverStatus})`);
+         debug(`_join RETURNING responseData with status: ${responseData.status}`);
          return { data: responseData };
     }
 
@@ -228,7 +237,7 @@ export abstract class ChessServer<T extends ChessClient> {
         const clientIdToLeave = leavingJoin.clientId;
 
         // Find the associated ChessClient instance
-        const clientToLeave = await this.__getClient(clientIdToLeave);
+        const clientToLeave = await this.__defineClient(clientIdToLeave);
         if (!clientToLeave) {
             debug(`Error: Found join record ${joinIdToLeave} pointing to client ${clientIdToLeave}, but client not registered.`);
             return { error: 'Internal server error: Inconsistent state, leaving client not found' };
@@ -330,7 +339,7 @@ export abstract class ChessServer<T extends ChessClient> {
         }
 
         // Get the ChessClient instance
-        const clientToMove = await this.__getClient(clientIdToMove); // Returns ChessClient
+        const clientToMove = await this.__defineClient(clientIdToMove); // Returns ChessClient
         if (!clientToMove) {
             debug(`Error: Client instance not found for clientId ${clientIdToMove} referenced by join record ${joinRecord.joinId}`);
             return { error: 'Internal server error: Client instance for move not found' };
@@ -574,12 +583,14 @@ export abstract class ChessServer<T extends ChessClient> {
         return newClient;
     }
 
-    public async __getClient(clientId: string): Promise<T | undefined> {
+    public async __defineClient(clientId: string): Promise<T | undefined> {
         const client = this._clients[clientId];
         if (!client) {
-            debug(`__getClient Error: Client with ID ${clientId} not found in registered clients.`);
+            debug(`__defineClient Info: Client with ID ${clientId} not found in registered clients. Attempting to register...`);
+            // If client doesn't exist, register it (which creates and stores it)
+            return await this.__registerClient(clientId);
         }
-        return client; // Returns ChessClient | undefined
+        return client; // Returns ChessClient | undefined (or the newly registered one)
     }
 
     public abstract __checkUser(userId: string | undefined): Promise<boolean>;

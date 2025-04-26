@@ -64,7 +64,12 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     return !!(await this.__getGame(gameId));
   }
   public async __getGame(gameId: string): Promise<any | undefined> {
-    const games = await this._hasyx.select({ table: 'badma_games', where: { id: { _eq: gameId } }, limit: 1, returning: ['id', 'user_id', 'sides', 'side', 'mode', 'fen', 'status', 'created_at', 'updated_at'] });
+    const games = await this._hasyx.select({
+      table: 'badma_games',
+      where: { id: { _eq: gameId } },
+      limit: 1,
+      returning: ['id', 'user_id', 'sides', 'side', 'mode', 'fen', 'status', 'created_at', 'updated_at'],
+    });
     const rawGame = (games as any)?.[0];
     debug('__getGame', rawGame);
     return HasyxChessServer.deserializeGame(rawGame);
@@ -98,7 +103,12 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     debug('__addJoinRecord serialized', serializedJoin);
   }
   public async __getAllJoinsForGame(gameId: string): Promise<any[]> {
-    const joinsResult = await this._hasyx.select({ table: 'badma_joins', where: { game_id: { _eq: gameId } } });
+    const joinsResult = await this._hasyx.select({
+      table: 'badma_joins',
+      where: { game_id: { _eq: gameId } },
+      order_by: { created_at: 'desc' },
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
+    });
     const rawJoins = (joinsResult as any) || [];
     return rawJoins.map(HasyxChessServer.deserializeJoin).filter(Boolean);
   }
@@ -106,7 +116,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     const joinsResult = await this._hasyx.select({
       table: 'badma_joins',
       where: { id: { _eq: joinId }, game_id: { _eq: gameId }, user_id: { _eq: userId }, client_id: { _is_null: false } },
-      limit: 1
+      limit: 1,
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
     });
     const rawJoin = (joinsResult as any)?.[0];
     return HasyxChessServer.deserializeJoin(rawJoin);
@@ -116,7 +127,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       table: 'badma_joins',
       where: { game_id: { _eq: gameId }, user_id: { _eq: userId }, role: { _eq: ChessClientRole.Player }, client_id: { _is_null: false } },
       order_by: { created_at: 'desc' },
-      limit: 1
+      limit: 1,
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at'],
     });
     const rawJoin = (joinsResult as any)?.[0];
     return HasyxChessServer.deserializeJoin(rawJoin);
@@ -126,25 +138,31 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         table: 'badma_joins',
         where: { game_id: { _eq: gameId }, side: { _eq: side }, role: { _eq: ChessClientRole.Player }, client_id: { _is_null: false } },
         order_by: { created_at: 'desc' },
-        limit: 1
+        limit: 1,
+        returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at'],
     });
     const rawJoin = (joinsResult as any)?.[0];
     return HasyxChessServer.deserializeJoin(rawJoin);
   }
   public async __getGamePlayerJoins(gameId: string): Promise<any[]> {
+    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Fetching player joins for game ${gameId}`);
     const joinsResult = await this._hasyx.select({
       table: 'badma_joins',
       where: { game_id: { _eq: gameId }, role: { _eq: ChessClientRole.Player }, client_id: { _is_null: false } },
       order_by: { created_at: 'asc' },
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
     });
     const rawJoins = (joinsResult as any) || [];
+    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Raw joins received for game ${gameId}:`, JSON.stringify(rawJoins));
     const deserializedJoins = rawJoins.map(HasyxChessServer.deserializeJoin).filter(Boolean);
 
     const latestJoinsByUser: Record<string, any> = {};
     deserializedJoins.forEach((j: any) => {
         latestJoinsByUser[j.userId] = j;
     });
-    return Object.values(latestJoinsByUser);
+    const finalPlayerJoins = Object.values(latestJoinsByUser);
+    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Final distinct player joins for game ${gameId} (length: ${finalPlayerJoins.length}):`, JSON.stringify(finalPlayerJoins));
+    return finalPlayerJoins;
   }
   public async __clearJoinClientReference(joinId: string): Promise<void> {
       await this._hasyx.update({
@@ -162,6 +180,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       table: 'badma_joins',
       where: { game_id: { _eq: gameId } },
       order_by: { created_at: 'desc' },
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
     });
     const rawJoins = (joinsResult as any) || [];
     const deserializedJoins = rawJoins.map(HasyxChessServer.deserializeJoin);
@@ -180,6 +199,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       where: { game_id: { _eq: gameId }, client_id: { _eq: clientId } },
       order_by: { created_at: 'desc' },
       limit: 1,
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
     });
     const rawJoin = (joinsResult as any)?.[0];
     return HasyxChessServer.deserializeJoin(rawJoin);
@@ -269,5 +289,54 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       debug('Error processing request in HasyxChessServer:', error);
       return { error: error.message || 'An internal server error occurred' };
     }
+  }
+
+  protected async _sync(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
+    debug('_sync processing for clientId:', request.clientId);
+    if (!(await this.__checkUser(request.userId))) return { error: '!user' };
+
+    const gameId = request.gameId!;
+    const game = await this.__getGame(gameId);
+    if (!game) {
+        debug(`Error: Game ${gameId} not found for sync.`);
+        return { error: '!game' };
+    }
+
+    // Find the latest active join record for the requesting client
+    const activeJoin = await this.__findActiveJoinByClientId(gameId, request.clientId);
+
+    let clientSide: ChessClientSide = 0;
+    let clientRole: ChessClientRole = ChessClientRole.Anonymous;
+    let clientJoinId: string | undefined = undefined;
+
+    if (activeJoin) {
+        debug(`Active join found for client ${request.clientId}: joinId=${activeJoin.joinId}, side=${activeJoin.side}, role=${activeJoin.role}`);
+        clientSide = activeJoin.side;
+        clientRole = activeJoin.role;
+        clientJoinId = activeJoin.joinId;
+    } else {
+        debug(`No active join found for client ${request.clientId} in game ${gameId}. Returning spectator state.`);
+    }
+
+    // <<< START DEBUG LOGGING >>>
+    // debug(`_sync: Determining response state for client ${request.clientId} in game ${gameId}`);
+    // debug(`_sync: Server game state: fen=${game.fen}, status=${game.status}, updatedAt=${game.updatedAt}, createdAt=${game.createdAt}`);
+    // debug(`_sync: Determined client state: side=${clientSide}, role=${clientRole}, joinId=${clientJoinId}`);
+    console.log(`[HASURA-SERVER-SYNC] Determining response state for client ${request.clientId} in game ${gameId}`);
+    console.log(`[HASURA-SERVER-SYNC] Server game state: fen=${game.fen}, status=${game.status}, updatedAt=${game.updatedAt}, createdAt=${game.createdAt}`);
+    console.log(`[HASURA-SERVER-SYNC] Determined client state: side=${clientSide}, role=${clientRole}, joinId=${clientJoinId}`);
+    // <<< END DEBUG LOGGING >>>
+
+    // Construct the response with current game state and client-specific details
+    const responseData: ChessServerResponse['data'] = {
+        clientId: request.clientId, gameId: gameId,
+        fen: game.fen, status: game.status,
+        updatedAt: game.updatedAt, createdAt: game.createdAt,
+        side: clientSide, role: clientRole, joinId: clientJoinId,
+    };
+
+    // debug('_sync successful response data:', responseData);
+    console.log('[HASURA-SERVER-SYNC] Successful response data:', responseData);
+    return { data: responseData };
   }
 } 
