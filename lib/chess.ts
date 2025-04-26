@@ -813,7 +813,6 @@ export default class Chess {
     
     // --- If any pre-move validation failed, return error immediately --- 
     if (preMoveValidationError) {
-      // console.log('!!! PRE-MOVE VALIDATION FAILED, RETURNING ERROR:', preMoveValidationError); // <<< REMOVED DEBUG LOG
       return { success: false, error: preMoveValidationError };
     }
     // --- End Pre-move Validation ---

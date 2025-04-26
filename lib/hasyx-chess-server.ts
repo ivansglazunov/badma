@@ -145,7 +145,6 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     return HasyxChessServer.deserializeJoin(rawJoin);
   }
   public async __getGamePlayerJoins(gameId: string): Promise<any[]> {
-    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Fetching player joins for game ${gameId}`);
     const joinsResult = await this._hasyx.select({
       table: 'badma_joins',
       where: { game_id: { _eq: gameId }, role: { _eq: ChessClientRole.Player }, client_id: { _is_null: false } },
@@ -153,7 +152,6 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       returning: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at']
     });
     const rawJoins = (joinsResult as any) || [];
-    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Raw joins received for game ${gameId}:`, JSON.stringify(rawJoins));
     const deserializedJoins = rawJoins.map(HasyxChessServer.deserializeJoin).filter(Boolean);
 
     const latestJoinsByUser: Record<string, any> = {};
@@ -161,7 +159,6 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         latestJoinsByUser[j.userId] = j;
     });
     const finalPlayerJoins = Object.values(latestJoinsByUser);
-    console.log(`[HASURA-SERVER-GET-PLAYER-JOINS] Final distinct player joins for game ${gameId} (length: ${finalPlayerJoins.length}):`, JSON.stringify(finalPlayerJoins));
     return finalPlayerJoins;
   }
   public async __clearJoinClientReference(joinId: string): Promise<void> {
@@ -322,9 +319,6 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     // debug(`_sync: Determining response state for client ${request.clientId} in game ${gameId}`);
     // debug(`_sync: Server game state: fen=${game.fen}, status=${game.status}, updatedAt=${game.updatedAt}, createdAt=${game.createdAt}`);
     // debug(`_sync: Determined client state: side=${clientSide}, role=${clientRole}, joinId=${clientJoinId}`);
-    console.log(`[HASURA-SERVER-SYNC] Determining response state for client ${request.clientId} in game ${gameId}`);
-    console.log(`[HASURA-SERVER-SYNC] Server game state: fen=${game.fen}, status=${game.status}, updatedAt=${game.updatedAt}, createdAt=${game.createdAt}`);
-    console.log(`[HASURA-SERVER-SYNC] Determined client state: side=${clientSide}, role=${clientRole}, joinId=${clientJoinId}`);
     // <<< END DEBUG LOGGING >>>
 
     // Construct the response with current game state and client-specific details
@@ -336,7 +330,6 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     };
 
     // debug('_sync successful response data:', responseData);
-    console.log('[HASURA-SERVER-SYNC] Successful response data:', responseData);
     return { data: responseData };
   }
 } 
