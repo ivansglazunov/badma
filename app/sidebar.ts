@@ -1,5 +1,5 @@
-import pckg from "hasyx/package.json"
-import { SidebarData } from "hasyx/components/app-sidebar"
+import { SidebarData } from "hasyx/components/sidebar";
+import pckg from "hasyx/package.json";
 
 export const sidebar: SidebarData = {
   versions: [pckg.version],
@@ -9,12 +9,12 @@ export const sidebar: SidebarData = {
       url: "#",
       items: [
         {
-          title: "Badma",
+          title: "Diagnostics",
           url: "/",
         },
         {
-          title: "Diagnostics",
-          url: "/diagnostics",
+          title: "A-Frame",
+          url: "/aframe",
         },
       ],
     },

@@ -806,9 +806,9 @@ export abstract class ChessClient {
   /**
    * Updates the client's internal state based on data received from a sync response.
    * @param {ChessServerResponse['data']} data The data part of the server response.
-   * @protected
+   * @public
    */
-  protected applySyncResponse(data: ChessServerResponse['data']): void {
+  public applySyncResponse(data: ChessServerResponse['data']): void {
       debug(`Applying sync response:`, data);
       // Add null/undefined check for data
       if (!data) {

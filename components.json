@@ -11,11 +11,11 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "hasyx/components",
-    "utils": "hasyx/lib/utils",
+    "components": "@/components",
+    "utils": "@/lib/utils",
     "ui": "hasyx/components/ui",
-    "lib": "hasyx/lib",
-    "hooks": "hasyx/hooks"
+    "lib": "@/lib",
+    "hooks": "@/hooks"
   },
   "iconLibrary": "lucide"
 }

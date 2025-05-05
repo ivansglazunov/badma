@@ -3,9 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { WebSocket, WebSocketServer } from 'ws';
 import { proxyGET, proxyPOST, proxySOCKET } from 'hasyx/lib/graphql-proxy';
 
-// For static export (Capacitor)
-export const dynamic = 'force-static';
-
 export async function GET(request: NextRequest): Promise<NextResponse> {
   return proxyGET(request);
 }
@@ -20,4 +17,4 @@ export function SOCKET(
   server: WebSocketServer
 ): void {
   proxySOCKET(client, request, server);
-} 
+}
