@@ -10,10 +10,14 @@
   ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "build": "NODE_ENV=production npx -y hasyx build",
-    "unbuild": "npx -y hasyx unbuild",
-    "start": "NODE_ENV=production npx -y hasyx start",
-    "dev": "npx -y hasyx dev",
+    "dev": "next dev --turbopack",
+    "build": "npm run build:lib && NODE_ENV=production next build",
+    "build:lib": "tsc -p tsconfig.lib.json",
+    "unbuild": "find lib components hooks -type f \\( -name '*.js' -o -name '*.d.ts' \\) -not -path \"*/types/*\" -print -delete; rm -rf tsconfig.lib.tsbuildinfo; echo '✅ Cleaned compiled files (types directory preserved)'",
+    "build:next": "next build --turbopack",
+    "client": "tsx lib/build-client.ts",
+    "start": "next start --turbopack",
+    "lint": "next lint --turbopack",
     "ws": "npx --yes next-ws-cli@latest patch -y",
     "postinstall": "npm run ws -- -y"
   },
@@ -33,6 +37,7 @@
     "events": "^3.3.0",
     "hasyx": "^0.1.102",
     "js-chess-engine": "^1.0.2",
+    "next": "^15.3.2",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",
     "ws": "^8.18.2"
