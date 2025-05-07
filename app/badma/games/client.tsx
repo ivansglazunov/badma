@@ -37,7 +37,7 @@ function GamesList() {
   return (
     <div className="space-y-6">
       <div className="grid sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4">
-        {data.map((game) => (
+        {data?.map((game) => (
           <Card key={game.id} className="p-0 overflow-hidden">
             <Board position={game.fen} />
           </Card>
