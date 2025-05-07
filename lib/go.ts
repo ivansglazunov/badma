@@ -1,5 +1,5 @@
-import { aiMove } from 'js-chess-engine';
-// const { aiMove } = jsChessEngine;
+import jsChessEngine from 'js-chess-engine';
+const { aiMove } = jsChessEngine;
 
 /**
  * Возвращает лучший ход для заданной позиции FEN и уровня сложности.

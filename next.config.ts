@@ -42,7 +42,7 @@ const config: NextConfig = {
   // but be aware this might hide real issues with static export incompatibility.
   // Consider removing these ignore flags later to see actual Next.js errors.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: isBuildingForClient,
   },
   eslint: {
     ignoreDuringBuilds: isBuildingForClient,
