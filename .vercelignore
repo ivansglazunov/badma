@@ -1,0 +1,7 @@
+# Ignore TypeScript config that might cause confusion
+next.config.ts
+
+# Ignore unnecessary build artifacts
+.next/cache
+node_modules
+client 
