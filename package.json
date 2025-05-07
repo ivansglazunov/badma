@@ -1,6 +1,6 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -11,13 +11,12 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "next dev --turbopack",
-    "build": "npm run build:lib && NODE_ENV=production next build",
+    "build": "npm run build:lib && NODE_ENV=production npm run build:next",
     "build:lib": "tsc -p tsconfig.lib.json",
     "unbuild": "find lib components hooks -type f \\( -name '*.js' -o -name '*.d.ts' \\) -not -path \"*/types/*\" -print -delete; rm -rf tsconfig.lib.tsbuildinfo; echo '✅ Cleaned compiled files (types directory preserved)'",
-    "build:next": "next build",
-    "client": "tsx lib/build-client.ts",
-    "start": "next start",
-    "lint": "next lint",
+    "build:next": "next build --turbopack",
+    "start": "next start --turbopack",
+    "lint": "next lint --turbopack",
     "ws": "npx --yes next-ws-cli@latest patch -y",
     "postinstall": "npm run ws -- -y"
   },
