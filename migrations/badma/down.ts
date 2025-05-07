@@ -29,6 +29,10 @@ const userPermissionsToDrop = [
   { type: 'pg_drop_insert_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
   { type: 'pg_drop_update_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
   { type: 'pg_drop_delete_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
+  // Anonymous permissions to drop
+  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, role: 'anonymous' } },
+  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'moves' }, role: 'anonymous' } },
+  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'joins' }, role: 'anonymous' } },
 ];
 
 // Relationships to drop (based on up.ts and clean)
@@ -73,14 +77,14 @@ const dropTablesSQL = `
 async function dropMetadata() {
   debug('🧹 Dropping permissions, relationships, and untracking tables for badma schema...');
 
-  debug('  🗑️ Dropping user permissions...');
+  debug('  ��️ Dropping user and anonymous permissions...');
   for (const dropRequest of userPermissionsToDrop) {
     const perm = `${dropRequest.args.role} on ${dropRequest.args.table.schema}.${dropRequest.args.table.name}`;
-    debug(`     Dropping select permission for ${perm}...`);
+    debug(`     Dropping permission for ${perm}...`);
     await hasura.v1(dropRequest);
     // Note: hasura.v1 handles 'not found' messages internally
   }
-  debug('  ✅ User permissions dropped.');
+  debug('  ✅ Permissions dropped.');
 
   debug('  🗑️ Dropping relationships...');
   for (const dropRequest of relationshipsToDrop) {

@@ -45,7 +45,7 @@ export default function BadmaDiagnosticPage() {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Badma Diagnostic</BreadcrumbPage>
+                <BreadcrumbPage>Badma Diagnostics</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

@@ -26,6 +26,7 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   bigint: { input: any; output: any };
+  jsonb: { input: any; output: any };
   timestamptz: { input: any; output: any };
   uuid: { input: any; output: any };
 };
@@ -559,646 +560,262 @@ export type Accounts_Variance_Order_By = {
   expires_at?: InputMaybe<Order_By>;
 };
 
-/** columns and relationships of "badma.ai" */
-export type Badma_Ai = {
-  __typename?: "badma_ai";
+/** columns and relationships of "badma.ais" */
+export type Badma_Ais = {
+  __typename?: "badma_ais";
   created_at: Scalars["timestamptz"]["output"];
-  id: Scalars["bigint"]["output"];
-  /** An object relationship */
-  join: Badma_Joins;
-  join_id: Scalars["uuid"]["output"];
-};
-
-/** aggregated selection of "badma.ai" */
-export type Badma_Ai_Aggregate = {
-  __typename?: "badma_ai_aggregate";
-  aggregate?: Maybe<Badma_Ai_Aggregate_Fields>;
-  nodes: Array<Badma_Ai>;
-};
-
-export type Badma_Ai_Aggregate_Bool_Exp = {
-  count?: InputMaybe<Badma_Ai_Aggregate_Bool_Exp_Count>;
-};
-
-export type Badma_Ai_Aggregate_Bool_Exp_Count = {
-  arguments?: InputMaybe<Array<Badma_Ai_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  filter?: InputMaybe<Badma_Ai_Bool_Exp>;
-  predicate: Int_Comparison_Exp;
-};
-
-/** aggregate fields of "badma.ai" */
-export type Badma_Ai_Aggregate_Fields = {
-  __typename?: "badma_ai_aggregate_fields";
-  avg?: Maybe<Badma_Ai_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Badma_Ai_Max_Fields>;
-  min?: Maybe<Badma_Ai_Min_Fields>;
-  stddev?: Maybe<Badma_Ai_Stddev_Fields>;
-  stddev_pop?: Maybe<Badma_Ai_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Badma_Ai_Stddev_Samp_Fields>;
-  sum?: Maybe<Badma_Ai_Sum_Fields>;
-  var_pop?: Maybe<Badma_Ai_Var_Pop_Fields>;
-  var_samp?: Maybe<Badma_Ai_Var_Samp_Fields>;
-  variance?: Maybe<Badma_Ai_Variance_Fields>;
-};
-
-/** aggregate fields of "badma.ai" */
-export type Badma_Ai_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Badma_Ai_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** order by aggregate values of table "badma.ai" */
-export type Badma_Ai_Aggregate_Order_By = {
-  avg?: InputMaybe<Badma_Ai_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Badma_Ai_Max_Order_By>;
-  min?: InputMaybe<Badma_Ai_Min_Order_By>;
-  stddev?: InputMaybe<Badma_Ai_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Badma_Ai_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Badma_Ai_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Badma_Ai_Sum_Order_By>;
-  var_pop?: InputMaybe<Badma_Ai_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Badma_Ai_Var_Samp_Order_By>;
-  variance?: InputMaybe<Badma_Ai_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "badma.ai" */
-export type Badma_Ai_Arr_Rel_Insert_Input = {
-  data: Array<Badma_Ai_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Ai_On_Conflict>;
-};
-
-/** aggregate avg on columns */
-export type Badma_Ai_Avg_Fields = {
-  __typename?: "badma_ai_avg_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by avg() on columns of table "badma.ai" */
-export type Badma_Ai_Avg_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "badma.ai". All fields are combined with a logical 'AND'. */
-export type Badma_Ai_Bool_Exp = {
-  _and?: InputMaybe<Array<Badma_Ai_Bool_Exp>>;
-  _not?: InputMaybe<Badma_Ai_Bool_Exp>;
-  _or?: InputMaybe<Array<Badma_Ai_Bool_Exp>>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Bigint_Comparison_Exp>;
-  join?: InputMaybe<Badma_Joins_Bool_Exp>;
-  join_id?: InputMaybe<Uuid_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "badma.ai" */
-export enum Badma_Ai_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  AiPkey = "ai_pkey",
-}
-
-/** input type for incrementing numeric columns in table "badma.ai" */
-export type Badma_Ai_Inc_Input = {
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "badma.ai" */
-export type Badma_Ai_Insert_Input = {
-  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
-  join?: InputMaybe<Badma_Joins_Obj_Rel_Insert_Input>;
-  join_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Badma_Ai_Max_Fields = {
-  __typename?: "badma_ai_max_fields";
-  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
-  id?: Maybe<Scalars["bigint"]["output"]>;
-  join_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** order by max() on columns of table "badma.ai" */
-export type Badma_Ai_Max_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  join_id?: InputMaybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Badma_Ai_Min_Fields = {
-  __typename?: "badma_ai_min_fields";
-  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
-  id?: Maybe<Scalars["bigint"]["output"]>;
-  join_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** order by min() on columns of table "badma.ai" */
-export type Badma_Ai_Min_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  join_id?: InputMaybe<Order_By>;
-};
-
-/** response of any mutation on the table "badma.ai" */
-export type Badma_Ai_Mutation_Response = {
-  __typename?: "badma_ai_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Badma_Ai>;
-};
-
-/** on_conflict condition type for table "badma.ai" */
-export type Badma_Ai_On_Conflict = {
-  constraint: Badma_Ai_Constraint;
-  update_columns?: Array<Badma_Ai_Update_Column>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "badma.ai". */
-export type Badma_Ai_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  join?: InputMaybe<Badma_Joins_Order_By>;
-  join_id?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: badma.ai */
-export type Badma_Ai_Pk_Columns_Input = {
-  id: Scalars["bigint"]["input"];
-};
-
-/** select columns of table "badma.ai" */
-export enum Badma_Ai_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  JoinId = "join_id",
-}
-
-/** input type for updating data in table "badma.ai" */
-export type Badma_Ai_Set_Input = {
-  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
-  join_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Badma_Ai_Stddev_Fields = {
-  __typename?: "badma_ai_stddev_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev() on columns of table "badma.ai" */
-export type Badma_Ai_Stddev_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Badma_Ai_Stddev_Pop_Fields = {
-  __typename?: "badma_ai_stddev_pop_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_pop() on columns of table "badma.ai" */
-export type Badma_Ai_Stddev_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Badma_Ai_Stddev_Samp_Fields = {
-  __typename?: "badma_ai_stddev_samp_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_samp() on columns of table "badma.ai" */
-export type Badma_Ai_Stddev_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "badma_ai" */
-export type Badma_Ai_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Badma_Ai_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Badma_Ai_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
-  join_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Badma_Ai_Sum_Fields = {
-  __typename?: "badma_ai_sum_fields";
-  id?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** order by sum() on columns of table "badma.ai" */
-export type Badma_Ai_Sum_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** update columns of table "badma.ai" */
-export enum Badma_Ai_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  JoinId = "join_id",
-}
-
-export type Badma_Ai_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Badma_Ai_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Badma_Ai_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Badma_Ai_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Badma_Ai_Var_Pop_Fields = {
-  __typename?: "badma_ai_var_pop_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_pop() on columns of table "badma.ai" */
-export type Badma_Ai_Var_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Badma_Ai_Var_Samp_Fields = {
-  __typename?: "badma_ai_var_samp_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_samp() on columns of table "badma.ai" */
-export type Badma_Ai_Var_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Badma_Ai_Variance_Fields = {
-  __typename?: "badma_ai_variance_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by variance() on columns of table "badma.ai" */
-export type Badma_Ai_Variance_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** columns and relationships of "badma.conflicts" */
-export type Badma_Conflicts = {
-  __typename?: "badma_conflicts";
-  created_at: Scalars["timestamptz"]["output"];
-  error: Scalars["String"]["output"];
-  /** An object relationship */
-  game: Badma_Games;
-  game_id: Scalars["uuid"]["output"];
-  id: Scalars["bigint"]["output"];
+  id: Scalars["uuid"]["output"];
+  options: Scalars["jsonb"]["output"];
+  updated_at: Scalars["timestamptz"]["output"];
   /** An object relationship */
   user: Users;
   user_id: Scalars["uuid"]["output"];
 };
 
-/** aggregated selection of "badma.conflicts" */
-export type Badma_Conflicts_Aggregate = {
-  __typename?: "badma_conflicts_aggregate";
-  aggregate?: Maybe<Badma_Conflicts_Aggregate_Fields>;
-  nodes: Array<Badma_Conflicts>;
+/** columns and relationships of "badma.ais" */
+export type Badma_AisOptionsArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type Badma_Conflicts_Aggregate_Bool_Exp = {
-  count?: InputMaybe<Badma_Conflicts_Aggregate_Bool_Exp_Count>;
+/** aggregated selection of "badma.ais" */
+export type Badma_Ais_Aggregate = {
+  __typename?: "badma_ais_aggregate";
+  aggregate?: Maybe<Badma_Ais_Aggregate_Fields>;
+  nodes: Array<Badma_Ais>;
 };
 
-export type Badma_Conflicts_Aggregate_Bool_Exp_Count = {
-  arguments?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
+export type Badma_Ais_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Ais_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Ais_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  filter?: InputMaybe<Badma_Conflicts_Bool_Exp>;
+  filter?: InputMaybe<Badma_Ais_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
 
-/** aggregate fields of "badma.conflicts" */
-export type Badma_Conflicts_Aggregate_Fields = {
-  __typename?: "badma_conflicts_aggregate_fields";
-  avg?: Maybe<Badma_Conflicts_Avg_Fields>;
+/** aggregate fields of "badma.ais" */
+export type Badma_Ais_Aggregate_Fields = {
+  __typename?: "badma_ais_aggregate_fields";
   count: Scalars["Int"]["output"];
-  max?: Maybe<Badma_Conflicts_Max_Fields>;
-  min?: Maybe<Badma_Conflicts_Min_Fields>;
-  stddev?: Maybe<Badma_Conflicts_Stddev_Fields>;
-  stddev_pop?: Maybe<Badma_Conflicts_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Badma_Conflicts_Stddev_Samp_Fields>;
-  sum?: Maybe<Badma_Conflicts_Sum_Fields>;
-  var_pop?: Maybe<Badma_Conflicts_Var_Pop_Fields>;
-  var_samp?: Maybe<Badma_Conflicts_Var_Samp_Fields>;
-  variance?: Maybe<Badma_Conflicts_Variance_Fields>;
+  max?: Maybe<Badma_Ais_Max_Fields>;
+  min?: Maybe<Badma_Ais_Min_Fields>;
 };
 
-/** aggregate fields of "badma.conflicts" */
-export type Badma_Conflicts_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
+/** aggregate fields of "badma.ais" */
+export type Badma_Ais_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
-/** order by aggregate values of table "badma.conflicts" */
-export type Badma_Conflicts_Aggregate_Order_By = {
-  avg?: InputMaybe<Badma_Conflicts_Avg_Order_By>;
+/** order by aggregate values of table "badma.ais" */
+export type Badma_Ais_Aggregate_Order_By = {
   count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Badma_Conflicts_Max_Order_By>;
-  min?: InputMaybe<Badma_Conflicts_Min_Order_By>;
-  stddev?: InputMaybe<Badma_Conflicts_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Badma_Conflicts_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Badma_Conflicts_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Badma_Conflicts_Sum_Order_By>;
-  var_pop?: InputMaybe<Badma_Conflicts_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Badma_Conflicts_Var_Samp_Order_By>;
-  variance?: InputMaybe<Badma_Conflicts_Variance_Order_By>;
+  max?: InputMaybe<Badma_Ais_Max_Order_By>;
+  min?: InputMaybe<Badma_Ais_Min_Order_By>;
 };
 
-/** input type for inserting array relation for remote table "badma.conflicts" */
-export type Badma_Conflicts_Arr_Rel_Insert_Input = {
-  data: Array<Badma_Conflicts_Insert_Input>;
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Badma_Ais_Append_Input = {
+  options?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** input type for inserting array relation for remote table "badma.ais" */
+export type Badma_Ais_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Ais_Insert_Input>;
   /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Conflicts_On_Conflict>;
+  on_conflict?: InputMaybe<Badma_Ais_On_Conflict>;
 };
 
-/** aggregate avg on columns */
-export type Badma_Conflicts_Avg_Fields = {
-  __typename?: "badma_conflicts_avg_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by avg() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Avg_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "badma.conflicts". All fields are combined with a logical 'AND'. */
-export type Badma_Conflicts_Bool_Exp = {
-  _and?: InputMaybe<Array<Badma_Conflicts_Bool_Exp>>;
-  _not?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-  _or?: InputMaybe<Array<Badma_Conflicts_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "badma.ais". All fields are combined with a logical 'AND'. */
+export type Badma_Ais_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Ais_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Ais_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Ais_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  error?: InputMaybe<String_Comparison_Exp>;
-  game?: InputMaybe<Badma_Games_Bool_Exp>;
-  game_id?: InputMaybe<Uuid_Comparison_Exp>;
-  id?: InputMaybe<Bigint_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  options?: InputMaybe<Jsonb_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<Users_Bool_Exp>;
   user_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "badma.conflicts" */
-export enum Badma_Conflicts_Constraint {
+/** unique or primary key constraints on table "badma.ais" */
+export enum Badma_Ais_Constraint {
   /** unique or primary key constraint on columns "id" */
-  ConflictsPkey = "conflicts_pkey",
+  AisPkey = "ais_pkey",
 }
 
-/** input type for incrementing numeric columns in table "badma.conflicts" */
-export type Badma_Conflicts_Inc_Input = {
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Badma_Ais_Delete_At_Path_Input = {
+  options?: InputMaybe<Array<Scalars["String"]["input"]>>;
 };
 
-/** input type for inserting data into table "badma.conflicts" */
-export type Badma_Conflicts_Insert_Input = {
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Badma_Ais_Delete_Elem_Input = {
+  options?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Badma_Ais_Delete_Key_Input = {
+  options?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.ais" */
+export type Badma_Ais_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  error?: InputMaybe<Scalars["String"]["input"]>;
-  game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
-  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  options?: InputMaybe<Scalars["jsonb"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
 
 /** aggregate max on columns */
-export type Badma_Conflicts_Max_Fields = {
-  __typename?: "badma_conflicts_max_fields";
+export type Badma_Ais_Max_Fields = {
+  __typename?: "badma_ais_max_fields";
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
-  error?: Maybe<Scalars["String"]["output"]>;
-  game_id?: Maybe<Scalars["uuid"]["output"]>;
-  id?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
   user_id?: Maybe<Scalars["uuid"]["output"]>;
 };
 
-/** order by max() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Max_Order_By = {
+/** order by max() on columns of table "badma.ais" */
+export type Badma_Ais_Max_Order_By = {
   created_at?: InputMaybe<Order_By>;
-  error?: InputMaybe<Order_By>;
-  game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
-export type Badma_Conflicts_Min_Fields = {
-  __typename?: "badma_conflicts_min_fields";
+export type Badma_Ais_Min_Fields = {
+  __typename?: "badma_ais_min_fields";
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
-  error?: Maybe<Scalars["String"]["output"]>;
-  game_id?: Maybe<Scalars["uuid"]["output"]>;
-  id?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
   user_id?: Maybe<Scalars["uuid"]["output"]>;
 };
 
-/** order by min() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Min_Order_By = {
+/** order by min() on columns of table "badma.ais" */
+export type Badma_Ais_Min_Order_By = {
   created_at?: InputMaybe<Order_By>;
-  error?: InputMaybe<Order_By>;
-  game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
-/** response of any mutation on the table "badma.conflicts" */
-export type Badma_Conflicts_Mutation_Response = {
-  __typename?: "badma_conflicts_mutation_response";
+/** response of any mutation on the table "badma.ais" */
+export type Badma_Ais_Mutation_Response = {
+  __typename?: "badma_ais_mutation_response";
   /** number of rows affected by the mutation */
   affected_rows: Scalars["Int"]["output"];
   /** data from the rows affected by the mutation */
-  returning: Array<Badma_Conflicts>;
+  returning: Array<Badma_Ais>;
 };
 
-/** on_conflict condition type for table "badma.conflicts" */
-export type Badma_Conflicts_On_Conflict = {
-  constraint: Badma_Conflicts_Constraint;
-  update_columns?: Array<Badma_Conflicts_Update_Column>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
+/** on_conflict condition type for table "badma.ais" */
+export type Badma_Ais_On_Conflict = {
+  constraint: Badma_Ais_Constraint;
+  update_columns?: Array<Badma_Ais_Update_Column>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "badma.conflicts". */
-export type Badma_Conflicts_Order_By = {
+/** Ordering options when selecting data from "badma.ais". */
+export type Badma_Ais_Order_By = {
   created_at?: InputMaybe<Order_By>;
-  error?: InputMaybe<Order_By>;
-  game?: InputMaybe<Badma_Games_Order_By>;
-  game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  options?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<Users_Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
-/** primary key columns input for table: badma.conflicts */
-export type Badma_Conflicts_Pk_Columns_Input = {
-  id: Scalars["bigint"]["input"];
+/** primary key columns input for table: badma.ais */
+export type Badma_Ais_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
 };
 
-/** select columns of table "badma.conflicts" */
-export enum Badma_Conflicts_Select_Column {
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Badma_Ais_Prepend_Input = {
+  options?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** select columns of table "badma.ais" */
+export enum Badma_Ais_Select_Column {
   /** column name */
   CreatedAt = "created_at",
   /** column name */
-  Error = "error",
-  /** column name */
-  GameId = "game_id",
-  /** column name */
   Id = "id",
+  /** column name */
+  Options = "options",
+  /** column name */
+  UpdatedAt = "updated_at",
   /** column name */
   UserId = "user_id",
 }
 
-/** input type for updating data in table "badma.conflicts" */
-export type Badma_Conflicts_Set_Input = {
+/** input type for updating data in table "badma.ais" */
+export type Badma_Ais_Set_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  error?: InputMaybe<Scalars["String"]["input"]>;
-  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  options?: InputMaybe<Scalars["jsonb"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
 
-/** aggregate stddev on columns */
-export type Badma_Conflicts_Stddev_Fields = {
-  __typename?: "badma_conflicts_stddev_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Stddev_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Badma_Conflicts_Stddev_Pop_Fields = {
-  __typename?: "badma_conflicts_stddev_pop_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_pop() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Stddev_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Badma_Conflicts_Stddev_Samp_Fields = {
-  __typename?: "badma_conflicts_stddev_samp_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_samp() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Stddev_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "badma_conflicts" */
-export type Badma_Conflicts_Stream_Cursor_Input = {
+/** Streaming cursor of the table "badma_ais" */
+export type Badma_Ais_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Badma_Conflicts_Stream_Cursor_Value_Input;
+  initial_value: Badma_Ais_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Badma_Conflicts_Stream_Cursor_Value_Input = {
+export type Badma_Ais_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  error?: InputMaybe<Scalars["String"]["input"]>;
-  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  id?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  options?: InputMaybe<Scalars["jsonb"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
 
-/** aggregate sum on columns */
-export type Badma_Conflicts_Sum_Fields = {
-  __typename?: "badma_conflicts_sum_fields";
-  id?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** order by sum() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Sum_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** update columns of table "badma.conflicts" */
-export enum Badma_Conflicts_Update_Column {
+/** update columns of table "badma.ais" */
+export enum Badma_Ais_Update_Column {
   /** column name */
   CreatedAt = "created_at",
   /** column name */
-  Error = "error",
-  /** column name */
-  GameId = "game_id",
-  /** column name */
   Id = "id",
+  /** column name */
+  Options = "options",
+  /** column name */
+  UpdatedAt = "updated_at",
   /** column name */
   UserId = "user_id",
 }
 
-export type Badma_Conflicts_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Badma_Conflicts_Inc_Input>;
+export type Badma_Ais_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Badma_Ais_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Badma_Ais_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Badma_Ais_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Badma_Ais_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Badma_Ais_Prepend_Input>;
   /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Badma_Conflicts_Set_Input>;
+  _set?: InputMaybe<Badma_Ais_Set_Input>;
   /** filter the rows which have to be updated */
-  where: Badma_Conflicts_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Badma_Conflicts_Var_Pop_Fields = {
-  __typename?: "badma_conflicts_var_pop_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_pop() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Var_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Badma_Conflicts_Var_Samp_Fields = {
-  __typename?: "badma_conflicts_var_samp_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_samp() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Var_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Badma_Conflicts_Variance_Fields = {
-  __typename?: "badma_conflicts_variance_fields";
-  id?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by variance() on columns of table "badma.conflicts" */
-export type Badma_Conflicts_Variance_Order_By = {
-  id?: InputMaybe<Order_By>;
+  where: Badma_Ais_Bool_Exp;
 };
 
 /** columns and relationships of "badma.games" */
 export type Badma_Games = {
   __typename?: "badma_games";
-  /** An array relationship */
-  conflicts: Array<Badma_Conflicts>;
-  /** An aggregate relationship */
-  conflicts_aggregate: Badma_Conflicts_Aggregate;
   created_at: Scalars["timestamptz"]["output"];
   fen?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["uuid"]["output"];
@@ -1213,27 +830,13 @@ export type Badma_Games = {
   moves_aggregate: Badma_Moves_Aggregate;
   side: Scalars["Int"]["output"];
   sides: Scalars["Int"]["output"];
+  status: Scalars["String"]["output"];
+  storage_inserted_at: Scalars["timestamptz"]["output"];
+  storage_updated_at: Scalars["timestamptz"]["output"];
+  updated_at: Scalars["timestamptz"]["output"];
   /** An object relationship */
   user: Users;
   user_id: Scalars["uuid"]["output"];
-};
-
-/** columns and relationships of "badma.games" */
-export type Badma_GamesConflictsArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-};
-
-/** columns and relationships of "badma.games" */
-export type Badma_GamesConflicts_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
 };
 
 /** columns and relationships of "badma.games" */
@@ -1352,8 +955,6 @@ export type Badma_Games_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Games_Bool_Exp>>;
   _not?: InputMaybe<Badma_Games_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Games_Bool_Exp>>;
-  conflicts?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-  conflicts_aggregate?: InputMaybe<Badma_Conflicts_Aggregate_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   fen?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -1364,6 +965,10 @@ export type Badma_Games_Bool_Exp = {
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Bool_Exp>;
   side?: InputMaybe<Int_Comparison_Exp>;
   sides?: InputMaybe<Int_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  storage_inserted_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  storage_updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<Users_Bool_Exp>;
   user_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
@@ -1382,7 +987,6 @@ export type Badma_Games_Inc_Input = {
 
 /** input type for inserting data into table "badma.games" */
 export type Badma_Games_Insert_Input = {
-  conflicts?: InputMaybe<Badma_Conflicts_Arr_Rel_Insert_Input>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   fen?: InputMaybe<Scalars["String"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -1391,6 +995,10 @@ export type Badma_Games_Insert_Input = {
   moves?: InputMaybe<Badma_Moves_Arr_Rel_Insert_Input>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   sides?: InputMaybe<Scalars["Int"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  storage_inserted_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  storage_updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
@@ -1404,6 +1012,10 @@ export type Badma_Games_Max_Fields = {
   mode?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
   sides?: Maybe<Scalars["Int"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  storage_inserted_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  storage_updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
   user_id?: Maybe<Scalars["uuid"]["output"]>;
 };
 
@@ -1415,6 +1027,10 @@ export type Badma_Games_Max_Order_By = {
   mode?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
   sides?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  storage_inserted_at?: InputMaybe<Order_By>;
+  storage_updated_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
@@ -1427,6 +1043,10 @@ export type Badma_Games_Min_Fields = {
   mode?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
   sides?: Maybe<Scalars["Int"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  storage_inserted_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  storage_updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
   user_id?: Maybe<Scalars["uuid"]["output"]>;
 };
 
@@ -1438,6 +1058,10 @@ export type Badma_Games_Min_Order_By = {
   mode?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
   sides?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  storage_inserted_at?: InputMaybe<Order_By>;
+  storage_updated_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
@@ -1466,7 +1090,6 @@ export type Badma_Games_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.games". */
 export type Badma_Games_Order_By = {
-  conflicts_aggregate?: InputMaybe<Badma_Conflicts_Aggregate_Order_By>;
   created_at?: InputMaybe<Order_By>;
   fen?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -1475,6 +1098,10 @@ export type Badma_Games_Order_By = {
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Order_By>;
   side?: InputMaybe<Order_By>;
   sides?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  storage_inserted_at?: InputMaybe<Order_By>;
+  storage_updated_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<Users_Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
@@ -1499,6 +1126,14 @@ export enum Badma_Games_Select_Column {
   /** column name */
   Sides = "sides",
   /** column name */
+  Status = "status",
+  /** column name */
+  StorageInsertedAt = "storage_inserted_at",
+  /** column name */
+  StorageUpdatedAt = "storage_updated_at",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
   UserId = "user_id",
 }
 
@@ -1510,6 +1145,10 @@ export type Badma_Games_Set_Input = {
   mode?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   sides?: InputMaybe<Scalars["Int"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  storage_inserted_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  storage_updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
 
@@ -1568,6 +1207,10 @@ export type Badma_Games_Stream_Cursor_Value_Input = {
   mode?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   sides?: InputMaybe<Scalars["Int"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  storage_inserted_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  storage_updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
 
@@ -1598,6 +1241,14 @@ export enum Badma_Games_Update_Column {
   Side = "side",
   /** column name */
   Sides = "sides",
+  /** column name */
+  Status = "status",
+  /** column name */
+  StorageInsertedAt = "storage_inserted_at",
+  /** column name */
+  StorageUpdatedAt = "storage_updated_at",
+  /** column name */
+  UpdatedAt = "updated_at",
   /** column name */
   UserId = "user_id",
 }
@@ -1653,10 +1304,7 @@ export type Badma_Games_Variance_Order_By = {
 /** columns and relationships of "badma.joins" */
 export type Badma_Joins = {
   __typename?: "badma_joins";
-  /** An array relationship */
-  ai_bots: Array<Badma_Ai>;
-  /** An aggregate relationship */
-  ai_bots_aggregate: Badma_Ai_Aggregate;
+  client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   /** An object relationship */
   game: Badma_Games;
@@ -1667,24 +1315,6 @@ export type Badma_Joins = {
   /** An object relationship */
   user: Users;
   user_id: Scalars["uuid"]["output"];
-};
-
-/** columns and relationships of "badma.joins" */
-export type Badma_JoinsAi_BotsArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
-};
-
-/** columns and relationships of "badma.joins" */
-export type Badma_JoinsAi_Bots_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
 };
 
 /** aggregated selection of "badma.joins" */
@@ -1767,8 +1397,7 @@ export type Badma_Joins_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Joins_Bool_Exp>>;
   _not?: InputMaybe<Badma_Joins_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Joins_Bool_Exp>>;
-  ai_bots?: InputMaybe<Badma_Ai_Bool_Exp>;
-  ai_bots_aggregate?: InputMaybe<Badma_Ai_Aggregate_Bool_Exp>;
+  client_id?: InputMaybe<Uuid_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   game?: InputMaybe<Badma_Games_Bool_Exp>;
   game_id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -1793,7 +1422,7 @@ export type Badma_Joins_Inc_Input = {
 
 /** input type for inserting data into table "badma.joins" */
 export type Badma_Joins_Insert_Input = {
-  ai_bots?: InputMaybe<Badma_Ai_Arr_Rel_Insert_Input>;
+  client_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -1807,6 +1436,7 @@ export type Badma_Joins_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Joins_Max_Fields = {
   __typename?: "badma_joins_max_fields";
+  client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1817,6 +1447,7 @@ export type Badma_Joins_Max_Fields = {
 
 /** order by max() on columns of table "badma.joins" */
 export type Badma_Joins_Max_Order_By = {
+  client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -1828,6 +1459,7 @@ export type Badma_Joins_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Joins_Min_Fields = {
   __typename?: "badma_joins_min_fields";
+  client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1838,6 +1470,7 @@ export type Badma_Joins_Min_Fields = {
 
 /** order by min() on columns of table "badma.joins" */
 export type Badma_Joins_Min_Order_By = {
+  client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -1855,13 +1488,6 @@ export type Badma_Joins_Mutation_Response = {
   returning: Array<Badma_Joins>;
 };
 
-/** input type for inserting object relation for remote table "badma.joins" */
-export type Badma_Joins_Obj_Rel_Insert_Input = {
-  data: Badma_Joins_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Joins_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.joins" */
 export type Badma_Joins_On_Conflict = {
   constraint: Badma_Joins_Constraint;
@@ -1871,7 +1497,7 @@ export type Badma_Joins_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.joins". */
 export type Badma_Joins_Order_By = {
-  ai_bots_aggregate?: InputMaybe<Badma_Ai_Aggregate_Order_By>;
+  client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game?: InputMaybe<Badma_Games_Order_By>;
   game_id?: InputMaybe<Order_By>;
@@ -1890,6 +1516,8 @@ export type Badma_Joins_Pk_Columns_Input = {
 /** select columns of table "badma.joins" */
 export enum Badma_Joins_Select_Column {
   /** column name */
+  ClientId = "client_id",
+  /** column name */
   CreatedAt = "created_at",
   /** column name */
   GameId = "game_id",
@@ -1905,6 +1533,7 @@ export enum Badma_Joins_Select_Column {
 
 /** input type for updating data in table "badma.joins" */
 export type Badma_Joins_Set_Input = {
+  client_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -1962,6 +1591,7 @@ export type Badma_Joins_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Joins_Stream_Cursor_Value_Input = {
+  client_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -1985,6 +1615,8 @@ export type Badma_Joins_Sum_Order_By = {
 
 /** update columns of table "badma.joins" */
 export enum Badma_Joins_Update_Column {
+  /** column name */
+  ClientId = "client_id",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -2612,6 +2244,34 @@ export enum Cursor_Ordering {
   Desc = "DESC",
 }
 
+export type Jsonb_Cast_Exp = {
+  String?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'. */
+export type Jsonb_Comparison_Exp = {
+  _cast?: InputMaybe<Jsonb_Cast_Exp>;
+  /** is the column contained in the given json value */
+  _contained_in?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** does the column contain the given json value at the top level */
+  _contains?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _eq?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _gt?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _gte?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** does the string exist as a top-level key in the column */
+  _has_key?: InputMaybe<Scalars["String"]["input"]>;
+  /** do all of these strings exist as top-level keys in the column */
+  _has_keys_all?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** do any of these strings exist as top-level keys in the column */
+  _has_keys_any?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  _in?: InputMaybe<Array<Scalars["jsonb"]["input"]>>;
+  _is_null?: InputMaybe<Scalars["Boolean"]["input"]>;
+  _lt?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _lte?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _neq?: InputMaybe<Scalars["jsonb"]["input"]>;
+  _nin?: InputMaybe<Array<Scalars["jsonb"]["input"]>>;
+};
+
 /** mutation root */
 export type Mutation_Root = {
   __typename?: "mutation_root";
@@ -2619,14 +2279,10 @@ export type Mutation_Root = {
   delete_accounts?: Maybe<Accounts_Mutation_Response>;
   /** delete single row from the table: "accounts" */
   delete_accounts_by_pk?: Maybe<Accounts>;
-  /** delete data from the table: "badma.ai" */
-  delete_badma_ai?: Maybe<Badma_Ai_Mutation_Response>;
-  /** delete single row from the table: "badma.ai" */
-  delete_badma_ai_by_pk?: Maybe<Badma_Ai>;
-  /** delete data from the table: "badma.conflicts" */
-  delete_badma_conflicts?: Maybe<Badma_Conflicts_Mutation_Response>;
-  /** delete single row from the table: "badma.conflicts" */
-  delete_badma_conflicts_by_pk?: Maybe<Badma_Conflicts>;
+  /** delete data from the table: "badma.ais" */
+  delete_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
+  /** delete single row from the table: "badma.ais" */
+  delete_badma_ais_by_pk?: Maybe<Badma_Ais>;
   /** delete data from the table: "badma.games" */
   delete_badma_games?: Maybe<Badma_Games_Mutation_Response>;
   /** delete single row from the table: "badma.games" */
@@ -2651,14 +2307,10 @@ export type Mutation_Root = {
   insert_accounts?: Maybe<Accounts_Mutation_Response>;
   /** insert a single row into the table: "accounts" */
   insert_accounts_one?: Maybe<Accounts>;
-  /** insert data into the table: "badma.ai" */
-  insert_badma_ai?: Maybe<Badma_Ai_Mutation_Response>;
-  /** insert a single row into the table: "badma.ai" */
-  insert_badma_ai_one?: Maybe<Badma_Ai>;
-  /** insert data into the table: "badma.conflicts" */
-  insert_badma_conflicts?: Maybe<Badma_Conflicts_Mutation_Response>;
-  /** insert a single row into the table: "badma.conflicts" */
-  insert_badma_conflicts_one?: Maybe<Badma_Conflicts>;
+  /** insert data into the table: "badma.ais" */
+  insert_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
+  /** insert a single row into the table: "badma.ais" */
+  insert_badma_ais_one?: Maybe<Badma_Ais>;
   /** insert data into the table: "badma.games" */
   insert_badma_games?: Maybe<Badma_Games_Mutation_Response>;
   /** insert a single row into the table: "badma.games" */
@@ -2685,20 +2337,12 @@ export type Mutation_Root = {
   update_accounts_by_pk?: Maybe<Accounts>;
   /** update multiples rows of table: "accounts" */
   update_accounts_many?: Maybe<Array<Maybe<Accounts_Mutation_Response>>>;
-  /** update data of the table: "badma.ai" */
-  update_badma_ai?: Maybe<Badma_Ai_Mutation_Response>;
-  /** update single row of the table: "badma.ai" */
-  update_badma_ai_by_pk?: Maybe<Badma_Ai>;
-  /** update multiples rows of table: "badma.ai" */
-  update_badma_ai_many?: Maybe<Array<Maybe<Badma_Ai_Mutation_Response>>>;
-  /** update data of the table: "badma.conflicts" */
-  update_badma_conflicts?: Maybe<Badma_Conflicts_Mutation_Response>;
-  /** update single row of the table: "badma.conflicts" */
-  update_badma_conflicts_by_pk?: Maybe<Badma_Conflicts>;
-  /** update multiples rows of table: "badma.conflicts" */
-  update_badma_conflicts_many?: Maybe<
-    Array<Maybe<Badma_Conflicts_Mutation_Response>>
-  >;
+  /** update data of the table: "badma.ais" */
+  update_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
+  /** update single row of the table: "badma.ais" */
+  update_badma_ais_by_pk?: Maybe<Badma_Ais>;
+  /** update multiples rows of table: "badma.ais" */
+  update_badma_ais_many?: Maybe<Array<Maybe<Badma_Ais_Mutation_Response>>>;
   /** update data of the table: "badma.games" */
   update_badma_games?: Maybe<Badma_Games_Mutation_Response>;
   /** update single row of the table: "badma.games" */
@@ -2744,23 +2388,13 @@ export type Mutation_RootDelete_Accounts_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Badma_AiArgs = {
-  where: Badma_Ai_Bool_Exp;
+export type Mutation_RootDelete_Badma_AisArgs = {
+  where: Badma_Ais_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Badma_Ai_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Badma_ConflictsArgs = {
-  where: Badma_Conflicts_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Badma_Conflicts_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
+export type Mutation_RootDelete_Badma_Ais_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
 };
 
 /** mutation root */
@@ -2826,27 +2460,15 @@ export type Mutation_RootInsert_Accounts_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Badma_AiArgs = {
-  objects: Array<Badma_Ai_Insert_Input>;
-  on_conflict?: InputMaybe<Badma_Ai_On_Conflict>;
+export type Mutation_RootInsert_Badma_AisArgs = {
+  objects: Array<Badma_Ais_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Ais_On_Conflict>;
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Badma_Ai_OneArgs = {
-  object: Badma_Ai_Insert_Input;
-  on_conflict?: InputMaybe<Badma_Ai_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Badma_ConflictsArgs = {
-  objects: Array<Badma_Conflicts_Insert_Input>;
-  on_conflict?: InputMaybe<Badma_Conflicts_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Badma_Conflicts_OneArgs = {
-  object: Badma_Conflicts_Insert_Input;
-  on_conflict?: InputMaybe<Badma_Conflicts_On_Conflict>;
+export type Mutation_RootInsert_Badma_Ais_OneArgs = {
+  object: Badma_Ais_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Ais_On_Conflict>;
 };
 
 /** mutation root */
@@ -2929,41 +2551,30 @@ export type Mutation_RootUpdate_Accounts_ManyArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Badma_AiArgs = {
-  _inc?: InputMaybe<Badma_Ai_Inc_Input>;
-  _set?: InputMaybe<Badma_Ai_Set_Input>;
-  where: Badma_Ai_Bool_Exp;
+export type Mutation_RootUpdate_Badma_AisArgs = {
+  _append?: InputMaybe<Badma_Ais_Append_Input>;
+  _delete_at_path?: InputMaybe<Badma_Ais_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Badma_Ais_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Badma_Ais_Delete_Key_Input>;
+  _prepend?: InputMaybe<Badma_Ais_Prepend_Input>;
+  _set?: InputMaybe<Badma_Ais_Set_Input>;
+  where: Badma_Ais_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Badma_Ai_By_PkArgs = {
-  _inc?: InputMaybe<Badma_Ai_Inc_Input>;
-  _set?: InputMaybe<Badma_Ai_Set_Input>;
-  pk_columns: Badma_Ai_Pk_Columns_Input;
+export type Mutation_RootUpdate_Badma_Ais_By_PkArgs = {
+  _append?: InputMaybe<Badma_Ais_Append_Input>;
+  _delete_at_path?: InputMaybe<Badma_Ais_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Badma_Ais_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Badma_Ais_Delete_Key_Input>;
+  _prepend?: InputMaybe<Badma_Ais_Prepend_Input>;
+  _set?: InputMaybe<Badma_Ais_Set_Input>;
+  pk_columns: Badma_Ais_Pk_Columns_Input;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Badma_Ai_ManyArgs = {
-  updates: Array<Badma_Ai_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Badma_ConflictsArgs = {
-  _inc?: InputMaybe<Badma_Conflicts_Inc_Input>;
-  _set?: InputMaybe<Badma_Conflicts_Set_Input>;
-  where: Badma_Conflicts_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Badma_Conflicts_By_PkArgs = {
-  _inc?: InputMaybe<Badma_Conflicts_Inc_Input>;
-  _set?: InputMaybe<Badma_Conflicts_Set_Input>;
-  pk_columns: Badma_Conflicts_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Badma_Conflicts_ManyArgs = {
-  updates: Array<Badma_Conflicts_Updates>;
+export type Mutation_RootUpdate_Badma_Ais_ManyArgs = {
+  updates: Array<Badma_Ais_Updates>;
 };
 
 /** mutation root */
@@ -3081,18 +2692,12 @@ export type Query_Root = {
   accounts_aggregate: Accounts_Aggregate;
   /** fetch data from the table: "accounts" using primary key columns */
   accounts_by_pk?: Maybe<Accounts>;
-  /** fetch data from the table: "badma.ai" */
-  badma_ai: Array<Badma_Ai>;
-  /** fetch aggregated fields from the table: "badma.ai" */
-  badma_ai_aggregate: Badma_Ai_Aggregate;
-  /** fetch data from the table: "badma.ai" using primary key columns */
-  badma_ai_by_pk?: Maybe<Badma_Ai>;
-  /** fetch data from the table: "badma.conflicts" */
-  badma_conflicts: Array<Badma_Conflicts>;
-  /** fetch aggregated fields from the table: "badma.conflicts" */
-  badma_conflicts_aggregate: Badma_Conflicts_Aggregate;
-  /** fetch data from the table: "badma.conflicts" using primary key columns */
-  badma_conflicts_by_pk?: Maybe<Badma_Conflicts>;
+  /** fetch data from the table: "badma.ais" */
+  badma_ais: Array<Badma_Ais>;
+  /** fetch aggregated fields from the table: "badma.ais" */
+  badma_ais_aggregate: Badma_Ais_Aggregate;
+  /** fetch data from the table: "badma.ais" using primary key columns */
+  badma_ais_by_pk?: Maybe<Badma_Ais>;
   /** fetch data from the table: "badma.games" */
   badma_games: Array<Badma_Games>;
   /** fetch aggregated fields from the table: "badma.games" */
@@ -3145,44 +2750,24 @@ export type Query_RootAccounts_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
-export type Query_RootBadma_AiArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
+export type Query_RootBadma_AisArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
-export type Query_RootBadma_Ai_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
+export type Query_RootBadma_Ais_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
-export type Query_RootBadma_Ai_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
-};
-
-export type Query_RootBadma_ConflictsArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-};
-
-export type Query_RootBadma_Conflicts_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-};
-
-export type Query_RootBadma_Conflicts_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
+export type Query_RootBadma_Ais_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
 };
 
 export type Query_RootBadma_GamesArgs = {
@@ -3295,22 +2880,14 @@ export type Subscription_Root = {
   accounts_by_pk?: Maybe<Accounts>;
   /** fetch data from the table in a streaming manner: "accounts" */
   accounts_stream: Array<Accounts>;
-  /** fetch data from the table: "badma.ai" */
-  badma_ai: Array<Badma_Ai>;
-  /** fetch aggregated fields from the table: "badma.ai" */
-  badma_ai_aggregate: Badma_Ai_Aggregate;
-  /** fetch data from the table: "badma.ai" using primary key columns */
-  badma_ai_by_pk?: Maybe<Badma_Ai>;
-  /** fetch data from the table in a streaming manner: "badma.ai" */
-  badma_ai_stream: Array<Badma_Ai>;
-  /** fetch data from the table: "badma.conflicts" */
-  badma_conflicts: Array<Badma_Conflicts>;
-  /** fetch aggregated fields from the table: "badma.conflicts" */
-  badma_conflicts_aggregate: Badma_Conflicts_Aggregate;
-  /** fetch data from the table: "badma.conflicts" using primary key columns */
-  badma_conflicts_by_pk?: Maybe<Badma_Conflicts>;
-  /** fetch data from the table in a streaming manner: "badma.conflicts" */
-  badma_conflicts_stream: Array<Badma_Conflicts>;
+  /** fetch data from the table: "badma.ais" */
+  badma_ais: Array<Badma_Ais>;
+  /** fetch aggregated fields from the table: "badma.ais" */
+  badma_ais_aggregate: Badma_Ais_Aggregate;
+  /** fetch data from the table: "badma.ais" using primary key columns */
+  badma_ais_by_pk?: Maybe<Badma_Ais>;
+  /** fetch data from the table in a streaming manner: "badma.ais" */
+  badma_ais_stream: Array<Badma_Ais>;
   /** fetch data from the table: "badma.games" */
   badma_games: Array<Badma_Games>;
   /** fetch aggregated fields from the table: "badma.games" */
@@ -3379,56 +2956,30 @@ export type Subscription_RootAccounts_StreamArgs = {
   where?: InputMaybe<Accounts_Bool_Exp>;
 };
 
-export type Subscription_RootBadma_AiArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
+export type Subscription_RootBadma_AisArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
-export type Subscription_RootBadma_Ai_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Ai_Select_Column>>;
+export type Subscription_RootBadma_Ais_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Ai_Order_By>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
-export type Subscription_RootBadma_Ai_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
+export type Subscription_RootBadma_Ais_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
 };
 
-export type Subscription_RootBadma_Ai_StreamArgs = {
+export type Subscription_RootBadma_Ais_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Badma_Ai_Stream_Cursor_Input>>;
-  where?: InputMaybe<Badma_Ai_Bool_Exp>;
-};
-
-export type Subscription_RootBadma_ConflictsArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-};
-
-export type Subscription_RootBadma_Conflicts_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-};
-
-export type Subscription_RootBadma_Conflicts_By_PkArgs = {
-  id: Scalars["bigint"]["input"];
-};
-
-export type Subscription_RootBadma_Conflicts_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Badma_Conflicts_Stream_Cursor_Input>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
+  cursor: Array<InputMaybe<Badma_Ais_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
 export type Subscription_RootBadma_GamesArgs = {
@@ -3582,9 +3133,9 @@ export type Users = {
   /** An aggregate relationship */
   accounts_aggregate: Accounts_Aggregate;
   /** An array relationship */
-  conflicts: Array<Badma_Conflicts>;
+  ais: Array<Badma_Ais>;
   /** An aggregate relationship */
-  conflicts_aggregate: Badma_Conflicts_Aggregate;
+  ais_aggregate: Badma_Ais_Aggregate;
   created_at: Scalars["timestamptz"]["output"];
   email?: Maybe<Scalars["String"]["output"]>;
   email_verified?: Maybe<Scalars["timestamptz"]["output"]>;
@@ -3628,21 +3179,21 @@ export type UsersAccounts_AggregateArgs = {
 };
 
 /** columns and relationships of "users" */
-export type UsersConflictsArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
+export type UsersAisArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
-export type UsersConflicts_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Badma_Conflicts_Select_Column>>;
+export type UsersAis_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Ais_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Badma_Conflicts_Order_By>>;
-  where?: InputMaybe<Badma_Conflicts_Bool_Exp>;
+  order_by?: InputMaybe<Array<Badma_Ais_Order_By>>;
+  where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -3727,8 +3278,8 @@ export type Users_Bool_Exp = {
   _or?: InputMaybe<Array<Users_Bool_Exp>>;
   accounts?: InputMaybe<Accounts_Bool_Exp>;
   accounts_aggregate?: InputMaybe<Accounts_Aggregate_Bool_Exp>;
-  conflicts?: InputMaybe<Badma_Conflicts_Bool_Exp>;
-  conflicts_aggregate?: InputMaybe<Badma_Conflicts_Aggregate_Bool_Exp>;
+  ais?: InputMaybe<Badma_Ais_Bool_Exp>;
+  ais_aggregate?: InputMaybe<Badma_Ais_Aggregate_Bool_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
   email_verified?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -3758,7 +3309,7 @@ export enum Users_Constraint {
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
   accounts?: InputMaybe<Accounts_Arr_Rel_Insert_Input>;
-  conflicts?: InputMaybe<Badma_Conflicts_Arr_Rel_Insert_Input>;
+  ais?: InputMaybe<Badma_Ais_Arr_Rel_Insert_Input>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   email?: InputMaybe<Scalars["String"]["input"]>;
   email_verified?: InputMaybe<Scalars["timestamptz"]["input"]>;
@@ -3828,7 +3379,7 @@ export type Users_On_Conflict = {
 /** Ordering options when selecting data from "users". */
 export type Users_Order_By = {
   accounts_aggregate?: InputMaybe<Accounts_Aggregate_Order_By>;
-  conflicts_aggregate?: InputMaybe<Badma_Conflicts_Aggregate_Order_By>;
+  ais_aggregate?: InputMaybe<Badma_Ais_Aggregate_Order_By>;
   created_at?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
   email_verified?: InputMaybe<Order_By>;

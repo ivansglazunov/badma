@@ -242,6 +242,24 @@ const userPermissions = [
   }
 }));
 
+// Anonymous permissions - allow reading all games, moves, and joins
+const anonymousPermissions = [
+  { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at', 'updated_at'] },
+  { table: 'moves', columns: ['id', 'from', 'to', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
+  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at'] },
+].map(p => ({
+  type: 'pg_create_select_permission',
+  args: {
+    source: 'default',
+    table: { schema: badmaSchema, name: p.table },
+    role: 'anonymous',
+    permission: {
+      columns: p.columns,
+      filter: {}
+    }
+  }
+}));
+
 // Special permissions for 'ais' table
 const aisUserPermissions = [
   {
@@ -338,7 +356,7 @@ async function applyPermissionsFunc() {
 
   // Drop existing permissions first (idempotency)
   const allTables = tablesToTrack.map(t => t.name);
-  const rolesToDrop = ['user', 'admin']; // Assuming we might only set user/admin here
+  const rolesToDrop = ['user', 'admin', 'anonymous']; // Added anonymous role
 
   for (const table of allTables) {
     for (const role of rolesToDrop) {
@@ -354,6 +372,13 @@ async function applyPermissionsFunc() {
   debug('  📝 Applying user permissions...');
   for (const permission of userPermissions) {
     debug(`     Applying select for user.${permission.args.table.name}...`);
+    await hasura.v1(permission);
+  }
+  
+  // Apply anonymous permissions
+  debug('  📝 Applying anonymous permissions...');
+  for (const permission of anonymousPermissions) {
+    debug(`     Applying select for anonymous.${permission.args.table.name}...`);
     await hasura.v1(permission);
   }
   

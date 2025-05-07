@@ -30,14 +30,11 @@
   "description": "",
   "dependencies": {
     "chess.js": "^0.12.1",
-    "debug": "^4.3.4",
     "events": "^3.3.0",
-    "graphql": "^16.8.1",
-    "graphql-tag": "^2.12.6",
-    "hasyx": "^0.1.93",
+    "hasyx": "^0.1.95",
     "js-chess-engine": "^1.0.2",
-    "next-ws": "^2.0.7",
-    "uuid": "^9.0.1",
+    "react-chessboard": "^4.7.3",
+    "react-resize-detector": "^12.0.2",
     "ws": "^8.18.2"
   },
   "devDependencies": {

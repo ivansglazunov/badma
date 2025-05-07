@@ -6,12 +6,12 @@ export const sidebar: SidebarData = {
   logo: 'logo.svg',
   navMain: [
     {
-      title: "Core",
+      title: "Hasyx",
       url: "#",
       items: [
         {
           title: "Diagnostics",
-          url: "/",
+          url: "/hasyx",
         },
       ],
     },
@@ -20,7 +20,11 @@ export const sidebar: SidebarData = {
       url: "#",
       items: [
         {
-          title: "Diagnostic",
+          title: "Application",
+          url: "/",
+        },
+        {
+          title: "Diagnostics",
           url: "/badma",
         },
         {

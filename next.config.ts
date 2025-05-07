@@ -12,8 +12,6 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 console.log(`Building config: isClient=${isBuildingForClient}, basePath=${basePath}`);
 
 const config: NextConfig = {
-  // Отключаем Pages Router используя только определенные расширения
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   // Conditionally set output to 'export'
   output: isBuildingForClient ? 'export' : undefined,
   // Explicitly set distDir again

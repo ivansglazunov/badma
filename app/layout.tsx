@@ -5,7 +5,6 @@ import "@/app/globals.css";
 import "hasyx/lib/styles.css";
 import { Generator } from "hasyx";
 import schema from "../public/hasura-schema.json";
-import { ThemeProvider } from "hasyx/components/theme-provider";
 
 const generate = Generator(schema);
 
@@ -22,11 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="icon" href="/favicon.ico" sizes="any" />
         </head>
         <body>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <HasyxProvider generate={generate}>
-              {children}
-            </HasyxProvider>
-          </ThemeProvider>
+          <HasyxProvider generate={generate}>
+            {children}
+          </HasyxProvider>
         </body>
       </html>
     </>

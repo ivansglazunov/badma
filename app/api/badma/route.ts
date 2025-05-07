@@ -4,13 +4,13 @@ import { WebSocket, WebSocketServer } from 'ws';
 // Remove unused proxy imports if no longer needed after refactor
 // import { proxyGET, proxyPOST, proxySOCKET } from 'hasyx/lib/graphql-proxy'; 
 import { HasyxChessServer } from '@/lib/hasyx-chess-server';
-import { Hasyx, createApolloClient, Generator, getTokenFromRequest } from 'hasyx';
+import { Hasyx, createApolloClient, Generator } from 'hasyx';
 // Ensure verifyJWT path is correct if used directly
 import { verifyJWT } from 'hasyx/lib/jwt'; // Adjusted path assuming it comes from hasyx lib
 import schema from '@/public/hasura-schema.json';
 import Debug from '@/lib/debug';
 import { ChessClientRequest, ChessServerResponse, ChessClientMove, ChessClientSide, ChessClientRole } from '@/lib/chess-client';
-import { WsClientsManager } from 'hasyx';
+import { getTokenFromRequest, WsClientsManager } from 'hasyx/lib/auth-next';
 
 const debug = Debug('api:badma');
 
@@ -217,7 +217,7 @@ export function SOCKET(
   request: http.IncomingMessage,
   server: WebSocketServer
 ): void {
-  const clientId = clients.Client(client);
+  const clientId = clients.Client(client as any);
   
   (async () => {
     const user = await clients.parseUser(request, clientId);
