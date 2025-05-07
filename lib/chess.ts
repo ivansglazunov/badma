@@ -422,7 +422,7 @@ export default class Chess {
             const isRook = piece.type === 'r' || piece.type === 'q';
             const isBishop = piece.type === 'b' || piece.type === 'q';
             
-            const directions = [];
+            const directions: any = [];
             if (isRook) directions.push(...[[0, 1], [0, -1], [1, 0], [-1, 0]]); // Orthogonal
             if (isBishop) directions.push(...[[1, 1], [1, -1], [-1, 1], [-1, -1]]); // Diagonal
 
@@ -567,7 +567,7 @@ export default class Chess {
     const opposingSide = side === 1 ? 2 : 1;
     
     // Find the king
-    let kingSquare = null;
+    let kingSquare: string | null = null;
     
     // Scan the board to find the king
     for (let file = 0; file < 8; file++) {
