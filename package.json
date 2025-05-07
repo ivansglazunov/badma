@@ -11,26 +11,26 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "next dev --turbopack",
-    "build": "npm run build:lib && NODE_ENV=production npm run build:next",
+    "build": "npm run build:lib && NODE_ENV=production next build",
     "build:lib": "tsc -p tsconfig.lib.json",
     "unbuild": "find lib components hooks -type f \\( -name '*.js' -o -name '*.d.ts' \\) -not -path \"*/types/*\" -print -delete; rm -rf tsconfig.lib.tsbuildinfo; echo '✅ Cleaned compiled files (types directory preserved)'",
-    "build:next": "next build --turbopack",
+    "build:next": "next build",
     "client": "tsx lib/build-client.ts",
-    "start": "next start --turbopack",
-    "lint": "next lint --turbopack",
+    "start": "next start",
+    "lint": "next lint",
     "ws": "npx --yes next-ws-cli@latest patch -y",
     "postinstall": "npm run ws -- -y"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivansglazunov/badma3.git"
+    "url": "git+https://github.com/ivansglazunov/badma.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ivansglazunov/badma3/issues"
+    "url": "https://github.com/ivansglazunov/badma/issues"
   },
-  "homepage": "https://github.com/ivansglazunov/badma3#readme",
+  "homepage": "https://github.com/ivansglazunov/badma#readme",
   "description": "",
   "dependencies": {
     "chess.js": "^0.12.1",
@@ -41,6 +41,7 @@
     "next-ws": "^2.0.7",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",
+    "vercel": "^41.7.3",
     "ws": "^8.18.2"
   },
   "devDependencies": {
