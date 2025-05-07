@@ -11,7 +11,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "next dev --turbopack",
-    "build": "npm run build:lib && NODE_ENV=production next build",
+    "build": "npm run build:lib && NODE_ENV=production npm run build:next",
     "build:lib": "tsc -p tsconfig.lib.json",
     "unbuild": "find lib components hooks -type f \\( -name '*.js' -o -name '*.d.ts' \\) -not -path \"*/types/*\" -print -delete; rm -rf tsconfig.lib.tsbuildinfo; echo '✅ Cleaned compiled files (types directory preserved)'",
     "build:next": "next build --turbopack",
@@ -35,9 +35,10 @@
   "dependencies": {
     "chess.js": "^0.12.1",
     "events": "^3.3.0",
-    "hasyx": "^0.1.102",
+    "hasyx": "^0.1.104",
     "js-chess-engine": "^1.0.2",
-    "next": "^15.3.2",
+    "next": "^15.3.1",
+    "next-ws": "^2.0.7",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",
     "ws": "^8.18.2"
