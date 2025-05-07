@@ -1,4 +1,4 @@
-import jsChessEngine from 'js-chess-engine';
+import * as jsChessEngine from 'js-chess-engine';
 const { aiMove } = jsChessEngine;
 
 /**
