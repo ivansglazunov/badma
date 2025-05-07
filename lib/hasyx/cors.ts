@@ -31,7 +31,7 @@ export function applyCorsHeaders(
  */
 export async function withCors(
   request: NextRequest,
-  handler: (request: NextRequest) => Promise<NextResponse> | NextResponse | any
+  handler: (request: NextRequest) => Promise<any> | any
 ): Promise<NextResponse> {
   const requestOrigin = request.headers.get('Origin') || '*';
   
@@ -44,14 +44,20 @@ export async function withCors(
   
   // Process the request with the handler
   try {
-    const response = await handler(request);
+    const result = await handler(request);
     
-    // Проверяем, что response является экземпляром NextResponse
-    // Это должно решить проблему сравнения с оператором '<'
-    if (!(response instanceof NextResponse)) {
-      debug('Handler returned non-NextResponse object, converting to NextResponse');
-      // Если response не является NextResponse, преобразуем его
-      return applyCorsHeaders(NextResponse.json(response), requestOrigin);
+    // Ensure we have a NextResponse
+    let response: NextResponse;
+    
+    if (result instanceof NextResponse) {
+      // Already a NextResponse, just add CORS headers
+      response = result;
+    } else if (result && typeof result === 'object') {
+      // Convert object to JSON response
+      response = NextResponse.json(result);
+    } else {
+      // Handle primitive values or null/undefined
+      response = NextResponse.json({ data: result });
     }
     
     return applyCorsHeaders(response, requestOrigin);

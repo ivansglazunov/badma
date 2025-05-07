@@ -32,6 +32,9 @@
       ],
       "badma/*": [
         "./*"
+      ],
+      "hasyx/lib/cors": [
+        "./lib/hasyx/cors.ts"
       ]
     },
     "types": [

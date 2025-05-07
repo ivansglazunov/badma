@@ -159,6 +159,16 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
     const aiMove = go(chessClient.fen, level);
     debug(`📝 AI suggested move: ${JSON.stringify(aiMove)}`);
     
+    // Если aiMove не определен, возвращаем ошибку
+    if (!aiMove) {
+      debug(`❌ AI engine failed to generate a move`);
+      return { 
+        success: false, 
+        message: 'AI engine failed to generate a move',
+        error: 'No move returned from AI engine'
+      };
+    }
+    
     // Make the move
     const moveResponse = await chessClient.asyncMove({
       from: aiMove.from,

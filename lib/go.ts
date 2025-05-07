@@ -1,5 +1,5 @@
-import jsChessEngine from 'js-chess-engine';
-const { aiMove } = jsChessEngine;
+import { aiMove } from 'js-chess-engine';
+// const { aiMove } = jsChessEngine;
 
 /**
  * Возвращает лучший ход для заданной позиции FEN и уровня сложности.
@@ -18,7 +18,7 @@ export function go(fen: string, level: number) {
     // В js-chess-engine пешка всегда превращается в ферзя автоматически,
     // но движок не возвращает тип превращения явно.
     // Поэтому promotion укажем только если ход пешкой на последнюю горизонталь.
-    let promotion = null;
+    let promotion: any = null;
     // Проверяем: если from - пешка и to - 1 или 8 горизонталь, то promotion = 'q'
     const fromRank = from[1];
     const toRank = to[1];
