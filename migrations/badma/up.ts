@@ -82,20 +82,13 @@ const sqlSchema = `
     -- Removed constraint side_valid_range as side can be 0 for spectator/observer
   );
 
-  -- Conflicts table (immutable)
-  CREATE TABLE IF NOT EXISTS ${badmaSchema}.conflicts (
-    id BIGSERIAL PRIMARY KEY,
-    game_id UUID NOT NULL REFERENCES ${badmaSchema}.games(id) ON DELETE CASCADE,
+  -- AIs table (user configurations for AI)
+  CREATE TABLE IF NOT EXISTS ${badmaSchema}.ais (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
-    error TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-  );
-
-  -- AI table (dynamic)
-  CREATE TABLE IF NOT EXISTS ${badmaSchema}.ai (
-    id BIGSERIAL PRIMARY KEY,
-    join_id UUID NOT NULL REFERENCES ${badmaSchema}.joins(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    options JSONB NOT NULL DEFAULT '{"engine": "js-chess-engine", "level": 0}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
 
   -- <<< ADDED Trigger for badma.games storage_updated_at >>>
@@ -112,8 +105,7 @@ const tablesToTrack = [
   { schema: badmaSchema, name: 'games' },
   { schema: badmaSchema, name: 'moves' },
   { schema: badmaSchema, name: 'joins' },
-  { schema: badmaSchema, name: 'conflicts' },
-  { schema: badmaSchema, name: 'ai' }
+  { schema: badmaSchema, name: 'ais' }
 ];
 
 // --- Relationships Definition (from init-gql) ---
@@ -155,42 +147,6 @@ const relationships = [
       using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'joins' }, column: 'game_id' } }
     }
   },
-  {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'conflicts' },
-      name: 'game',
-      using: { foreign_key_constraint_on: 'game_id' }
-    }
-  },
-  {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'games' },
-      name: 'conflicts',
-      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'conflicts' }, column: 'game_id' } }
-    }
-  },
-  {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'ai' },
-      name: 'join',
-      using: { foreign_key_constraint_on: 'join_id' }
-    }
-  },
-  {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'joins' },
-      name: 'ai_bots', // Changed from stockfish_bots to ai_bots for consistency
-      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'ai' }, column: 'join_id' } }
-    }
-  },
   // Relationships involving public.users
   {
     type: 'pg_create_object_relationship',
@@ -210,7 +166,7 @@ const relationships = [
       using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'games' }, column: 'user_id' } }
     }
   },
-   {
+  {
     type: 'pg_create_object_relationship',
     args: {
       source: 'default',
@@ -246,11 +202,11 @@ const relationships = [
       using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'joins' }, column: 'user_id' } }
     }
   },
-   {
+  {
     type: 'pg_create_object_relationship',
     args: {
       source: 'default',
-      table: { schema: badmaSchema, name: 'conflicts' },
+      table: { schema: badmaSchema, name: 'ais' },
       name: 'user',
       using: { foreign_key_constraint_on: 'user_id' }
     }
@@ -260,20 +216,19 @@ const relationships = [
     args: {
       source: 'default',
       table: { schema: publicSchema, name: 'users' },
-      name: 'conflicts',
-      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'conflicts' }, column: 'user_id' } }
+      name: 'ais',
+      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'ais' }, column: 'user_id' } }
     }
-  },
+  }
 ];
 
 // --- Permissions Definition (from init-gql) ---
 // We only need select permissions for 'user' role on most tables
 const userPermissions = [
   { table: 'servers', columns: ['id', 'local_address', 'global_address', 'created_at', 'active_at'] },
-  { table: 'badma_games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at'] },
-  { table: 'badma_moves', columns: ['id', 'from', 'to', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
-  { table: 'badma_joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at'] },
-  { table: 'conflicts', columns: ['id', 'game_id', 'user_id', 'error', 'created_at'] },
+  { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at'] },
+  { table: 'moves', columns: ['id', 'from', 'to', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
+  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at'] },
 ].map(p => ({
   type: 'pg_create_select_permission',
   args: {
@@ -287,36 +242,63 @@ const userPermissions = [
   }
 }));
 
-// Special permissions for 'ai' table
-const aiUserSelectPermission = {
-  type: 'pg_create_select_permission',
-  args: {
-    source: 'default',
-    table: { schema: badmaSchema, name: 'ai' },
-    role: 'user',
-    permission: {
-      columns: ['id', 'join_id', 'created_at'],
-      filter: {
-        join: { // Assuming 'join' is the object relationship name defined above
-          user_id: { _eq: 'X-Hasura-User-Id' } // Only allow users to see AI related to their joins
+// Special permissions for 'ais' table
+const aisUserPermissions = [
+  {
+    type: 'pg_create_select_permission',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'ais' },
+      role: 'user',
+      permission: {
+        columns: ['id', 'user_id', 'options', 'created_at', 'updated_at'],
+        filter: {
+          user_id: { _eq: 'X-Hasura-User-Id' } // Users can only see their own AI configs
         }
       }
     }
-  }
-};
-
-const aiAdminPermissions = [
-  {
-    type: 'pg_create_select_permission',
-    args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin', permission: { columns: ['id', 'join_id', 'created_at'], filter: {} } }
   },
   {
     type: 'pg_create_insert_permission',
-    args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin', permission: { columns: ['join_id'], check: {} } }
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'ais' },
+      role: 'user',
+      permission: {
+        check: {
+          user_id: { _eq: 'X-Hasura-User-Id' } // Users can only add AI configs for themselves
+        },
+        columns: ['user_id', 'options']
+      }
+    }
+  },
+  {
+    type: 'pg_create_update_permission',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'ais' },
+      role: 'user',
+      permission: {
+        columns: ['options'],
+        filter: {
+          user_id: { _eq: 'X-Hasura-User-Id' } // Users can only update their own AI configs
+        },
+        check: {}
+      }
+    }
   },
   {
     type: 'pg_create_delete_permission',
-    args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin', permission: { filter: {} } }
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'ais' },
+      role: 'user',
+      permission: {
+        filter: {
+          user_id: { _eq: 'X-Hasura-User-Id' } // Users can only delete their own AI configs
+        }
+      }
+    }
   }
 ];
 
@@ -374,17 +356,13 @@ async function applyPermissionsFunc() {
     debug(`     Applying select for user.${permission.args.table.name}...`);
     await hasura.v1(permission);
   }
-  debug(`     Applying select for user.ai...`);
-  await hasura.v1(aiUserSelectPermission);
-  debug('  ✅ User permissions applied.');
-
-  // Apply admin permissions for AI table
-  debug('  📝 Applying admin permissions for badma.ai...');
-  for (const permission of aiAdminPermissions) {
-     debug(`     Applying ${permission.type.split('_').pop()} for admin.ai...`);
-     await hasura.v1(permission);
+  
+  // Apply ais permissions
+  debug('  📝 Applying ais permissions...');
+  for (const permission of aisUserPermissions) {
+    debug(`     Applying ${permission.type.split('_').pop()} for user.ais...`);
+    await hasura.v1(permission);
   }
-  debug('  ✅ Admin permissions for badma.ai applied.');
 
   debug('✅ Badma permissions successfully applied.');
 }

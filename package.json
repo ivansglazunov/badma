@@ -3,7 +3,6 @@
   "version": "0.1.0-alpha.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "files": [
     "dist",
     "LICENSE",
@@ -11,9 +10,12 @@
   ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "build": "tsc -p tsconfig.lib.json; npx -y hasyx build",
+    "build": "NODE_ENV=production npx -y hasyx build",
+    "unbuild": "npx -y hasyx unbuild",
+    "start": "NODE_ENV=production npx -y hasyx start",
     "dev": "npx -y hasyx dev",
-    "start": "npx -y hasyx start"
+    "ws": "npx --yes next-ws-cli@latest patch -y",
+    "postinstall": "npm run ws -- -y"
   },
   "repository": {
     "type": "git",
@@ -32,9 +34,11 @@
     "events": "^3.3.0",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
-    "hasyx": "^0.1.67",
+    "hasyx": "^0.1.93",
     "js-chess-engine": "^1.0.2",
-    "uuid": "^9.0.1"
+    "next-ws": "^2.0.7",
+    "uuid": "^9.0.1",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

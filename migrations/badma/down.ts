@@ -17,7 +17,7 @@ const hasura = new Hasura({
 
 const badmaSchema = 'badma';
 const publicSchema = 'public';
-const badmaTables = ['servers', 'games', 'moves', 'joins', 'conflicts', 'ai'];
+const badmaTables = ['servers', 'games', 'moves', 'joins', 'ais'];
 
 // Permissions to drop (matching those created in up.ts)
 const userPermissionsToDrop = [
@@ -25,14 +25,10 @@ const userPermissionsToDrop = [
   { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, role: 'user' } },
   { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'moves' }, role: 'user' } },
   { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'joins' }, role: 'user' } },
-  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'conflicts' }, role: 'user' } },
-  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'user' } },
-];
-
-const adminPermissionsAiToDrop = [
-  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin' } },
-  { type: 'pg_drop_insert_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin' } },
-  { type: 'pg_drop_delete_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, role: 'admin' } },
+  { type: 'pg_drop_select_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
+  { type: 'pg_drop_insert_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
+  { type: 'pg_drop_update_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
+  { type: 'pg_drop_delete_permission', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, role: 'user' } },
 ];
 
 // Relationships to drop (based on up.ts and clean)
@@ -42,10 +38,6 @@ const relationshipsToDrop = [
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, relationship: 'moves' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, relationship: 'joins' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'joins' }, relationship: 'game' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'conflicts' }, relationship: 'game' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, relationship: 'conflicts' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'ai' }, relationship: 'join' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'joins' }, relationship: 'ai_bots' } },
 
   // Relationships involving public.users
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, relationship: 'user' } },
@@ -54,8 +46,8 @@ const relationshipsToDrop = [
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'moves' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'joins' }, relationship: 'user' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'joins' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'conflicts' }, relationship: 'user' } },
-  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'conflicts' } },
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, relationship: 'user' } },
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'ais' } },
 ];
 
 // Tables to untrack
@@ -70,10 +62,9 @@ DROP FUNCTION IF EXISTS _set_storage_updated_at() CASCADE;
 `;
 
 const dropTablesSQL = `
-  DROP TABLE IF EXISTS badma.ai CASCADE;
+  DROP TABLE IF EXISTS badma.ais CASCADE;
   DROP TABLE IF EXISTS badma.moves CASCADE;
   DROP TABLE IF EXISTS badma.joins CASCADE;
-  DROP TABLE IF EXISTS badma.conflicts CASCADE;
   DROP TABLE IF EXISTS badma.games CASCADE;
   DROP TABLE IF EXISTS badma.servers CASCADE;
   DROP SCHEMA IF EXISTS badma CASCADE;
@@ -90,15 +81,6 @@ async function dropMetadata() {
     // Note: hasura.v1 handles 'not found' messages internally
   }
   debug('  ✅ User permissions dropped.');
-
-  debug('  🗑️ Dropping admin permissions for badma.ai...');
-  for (const dropRequest of adminPermissionsAiToDrop) {
-    const perm = `${dropRequest.args.role} on ${dropRequest.args.table.schema}.${dropRequest.args.table.name}`;
-    debug(`     Dropping permission for ${perm}...`);
-    await hasura.v1(dropRequest);
-  }
-  debug('  ✅ Admin permissions for badma.ai dropped.');
-
 
   debug('  🗑️ Dropping relationships...');
   for (const dropRequest of relationshipsToDrop) {
@@ -131,7 +113,7 @@ async function dropTablesFunc() {
 async function down() {
   debug('🚀 Starting Badma schema migration DOWN...');
   try {
-    // Drop metadata first (permissions, relationships, tracking)
+    // Then drop metadata (permissions, relationships, tracking)
     await dropMetadata();
 
     // Then drop the tables and schema

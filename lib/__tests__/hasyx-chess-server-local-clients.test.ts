@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
 import { createApolloClient, Generator, Hasyx } from 'hasyx'; // Function to create Apollo Client
-import Debug from '../debug';
 import { v4 as uuidv4 } from 'uuid';
 import schema from '../../public/hasura-schema.json';
-import { HasyxChessClient } from '../hasyx-chess-client';
+import { ChessClientRole } from '../chess-client';
+import Debug from '../debug';
 import { HasyxChessServer } from '../hasyx-chess-server';
 import { LocalChessClient } from '../local-chess-client';
-import { ChessClientRole } from '../chess-client';
 
 dotenv.config();
 

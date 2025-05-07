@@ -1,4 +1,4 @@
-import { AppSidebar } from "hasyx/components/app-sidebar"
+import { Sidebar } from "hasyx/components/sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,28 +16,27 @@ import {
 
 import pckg from "hasyx/package.json"
 
-import { HasuraCard } from "hasyx/components/hasura/card"
-import { ProxyCard } from "hasyx/components/proxy/card"
+import { AuthActionsCard } from "hasyx/components/auth/auth-actions-card"
 import { CredentialsSignInCard } from "hasyx/components/auth/credentials-signin-card"
 import { SessionCard } from "hasyx/components/auth/session-card"
-import { AuthActionsCard } from "hasyx/components/auth/auth-actions-card"
+import { HasuraCard } from "hasyx/components/hasura/card"
+import { ProxyCard } from "hasyx/components/proxy/card"
 import { UsersCard } from "hasyx/components/users/users-card"
 
 // Imports for getting server-side session
-import { getServerSession } from "next-auth/next"
-import authOptions from "@/app/api/auth/[...nextauth]/options" 
-import { Session } from "next-auth" // Import Session type
+import authOptions from "@/app/options"
 
 import sidebar from "@/app/sidebar"
+import useSsr, { SsrResult } from "hasyx/lib/ssr"
 
 // Now this is an async server component
 export default async function Page() {
   // Get session on the server
-  const session: Session | null = await getServerSession(authOptions);
-
+  const { session } = await useSsr(authOptions) as SsrResult;
+  // const session = null;
   return (
     <SidebarProvider>
-      <AppSidebar activeUrl={'/diagnostics'} data={sidebar} />
+      <Sidebar activeUrl={'/'} data={sidebar} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
