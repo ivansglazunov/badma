@@ -12,11 +12,8 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "npx -y hasyx dev",
     "build": "NODE_ENV=production npx -y hasyx build",
-    "build:lib": "tsc -p tsconfig.lib.json",
     "unbuild": "npx -y hasyx unbuild",
-    "build:next": "next build --turbopack",
     "start": "NODE_ENV=production npx -y hasyx start",
-    "lint": "next lint --turbopack",
     "ws": "npx --yes next-ws-cli@latest patch -y",
     "postinstall": "npm run ws -- -y"
   },

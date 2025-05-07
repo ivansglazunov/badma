@@ -11,14 +11,6 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 // basePath and distDir are now removed, relying on actions/configure-pages@v5 or defaults
 console.log(`Building config: isClient=${isBuildingForClient}, basePath=${basePath}`);
 
-// Show verbose build information
-console.log('*****************************');
-console.log('BUILD INFO:');
-console.log('NEXT_PUBLIC_BUILD_TARGET:', process.env.NEXT_PUBLIC_BUILD_TARGET);
-console.log('isBuildingForClient:', isBuildingForClient);
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('*****************************');
-
 const config: NextConfig = {
   // Conditionally set output to 'export'
   output: isBuildingForClient ? 'export' : undefined,
