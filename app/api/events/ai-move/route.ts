@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config(); // Добавляем загрузку переменных окружения
 
-import { NextRequest, NextResponse } from 'next/server'; // Используем стандартные типы Next.js
 import { createApolloClient, Generator, Hasyx } from 'hasyx';
-// import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events'; // Убираем hasyxEvent
+import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events'; // <<< Возвращаем импорт hasyxEvent
 import schema from '../../../../public/hasura-schema.json';
 import Debug from '../../../../lib/debug';
 import { ChessClientRole, ChessClientSide, ChessClientStatus } from '../../../../lib/chess-client';
@@ -15,39 +14,13 @@ import { Badma_Games } from '@/types/hasura-types';
 
 const debug = Debug('event:ai-move');
 
-// Определяем интерфейс для ожидаемого Hasura payload
-interface HasuraEventPayloadStructure {
-  created_at: string;
-  delivery_info: {
-    current_retry: number;
-    max_retries: number;
-  };
-  event: {
-    data: {
-      new: any; // Используем any, так как структура зависит от таблицы
-      old: any;
-    };
-    op: 'INSERT' | 'UPDATE' | 'DELETE' | 'MANUAL';
-    session_variables: Record<string, string>;
-    trace_context?: Record<string, any>;
-  };
-  id: string;
-  table: {
-    name: string;
-    schema: string;
-  };
-  trigger: {
-    name: string;
-  };
-}
-
 // Типы для данных внутри event.data, специфичные для badma_games
-interface BadmaGameEventData {
+interface BadmaGameData {
   id: string;
   fen: string;
   status: string;
   side: number;
-  user_id: string; // Добавляем user_id, если он есть в таблице и триггере
+  user_id: string;
 }
 
 interface AiConfig {
@@ -74,55 +47,47 @@ interface AiMoveResult {
 }
 
 /**
- * AI Move Event Handler (Raw Request)
- * Обрабатывает POST-запросы от Hasura Event Trigger.
+ * AI Move Event Handler
+ * Process chess AI moves when a game state changes (using hasyxEvent wrapper)
  */
-export async function POST(request: NextRequest) {
+export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
+  // Убираем ручную проверку секрета и парсинг body.payload, так как это делает hasyxEvent
+  /*
   debug('🔔 Raw AI move event trigger received');
-
   let eventPayload: HasuraEventPayloadStructure;
   try {
     // 1. Проверяем секрет события Hasura
-    const eventSecret = process.env.HASURA_EVENT_SECRET;
-    const receivedSecret = request.headers.get('x-hasura-event-secret');
-
-    if (!eventSecret || receivedSecret !== eventSecret) {
-      debug('⚠️ Unauthorized: Invalid or missing X-Hasura-Event-Secret');
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
+    // ... (код проверки секрета) ...
     // 2. Парсим тело запроса и извлекаем данные из ключа 'payload'
-    const body = await request.json();
-    if (!body || !body.payload) {
-      debug('⚠️ Invalid payload: Missing \'payload\' key in request body');
-      return NextResponse.json({ message: 'Invalid payload structure' }, { status: 400 });
-    }
-    eventPayload = body.payload as HasuraEventPayloadStructure;
-    debug('Parsed event payload:', JSON.stringify(eventPayload, null, 2));
-
+    // ... (код парсинга body.payload) ...
   } catch (error) {
-    debug('❌ Error parsing request body or validating secret:', error);
-    return NextResponse.json({ message: 'Invalid request body or headers' }, { status: 400 });
+    // ... (обработка ошибок парсинга) ...
   }
+  */
 
-  // --- НАЧАЛО ЛОГИКИ ОБРАБОТЧИКА (ранее была внутри hasyxEvent) ---
+  // --- НАЧАЛО ЛОГИКИ ОБРАБОТЧИКА (теперь внутри hasyxEvent) ---
+  // Логика остается почти той же, но используем eventPayload напрямую
   try {
     const { table, event } = eventPayload;
     const { op, data } = event;
-    const gameData = data.new as BadmaGameEventData;
+    // Используем HasuraEventPayload, data.new/old имеют тип any
+    const gameData = data.new as BadmaGameData; // Приводим к нашему типу
     
     debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}, side=${gameData.side}`);
     
+    // Проверки остаются теми же
     if (table.schema !== 'badma' || table.name !== 'games' || op !== 'UPDATE') {
       debug('⚠️ Skipping: Not a badma.games table update event');
-      return NextResponse.json({ success: true, message: 'Skipped: Not a relevant event type' });
+      // Возвращаем объект, NextResponse создаст hasyxEvent
+      return { success: true, message: 'Skipped: Not a relevant event type' }; 
     }
     
     if (gameData.status !== 'ready' && gameData.status !== 'continue') {
       debug(`⚠️ Skipping: Game not in playable state (status: ${gameData.status})`);
-      return NextResponse.json({ success: true, message: 'No AI move needed: Game not in playable state' });
+      return { success: true, message: 'No AI move needed: Game not in playable state' };
     }
     
+    // Создание клиентов и запросы остаются теми же
     const adminClient = createApolloClient({ 
       secret: process.env.HASURA_ADMIN_SECRET as string 
     });
@@ -133,20 +98,21 @@ export async function POST(request: NextRequest) {
     debug(`🎮 Current game side/turn: ${currentSide}`);
     
     // --- Запрос к badma_joins --- 
-    const joins = await hasyx.select<JoinRecord[]>({ 
+    const joins = await hasyx.select<JoinRecord[]>({
       table: 'badma_joins',
       where: { 
         game_id: { _eq: gameData.id }, 
         side: { _eq: currentSide },
-        role: { _eq: ChessClientRole.Player }  },
+        role: { _eq: ChessClientRole.Player }  
+      },
       order_by: { created_at: 'desc' },
       limit: 1,
-      returning: ['id', 'user_id', 'game_id', 'side', 'role'] // Убираем created_at если не используется
+      returning: ['id', 'user_id', 'game_id', 'side', 'role']
     });
     
     if (!joins || joins.length === 0) {
       debug('⚠️ No join record found for the current side');
-      return NextResponse.json({ success: true, message: 'No AI move needed: No join record for current side' });
+      return { success: true, message: 'No AI move needed: No join record for current side' };
     }
     
     const join = joins[0];
@@ -154,16 +120,16 @@ export async function POST(request: NextRequest) {
     debug(`👤 User ID for current turn: ${userId}`);
     
     // --- Запрос к badma_ais --- 
-    const aiConfigs = await hasyx.select<AiConfig[]>({ 
+    const aiConfigs = await hasyx.select<AiConfig[]>({
       table: 'badma_ais',
       where: { user_id: { _eq: userId } },
       limit: 1,
-      returning: ['id', 'user_id', 'options'] // Убираем timestamps если не используются
+      returning: ['id', 'user_id', 'options']
     });
     
     if (!aiConfigs || aiConfigs.length === 0) {
       debug('⚠️ No AI configuration found for user');
-      return NextResponse.json({ success: true, message: 'No AI move needed: User has no AI configuration' });
+      return { success: true, message: 'No AI move needed: User has no AI configuration' };
     }
     
     const aiConfig = aiConfigs[0];
@@ -181,21 +147,22 @@ export async function POST(request: NextRequest) {
     
     if (!aiMove) {
       debug(`❌ AI engine failed to generate a move`);
+      // hasyxEvent обработает ошибку, если вернуть объект с полем error
       return { 
-        success: false, 
+        success: false, // success: false не стандартно для hasyxEvent, лучше error
         message: 'AI engine failed to generate a move',
-        error: 'No move returned from AI engine'
+        error: 'No move returned from AI engine' // Возвращаем error
       };
     }
     
     // Выполняем ход напрямую через HasyxChessServer
-    const clientId = uuidv4();
+    const clientId = uuidv4(); // Генерируем временный clientId для запроса к серверу
     const moveResult = await chessServer.request({
       operation: 'move',
-      clientId: clientId,
+      clientId: clientId, // Передаем временный ID
       userId: userId,
       gameId: gameData.id,
-      joinId: join.id,
+      joinId: join.id, // Передаем joinId пользователя ИИ
       side: currentSide,
       role: ChessClientRole.Player,
       move: {
@@ -203,17 +170,19 @@ export async function POST(request: NextRequest) {
         to: aiMove.to,
         promotion: aiMove.promotion === null ? undefined : aiMove.promotion
       },
-      updatedAt: Date.now(),
+      // Передаем текущее время для createdAt/updatedAt запроса
+      updatedAt: Date.now(), 
       createdAt: Date.now()
     });
     
     if (moveResult.error) {
       debug(`❌ AI move failed: ${moveResult.error}`);
+      // hasyxEvent обработает ошибку, если вернуть объект с полем error
       return { 
-        success: false, 
+        // success: false, // Убираем, hasyxEvent смотрит на error
         message: 'AI move failed', 
-        error: moveResult.error 
-      };
+        error: moveResult.error // Возвращаем error
+      }; 
     }
     
     debug(`✅ AI move successful!`);
@@ -223,14 +192,16 @@ export async function POST(request: NextRequest) {
       table: 'badma_moves',
       where: {
         game_id: { _eq: gameData.id },
-        user_id: { _eq: userId }
+        user_id: { _eq: userId } // Ищем ходы именно этого AI
       },
       order_by: { created_at: 'desc' },
-      limit: 5
+      limit: 5,
+      returning: ['id', 'from', 'to', 'created_at'] // Достаточно для проверки
     });
     
-    debug(`✓ Recent moves for this game: ${JSON.stringify(movesCheck)}`);
+    debug(`✓ Recent moves for this game by AI (${userId}): ${JSON.stringify(movesCheck)}`);
     
+    // Возвращаем успешный результат
     return { 
       success: true, 
       message: 'AI move successful',
@@ -244,13 +215,18 @@ export async function POST(request: NextRequest) {
         newStatus: moveResult.data?.status,
         newFen: moveResult.data?.fen
       }
-    };
+    }; 
   } catch (error) {
+    // hasyxEvent поймает ошибку и вернет 500
     debug(`❌ Error processing AI move: ${error instanceof Error ? error.message : String(error)}`);
+    // Можно просто выбросить ошибку, чтобы hasyxEvent её обработал
+    throw error; 
+    /* Или вернуть объект с ошибкой, если нужно кастомное сообщение
     return {
       success: false,
       message: 'Error processing AI move',
       error: error instanceof Error ? error.message : String(error)
     };
+    */
   }
-}); 
+}); // <<< Закрывающая скобка для hasyxEvent 
