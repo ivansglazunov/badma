@@ -1,12 +1,15 @@
+import dotenv from 'dotenv';
+dotenv.config(); // Добавляем загрузку переменных окружения
+
 import { createApolloClient, Generator, Hasyx } from 'hasyx';
 import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events';
 import schema from '../../../../public/hasura-schema.json';
 import Debug from '../../../../lib/debug';
-import { AxiosChessClient } from '../../../../lib/axios-chess-client';
-import { ChessClientRole, ChessClientSide } from '../../../../lib/chess-client';
-import axios from 'axios';
+import { ChessClientRole, ChessClientSide, ChessClientStatus } from '../../../../lib/chess-client';
 import { v4 as uuidv4 } from 'uuid';
 import { go } from '../../../../lib/go';
+import { HasyxChessServer } from '../../../../lib/hasyx-chess-server';
+import { LocalChessClient } from '../../../../lib/local-chess-client';
 import { Badma_Games } from '@/types/hasura-types';
 
 const debug = Debug('event:ai-move');
@@ -55,6 +58,8 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
   const { op, data } = event;
   const gameData = data.new as BadmaGame;
   
+  debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}, side=${gameData.side}`);
+  
   // Validate event is from games table with UPDATE operation
   if (table.name !== 'games' || op !== 'UPDATE') {
     debug('⚠️ Skipping: Not a games table update event');
@@ -94,7 +99,8 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
         role: { _eq: ChessClientRole.Player }  
       },
       order_by: { created_at: 'desc' },
-      limit: 1
+      limit: 1,
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at']
     });
     
     if (!joins || joins.length === 0) {
@@ -113,7 +119,8 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
     const aiConfigs = await hasyx.select<AiConfig[]>({
       table: 'badma_ais',
       where: { user_id: { _eq: userId } },
-      limit: 1
+      limit: 1,
+      returning: ['id', 'user_id', 'options', 'created_at', 'updated_at']
     });
     
     if (!aiConfigs || aiConfigs.length === 0) {
@@ -128,35 +135,19 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
     const aiConfig = aiConfigs[0];
     debug(`🤖 Found AI configuration: ${JSON.stringify(aiConfig.options)}`);
     
-    // Create Axios client with admin credentials to make the move
-    const axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_MAIN_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET
-      }
-    });
+    // Create HasyxChessServer and a direct instance для работы с данными
+    const chessServer = new HasyxChessServer(hasyx);
     
-    // Create chess client
-    const chessClient = new AxiosChessClient(axiosInstance);
-    chessClient.userId = userId;
-    chessClient.clientId = uuidv4(); // Generate a client ID
-    chessClient.gameId = gameData.id;
-    chessClient.joinId = join.id;
-    chessClient.side = currentSide;
-    chessClient.fen = gameData.fen;
-    chessClient.status = gameData.status;
-    
-    // Sync to ensure latest state
-    await chessClient.asyncSync();
+    // Создаем прямой запрос к серверу для выполнения хода
+    debug('🎲 Making AI move directly with HasyxChessServer');
     
     // Get AI engine and level settings
     const engine = aiConfig.options?.engine || 'js-chess-engine';
     const level = aiConfig.options?.level || 0;
     debug(`🧠 Using AI engine: ${engine}, level: ${level}`);
     
-    // Use the go function to get the AI move
-    const aiMove = go(chessClient.fen, level);
+    // Получаем ход от AI
+    const aiMove = go(gameData.fen, level);
     debug(`📝 AI suggested move: ${JSON.stringify(aiMove)}`);
     
     // Если aiMove не определен, возвращаем ошибку
@@ -169,23 +160,49 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
       };
     }
     
-    // Make the move
-    const moveResponse = await chessClient.asyncMove({
-      from: aiMove.from,
-      to: aiMove.to,
-      promotion: aiMove.promotion === null ? undefined : aiMove.promotion
+    // Выполняем ход напрямую через HasyxChessServer
+    const clientId = uuidv4();
+    const moveResult = await chessServer.request({
+      operation: 'move',
+      clientId: clientId,
+      userId: userId,
+      gameId: gameData.id,
+      joinId: join.id,
+      side: currentSide,
+      role: ChessClientRole.Player,
+      move: {
+        from: aiMove.from,
+        to: aiMove.to,
+        promotion: aiMove.promotion === null ? undefined : aiMove.promotion
+      },
+      updatedAt: Date.now(),
+      createdAt: Date.now()
     });
     
-    if (moveResponse.error) {
-      debug(`❌ AI move failed: ${moveResponse.error}`);
+    if (moveResult.error) {
+      debug(`❌ AI move failed: ${moveResult.error}`);
       return { 
         success: false, 
         message: 'AI move failed', 
-        error: moveResponse.error 
+        error: moveResult.error 
       };
     }
     
     debug(`✅ AI move successful!`);
+    
+    // Проверяем, был ли ход выполнен (для отладки)
+    const movesCheck = await hasyx.select({
+      table: 'badma_moves',
+      where: {
+        game_id: { _eq: gameData.id },
+        user_id: { _eq: userId }
+      },
+      order_by: { created_at: 'desc' },
+      limit: 5
+    });
+    
+    debug(`✓ Recent moves for this game: ${JSON.stringify(movesCheck)}`);
+    
     return { 
       success: true, 
       message: 'AI move successful',
@@ -196,8 +213,8 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
       },
       game: {
         id: gameData.id,
-        newStatus: moveResponse.data?.status,
-        newFen: moveResponse.data?.fen
+        newStatus: moveResult.data?.status,
+        newFen: moveResult.data?.fen
       }
     };
   } catch (error) {

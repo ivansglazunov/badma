@@ -168,6 +168,7 @@ export class HasyxChessClient extends ChessClient {
         object: {
           from: request.move.from,
           to: request.move.to,
+          promotion: request.move.promotion,
           user_id: request.userId,
           game_id: request.gameId,
           created_at: new Date(request.createdAt).toISOString(),

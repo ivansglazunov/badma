@@ -332,4 +332,130 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     // debug('_sync successful response data:', responseData);
     return { data: responseData };
   }
+
+  protected async _move(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
+    debug('_move processing (using BASE asyncMove logic via .call)', request);
+    if (!(await this.__checkUser(request.userId))) return { error: '!user' };
+
+    const gameId = request.gameId!;
+    const game = await this.__getGame(gameId);
+    if (!game) { return { error: '!game' }; }
+
+    if (game.status !== 'ready' && game.status !== 'continue') {
+        return { error: `Game not playable (status: ${game.status})` };
+    }
+
+    // Find the player's specific active join record
+    // Use request.joinId because client might have multiple joins, but only one is active for the move
+    const joinRecord = await this.__findJoinByJoinIdAndClient(gameId, request.userId!, request.joinId!); 
+
+    if (!joinRecord || !joinRecord.clientId) {
+        debug(`Error: Active Player join record not found for joinId ${request.joinId} in game ${gameId}`);
+        return { error: 'Active player join record not found for this move' };
+    }
+    const clientIdToMove = joinRecord.clientId;
+
+    // Validate request details against the found join record
+    if (joinRecord.side !== request.side || joinRecord.role !== request.role) {
+        debug(`Error: Request side/role (${request.side}/${request.role}) mismatch with server state (${joinRecord.side}/${joinRecord.role}) for join ${request.joinId}`);
+        return { error: 'Request side/role mismatch with server state' };
+    }
+    if (joinRecord.role !== ChessClientRole.Player) {
+        return { error: 'Only players can move' };
+    }
+
+    // Get the ChessClient instance
+    // Use __defineClient which registers if not found (should ideally exist)
+    const clientToMove = await this.__defineClient(clientIdToMove); 
+    if (!clientToMove) {
+        debug(`Error: Client instance not found for clientId ${clientIdToMove} referenced by join record ${joinRecord.joinId}`);
+        return { error: 'Internal server error: Client instance for move not found' };
+    }
+    if (clientToMove.clientId !== request.clientId) {
+        debug(`Warning: Client ID mismatch during move. Request clientId: ${request.clientId}, Found client's clientId: ${clientToMove.clientId} via joinId ${request.joinId}. Proceeding with found client.`);
+        // Force update the client ID in the instance to match the request (in case of reconnects etc.)
+        clientToMove.clientId = request.clientId; 
+    }
+
+    // Sync client state FROM CURRENT SERVER game state BEFORE simulating move
+    clientToMove.userId = request.userId!; // Ensure user ID is set
+    clientToMove.gameId = gameId;
+    clientToMove.joinId = request.joinId; // Set the specific join ID for this move context
+    clientToMove.side = request.side!;
+    clientToMove.role = request.role!;
+    clientToMove.fen = game.fen; // <<< Load CURRENT FEN from server
+    clientToMove.status = game.status; // <<< Load CURRENT status from server
+    clientToMove.createdAt = game.createdAt; // Sync createdAt for consistency in potential base client logic
+    clientToMove.updatedAt = game.updatedAt; // Sync updatedAt
+
+    debug(`Synchronized client ${clientToMove.clientId} state before move simulation:`, { fen: clientToMove.fen, status: clientToMove.status });
+
+    // <<< Call BASE asyncMove logic on the ChessClient instance >>>
+    // This simulates the move using the client's internal chess engine
+    const clientMoveResponse = await ChessClient.prototype.asyncMove.call(clientToMove, request.move!); 
+
+    // --- Server trusts the BASE client simulation result --- 
+    if (clientMoveResponse.error || !clientMoveResponse.data) {
+        debug(`Move failed via BASE client simulation logic (${joinRecord.joinId}): ${clientMoveResponse.error}`);
+        // Even on error from base client logic, return current *server* state
+        const responseDataOnError: ChessServerResponse['data'] = {
+            clientId: request.clientId, gameId: gameId, joinId: request.joinId,
+            side: request.side, role: request.role, 
+            fen: game.fen, // Current server FEN
+            status: game.status, // Current server status
+            updatedAt: game.updatedAt, createdAt: game.createdAt,
+        };
+        // Return the error reported by the BASE client's simulation logic
+        return { error: clientMoveResponse.error || 'Base client move logic failed', data: responseDataOnError };
+    }
+
+    // --- MOVE SIMULATION SUCCEEDED (according to base client logic) --- 
+    // Update the SHARED Server GameState FROM the BASE client simulation result
+    const updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
+    const updatedStatus = clientMoveResponse.data.status; // Status from client after its internal move
+    const updatedTime = Date.now();                   // Use server time for update
+
+    await this.__updateGame(gameId, { fen: updatedFen, status: updatedStatus, updatedAt: updatedTime });
+    debug(`Server game state updated based on BASE client simulation logic (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
+
+    // ---> ДОБАВЛЕНА ЗАПИСЬ ХОДА В badma_moves <---
+    try {
+        // Используем request.move!, так как он валидируется раньше в _move
+        await this._hasyx.insert({
+            table: 'badma_moves',
+            object: {
+                from: request.move!.from,
+                to: request.move!.to,
+                promotion: request.move!.promotion, // Включаем promotion, если есть
+                side: request.side, // Чей был ход
+                user_id: request.userId,
+                game_id: gameId,
+                created_at: new Date(updatedTime).toISOString() // Используем время обновления сервера
+            }
+        });
+        debug(`Successfully inserted move record into badma_moves for game ${gameId}`);
+    } catch (insertError: any) {
+        debug(`Error inserting move record into badma_moves: ${insertError.message || insertError}`);
+        // Decide if this error should halt the entire move process or just be logged
+        // For now, logging the error but not returning it, allowing the response below.
+        // Consider returning an error if recording the move is critical:
+        // return { error: `Failed to record move: ${insertError.message || 'Unknown DB error'}` };
+    }
+    // ---> КОНЕЦ ДОБАВЛЕННОЙ ЛОГИКИ <---
+
+    // Return data reflecting the state AFTER the update based on client sim
+    const responseData: ChessServerResponse['data'] = {
+        clientId: request.clientId,
+        gameId: gameId,
+        joinId: request.joinId,
+        side: request.side,
+        role: request.role,
+        fen: updatedFen,     // Send the FEN resulting from client sim
+        status: updatedStatus, // Send the status resulting from client sim
+        updatedAt: updatedTime, // Send the server update time
+        createdAt: game.createdAt,
+    };
+     debug('_move successful response data (based on base client sim):', responseData);
+    return { data: responseData };
+  }
 } 
