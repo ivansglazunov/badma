@@ -31,11 +31,11 @@ export class HasyxChessClient extends ChessClient {
         table: 'badma_games',
         object: {
           id: gameId,
-          userId: request.userId,
+          user_id: request.userId,
           fen: this.fen,
           status: 'await',
-          updatedAt: request.updatedAt,
-          createdAt: request.createdAt,
+          updated_at: typeof request.updatedAt === 'number' ? new Date(request.updatedAt).toISOString() : request.updatedAt,
+          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
         }
       });
       if (game.error) {
@@ -84,7 +84,7 @@ export class HasyxChessClient extends ChessClient {
           side: request.side,
           role: request.role,
           client_id: request.clientId,
-          created_at: new Date(request.createdAt).toISOString(),
+          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
         },
       });
       if (join.error) {
@@ -99,8 +99,8 @@ export class HasyxChessClient extends ChessClient {
         role: request.role,
         fen: this.fen,
         status: 'await',
-        updatedAt: new Date(request.createdAt).valueOf(),
-        createdAt: new Date(request.createdAt).valueOf(),
+        updatedAt: request.createdAt,
+        createdAt: request.createdAt,
       };
       debug('HasyxChessClient _join received response from server:', response);
       return response;
@@ -128,7 +128,7 @@ export class HasyxChessClient extends ChessClient {
           side: request.side,
           role: 0,
           client_id: request.clientId,
-          created_at: new Date(request.createdAt).toISOString(),
+          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
         },
       });
       if (join.error) {
@@ -143,8 +143,8 @@ export class HasyxChessClient extends ChessClient {
         role: 0,
         fen: this.fen,
         status: 'await',
-        updatedAt: new Date(request.createdAt).valueOf(),
-        createdAt: new Date(request.createdAt).valueOf(),
+        updatedAt: request.createdAt,
+        createdAt: request.createdAt,
       };
       debug('HasyxChessClient _leave received response from server:', response);
       return response;
@@ -171,15 +171,18 @@ export class HasyxChessClient extends ChessClient {
           promotion: request.move.promotion,
           user_id: request.userId,
           game_id: request.gameId,
-          created_at: new Date(request.createdAt).toISOString(),
+          ...(request.side !== undefined && { side: request.side }),
+          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
         },
       });
+      if (moves.error) {
+        response.error = moves.error;
+        debug('HasyxChessClient _move error during insert:', response.error);
+        return response;
+      }
       response.data = {
         clientId: request.clientId,
         gameId: request.gameId as string,
-        // joinId: undefined,
-        // side: request.side,
-        // role: 0,
         fen: this.fen,
         status: this.status,
         updatedAt: request.updatedAt,
@@ -201,31 +204,47 @@ export class HasyxChessClient extends ChessClient {
         recommend: undefined,
         data: undefined,
       };
-      const games = await this._hasyx.select({
+      const gamesArray = await this._hasyx.select<any[]>({
         table: 'badma_games',
         where: {
-          id: request.gameId,
-          game_id: request.gameId,
-          returning: {
-            joins: {
-              order_by: { created_at: 'desc' },
-              distinct_on: ['side'],
-            },
-          },
+          id: { _eq: request.gameId },
         },
+        limit: 1,
+        returning: ['id', 'fen', 'status', 'side', 'created_at', 'updated_at']
       });
-      const game = games[0];
-      const join = game?.joins?.filter((join: any) => join.userId === request.userId)[0];
+
+      const game = gamesArray?.[0];
+
+      if (!game) {
+        debug('HasyxChessClient _sync: Game not found', request.gameId);
+        return { error: 'Game not found' };
+      }
+
+      let join: any = null;
+      if (request.userId) {
+        const joinsArray = await this._hasyx.select<any[]>({
+          table: 'badma_joins',
+          where: {
+            game_id: { _eq: request.gameId },
+            user_id: { _eq: request.userId }
+          },
+          order_by: { created_at: 'desc' },
+          limit: 1,
+          returning: ['id', 'side', 'role', 'created_at']
+        });
+        join = joinsArray?.[0];
+      }
+      
       response.data = {
         clientId: request.clientId,
         gameId: request.gameId as string,
-        joinId: join?.id,
+        joinId: join?.id, 
         side: join?.side,
         role: join?.role,
-        fen: game?.fen,
-        status: game?.status,
-        updatedAt: game?.updatedAt,
-        createdAt: game?.createdAt,
+        fen: game.fen,
+        status: game.status,
+        updatedAt: new Date(game.updated_at).getTime(),
+        createdAt: new Date(game.created_at).getTime(),
       };
       debug('HasyxChessClient _sync received response from server:', response);
       return response;

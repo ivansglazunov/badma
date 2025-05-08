@@ -24,73 +24,79 @@ let aiUser: { userId: string; email: string };
 let gameId: string;
 const aiLevel = 2; // Medium difficulty
 
+let originalAiMoveTriggerDefinition: any = null; // Для хранения определения триггера
+
 beforeAll(async () => {
   debug('Setting up fake event test environment...');
   
-  // Create admin Hasyx client
   const adminApolloClient = createApolloClient({ 
     secret: process.env.HASURA_ADMIN_SECRET! 
   });
   const generate = Generator(schema);
   adminHasyx = new Hasyx(adminApolloClient, generate);
-  
-  // <<< УДАЛЕНИЕ EVENT TRIGGER через Metadata API >>>
-  debug('Attempting to delete Hasura event trigger: games_ai_move');
-  const hasuraUrl = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_URL?.replace('/v1/graphql', '/v1/metadata');
+
+  const hasuraMetadataUrl = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_URL?.replace('/v1/graphql', '/v1/metadata');
   const adminSecret = process.env.HASURA_ADMIN_SECRET;
 
-  if (hasuraUrl && adminSecret) {
+  if (hasuraMetadataUrl && adminSecret) {
+    debug('Attempting to fetch, store, and then delete Hasura event trigger: games_ai_move');
+    // 1. Fetch and store original trigger definition
     try {
-      const response = await fetch(hasuraUrl, {
+      const exportResponse = await fetch(hasuraMetadataUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Hasura-Admin-Secret': adminSecret
-        },
-        body: JSON.stringify({
-          type: 'pg_delete_event_trigger',
-          args: {
-            source: 'default', 
-            name: 'games_ai_move'
-          }
-        })
+        headers: { 'Content-Type': 'application/json', 'X-Hasura-Admin-Secret': adminSecret },
+        body: JSON.stringify({ type: 'export_metadata', args: {} })
       });
-      const result = await response.json();
-      debug('Hasura Metadata API response for trigger deletion:', result);
-      // Логируем предупреждение, если удаление не удалось (кроме 'not found')
-      if (!response.ok && result?.code !== 'not-found') {
-        console.warn(`Warning: Failed to delete Hasura event trigger 'games_ai_move'. Status: ${response.status}, Response:`, result);
+      if (exportResponse.ok) {
+        const metadata = await exportResponse.json();
+        const defaultSource = metadata.sources?.find((s: any) => s.name === 'default');
+        const gamesTable = defaultSource?.tables?.find((t: any) => t.table.schema === 'badma' && t.table.name === 'games');
+        const trigger = gamesTable?.event_triggers?.find((et: any) => et.name === 'games_ai_move');
+        if (trigger) {
+          originalAiMoveTriggerDefinition = trigger;
+          debug('Successfully fetched and stored definition for games_ai_move.');
+        } else {
+          debug('Event trigger games_ai_move not found in metadata. It might be created by this test later or does not exist.');
+        }
+      } else {
+        const errorResult = await exportResponse.json().catch(() => ({}));
+        console.warn(`Warning: Failed to fetch metadata. Status: ${exportResponse.status}, Response: ${JSON.stringify(errorResult)}`);
       }
     } catch (error) {
-      console.warn('Warning: Error calling Hasura Metadata API to delete trigger:', error);
-      // Продолжаем выполнение теста
+      console.warn(`Warning: Error fetching metadata for games_ai_move trigger: ${error instanceof Error ? error.message : String(error)}`);
+    }
+
+    // 2. Delete the trigger
+    try {
+      const deleteResponse = await fetch(hasuraMetadataUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Hasura-Admin-Secret': adminSecret },
+        body: JSON.stringify({ type: 'pg_delete_event_trigger', args: { source: 'default', name: 'games_ai_move' } })
+      });
+      const deleteResult = await deleteResponse.json();
+      debug('Hasura Metadata API response for trigger deletion:', deleteResult);
+      if (!deleteResponse.ok && deleteResult?.code !== 'not-found') {
+        console.warn(`Warning: Failed to delete Hasura event trigger 'games_ai_move'. Status: ${deleteResponse.status}, Response: ${JSON.stringify(deleteResult)}`);
+      }
+    } catch (error) {
+      console.warn(`Warning: Error calling Hasura Metadata API to delete trigger: ${error instanceof Error ? error.message : String(error)}`);
     }
   } else {
-    console.warn('Warning: Cannot delete Hasura event trigger - URL or Admin Secret missing in .env');
+    console.warn('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot manage event triggers.');
   }
-  // <<< КОНЕЦ УДАЛЕНИЯ >>>
   
-  // Create test users
   humanUser = await createFakeUser({ adminHasyx, password: 'humanPassword123' });
   aiUser = await createFakeUser({ adminHasyx, password: 'aiPassword456' });
   
-  // Create AI configuration for AI user
   await adminHasyx.insert({
     table: 'badma_ais',
-    object: {
-      user_id: aiUser.userId,
-      options: { engine: 'js-chess-engine', level: aiLevel }
-    }
+    object: { user_id: aiUser.userId, options: { engine: 'js-chess-engine', level: aiLevel } }
   });
   
-  // Setup authorized clients
   const humanAuth = await testAuthorize(humanUser.userId);
   const aiAuth = await testAuthorize(aiUser.userId);
-  
   humanClient = new AxiosChessClient(humanAuth.axios);
   aiClient = new AxiosChessClient(aiAuth.axios);
-  
-  // Set client IDs and user IDs
   humanClient.userId = humanUser.userId;
   humanClient.clientId = uuidv4();
   aiClient.userId = aiUser.userId;
@@ -433,17 +439,60 @@ async function createFakeUser({ adminHasyx, password }: { adminHasyx: Hasyx, pas
 
 // <<< ВОССТАНОВЛЕНИЕ METADATA ПОСЛЕ ТЕСТОВ >>>
 afterAll(async () => {
-  debug('Restoring Hasura metadata using npx hasyx events...');
-  // Здесь мы НЕ можем напрямую вызвать run_terminal_cmd, так как он требует 
-  // взаимодействия с пользователем через UI для подтверждения команды.
-  // Поэтому оставляем этот шаг для выполнения вручную или через CI/CD скрипты.
-  console.log("\nIMPORTANT: Run 'npx hasyx events' manually in the project root to restore Hasura event triggers and metadata.\n");
-  // Если бы была возможность запустить команду без подтверждения, это выглядело бы так:
-  // try {
-  //   await runTerminalCommandFn('npx hasyx events'); // Псевдо-функция
-  //   debug('Hasura metadata restoration command executed.');
-  // } catch (error) {
-  //   console.error('ERROR: Failed to execute \'npx hasyx events\'. Please run manually.', error);
-  // }
+  debug('Cleaning up after fake event test...');
+  const hasuraMetadataUrl = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_URL?.replace('/v1/graphql', '/v1/metadata');
+  const adminSecret = process.env.HASURA_ADMIN_SECRET;
+
+  if (originalAiMoveTriggerDefinition && hasuraMetadataUrl && adminSecret) {
+    debug('Attempting to restore Hasura event trigger: games_ai_move using stored definition.');
+    try {
+      // Деструктурируем сохраненное определение триггера, чтобы отделить name и definition
+      // от остальных верхнеуровневых полей (например, webhook, retry_conf, comment и т.д.)
+      const { name, definition, ...restOfTriggerDefinition } = originalAiMoveTriggerDefinition;
+
+      const createTriggerArgs = {
+        source: 'default', // Источник данных
+        table: { schema: 'badma', name: 'games' }, // Явно указываем таблицу
+        name: name, // Имя триггера из сохраненного определения
+        ...restOfTriggerDefinition, // Копируем остальные верхнеуровневые поля (webhook, retry_conf и т.д.)
+        ...(definition || {}) // Копируем поля из объекта definition (enable_manual, update, insert, delete и т.д.)
+                               // (definition || {}) для случая если definition вдруг окажется undefined
+      };
+
+      const createTriggerPayload = {
+        type: 'pg_create_event_trigger',
+        args: createTriggerArgs
+      };
+
+      debug('Payload for restoring trigger:', JSON.stringify(createTriggerPayload, null, 2));
+
+      const response = await fetch(hasuraMetadataUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Hasura-Admin-Secret': adminSecret },
+        body: JSON.stringify(createTriggerPayload)
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        debug('Successfully restored Hasura event trigger games_ai_move.', result);
+      } else {
+        console.error(
+          'ERROR: Failed to restore Hasura event trigger games_ai_move.',
+          `Status: ${response.status}, Response: ${JSON.stringify(result)}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        'ERROR: Exception while restoring Hasura event trigger games_ai_move:',
+        error instanceof Error ? error.message : String(error)
+      );
+    }
+  } else if (!originalAiMoveTriggerDefinition) {
+    debug('Original event trigger definition for games_ai_move was not found/stored. Skipping direct restore.');
+    console.log("\nIMPORTANT: Original trigger definition not found. Run 'npx hasyx events' manually in the project root to ensure all Hasura event triggers and metadata are correctly configured.\n");
+  } else {
+    console.warn('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot restore event trigger automatically.');
+    console.log("\nIMPORTANT: Run 'npx hasyx events' manually in the project root to restore Hasura event triggers and metadata.\n");
+  }
 });
 // <<< КОНЕЦ ВОССТАНОВЛЕНИЯ >>>

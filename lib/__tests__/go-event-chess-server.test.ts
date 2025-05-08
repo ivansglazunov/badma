@@ -43,13 +43,12 @@ beforeAll(async () => {
     }
   });
   
-  // Setup authorized client for human player
-  const humanAuth = await testAuthorize(humanUser.userId);
-  humanClient = new HasyxChessClient(humanAuth.hasyx);
+  // Setup client for human player USING ADMIN HASYX
+  humanClient = new HasyxChessClient(adminHasyx);
   humanClient.userId = humanUser.userId;
   humanClient.clientId = uuidv4();
   
-  debug(`Human client configured: userId=${humanClient.userId}`);
+  debug(`Human client configured with ADMIN privileges: userId=${humanClient.userId}`);
   debug(`AI user configured: userId=${aiUser.userId}`);
   
   // Note: We assume the games_ai_move trigger is already set up in Hasura

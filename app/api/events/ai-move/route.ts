@@ -1,26 +1,53 @@
 import dotenv from 'dotenv';
 dotenv.config(); // Добавляем загрузку переменных окружения
 
+import { NextRequest, NextResponse } from 'next/server'; // Используем стандартные типы Next.js
 import { createApolloClient, Generator, Hasyx } from 'hasyx';
-import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events';
+// import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events'; // Убираем hasyxEvent
 import schema from '../../../../public/hasura-schema.json';
 import Debug from '../../../../lib/debug';
 import { ChessClientRole, ChessClientSide, ChessClientStatus } from '../../../../lib/chess-client';
 import { v4 as uuidv4 } from 'uuid';
 import { go } from '../../../../lib/go';
 import { HasyxChessServer } from '../../../../lib/hasyx-chess-server';
-import { LocalChessClient } from '../../../../lib/local-chess-client';
+// import { LocalChessClient } from '../../../../lib/local-chess-client'; // LocalChessClient здесь не нужен
 import { Badma_Games } from '@/types/hasura-types';
 
 const debug = Debug('event:ai-move');
 
-// Type definitions for better type safety
-interface BadmaGame {
+// Определяем интерфейс для ожидаемого Hasura payload
+interface HasuraEventPayloadStructure {
+  created_at: string;
+  delivery_info: {
+    current_retry: number;
+    max_retries: number;
+  };
+  event: {
+    data: {
+      new: any; // Используем any, так как структура зависит от таблицы
+      old: any;
+    };
+    op: 'INSERT' | 'UPDATE' | 'DELETE' | 'MANUAL';
+    session_variables: Record<string, string>;
+    trace_context?: Record<string, any>;
+  };
+  id: string;
+  table: {
+    name: string;
+    schema: string;
+  };
+  trigger: {
+    name: string;
+  };
+}
+
+// Типы для данных внутри event.data, специфичные для badma_games
+interface BadmaGameEventData {
   id: string;
   fen: string;
   status: string;
   side: number;
-  user_id: string;
+  user_id: string; // Добавляем user_id, если он есть в таблице и триггере
 }
 
 interface AiConfig {
@@ -47,110 +74,111 @@ interface AiMoveResult {
 }
 
 /**
- * AI Move Event Handler
- * Process chess AI moves when a game state changes
+ * AI Move Event Handler (Raw Request)
+ * Обрабатывает POST-запросы от Hasura Event Trigger.
  */
-export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
-  debug('🔔 Received AI move event trigger');
-  
-  // Get the event data
-  const { table, event } = payload;
-  const { op, data } = event;
-  const gameData = data.new as BadmaGame;
-  
-  debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}, side=${gameData.side}`);
-  
-  // Validate event is from games table with UPDATE operation
-  if (table.name !== 'games' || op !== 'UPDATE') {
-    debug('⚠️ Skipping: Not a games table update event');
-    return { 
-      success: true, 
-      message: 'Skipped: Not a relevant event type'
-    };
-  }
-  
-  // Check if the game is in a state that would require an AI move
-  if (gameData.status !== 'ready' && gameData.status !== 'continue') {
-    debug(`⚠️ Skipping: Game not in playable state (status: ${gameData.status})`);
-    return { 
-      success: true, 
-      message: 'No AI move needed: Game not in playable state' 
-    };
-  }
-  
-  // Create admin Hasyx client to query database
-  const adminClient = createApolloClient({ 
-    secret: process.env.HASURA_ADMIN_SECRET as string 
-  });
-  const generate = Generator(schema);
-  const hasyx = new Hasyx(adminClient, generate);
-  
-  // Get the current turn user from the joins table
-  const currentSide = gameData.side as ChessClientSide;
-  debug(`🎮 Current game side/turn: ${currentSide}`);
-  
+export async function POST(request: NextRequest) {
+  debug('🔔 Raw AI move event trigger received');
+
+  let eventPayload: HasuraEventPayloadStructure;
   try {
-    // Query to find if the user whose turn it is has an AI configuration
-    const joins = await hasyx.select<JoinRecord[]>({
+    // 1. Проверяем секрет события Hasura
+    const eventSecret = process.env.HASURA_EVENT_SECRET;
+    const receivedSecret = request.headers.get('x-hasura-event-secret');
+
+    if (!eventSecret || receivedSecret !== eventSecret) {
+      debug('⚠️ Unauthorized: Invalid or missing X-Hasura-Event-Secret');
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // 2. Парсим тело запроса и извлекаем данные из ключа 'payload'
+    const body = await request.json();
+    if (!body || !body.payload) {
+      debug('⚠️ Invalid payload: Missing \'payload\' key in request body');
+      return NextResponse.json({ message: 'Invalid payload structure' }, { status: 400 });
+    }
+    eventPayload = body.payload as HasuraEventPayloadStructure;
+    debug('Parsed event payload:', JSON.stringify(eventPayload, null, 2));
+
+  } catch (error) {
+    debug('❌ Error parsing request body or validating secret:', error);
+    return NextResponse.json({ message: 'Invalid request body or headers' }, { status: 400 });
+  }
+
+  // --- НАЧАЛО ЛОГИКИ ОБРАБОТЧИКА (ранее была внутри hasyxEvent) ---
+  try {
+    const { table, event } = eventPayload;
+    const { op, data } = event;
+    const gameData = data.new as BadmaGameEventData;
+    
+    debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}, side=${gameData.side}`);
+    
+    if (table.schema !== 'badma' || table.name !== 'games' || op !== 'UPDATE') {
+      debug('⚠️ Skipping: Not a badma.games table update event');
+      return NextResponse.json({ success: true, message: 'Skipped: Not a relevant event type' });
+    }
+    
+    if (gameData.status !== 'ready' && gameData.status !== 'continue') {
+      debug(`⚠️ Skipping: Game not in playable state (status: ${gameData.status})`);
+      return NextResponse.json({ success: true, message: 'No AI move needed: Game not in playable state' });
+    }
+    
+    const adminClient = createApolloClient({ 
+      secret: process.env.HASURA_ADMIN_SECRET as string 
+    });
+    const generate = Generator(schema);
+    const hasyx = new Hasyx(adminClient, generate);
+    
+    const currentSide = gameData.side as ChessClientSide;
+    debug(`🎮 Current game side/turn: ${currentSide}`);
+    
+    // --- Запрос к badma_joins --- 
+    const joins = await hasyx.select<JoinRecord[]>({ 
       table: 'badma_joins',
       where: { 
         game_id: { _eq: gameData.id }, 
         side: { _eq: currentSide },
-        role: { _eq: ChessClientRole.Player }  
-      },
+        role: { _eq: ChessClientRole.Player }  },
       order_by: { created_at: 'desc' },
       limit: 1,
-      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at']
+      returning: ['id', 'user_id', 'game_id', 'side', 'role'] // Убираем created_at если не используется
     });
     
     if (!joins || joins.length === 0) {
       debug('⚠️ No join record found for the current side');
-      return { 
-        success: true, 
-        message: 'No AI move needed: No join record for current side' 
-      };
+      return NextResponse.json({ success: true, message: 'No AI move needed: No join record for current side' });
     }
     
     const join = joins[0];
     const userId = join.user_id;
     debug(`👤 User ID for current turn: ${userId}`);
     
-    // Check if this user has an AI configuration
-    const aiConfigs = await hasyx.select<AiConfig[]>({
+    // --- Запрос к badma_ais --- 
+    const aiConfigs = await hasyx.select<AiConfig[]>({ 
       table: 'badma_ais',
       where: { user_id: { _eq: userId } },
       limit: 1,
-      returning: ['id', 'user_id', 'options', 'created_at', 'updated_at']
+      returning: ['id', 'user_id', 'options'] // Убираем timestamps если не используются
     });
     
     if (!aiConfigs || aiConfigs.length === 0) {
       debug('⚠️ No AI configuration found for user');
-      return { 
-        success: true, 
-        message: 'No AI move needed: User has no AI configuration' 
-      };
+      return NextResponse.json({ success: true, message: 'No AI move needed: User has no AI configuration' });
     }
     
-    // Found an AI configuration - time to make a move
     const aiConfig = aiConfigs[0];
     debug(`🤖 Found AI configuration: ${JSON.stringify(aiConfig.options)}`);
     
-    // Create HasyxChessServer and a direct instance для работы с данными
     const chessServer = new HasyxChessServer(hasyx);
     
-    // Создаем прямой запрос к серверу для выполнения хода
     debug('🎲 Making AI move directly with HasyxChessServer');
-    
-    // Get AI engine and level settings
     const engine = aiConfig.options?.engine || 'js-chess-engine';
     const level = aiConfig.options?.level || 0;
     debug(`🧠 Using AI engine: ${engine}, level: ${level}`);
     
-    // Получаем ход от AI
     const aiMove = go(gameData.fen, level);
     debug(`📝 AI suggested move: ${JSON.stringify(aiMove)}`);
     
-    // Если aiMove не определен, возвращаем ошибку
     if (!aiMove) {
       debug(`❌ AI engine failed to generate a move`);
       return { 

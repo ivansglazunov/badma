@@ -5,7 +5,6 @@
     "name": "games"
   },
   "webhook_path": "/api/events/ai-move",
-  "webhook": "${NEXT_PUBLIC_MAIN_URL}/api/events/ai-move",
   "update": {
     "columns": ["fen", "status", "side"]
   },
