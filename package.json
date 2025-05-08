@@ -1,13 +1,8 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.2",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
+  "version": "0.1.0-alpha.3",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "dev": "npx -y hasyx dev",
@@ -31,7 +26,7 @@
   "dependencies": {
     "chess.js": "^0.12.1",
     "events": "^3.3.0",
-    "hasyx": "^0.1.103",
+    "hasyx": "^0.1.107",
     "js-chess-engine": "^1.0.2",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",

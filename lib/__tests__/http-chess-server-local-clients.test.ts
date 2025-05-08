@@ -17,7 +17,7 @@ const debug = Debug('test:http-clients');
 // --- Переменные окружения (ВАЖНО!) ---
 const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET;
 // Define the base URL for the Next.js app itself
-const BASE_URL = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'; 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'; 
 
 // Проверка наличия секретов
 if (!hasuraAdminSecret) {

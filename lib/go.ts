@@ -1,5 +1,4 @@
-import * as jsChessEngine from 'js-chess-engine';
-const { aiMove } = jsChessEngine;
+import jsChessEngine from 'js-chess-engine';
 
 /**
  * Возвращает лучший ход для заданной позиции FEN и уровня сложности.
@@ -9,7 +8,7 @@ const { aiMove } = jsChessEngine;
  */
 export function go(fen: string, level: number) {
     // Получаем ход от движка: например { "E2": "E4" }
-    const moveObj = aiMove(fen, level);
+    const moveObj = jsChessEngine.aiMove(fen, level);
 
     // Извлекаем from и to
     const from = Object.keys(moveObj)[0];

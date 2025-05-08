@@ -63,7 +63,7 @@ export class AxiosChessClient extends ChessClient {
 
     // Centralized request sending logic now uses GET
     private async sendRequest(request: ChessClientRequest): Promise<ChessServerResponse> {
-        const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
         const apiUrl = `${baseUrl}/api/badma`; // Base API URL
 
         // Get authorization header from defaults if available
