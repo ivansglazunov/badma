@@ -210,6 +210,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (game.userId !== undefined) result.user_id = game.userId; // Renamed field
     if (game.fen !== undefined) result.fen = game.fen;
     if (game.status !== undefined) result.status = game.status;
+    if (game.side !== undefined) result.side = game.side;
     if (game.createdAt !== undefined) result.created_at = new Date(game.createdAt).toISOString();
     if (game.updatedAt !== undefined) result.updated_at = new Date(game.updatedAt).toISOString();
     return result;
@@ -222,6 +223,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (game.user_id !== undefined) result.userId = game.user_id; // Renamed field
     if (game.fen !== undefined) result.fen = game.fen;
     if (game.status !== undefined) result.status = game.status;
+    if (game.side !== undefined) result.side = game.side;
     if (game.created_at !== undefined) result.createdAt = new Date(game.created_at).getTime();
     if (game.updated_at !== undefined) result.updatedAt = new Date(game.updated_at).getTime();
     return result;
