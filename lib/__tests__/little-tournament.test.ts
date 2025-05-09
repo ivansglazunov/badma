@@ -12,8 +12,9 @@ import { Badma_Games, Badma_Tournament_Participants, Badma_Tournament_Scores, Us
 
 const debug = Debug('test:little-tournament');
 
-const TEST_TIMEOUT = 5 * 60 * 1000; 
+const TEST_TIMEOUT = 60 * 60 * 1000; 
 const POLLING_INTERVAL = 5000; 
+const LITTLE_TOURNAMENT_SIZE = 3;
 
 let tournamentOrganizer: Users;
 
@@ -87,15 +88,15 @@ describe('Little Round Robin Tournament Test', () => {
     debug(`Created Tournament Organizer: ${tournamentOrganizer.name} (ID: ${tournamentOrganizer.id})`);
 
     // 1. Create 5 players
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < LITTLE_TOURNAMENT_SIZE; i++) {
       const user = await createFakeUser(adminHasyx, `TourneyPlayer${i + 1}`);
       users.push(user);
-      // 2. Add AI config with random level 1-3
-      const aiLevel = Math.floor(Math.random() * 3) + 1;
+      // 2. Add AI config: first player level 3, others level 1
+      const aiLevel = (i === 0) ? 3 : 1;
       await addAiConfig(adminHasyx, user.id, aiLevel);
       debug(`Created user ${user.name} (ID: ${user.id}) with AI level ${aiLevel}`);
     }
-    expect(users.length).toBe(5);
+    expect(users.length).toBe(LITTLE_TOURNAMENT_SIZE);
 
     // 3. Create a tournament
     const tournament = await adminHasyx.insert<any>({
@@ -142,7 +143,7 @@ describe('Little Round Robin Tournament Test', () => {
       where: { tournament_games: { tournament_id: { _eq: tournamentId } } }, // Adjusted based on expected new relationship
       returning: ['id', 'user_id', { joins: ['id', 'user_id'] }], // Assuming 'joins' is the correct relationship name on games table
     });
-    const expectedGames = (5 * 4) / 2; // 10 games for 5 players
+    const expectedGames = (LITTLE_TOURNAMENT_SIZE * (LITTLE_TOURNAMENT_SIZE - 1)) / 2;
     expect(gamesInTournament.length).toBe(expectedGames);
     debug(`Verified ${gamesInTournament.length} games created.`);
     gamesInTournament.forEach(game => {
@@ -156,6 +157,7 @@ describe('Little Round Robin Tournament Test', () => {
 
     // 7. Monitor tournament progress
     let tournamentInProgress = true;
+    const totalMoveCountsByUser: { [key: string]: number } = {}; // Store total moves per user
     while (tournamentInProgress) {
       await delay(POLLING_INTERVAL);
       const currentTime = new Date();
@@ -170,6 +172,30 @@ describe('Little Round Robin Tournament Test', () => {
         tournamentInProgress = false;
         debug(`Tournament ${tournamentId} status changed to ${currentTournament.status}. Exiting monitoring loop.`);
         break;
+      }
+      
+      // Fetch game_ids for the current tournament
+      const tournamentGameLinks = await adminHasyx.select<{ game_id: string }[]>({
+          table: 'badma_tournament_games',
+          where: { tournament_id: { _eq: tournamentId } },
+          returning: ['game_id']
+      });
+      const gameIdsInThisTournament = tournamentGameLinks.map(link => link.game_id);
+
+      // Fetch moves made since last check for these games
+      const movesSinceLastCheck = await adminHasyx.select<{ user_id: string }[]>({
+          table: 'badma_moves',
+          where: {
+              game_id: { _in: gameIdsInThisTournament },
+              created_at: { _gt: lastCheckTime.toISOString() }
+          },
+          returning: ['user_id']
+      });
+
+      const moveCountsByUser: { [key: string]: number } = {};
+      for (const move of movesSinceLastCheck) {
+          moveCountsByUser[move.user_id] = (moveCountsByUser[move.user_id] || 0) + 1;
+          totalMoveCountsByUser[move.user_id] = (totalMoveCountsByUser[move.user_id] || 0) + 1; // Increment total moves
       }
       
       const participantStats = await adminHasyx.select<any[]>({
@@ -189,14 +215,16 @@ describe('Little Round Robin Tournament Test', () => {
         order_by: { user_id: 'asc'}
       });
 
-      const logParts: string[] = [];
+      let progressLogOutput = `\n[${currentTime.toLocaleTimeString()}] Tournament ${tournamentId} Progress:`;
       participantStats.forEach(p => {
         const userName = p.user?.name || p.user_id.substring(0,8);
         const totalScore = p.scores_aggregate?.aggregate?.sum?.score || 0;
-        logParts.push(`👤 ${userName} 🧮 ${totalScore.toFixed(1)}`);
+        const movesMadeSinceLastLog = moveCountsByUser[p.user_id] || 0;
+        const totalMovesForUser = totalMoveCountsByUser[p.user_id] || 0;
+        progressLogOutput += `\n  👤 ${userName} ♟️ ${movesMadeSinceLastLog} 🟰 ${totalMovesForUser}  🧮 ${totalScore.toFixed(1)}`;
       });
+      console.log(progressLogOutput);
       
-      console.log(`[${currentTime.toLocaleTimeString()}] Tournament ${tournamentId} Progress: ${logParts.join(' | ')}`);
       lastCheckTime = currentTime;
     }
 

@@ -2,7 +2,7 @@
   "name": "tournaments_games_event",
   "table": {
     "schema": "badma",
-    "name": "badma_games"
+    "name": "games"
   },
   "webhook_path": "/api/events/tournaments-games",
   "update": {
