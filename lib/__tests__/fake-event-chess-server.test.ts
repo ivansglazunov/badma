@@ -60,10 +60,10 @@ beforeAll(async () => {
         }
       } else {
         const errorResult = await exportResponse.json().catch(() => ({}));
-        console.warn(`Warning: Failed to fetch metadata. Status: ${exportResponse.status}, Response: ${JSON.stringify(errorResult)}`);
+        debug(`Warning: Failed to fetch metadata. Status: ${exportResponse.status}, Response: ${JSON.stringify(errorResult)}`);
       }
     } catch (error) {
-      console.warn(`Warning: Error fetching metadata for games_ai_move trigger: ${error instanceof Error ? error.message : String(error)}`);
+      debug(`Warning: Error fetching metadata for games_ai_move trigger: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // 2. Delete the trigger
@@ -76,13 +76,13 @@ beforeAll(async () => {
       const deleteResult = await deleteResponse.json();
       debug('Hasura Metadata API response for trigger deletion:', deleteResult);
       if (!deleteResponse.ok && deleteResult?.code !== 'not-found') {
-        console.warn(`Warning: Failed to delete Hasura event trigger 'games_ai_move'. Status: ${deleteResponse.status}, Response: ${JSON.stringify(deleteResult)}`);
+        debug(`Warning: Failed to delete Hasura event trigger 'games_ai_move'. Status: ${deleteResponse.status}, Response: ${JSON.stringify(deleteResult)}`);
       }
     } catch (error) {
-      console.warn(`Warning: Error calling Hasura Metadata API to delete trigger: ${error instanceof Error ? error.message : String(error)}`);
+      debug(`Warning: Error calling Hasura Metadata API to delete trigger: ${error instanceof Error ? error.message : String(error)}`);
     }
   } else {
-    console.warn('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot manage event triggers.');
+    debug('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot manage event triggers.');
   }
   
   humanUser = await createFakeUser({ adminHasyx, password: 'humanPassword123' });
@@ -476,23 +476,23 @@ afterAll(async () => {
       if (response.ok) {
         debug('Successfully restored Hasura event trigger games_ai_move.', result);
       } else {
-        console.error(
+        debug(
           'ERROR: Failed to restore Hasura event trigger games_ai_move.',
           `Status: ${response.status}, Response: ${JSON.stringify(result)}`
         );
       }
     } catch (error) {
-      console.error(
+      debug(
         'ERROR: Exception while restoring Hasura event trigger games_ai_move:',
         error instanceof Error ? error.message : String(error)
       );
     }
   } else if (!originalAiMoveTriggerDefinition) {
     debug('Original event trigger definition for games_ai_move was not found/stored. Skipping direct restore.');
-    console.log("\nIMPORTANT: Original trigger definition not found. Run 'npx hasyx events' manually in the project root to ensure all Hasura event triggers and metadata are correctly configured.\n");
+    debug("\nIMPORTANT: Original trigger definition not found. Run 'npx hasyx events' manually in the project root to ensure all Hasura event triggers and metadata are correctly configured.\n");
   } else {
-    console.warn('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot restore event trigger automatically.');
-    console.log("\nIMPORTANT: Run 'npx hasyx events' manually in the project root to restore Hasura event triggers and metadata.\n");
+    debug('Warning: HASURA_GRAPHQL_URL or HASURA_ADMIN_SECRET not defined. Cannot restore event trigger automatically.');
+    debug("\nIMPORTANT: Run 'npx hasyx events' manually in the project root to restore Hasura event triggers and metadata.\n");
   }
 });
 // <<< КОНЕЦ ВОССТАНОВЛЕНИЯ >>>

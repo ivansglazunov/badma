@@ -402,7 +402,8 @@ async function up() {
     await applyPermissionsFunc(); // Apply GQL permissions after tables/relationships
     debug('✨ Badma schema migration UP completed successfully!');
   } catch (error) {
-    console.error('❗ Critical error during Badma UP migration:', error);
+    // console.error('❗ Critical error during Badma UP migration:', error);
+    debug('❗ Critical error during Badma UP migration:', error instanceof Error ? error.message : String(error), error);
     debug('❌ Badma UP Migration failed.');
     process.exit(1); // Exit with error code on failure
   }

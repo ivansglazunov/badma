@@ -158,12 +158,43 @@ export class HasyxChessClient extends ChessClient {
     debug('HasyxChessClient _move sending request to server:', request);
     if (!request.move) return { error: '!move' };
     try {
-      const response: ChessServerResponse = {
-        error: undefined,
-        recommend: undefined,
-        data: undefined,
-      };
-      const moves = await this._hasyx.insert({
+      // The client's internal state (this.fen, this.status) should have been
+      // updated by this.chess.move() in the calling asyncMove method BEFORE _move is called.
+
+      // 1. Update badma_games table with the new FEN and status from the client's state
+      const updatedGameTime = typeof request.updatedAt === 'number' ? new Date(request.updatedAt).toISOString() : request.updatedAt;
+      const gameUpdateResult = await this._hasyx.update({
+        table: 'badma_games',
+        where: { id: { _eq: request.gameId } },
+        _set: {
+          fen: this.fen,       // Use FEN from client's internal state
+          status: this.status, // Use status from client's internal state
+          updated_at: updatedGameTime
+        }
+      });
+
+      if (gameUpdateResult.error) {
+        debug('HasyxChessClient _move error during badma_games update:', gameUpdateResult.error);
+        // Return error but try to include current client state if possible for context
+        return { 
+          error: `Failed to update game state: ${gameUpdateResult.error}`,
+          data: {
+            clientId: request.clientId,
+            gameId: request.gameId as string,
+            joinId: request.joinId,
+            side: request.side,
+            role: request.role,
+            fen: this.fen, // current client FEN
+            status: this.status, // current client status
+            updatedAt: request.updatedAt,
+            createdAt: request.createdAt,
+          }
+        };
+      }
+      debug('HasyxChessClient _move successfully updated badma_games.');
+
+      // 2. Insert into badma_moves table
+      const moveInsertResult = await this._hasyx.insert({
         table: 'badma_moves',
         object: {
           from: request.move.from,
@@ -175,21 +206,42 @@ export class HasyxChessClient extends ChessClient {
           created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
         },
       });
-      if (moves.error) {
-        response.error = moves.error;
-        debug('HasyxChessClient _move error during insert:', response.error);
-        return response;
+
+      if (moveInsertResult.error) {
+        debug('HasyxChessClient _move error during badma_moves insert:', moveInsertResult.error);
+        // Even if move insert fails, the game state might have been updated.
+        // Consider how to handle this inconsistency. For now, return the error.
+        return { 
+          error: `Failed to record move: ${moveInsertResult.error}`,
+          data: { // Return client state which reflects the game state that *was* updated
+            clientId: request.clientId,
+            gameId: request.gameId as string,
+            joinId: request.joinId,
+            side: request.side,
+            role: request.role,
+            fen: this.fen,
+            status: this.status,
+            updatedAt: request.updatedAt,
+            createdAt: request.createdAt,
+          }
+        };
       }
-      response.data = {
+      debug('HasyxChessClient _move successfully inserted into badma_moves.');
+
+      // 3. Prepare response
+      const responseData: ChessServerResponse['data'] = {
         clientId: request.clientId,
         gameId: request.gameId as string,
-        fen: this.fen,
-        status: this.status,
-        updatedAt: request.updatedAt,
-        createdAt: request.createdAt,
+        joinId: request.joinId, // Include joinId if present in request/client state
+        side: request.side,     // Include side if present
+        role: request.role,     // Include role if present
+        fen: this.fen,          // FEN from client's internal state (reflects successful move)
+        status: this.status,      // Status from client's internal state
+        updatedAt: request.updatedAt, // Timestamp of the move operation
+        createdAt: request.createdAt, // Original game creation timestamp
       };
-      debug('HasyxChessClient _move received response from server:', response);
-      return response;
+      debug('HasyxChessClient _move received response from server:', { data: responseData });
+      return { data: responseData };
     } catch (error: any) {
       debug('HasyxChessClient _move error calling server:', error);
       return { error: error.message || 'Server communication error during move' };

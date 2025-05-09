@@ -22,11 +22,13 @@ const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET;
 const nextAuthSecret = process.env.NEXTAUTH_SECRET;
 
 if (!hasuraAdminSecret) {
-  console.error('ERROR: HASURA_ADMIN_SECRET environment variable is not set.');
+  // console.error('ERROR: HASURA_ADMIN_SECRET environment variable is not set.');
+  debug('ERROR: HASURA_ADMIN_SECRET environment variable is not set.');
   debug('API route startup error: HASURA_ADMIN_SECRET is missing');
 }
 if (!nextAuthSecret) {
-  console.error('ERROR: NEXTAUTH_SECRET environment variable is not set. Required for authentication.');
+  // console.error('ERROR: NEXTAUTH_SECRET environment variable is not set. Required for authentication.');
+  debug('ERROR: NEXTAUTH_SECRET environment variable is not set. Required for authentication.');
   debug('API route startup error: NEXTAUTH_SECRET is missing');
 }
 

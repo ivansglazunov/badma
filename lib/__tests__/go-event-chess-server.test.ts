@@ -60,7 +60,7 @@ describe('AI Move Event Trigger Integration Test', () => {
   it('should automatically make AI moves when game state changes via Hasura event trigger', async () => {
     // 1. Create a game as human player (black)
     debug('Human creating game...');
-    const createResponse = await humanClient.asyncCreate(2); // Human is black (side 2)
+    const createResponse = await humanClient.asyncCreate(1);
     expect(createResponse.error).toBeUndefined();
     gameId = createResponse.data!.gameId!;
     debug(`Game created with ID: ${gameId}`);
@@ -163,7 +163,7 @@ async function createFakeUser({ adminHasyx, password }: { adminHasyx: Hasyx, pas
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   const now = new Date().toISOString();
 
-  debug(`Creating fake user ${email}`);
+  // debug(`Creating fake user ${email}`); // Already uses debug
   const result = await adminHasyx.insert({
     table: 'users',
     object: {

@@ -118,19 +118,20 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       },
       order_by: { created_at: 'desc' },
       limit: 1,
-      returning: ['id', 'user_id', 'game_id', 'side', 'role']
+      returning: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at']
     });
     
     if (!joins || joins.length === 0) {
-      debug('⚠️ No join record found for the current side');
+      debug(`🔴 CRITICAL: No join record found for game ${gameData.id} and side ${currentSide}. Cannot determine AI user.`);
       return { success: true, message: 'No AI move needed: No join record for current side' };
     }
     
     const join = joins[0];
     const userId = join.user_id;
-    debug(`👤 User ID for current turn: ${userId}`);
+    debug(`👤 User ID for current turn (from join record ${join.id} with side ${join.side}): ${userId}`);
     
     // --- Запрос к badma_ais --- 
+    debug(`🤖 Attempting to fetch AI config for user_id: ${userId}`);
     const aiConfigs = await hasyx.select<AiConfig[]>({
       table: 'badma_ais',
       where: { user_id: { _eq: userId } },
@@ -139,8 +140,8 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     });
     
     if (!aiConfigs || aiConfigs.length === 0) {
-      debug('⚠️ No AI configuration found for user');
-      return { success: true, message: 'No AI move needed: User has no AI configuration' };
+      debug(`⚠️ No AI configuration found for user ${userId}. Check badma_ais table.`);
+      return { success: true, message: `No AI move needed: User ${userId} has no AI configuration` };
     }
     
     const aiConfig = aiConfigs[0];

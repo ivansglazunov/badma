@@ -77,7 +77,7 @@ const dropTablesSQL = `
 async function dropMetadata() {
   debug('🧹 Dropping permissions, relationships, and untracking tables for badma schema...');
 
-  debug('  ��️ Dropping user and anonymous permissions...');
+  debug('  🧹 Dropping user and anonymous permissions...');
   for (const dropRequest of userPermissionsToDrop) {
     const perm = `${dropRequest.args.role} on ${dropRequest.args.table.schema}.${dropRequest.args.table.name}`;
     debug(`     Dropping permission for ${perm}...`);
@@ -125,7 +125,8 @@ async function down() {
 
     debug('✨ Badma schema migration DOWN completed successfully!');
   } catch (error) {
-    console.error('❗ Critical error during Badma DOWN migration:', error);
+    // console.error('❗ Critical error during Badma DOWN migration:', error);
+    debug('❗ Critical error during Badma DOWN migration:', error instanceof Error ? error.message : String(error), error);
     debug('❌ Badma DOWN Migration failed.');
     process.exit(1); // Exit with error code on failure
   }
