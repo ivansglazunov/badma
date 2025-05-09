@@ -27,6 +27,7 @@ export type Scalars = {
   Float: { input: number; output: number };
   bigint: { input: any; output: any };
   jsonb: { input: any; output: any };
+  numeric: { input: any; output: any };
   timestamptz: { input: any; output: any };
   uuid: { input: any; output: any };
 };
@@ -1688,6 +1689,7 @@ export type Badma_Moves = {
   game: Badma_Games;
   game_id: Scalars["uuid"]["output"];
   id: Scalars["uuid"]["output"];
+  promotion?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
   to?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
@@ -1779,6 +1781,7 @@ export type Badma_Moves_Bool_Exp = {
   game?: InputMaybe<Badma_Games_Bool_Exp>;
   game_id?: InputMaybe<Uuid_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  promotion?: InputMaybe<String_Comparison_Exp>;
   side?: InputMaybe<Int_Comparison_Exp>;
   to?: InputMaybe<String_Comparison_Exp>;
   type?: InputMaybe<String_Comparison_Exp>;
@@ -1804,6 +1807,7 @@ export type Badma_Moves_Insert_Input = {
   game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  promotion?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   to?: InputMaybe<Scalars["String"]["input"]>;
   type?: InputMaybe<Scalars["String"]["input"]>;
@@ -1818,6 +1822,7 @@ export type Badma_Moves_Max_Fields = {
   from?: Maybe<Scalars["String"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
+  promotion?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
   to?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
@@ -1830,6 +1835,7 @@ export type Badma_Moves_Max_Order_By = {
   from?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  promotion?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
@@ -1843,6 +1849,7 @@ export type Badma_Moves_Min_Fields = {
   from?: Maybe<Scalars["String"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
+  promotion?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
   to?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
@@ -1855,6 +1862,7 @@ export type Badma_Moves_Min_Order_By = {
   from?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  promotion?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
@@ -1884,6 +1892,7 @@ export type Badma_Moves_Order_By = {
   game?: InputMaybe<Badma_Games_Order_By>;
   game_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  promotion?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
   to?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
@@ -1907,6 +1916,8 @@ export enum Badma_Moves_Select_Column {
   /** column name */
   Id = "id",
   /** column name */
+  Promotion = "promotion",
+  /** column name */
   Side = "side",
   /** column name */
   To = "to",
@@ -1922,6 +1933,7 @@ export type Badma_Moves_Set_Input = {
   from?: InputMaybe<Scalars["String"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  promotion?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   to?: InputMaybe<Scalars["String"]["input"]>;
   type?: InputMaybe<Scalars["String"]["input"]>;
@@ -1975,6 +1987,7 @@ export type Badma_Moves_Stream_Cursor_Value_Input = {
   from?: InputMaybe<Scalars["String"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  promotion?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   to?: InputMaybe<Scalars["String"]["input"]>;
   type?: InputMaybe<Scalars["String"]["input"]>;
@@ -2002,6 +2015,8 @@ export enum Badma_Moves_Update_Column {
   GameId = "game_id",
   /** column name */
   Id = "id",
+  /** column name */
+  Promotion = "promotion",
   /** column name */
   Side = "side",
   /** column name */
@@ -2223,6 +2238,1210 @@ export type Badma_Servers_Updates = {
   where: Badma_Servers_Bool_Exp;
 };
 
+/** columns and relationships of "badma.tournament_games" */
+export type Badma_Tournament_Games = {
+  __typename?: "badma_tournament_games";
+  created_at: Scalars["timestamptz"]["output"];
+  /** An object relationship */
+  game: Badma_Games;
+  game_id: Scalars["uuid"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** An object relationship */
+  tournament: Badma_Tournaments;
+  tournament_id: Scalars["uuid"]["output"];
+  updated_at: Scalars["timestamptz"]["output"];
+};
+
+/** aggregated selection of "badma.tournament_games" */
+export type Badma_Tournament_Games_Aggregate = {
+  __typename?: "badma_tournament_games_aggregate";
+  aggregate?: Maybe<Badma_Tournament_Games_Aggregate_Fields>;
+  nodes: Array<Badma_Tournament_Games>;
+};
+
+export type Badma_Tournament_Games_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Tournament_Games_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Tournament_Games_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.tournament_games" */
+export type Badma_Tournament_Games_Aggregate_Fields = {
+  __typename?: "badma_tournament_games_aggregate_fields";
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Tournament_Games_Max_Fields>;
+  min?: Maybe<Badma_Tournament_Games_Min_Fields>;
+};
+
+/** aggregate fields of "badma.tournament_games" */
+export type Badma_Tournament_Games_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.tournament_games" */
+export type Badma_Tournament_Games_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Tournament_Games_Max_Order_By>;
+  min?: InputMaybe<Badma_Tournament_Games_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.tournament_games" */
+export type Badma_Tournament_Games_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Tournament_Games_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Tournament_Games_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "badma.tournament_games". All fields are combined with a logical 'AND'. */
+export type Badma_Tournament_Games_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Tournament_Games_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Tournament_Games_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  game?: InputMaybe<Badma_Games_Bool_Exp>;
+  game_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  tournament?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+  tournament_id?: InputMaybe<Uuid_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.tournament_games" */
+export enum Badma_Tournament_Games_Constraint {
+  /** unique or primary key constraint on columns "tournament_id", "game_id" */
+  TournamentGamesGameIdTournamentIdKey = "tournament_games_game_id_tournament_id_key",
+  /** unique or primary key constraint on columns "id" */
+  TournamentGamesPkey = "tournament_games_pkey",
+}
+
+/** input type for inserting data into table "badma.tournament_games" */
+export type Badma_Tournament_Games_Insert_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  tournament?: InputMaybe<Badma_Tournaments_Obj_Rel_Insert_Input>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Tournament_Games_Max_Fields = {
+  __typename?: "badma_tournament_games_max_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  tournament_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.tournament_games" */
+export type Badma_Tournament_Games_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Tournament_Games_Min_Fields = {
+  __typename?: "badma_tournament_games_min_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  tournament_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.tournament_games" */
+export type Badma_Tournament_Games_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.tournament_games" */
+export type Badma_Tournament_Games_Mutation_Response = {
+  __typename?: "badma_tournament_games_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Tournament_Games>;
+};
+
+/** on_conflict condition type for table "badma.tournament_games" */
+export type Badma_Tournament_Games_On_Conflict = {
+  constraint: Badma_Tournament_Games_Constraint;
+  update_columns?: Array<Badma_Tournament_Games_Update_Column>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.tournament_games". */
+export type Badma_Tournament_Games_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game?: InputMaybe<Badma_Games_Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  tournament?: InputMaybe<Badma_Tournaments_Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.tournament_games */
+export type Badma_Tournament_Games_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.tournament_games" */
+export enum Badma_Tournament_Games_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  TournamentId = "tournament_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** input type for updating data in table "badma.tournament_games" */
+export type Badma_Tournament_Games_Set_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** Streaming cursor of the table "badma_tournament_games" */
+export type Badma_Tournament_Games_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Tournament_Games_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Tournament_Games_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** update columns of table "badma.tournament_games" */
+export enum Badma_Tournament_Games_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  TournamentId = "tournament_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+export type Badma_Tournament_Games_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Tournament_Games_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Tournament_Games_Bool_Exp;
+};
+
+/** columns and relationships of "badma.tournament_participants" */
+export type Badma_Tournament_Participants = {
+  __typename?: "badma_tournament_participants";
+  created_at: Scalars["timestamptz"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** 1 for join, 0 for leave */
+  role: Scalars["Int"]["output"];
+  /** An array relationship */
+  scores: Array<Badma_Tournament_Scores>;
+  /** An aggregate relationship */
+  scores_aggregate: Badma_Tournament_Scores_Aggregate;
+  /** An object relationship */
+  tournament: Badma_Tournaments;
+  tournament_id: Scalars["uuid"]["output"];
+  updated_at: Scalars["timestamptz"]["output"];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars["uuid"]["output"];
+};
+
+/** columns and relationships of "badma.tournament_participants" */
+export type Badma_Tournament_ParticipantsScoresArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.tournament_participants" */
+export type Badma_Tournament_ParticipantsScores_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+/** aggregated selection of "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Aggregate = {
+  __typename?: "badma_tournament_participants_aggregate";
+  aggregate?: Maybe<Badma_Tournament_Participants_Aggregate_Fields>;
+  nodes: Array<Badma_Tournament_Participants>;
+};
+
+export type Badma_Tournament_Participants_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Tournament_Participants_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Aggregate_Fields = {
+  __typename?: "badma_tournament_participants_aggregate_fields";
+  avg?: Maybe<Badma_Tournament_Participants_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Tournament_Participants_Max_Fields>;
+  min?: Maybe<Badma_Tournament_Participants_Min_Fields>;
+  stddev?: Maybe<Badma_Tournament_Participants_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_Tournament_Participants_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_Tournament_Participants_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_Tournament_Participants_Sum_Fields>;
+  var_pop?: Maybe<Badma_Tournament_Participants_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_Tournament_Participants_Var_Samp_Fields>;
+  variance?: Maybe<Badma_Tournament_Participants_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Tournament_Participants_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Tournament_Participants_Max_Order_By>;
+  min?: InputMaybe<Badma_Tournament_Participants_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Tournament_Participants_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Tournament_Participants_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Tournament_Participants_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Tournament_Participants_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Tournament_Participants_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Tournament_Participants_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Tournament_Participants_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Tournament_Participants_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Tournament_Participants_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_Tournament_Participants_Avg_Fields = {
+  __typename?: "badma_tournament_participants_avg_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Avg_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.tournament_participants". All fields are combined with a logical 'AND'. */
+export type Badma_Tournament_Participants_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Tournament_Participants_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Tournament_Participants_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  role?: InputMaybe<Int_Comparison_Exp>;
+  scores?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+  scores_aggregate?: InputMaybe<Badma_Tournament_Scores_Aggregate_Bool_Exp>;
+  tournament?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+  tournament_id?: InputMaybe<Uuid_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.tournament_participants" */
+export enum Badma_Tournament_Participants_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  TournamentParticipantsPkey = "tournament_participants_pkey",
+}
+
+/** input type for incrementing numeric columns in table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Inc_Input = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Insert_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Scalars["Int"]["input"]>;
+  scores?: InputMaybe<Badma_Tournament_Scores_Arr_Rel_Insert_Input>;
+  tournament?: InputMaybe<Badma_Tournaments_Obj_Rel_Insert_Input>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Tournament_Participants_Max_Fields = {
+  __typename?: "badma_tournament_participants_max_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Int"]["output"]>;
+  tournament_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Tournament_Participants_Min_Fields = {
+  __typename?: "badma_tournament_participants_min_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Int"]["output"]>;
+  tournament_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Mutation_Response = {
+  __typename?: "badma_tournament_participants_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Tournament_Participants>;
+};
+
+/** input type for inserting object relation for remote table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Obj_Rel_Insert_Input = {
+  data: Badma_Tournament_Participants_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Tournament_Participants_On_Conflict>;
+};
+
+/** on_conflict condition type for table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_On_Conflict = {
+  constraint: Badma_Tournament_Participants_Constraint;
+  update_columns?: Array<Badma_Tournament_Participants_Update_Column>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.tournament_participants". */
+export type Badma_Tournament_Participants_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  role?: InputMaybe<Order_By>;
+  scores_aggregate?: InputMaybe<Badma_Tournament_Scores_Aggregate_Order_By>;
+  tournament?: InputMaybe<Badma_Tournaments_Order_By>;
+  tournament_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.tournament_participants */
+export type Badma_Tournament_Participants_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.tournament_participants" */
+export enum Badma_Tournament_Participants_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Role = "role",
+  /** column name */
+  TournamentId = "tournament_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** input type for updating data in table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Set_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Scalars["Int"]["input"]>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_Tournament_Participants_Stddev_Fields = {
+  __typename?: "badma_tournament_participants_stddev_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Stddev_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_Tournament_Participants_Stddev_Pop_Fields = {
+  __typename?: "badma_tournament_participants_stddev_pop_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Stddev_Pop_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_Tournament_Participants_Stddev_Samp_Fields = {
+  __typename?: "badma_tournament_participants_stddev_samp_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Stddev_Samp_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_tournament_participants" */
+export type Badma_Tournament_Participants_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Tournament_Participants_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Tournament_Participants_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Scalars["Int"]["input"]>;
+  tournament_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_Tournament_Participants_Sum_Fields = {
+  __typename?: "badma_tournament_participants_sum_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Int"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Sum_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.tournament_participants" */
+export enum Badma_Tournament_Participants_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Role = "role",
+  /** column name */
+  TournamentId = "tournament_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+export type Badma_Tournament_Participants_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_Tournament_Participants_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Tournament_Participants_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Tournament_Participants_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_Tournament_Participants_Var_Pop_Fields = {
+  __typename?: "badma_tournament_participants_var_pop_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Var_Pop_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_Tournament_Participants_Var_Samp_Fields = {
+  __typename?: "badma_tournament_participants_var_samp_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Var_Samp_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_Tournament_Participants_Variance_Fields = {
+  __typename?: "badma_tournament_participants_variance_fields";
+  /** 1 for join, 0 for leave */
+  role?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.tournament_participants" */
+export type Badma_Tournament_Participants_Variance_Order_By = {
+  /** 1 for join, 0 for leave */
+  role?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "badma.tournament_scores" */
+export type Badma_Tournament_Scores = {
+  __typename?: "badma_tournament_scores";
+  created_at: Scalars["timestamptz"]["output"];
+  /** An object relationship */
+  game: Badma_Games;
+  game_id: Scalars["uuid"]["output"];
+  id: Scalars["uuid"]["output"];
+  score: Scalars["numeric"]["output"];
+  tournament_participant_id: Scalars["uuid"]["output"];
+  /** An object relationship */
+  tournament_participation: Badma_Tournament_Participants;
+  updated_at: Scalars["timestamptz"]["output"];
+};
+
+/** aggregated selection of "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Aggregate = {
+  __typename?: "badma_tournament_scores_aggregate";
+  aggregate?: Maybe<Badma_Tournament_Scores_Aggregate_Fields>;
+  nodes: Array<Badma_Tournament_Scores>;
+};
+
+export type Badma_Tournament_Scores_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Tournament_Scores_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Tournament_Scores_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Aggregate_Fields = {
+  __typename?: "badma_tournament_scores_aggregate_fields";
+  avg?: Maybe<Badma_Tournament_Scores_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Tournament_Scores_Max_Fields>;
+  min?: Maybe<Badma_Tournament_Scores_Min_Fields>;
+  stddev?: Maybe<Badma_Tournament_Scores_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_Tournament_Scores_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_Tournament_Scores_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_Tournament_Scores_Sum_Fields>;
+  var_pop?: Maybe<Badma_Tournament_Scores_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_Tournament_Scores_Var_Samp_Fields>;
+  variance?: Maybe<Badma_Tournament_Scores_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Tournament_Scores_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Tournament_Scores_Max_Order_By>;
+  min?: InputMaybe<Badma_Tournament_Scores_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Tournament_Scores_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Tournament_Scores_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Tournament_Scores_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Tournament_Scores_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Tournament_Scores_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Tournament_Scores_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Tournament_Scores_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Tournament_Scores_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Tournament_Scores_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_Tournament_Scores_Avg_Fields = {
+  __typename?: "badma_tournament_scores_avg_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Avg_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.tournament_scores". All fields are combined with a logical 'AND'. */
+export type Badma_Tournament_Scores_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Tournament_Scores_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Tournament_Scores_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  game?: InputMaybe<Badma_Games_Bool_Exp>;
+  game_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  score?: InputMaybe<Numeric_Comparison_Exp>;
+  tournament_participant_id?: InputMaybe<Uuid_Comparison_Exp>;
+  tournament_participation?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.tournament_scores" */
+export enum Badma_Tournament_Scores_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  TournamentScoresPkey = "tournament_scores_pkey",
+}
+
+/** input type for incrementing numeric columns in table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Inc_Input = {
+  score?: InputMaybe<Scalars["numeric"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Insert_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  score?: InputMaybe<Scalars["numeric"]["input"]>;
+  tournament_participant_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  tournament_participation?: InputMaybe<Badma_Tournament_Participants_Obj_Rel_Insert_Input>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Tournament_Scores_Max_Fields = {
+  __typename?: "badma_tournament_scores_max_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  score?: Maybe<Scalars["numeric"]["output"]>;
+  tournament_participant_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  score?: InputMaybe<Order_By>;
+  tournament_participant_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Tournament_Scores_Min_Fields = {
+  __typename?: "badma_tournament_scores_min_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  score?: Maybe<Scalars["numeric"]["output"]>;
+  tournament_participant_id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  score?: InputMaybe<Order_By>;
+  tournament_participant_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Mutation_Response = {
+  __typename?: "badma_tournament_scores_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Tournament_Scores>;
+};
+
+/** on_conflict condition type for table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_On_Conflict = {
+  constraint: Badma_Tournament_Scores_Constraint;
+  update_columns?: Array<Badma_Tournament_Scores_Update_Column>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.tournament_scores". */
+export type Badma_Tournament_Scores_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  game?: InputMaybe<Badma_Games_Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  score?: InputMaybe<Order_By>;
+  tournament_participant_id?: InputMaybe<Order_By>;
+  tournament_participation?: InputMaybe<Badma_Tournament_Participants_Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.tournament_scores */
+export type Badma_Tournament_Scores_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.tournament_scores" */
+export enum Badma_Tournament_Scores_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Score = "score",
+  /** column name */
+  TournamentParticipantId = "tournament_participant_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** input type for updating data in table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Set_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  score?: InputMaybe<Scalars["numeric"]["input"]>;
+  tournament_participant_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_Tournament_Scores_Stddev_Fields = {
+  __typename?: "badma_tournament_scores_stddev_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Stddev_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_Tournament_Scores_Stddev_Pop_Fields = {
+  __typename?: "badma_tournament_scores_stddev_pop_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Stddev_Pop_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_Tournament_Scores_Stddev_Samp_Fields = {
+  __typename?: "badma_tournament_scores_stddev_samp_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Stddev_Samp_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_tournament_scores" */
+export type Badma_Tournament_Scores_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Tournament_Scores_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Tournament_Scores_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  score?: InputMaybe<Scalars["numeric"]["input"]>;
+  tournament_participant_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_Tournament_Scores_Sum_Fields = {
+  __typename?: "badma_tournament_scores_sum_fields";
+  score?: Maybe<Scalars["numeric"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Sum_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.tournament_scores" */
+export enum Badma_Tournament_Scores_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Score = "score",
+  /** column name */
+  TournamentParticipantId = "tournament_participant_id",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+export type Badma_Tournament_Scores_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_Tournament_Scores_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Tournament_Scores_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Tournament_Scores_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_Tournament_Scores_Var_Pop_Fields = {
+  __typename?: "badma_tournament_scores_var_pop_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Var_Pop_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_Tournament_Scores_Var_Samp_Fields = {
+  __typename?: "badma_tournament_scores_var_samp_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Var_Samp_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_Tournament_Scores_Variance_Fields = {
+  __typename?: "badma_tournament_scores_variance_fields";
+  score?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.tournament_scores" */
+export type Badma_Tournament_Scores_Variance_Order_By = {
+  score?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "badma.tournaments" */
+export type Badma_Tournaments = {
+  __typename?: "badma_tournaments";
+  created_at: Scalars["timestamptz"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** An array relationship */
+  participants: Array<Badma_Tournament_Participants>;
+  /** An aggregate relationship */
+  participants_aggregate: Badma_Tournament_Participants_Aggregate;
+  status: Scalars["String"]["output"];
+  /** An array relationship */
+  tournament_games: Array<Badma_Tournament_Games>;
+  /** An aggregate relationship */
+  tournament_games_aggregate: Badma_Tournament_Games_Aggregate;
+  type: Scalars["String"]["output"];
+  updated_at: Scalars["timestamptz"]["output"];
+};
+
+/** columns and relationships of "badma.tournaments" */
+export type Badma_TournamentsParticipantsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.tournaments" */
+export type Badma_TournamentsParticipants_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.tournaments" */
+export type Badma_TournamentsTournament_GamesArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.tournaments" */
+export type Badma_TournamentsTournament_Games_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+/** aggregated selection of "badma.tournaments" */
+export type Badma_Tournaments_Aggregate = {
+  __typename?: "badma_tournaments_aggregate";
+  aggregate?: Maybe<Badma_Tournaments_Aggregate_Fields>;
+  nodes: Array<Badma_Tournaments>;
+};
+
+/** aggregate fields of "badma.tournaments" */
+export type Badma_Tournaments_Aggregate_Fields = {
+  __typename?: "badma_tournaments_aggregate_fields";
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Tournaments_Max_Fields>;
+  min?: Maybe<Badma_Tournaments_Min_Fields>;
+};
+
+/** aggregate fields of "badma.tournaments" */
+export type Badma_Tournaments_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Tournaments_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** Boolean expression to filter rows from the table "badma.tournaments". All fields are combined with a logical 'AND'. */
+export type Badma_Tournaments_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Tournaments_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Tournaments_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  participants?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+  participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  tournament_games?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+  tournament_games_aggregate?: InputMaybe<Badma_Tournament_Games_Aggregate_Bool_Exp>;
+  type?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.tournaments" */
+export enum Badma_Tournaments_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  TournamentsPkey = "tournaments_pkey",
+}
+
+/** input type for inserting data into table "badma.tournaments" */
+export type Badma_Tournaments_Insert_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  participants?: InputMaybe<Badma_Tournament_Participants_Arr_Rel_Insert_Input>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  tournament_games?: InputMaybe<Badma_Tournament_Games_Arr_Rel_Insert_Input>;
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Tournaments_Max_Fields = {
+  __typename?: "badma_tournaments_max_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** aggregate min on columns */
+export type Badma_Tournaments_Min_Fields = {
+  __typename?: "badma_tournaments_min_fields";
+  created_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
+};
+
+/** response of any mutation on the table "badma.tournaments" */
+export type Badma_Tournaments_Mutation_Response = {
+  __typename?: "badma_tournaments_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Tournaments>;
+};
+
+/** input type for inserting object relation for remote table "badma.tournaments" */
+export type Badma_Tournaments_Obj_Rel_Insert_Input = {
+  data: Badma_Tournaments_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Tournaments_On_Conflict>;
+};
+
+/** on_conflict condition type for table "badma.tournaments" */
+export type Badma_Tournaments_On_Conflict = {
+  constraint: Badma_Tournaments_Constraint;
+  update_columns?: Array<Badma_Tournaments_Update_Column>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.tournaments". */
+export type Badma_Tournaments_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Order_By>;
+  status?: InputMaybe<Order_By>;
+  tournament_games_aggregate?: InputMaybe<Badma_Tournament_Games_Aggregate_Order_By>;
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.tournaments */
+export type Badma_Tournaments_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.tournaments" */
+export enum Badma_Tournaments_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Status = "status",
+  /** column name */
+  Type = "type",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** input type for updating data in table "badma.tournaments" */
+export type Badma_Tournaments_Set_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** Streaming cursor of the table "badma_tournaments" */
+export type Badma_Tournaments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Tournaments_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Tournaments_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+};
+
+/** update columns of table "badma.tournaments" */
+export enum Badma_Tournaments_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Status = "status",
+  /** column name */
+  Type = "type",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+export type Badma_Tournaments_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Tournaments_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Tournaments_Bool_Exp;
+};
+
 /** Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'. */
 export type Bigint_Comparison_Exp = {
   _eq?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -2299,6 +3518,22 @@ export type Mutation_Root = {
   delete_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** delete single row from the table: "badma.servers" */
   delete_badma_servers_by_pk?: Maybe<Badma_Servers>;
+  /** delete data from the table: "badma.tournament_games" */
+  delete_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
+  /** delete single row from the table: "badma.tournament_games" */
+  delete_badma_tournament_games_by_pk?: Maybe<Badma_Tournament_Games>;
+  /** delete data from the table: "badma.tournament_participants" */
+  delete_badma_tournament_participants?: Maybe<Badma_Tournament_Participants_Mutation_Response>;
+  /** delete single row from the table: "badma.tournament_participants" */
+  delete_badma_tournament_participants_by_pk?: Maybe<Badma_Tournament_Participants>;
+  /** delete data from the table: "badma.tournament_scores" */
+  delete_badma_tournament_scores?: Maybe<Badma_Tournament_Scores_Mutation_Response>;
+  /** delete single row from the table: "badma.tournament_scores" */
+  delete_badma_tournament_scores_by_pk?: Maybe<Badma_Tournament_Scores>;
+  /** delete data from the table: "badma.tournaments" */
+  delete_badma_tournaments?: Maybe<Badma_Tournaments_Mutation_Response>;
+  /** delete single row from the table: "badma.tournaments" */
+  delete_badma_tournaments_by_pk?: Maybe<Badma_Tournaments>;
   /** delete data from the table: "users" */
   delete_users?: Maybe<Users_Mutation_Response>;
   /** delete single row from the table: "users" */
@@ -2327,6 +3562,22 @@ export type Mutation_Root = {
   insert_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** insert a single row into the table: "badma.servers" */
   insert_badma_servers_one?: Maybe<Badma_Servers>;
+  /** insert data into the table: "badma.tournament_games" */
+  insert_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
+  /** insert a single row into the table: "badma.tournament_games" */
+  insert_badma_tournament_games_one?: Maybe<Badma_Tournament_Games>;
+  /** insert data into the table: "badma.tournament_participants" */
+  insert_badma_tournament_participants?: Maybe<Badma_Tournament_Participants_Mutation_Response>;
+  /** insert a single row into the table: "badma.tournament_participants" */
+  insert_badma_tournament_participants_one?: Maybe<Badma_Tournament_Participants>;
+  /** insert data into the table: "badma.tournament_scores" */
+  insert_badma_tournament_scores?: Maybe<Badma_Tournament_Scores_Mutation_Response>;
+  /** insert a single row into the table: "badma.tournament_scores" */
+  insert_badma_tournament_scores_one?: Maybe<Badma_Tournament_Scores>;
+  /** insert data into the table: "badma.tournaments" */
+  insert_badma_tournaments?: Maybe<Badma_Tournaments_Mutation_Response>;
+  /** insert a single row into the table: "badma.tournaments" */
+  insert_badma_tournaments_one?: Maybe<Badma_Tournaments>;
   /** insert data into the table: "users" */
   insert_users?: Maybe<Users_Mutation_Response>;
   /** insert a single row into the table: "users" */
@@ -2368,6 +3619,38 @@ export type Mutation_Root = {
   /** update multiples rows of table: "badma.servers" */
   update_badma_servers_many?: Maybe<
     Array<Maybe<Badma_Servers_Mutation_Response>>
+  >;
+  /** update data of the table: "badma.tournament_games" */
+  update_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
+  /** update single row of the table: "badma.tournament_games" */
+  update_badma_tournament_games_by_pk?: Maybe<Badma_Tournament_Games>;
+  /** update multiples rows of table: "badma.tournament_games" */
+  update_badma_tournament_games_many?: Maybe<
+    Array<Maybe<Badma_Tournament_Games_Mutation_Response>>
+  >;
+  /** update data of the table: "badma.tournament_participants" */
+  update_badma_tournament_participants?: Maybe<Badma_Tournament_Participants_Mutation_Response>;
+  /** update single row of the table: "badma.tournament_participants" */
+  update_badma_tournament_participants_by_pk?: Maybe<Badma_Tournament_Participants>;
+  /** update multiples rows of table: "badma.tournament_participants" */
+  update_badma_tournament_participants_many?: Maybe<
+    Array<Maybe<Badma_Tournament_Participants_Mutation_Response>>
+  >;
+  /** update data of the table: "badma.tournament_scores" */
+  update_badma_tournament_scores?: Maybe<Badma_Tournament_Scores_Mutation_Response>;
+  /** update single row of the table: "badma.tournament_scores" */
+  update_badma_tournament_scores_by_pk?: Maybe<Badma_Tournament_Scores>;
+  /** update multiples rows of table: "badma.tournament_scores" */
+  update_badma_tournament_scores_many?: Maybe<
+    Array<Maybe<Badma_Tournament_Scores_Mutation_Response>>
+  >;
+  /** update data of the table: "badma.tournaments" */
+  update_badma_tournaments?: Maybe<Badma_Tournaments_Mutation_Response>;
+  /** update single row of the table: "badma.tournaments" */
+  update_badma_tournaments_by_pk?: Maybe<Badma_Tournaments>;
+  /** update multiples rows of table: "badma.tournaments" */
+  update_badma_tournaments_many?: Maybe<
+    Array<Maybe<Badma_Tournaments_Mutation_Response>>
   >;
   /** update data of the table: "users" */
   update_users?: Maybe<Users_Mutation_Response>;
@@ -2434,6 +3717,46 @@ export type Mutation_RootDelete_Badma_ServersArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Badma_Servers_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_GamesArgs = {
+  where: Badma_Tournament_Games_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_Games_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_ParticipantsArgs = {
+  where: Badma_Tournament_Participants_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_Participants_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_ScoresArgs = {
+  where: Badma_Tournament_Scores_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournament_Scores_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_TournamentsArgs = {
+  where: Badma_Tournaments_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Tournaments_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -2517,6 +3840,54 @@ export type Mutation_RootInsert_Badma_ServersArgs = {
 export type Mutation_RootInsert_Badma_Servers_OneArgs = {
   object: Badma_Servers_Insert_Input;
   on_conflict?: InputMaybe<Badma_Servers_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_GamesArgs = {
+  objects: Array<Badma_Tournament_Games_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Tournament_Games_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_Games_OneArgs = {
+  object: Badma_Tournament_Games_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Tournament_Games_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_ParticipantsArgs = {
+  objects: Array<Badma_Tournament_Participants_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Tournament_Participants_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_Participants_OneArgs = {
+  object: Badma_Tournament_Participants_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Tournament_Participants_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_ScoresArgs = {
+  objects: Array<Badma_Tournament_Scores_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Tournament_Scores_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournament_Scores_OneArgs = {
+  object: Badma_Tournament_Scores_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Tournament_Scores_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_TournamentsArgs = {
+  objects: Array<Badma_Tournaments_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Tournaments_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Tournaments_OneArgs = {
+  object: Badma_Tournaments_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Tournaments_On_Conflict>;
 };
 
 /** mutation root */
@@ -2652,6 +4023,78 @@ export type Mutation_RootUpdate_Badma_Servers_ManyArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_GamesArgs = {
+  _set?: InputMaybe<Badma_Tournament_Games_Set_Input>;
+  where: Badma_Tournament_Games_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Games_By_PkArgs = {
+  _set?: InputMaybe<Badma_Tournament_Games_Set_Input>;
+  pk_columns: Badma_Tournament_Games_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Games_ManyArgs = {
+  updates: Array<Badma_Tournament_Games_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_ParticipantsArgs = {
+  _inc?: InputMaybe<Badma_Tournament_Participants_Inc_Input>;
+  _set?: InputMaybe<Badma_Tournament_Participants_Set_Input>;
+  where: Badma_Tournament_Participants_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Participants_By_PkArgs = {
+  _inc?: InputMaybe<Badma_Tournament_Participants_Inc_Input>;
+  _set?: InputMaybe<Badma_Tournament_Participants_Set_Input>;
+  pk_columns: Badma_Tournament_Participants_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Participants_ManyArgs = {
+  updates: Array<Badma_Tournament_Participants_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_ScoresArgs = {
+  _inc?: InputMaybe<Badma_Tournament_Scores_Inc_Input>;
+  _set?: InputMaybe<Badma_Tournament_Scores_Set_Input>;
+  where: Badma_Tournament_Scores_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Scores_By_PkArgs = {
+  _inc?: InputMaybe<Badma_Tournament_Scores_Inc_Input>;
+  _set?: InputMaybe<Badma_Tournament_Scores_Set_Input>;
+  pk_columns: Badma_Tournament_Scores_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournament_Scores_ManyArgs = {
+  updates: Array<Badma_Tournament_Scores_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_TournamentsArgs = {
+  _set?: InputMaybe<Badma_Tournaments_Set_Input>;
+  where: Badma_Tournaments_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournaments_By_PkArgs = {
+  _set?: InputMaybe<Badma_Tournaments_Set_Input>;
+  pk_columns: Badma_Tournaments_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Tournaments_ManyArgs = {
+  updates: Array<Badma_Tournaments_Updates>;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
   _set?: InputMaybe<Users_Set_Input>;
   where: Users_Bool_Exp;
@@ -2666,6 +4109,19 @@ export type Mutation_RootUpdate_Users_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Users_ManyArgs = {
   updates: Array<Users_Updates>;
+};
+
+/** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
+export type Numeric_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars["numeric"]["input"]>;
+  _gt?: InputMaybe<Scalars["numeric"]["input"]>;
+  _gte?: InputMaybe<Scalars["numeric"]["input"]>;
+  _in?: InputMaybe<Array<Scalars["numeric"]["input"]>>;
+  _is_null?: InputMaybe<Scalars["Boolean"]["input"]>;
+  _lt?: InputMaybe<Scalars["numeric"]["input"]>;
+  _lte?: InputMaybe<Scalars["numeric"]["input"]>;
+  _neq?: InputMaybe<Scalars["numeric"]["input"]>;
+  _nin?: InputMaybe<Array<Scalars["numeric"]["input"]>>;
 };
 
 /** column ordering options */
@@ -2722,6 +4178,30 @@ export type Query_Root = {
   badma_servers_aggregate: Badma_Servers_Aggregate;
   /** fetch data from the table: "badma.servers" using primary key columns */
   badma_servers_by_pk?: Maybe<Badma_Servers>;
+  /** fetch data from the table: "badma.tournament_games" */
+  badma_tournament_games: Array<Badma_Tournament_Games>;
+  /** fetch aggregated fields from the table: "badma.tournament_games" */
+  badma_tournament_games_aggregate: Badma_Tournament_Games_Aggregate;
+  /** fetch data from the table: "badma.tournament_games" using primary key columns */
+  badma_tournament_games_by_pk?: Maybe<Badma_Tournament_Games>;
+  /** fetch data from the table: "badma.tournament_participants" */
+  badma_tournament_participants: Array<Badma_Tournament_Participants>;
+  /** fetch aggregated fields from the table: "badma.tournament_participants" */
+  badma_tournament_participants_aggregate: Badma_Tournament_Participants_Aggregate;
+  /** fetch data from the table: "badma.tournament_participants" using primary key columns */
+  badma_tournament_participants_by_pk?: Maybe<Badma_Tournament_Participants>;
+  /** fetch data from the table: "badma.tournament_scores" */
+  badma_tournament_scores: Array<Badma_Tournament_Scores>;
+  /** fetch aggregated fields from the table: "badma.tournament_scores" */
+  badma_tournament_scores_aggregate: Badma_Tournament_Scores_Aggregate;
+  /** fetch data from the table: "badma.tournament_scores" using primary key columns */
+  badma_tournament_scores_by_pk?: Maybe<Badma_Tournament_Scores>;
+  /** fetch data from the table: "badma.tournaments" */
+  badma_tournaments: Array<Badma_Tournaments>;
+  /** fetch aggregated fields from the table: "badma.tournaments" */
+  badma_tournaments_aggregate: Badma_Tournaments_Aggregate;
+  /** fetch data from the table: "badma.tournaments" using primary key columns */
+  badma_tournaments_by_pk?: Maybe<Badma_Tournaments>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -2850,6 +4330,86 @@ export type Query_RootBadma_Servers_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
+export type Query_RootBadma_Tournament_GamesArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Games_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Games_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Query_RootBadma_Tournament_ParticipantsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Participants_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Participants_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Query_RootBadma_Tournament_ScoresArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Scores_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournament_Scores_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Query_RootBadma_TournamentsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournaments_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournaments_Order_By>>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournaments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournaments_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournaments_Order_By>>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+};
+
+export type Query_RootBadma_Tournaments_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
 export type Query_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2920,6 +4480,38 @@ export type Subscription_Root = {
   badma_servers_by_pk?: Maybe<Badma_Servers>;
   /** fetch data from the table in a streaming manner: "badma.servers" */
   badma_servers_stream: Array<Badma_Servers>;
+  /** fetch data from the table: "badma.tournament_games" */
+  badma_tournament_games: Array<Badma_Tournament_Games>;
+  /** fetch aggregated fields from the table: "badma.tournament_games" */
+  badma_tournament_games_aggregate: Badma_Tournament_Games_Aggregate;
+  /** fetch data from the table: "badma.tournament_games" using primary key columns */
+  badma_tournament_games_by_pk?: Maybe<Badma_Tournament_Games>;
+  /** fetch data from the table in a streaming manner: "badma.tournament_games" */
+  badma_tournament_games_stream: Array<Badma_Tournament_Games>;
+  /** fetch data from the table: "badma.tournament_participants" */
+  badma_tournament_participants: Array<Badma_Tournament_Participants>;
+  /** fetch aggregated fields from the table: "badma.tournament_participants" */
+  badma_tournament_participants_aggregate: Badma_Tournament_Participants_Aggregate;
+  /** fetch data from the table: "badma.tournament_participants" using primary key columns */
+  badma_tournament_participants_by_pk?: Maybe<Badma_Tournament_Participants>;
+  /** fetch data from the table in a streaming manner: "badma.tournament_participants" */
+  badma_tournament_participants_stream: Array<Badma_Tournament_Participants>;
+  /** fetch data from the table: "badma.tournament_scores" */
+  badma_tournament_scores: Array<Badma_Tournament_Scores>;
+  /** fetch aggregated fields from the table: "badma.tournament_scores" */
+  badma_tournament_scores_aggregate: Badma_Tournament_Scores_Aggregate;
+  /** fetch data from the table: "badma.tournament_scores" using primary key columns */
+  badma_tournament_scores_by_pk?: Maybe<Badma_Tournament_Scores>;
+  /** fetch data from the table in a streaming manner: "badma.tournament_scores" */
+  badma_tournament_scores_stream: Array<Badma_Tournament_Scores>;
+  /** fetch data from the table: "badma.tournaments" */
+  badma_tournaments: Array<Badma_Tournaments>;
+  /** fetch aggregated fields from the table: "badma.tournaments" */
+  badma_tournaments_aggregate: Badma_Tournaments_Aggregate;
+  /** fetch data from the table: "badma.tournaments" using primary key columns */
+  badma_tournaments_by_pk?: Maybe<Badma_Tournaments>;
+  /** fetch data from the table in a streaming manner: "badma.tournaments" */
+  badma_tournaments_stream: Array<Badma_Tournaments>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -3084,6 +4676,110 @@ export type Subscription_RootBadma_Servers_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Badma_Servers_Stream_Cursor_Input>>;
   where?: InputMaybe<Badma_Servers_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_GamesArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Games_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Games_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Games_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Tournament_Games_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Tournament_Games_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Tournament_Games_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_ParticipantsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Participants_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Participants_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Tournament_Participants_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Tournament_Participants_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_ScoresArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Scores_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Scores_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Scores_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournament_Scores_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Tournament_Scores_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Tournament_Scores_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Tournament_Scores_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_TournamentsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournaments_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournaments_Order_By>>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournaments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournaments_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournaments_Order_By>>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Tournaments_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Tournaments_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Tournaments_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Tournaments_Bool_Exp>;
 };
 
 export type Subscription_RootUsersArgs = {

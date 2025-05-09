@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { down } from 'hasyx/lib/down';
+import { down } from 'hasyx/lib/down-users';
 
 // Load environment variables from root .env file
 dotenv.config();

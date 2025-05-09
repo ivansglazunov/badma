@@ -5,6 +5,10 @@
     "name": "games"
   },
   "webhook_path": "/api/events/ai-move",
+  "trigger_operations": ["insert", "update"],
+  "insert": {
+    "columns": "*"
+  },
   "update": {
     "columns": ["fen", "status", "side"]
   },

@@ -1,0 +1,23 @@
+{
+  "name": "tournaments_games_event",
+  "table": {
+    "schema": "badma",
+    "name": "badma_games"
+  },
+  "webhook_path": "/api/events/tournaments-games",
+  "update": {
+    "columns": ["status", "fen", "side"]
+  },
+  "retry_conf": {
+    "num_retries": 3,
+    "interval_sec": 10,
+    "timeout_sec": 60
+  },
+  "headers": [
+    {
+      "name": "X-Hasura-Event-Secret",
+      "value_from_env": "HASURA_EVENT_SECRET"
+    }
+  ],
+  "replace": true
+} 
