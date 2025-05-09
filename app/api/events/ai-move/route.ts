@@ -86,19 +86,14 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       return { success: true, message: 'No AI move needed: Game not in playable state' };
     }
     
-    // <<< УДАЛЯЕМ ПРОВЕРКУ СООТВЕТСТВИЯ FEN и SIDE >>>
-    // if (!gameData.fen) { ... }
-    // const tempChess = new Chess(); ...
-    // if (currentTurnInFen !== expectedSideToMove) { ... }
-
     // <<< ОПРЕДЕЛЯЕМ ХОД НАПРЯМУЮ ИЗ FEN >>>
     if (!gameData.fen) {
         debug('⚠️ Skipping: FEN is missing in game data.');
         return { success: true, message: 'Skipped: FEN missing' };
     }
-    const tempChessForTurn = new Chess();
+    const tempChessForTurn = new Chess(); 
     tempChessForTurn.load(gameData.fen);
-    const currentSide = tempChessForTurn.turn; // Получаем 1 для 'w', 2 для 'b'
+    const currentSide = tempChessForTurn.turn; // Используем FEN для определения текущего хода
     debug(`🎮 Current turn determined from FEN: ${currentSide} (${currentSide === 1 ? 'White' : 'Black'})`);
 
     // Создание клиентов и запросы остаются теми же

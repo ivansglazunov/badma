@@ -52,7 +52,7 @@ export class TournamentRoundRobin extends Tournament {
         gamesToCreate.push({
           id: gameId,
           user_id: this.organizerId || player1.user_id, // Use organizerId or fallback to a player
-          status: 'ready',
+          status: 'await',
           fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
           side: 1,
           tournament_games_relation: {
@@ -114,11 +114,26 @@ export class TournamentRoundRobin extends Tournament {
             objects: gameData.joins_relation.data.map((join: any) => ({ ...join, game_id: gameData.id })),
           });
 
-          debug(`Successfully created game ${gameData.id} and its associations for tournament ${this.tournamentId}`);
+          debug(`Successfully created game ${gameData.id} (status: await) and its associations for tournament ${this.tournamentId}`);
         } catch (error) {
           debug(`Error creating game ${gameData.id} for tournament ${this.tournamentId}:`, error);
         }
       }
+
+      debug(`Updating status to 'ready' for ${gamesToCreate.length} created games in tournament ${this.tournamentId}`);
+      for (const gameData of gamesToCreate) {
+        try {
+          await this.hasyx.update({
+            table: 'badma_games',
+            where: { id: { _eq: gameData.id } },
+            _set: { status: 'ready', updated_at: new Date().toISOString() },
+          });
+          debug(`Game ${gameData.id} status updated to 'ready'.`);
+        } catch (error) {
+          debug(`Error updating game ${gameData.id} status to 'ready':`, error);
+        }
+      }
+
     } else {
       debug(`No games to create for tournament ${this.tournamentId}`);
     }

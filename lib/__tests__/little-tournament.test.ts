@@ -14,7 +14,7 @@ const debug = Debug('test:little-tournament');
 
 const TEST_TIMEOUT = 60 * 60 * 1000; 
 const POLLING_INTERVAL = 5000; 
-const LITTLE_TOURNAMENT_SIZE = 3;
+const LITTLE_TOURNAMENT_SIZE = 4;
 
 let tournamentOrganizer: Users;
 
