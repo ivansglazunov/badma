@@ -18,7 +18,7 @@ export class HasyxChessClient extends ChessClient {
   }
 
   // --- Error Logging Method (for HasyxChessClient internal DB errors) ---
-  private async _error(details: { 
+  private async _logDbError(details: { 
       userId?: string, 
       gameId?: string, 
       context: string, 
@@ -91,7 +91,7 @@ export class HasyxChessClient extends ChessClient {
     } catch (error: any) {
       const errorMsg = error.message || 'Server communication error during create';
       debug('HasyxChessClient _create error calling server:', errorMsg, error);
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_create:catch_all', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_create:catch_all', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
   }
@@ -137,7 +137,7 @@ export class HasyxChessClient extends ChessClient {
     } catch (error: any) {
       const errorMsg = error.message || 'Server communication error during join';
       debug('HasyxChessClient _join error calling server:', errorMsg, error);
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_join:catch_all', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_join:catch_all', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
   }
@@ -183,7 +183,7 @@ export class HasyxChessClient extends ChessClient {
     } catch (error: any) {
       const errorMsg = error.message || 'Server communication error during leave';
       debug('HasyxChessClient _leave error calling server:', errorMsg, error);
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_leave:catch_all', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_leave:catch_all', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
   }
@@ -192,7 +192,7 @@ export class HasyxChessClient extends ChessClient {
     debug('HasyxChessClient _move sending request to server:', request);
     if (!request.move) {
         const errorMsg = '!move argument missing';
-        await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:missing_move_arg', requestPayload: request, errorMessage: errorMsg });
+        await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_move:missing_move_arg', requestPayload: request, errorMessage: errorMsg });
         return { error: errorMsg };
     }
     try {
@@ -214,7 +214,7 @@ export class HasyxChessClient extends ChessClient {
       if (gameUpdateResult.error) {
         const errorMsg = `Failed to update game state: ${gameUpdateResult.error}`;
         debug('HasyxChessClient _move error during badma_games update:', errorMsg, gameUpdateResult.error);
-        await this._error({ 
+        await this._logDbError({ 
             userId: request.userId, gameId: request.gameId, context: '_move:game_update_failed', 
             requestPayload: { request, clientFen: this.fen, clientStatus: this.status }, 
             responsePayload: { gameUpdateError: gameUpdateResult.error }, 
@@ -254,7 +254,7 @@ export class HasyxChessClient extends ChessClient {
       if (moveInsertResult.error) {
         const errorMsg = `Failed to record move: ${moveInsertResult.error}`;
         debug('HasyxChessClient _move error during badma_moves insert:', errorMsg, moveInsertResult.error);
-        await this._error({ 
+        await this._logDbError({ 
             userId: request.userId, gameId: request.gameId, context: '_move:move_insert_failed', 
             requestPayload: request.move, 
             responsePayload: { moveInsertError: moveInsertResult.error }, 
@@ -294,7 +294,7 @@ export class HasyxChessClient extends ChessClient {
     } catch (error: any) {
       const errorMsg = error.message || 'Server communication error during move';
       debug('HasyxChessClient _move error calling server:', errorMsg, error);
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:catch_all', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_move:catch_all', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
   }
@@ -354,7 +354,7 @@ export class HasyxChessClient extends ChessClient {
     } catch (error: any) {
       const errorMsg = error.message || 'Server communication error during sync';
       debug('HasyxChessClient _sync error calling server:', errorMsg, error);
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_sync:catch_all', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_sync:catch_all', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
   }

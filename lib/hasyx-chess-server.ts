@@ -203,7 +203,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
   }
 
   // --- Error Logging Method ---
-  private async _error(details: { 
+  private async _logDbError(details: { 
       userId?: string, 
       gameId?: string, 
       context: string, 
@@ -367,7 +367,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     debug('_move processing (using BASE asyncMove logic via .call)', request);
     if (!(await this.__checkUser(request.userId))) {
       const errorMsg = '!user';
-      await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:user_check_failed', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_move:user_check_failed', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
 
@@ -375,13 +375,13 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     const game = await this.__getGame(gameId);
     if (!game) {
       const errorMsg = '!game';
-      await this._error({ userId: request.userId, gameId: gameId, context: '_move:game_not_found', requestPayload: request, errorMessage: errorMsg });
+      await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:game_not_found', requestPayload: request, errorMessage: errorMsg });
       return { error: errorMsg };
     }
 
     if (game.status !== 'ready' && game.status !== 'continue') {
         const errorMsg = `Game not playable (status: ${game.status})`;
-        await this._error({ userId: request.userId, gameId: gameId, context: '_move:game_not_playable', requestPayload: request, responsePayload: { currentStatus: game.status }, errorMessage: errorMsg });
+        await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:game_not_playable', requestPayload: request, responsePayload: { currentStatus: game.status }, errorMessage: errorMsg });
         return { error: errorMsg };
     }
 
@@ -389,7 +389,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
     if (!joinRecord || !joinRecord.clientId) {
         const errorMsg = 'Active player join record not found for this move';
-        await this._error({ userId: request.userId, gameId: gameId, context: '_move:join_record_not_found', requestPayload: request, errorMessage: errorMsg });
+        await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:join_record_not_found', requestPayload: request, errorMessage: errorMsg });
         debug(`Error: Active Player join record not found for joinId ${request.joinId} in game ${gameId}`);
         return { error: errorMsg };
     }
@@ -397,7 +397,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
     if (joinRecord.side !== request.side || joinRecord.role !== request.role) {
         const errorMsg = 'Request side/role mismatch with server state';
-        await this._error({ 
+        await this._logDbError({ 
             userId: request.userId, gameId: gameId, context: '_move:side_role_mismatch', 
             requestPayload: request, 
             responsePayload: { serverSide: joinRecord.side, serverRole: joinRecord.role }, 
@@ -408,14 +408,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     }
     if (joinRecord.role !== ChessClientRole.Player) {
         const errorMsg = 'Only players can move';
-        await this._error({ userId: request.userId, gameId: gameId, context: '_move:not_a_player', requestPayload: request, responsePayload: { role: joinRecord.role }, errorMessage: errorMsg });
+        await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:not_a_player', requestPayload: request, responsePayload: { role: joinRecord.role }, errorMessage: errorMsg });
         return { error: errorMsg };
     }
 
     const clientToMove = await this.__defineClient(clientIdToMove); 
     if (!clientToMove) {
         const errorMsg = 'Internal server error: Client instance for move not found';
-        await this._error({ userId: request.userId, gameId: gameId, context: '_move:client_instance_not_found', requestPayload: { clientIdToMove }, errorMessage: errorMsg });
+        await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:client_instance_not_found', requestPayload: { clientIdToMove }, errorMessage: errorMsg });
         debug(`Error: Client instance not found for clientId ${clientIdToMove} referenced by join record ${joinRecord.joinId}`);
         return { error: errorMsg };
     }
@@ -445,7 +445,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     // --- Server trusts the BASE client simulation result --- 
     if (clientMoveResponse.error || !clientMoveResponse.data) {
         const errorMsg = clientMoveResponse.error || 'Base client move logic failed';
-        await this._error({
+        await this._logDbError({
             userId: request.userId, gameId: gameId, context: '_move:base_client_simulation_failed',
             requestPayload: request.move, 
             responsePayload: { clientMoveResponseError: clientMoveResponse.error, currentServerFen: game.fen, currentServerStatus: game.status },
@@ -494,7 +494,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         debug(`Successfully inserted move record into badma_moves for game ${gameId}`);
     } catch (insertError: any) {
         const errorMsg = `Failed to record move: ${insertError.message || 'Unknown DB error'}`;
-        await this._error({
+        await this._logDbError({
             userId: request.userId, gameId: gameId, context: '_move:db_insert_move_failed',
             requestPayload: request.move,
             responsePayload: { dbError: insertError.message || insertError },
