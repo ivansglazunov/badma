@@ -417,7 +417,11 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     const updatedStatus = clientMoveResponse.data.status; // Status from client after its internal move
     const updatedTime = Date.now();                   // Use server time for update
 
-    await this.__updateGame(gameId, { fen: updatedFen, status: updatedStatus, updatedAt: updatedTime });
+    await this.__updateGame(gameId, { 
+        fen: updatedFen, 
+        status: updatedStatus, 
+        updatedAt: updatedTime 
+    });
     debug(`Server game state updated based on BASE client simulation logic (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
 
     // ---> ДОБАВЛЕНА ЗАПИСЬ ХОДА В badma_moves <---
