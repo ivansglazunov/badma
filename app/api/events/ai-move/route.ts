@@ -9,6 +9,7 @@ import { ChessClientRole, ChessClientSide, ChessClientStatus } from '../../../..
 import { v4 as uuidv4 } from 'uuid';
 import { go } from '../../../../lib/go';
 import { HasyxChessServer } from '../../../../lib/hasyx-chess-server';
+import { Chess } from '../../../../lib/chess'; // <<< ДОБАВИТЬ ИМПОРТ
 // import { LocalChessClient } from '../../../../lib/local-chess-client'; // LocalChessClient здесь не нужен
 import { Badma_Games } from '@/types/hasura-types';
 
@@ -70,15 +71,13 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
   try {
     const { table, event } = eventPayload;
     const { op, data } = event;
-    // Используем HasuraEventPayload, data.new/old имеют тип any
-    const gameData = data.new as BadmaGameData; // Приводим к нашему типу
+    const gameData = data.new as BadmaGameData;
     
-    debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}, side=${gameData.side}`);
+    debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}`);
     
     // Проверки остаются теми же
     if (table.schema !== 'badma' || table.name !== 'games' || op !== 'UPDATE') {
       debug('⚠️ Skipping: Not a badma.games table update event');
-      // Возвращаем объект, NextResponse создаст hasyxEvent
       return { success: true, message: 'Skipped: Not a relevant event type' }; 
     }
     
@@ -87,15 +86,27 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       return { success: true, message: 'No AI move needed: Game not in playable state' };
     }
     
+    // <<< УДАЛЯЕМ ПРОВЕРКУ СООТВЕТСТВИЯ FEN и SIDE >>>
+    // if (!gameData.fen) { ... }
+    // const tempChess = new Chess(); ...
+    // if (currentTurnInFen !== expectedSideToMove) { ... }
+
+    // <<< ОПРЕДЕЛЯЕМ ХОД НАПРЯМУЮ ИЗ FEN >>>
+    if (!gameData.fen) {
+        debug('⚠️ Skipping: FEN is missing in game data.');
+        return { success: true, message: 'Skipped: FEN missing' };
+    }
+    const tempChessForTurn = new Chess();
+    tempChessForTurn.load(gameData.fen);
+    const currentSide = tempChessForTurn.turn; // Получаем 1 для 'w', 2 для 'b'
+    debug(`🎮 Current turn determined from FEN: ${currentSide} (${currentSide === 1 ? 'White' : 'Black'})`);
+
     // Создание клиентов и запросы остаются теми же
     const adminClient = createApolloClient({ 
       secret: process.env.HASURA_ADMIN_SECRET as string 
     });
     const generate = Generator(schema);
     const hasyx = new Hasyx(adminClient, generate);
-    
-    const currentSide = gameData.side as ChessClientSide;
-    debug(`🎮 Current game side/turn: ${currentSide}`);
     
     // --- Запрос к badma_joins --- 
     const joins = await hasyx.select<JoinRecord[]>({
