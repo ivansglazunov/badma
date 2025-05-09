@@ -76,9 +76,9 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}`);
     
     // Проверки остаются теми же
-    if (table.schema !== 'badma' || table.name !== 'games' || op !== 'UPDATE') {
-      debug('⚠️ Skipping: Not a badma.games table update event');
-      return { success: true, message: 'Skipped: Not a relevant event type' }; 
+    if (table.schema !== 'badma' || table.name !== 'games' || !['INSERT', 'UPDATE'].includes(op)) {
+      debug(`⚠️ Skipping: Not a relevant event. Table: ${table.schema}.${table.name}, Op: ${op}`);
+      return { success: true, message: 'Skipped: Not a relevant event type for AI move processing (expected INSERT/UPDATE on badma.games)' }; 
     }
     
     if (gameData.status !== 'ready' && gameData.status !== 'continue') {
