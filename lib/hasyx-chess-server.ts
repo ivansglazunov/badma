@@ -202,6 +202,34 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     return HasyxChessServer.deserializeJoin(rawJoin);
   }
 
+  // --- Error Logging Method ---
+  private async _error(details: { 
+      userId?: string, 
+      gameId?: string, 
+      context: string, 
+      requestPayload?: any, 
+      responsePayload?: any, 
+      errorMessage: string 
+  }): Promise<void> {
+      debug(`Logging error: context=${details.context}, msg='${details.errorMessage}'`, details.requestPayload, details.responsePayload);
+      try {
+          await this._hasyx.insert({
+              table: 'badma_errors',
+              object: {
+                  user_id: details.userId,
+                  game_id: details.gameId,
+                  context: details.context,
+                  request_payload: details.requestPayload,
+                  response_payload: details.responsePayload,
+                  error_message: details.errorMessage,
+              }
+          });
+          debug(`Successfully logged error to badma.errors: ${details.context}`);
+      } catch (logError: any) {
+          debug(`CRITICAL: Failed to log error to badma.errors table: ${logError.message}`, { originalError: details, loggingError: logError });
+      }
+  }
+
   // --- Serialization/Deserialization Methods ---
 
   static serializeGame(game: any): any {
@@ -337,41 +365,59 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
   protected async _move(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
     debug('_move processing (using BASE asyncMove logic via .call)', request);
-    if (!(await this.__checkUser(request.userId))) return { error: '!user' };
+    if (!(await this.__checkUser(request.userId))) {
+      const errorMsg = '!user';
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:user_check_failed', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
+    }
 
     const gameId = request.gameId!;
     const game = await this.__getGame(gameId);
-    if (!game) { return { error: '!game' }; }
-
-    if (game.status !== 'ready' && game.status !== 'continue') {
-        return { error: `Game not playable (status: ${game.status})` };
+    if (!game) {
+      const errorMsg = '!game';
+      await this._error({ userId: request.userId, gameId: gameId, context: '_move:game_not_found', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
 
-    // Find the player's specific active join record
-    // Use request.joinId because client might have multiple joins, but only one is active for the move
+    if (game.status !== 'ready' && game.status !== 'continue') {
+        const errorMsg = `Game not playable (status: ${game.status})`;
+        await this._error({ userId: request.userId, gameId: gameId, context: '_move:game_not_playable', requestPayload: request, responsePayload: { currentStatus: game.status }, errorMessage: errorMsg });
+        return { error: errorMsg };
+    }
+
     const joinRecord = await this.__findJoinByJoinIdAndClient(gameId, request.userId!, request.joinId!); 
 
     if (!joinRecord || !joinRecord.clientId) {
+        const errorMsg = 'Active player join record not found for this move';
+        await this._error({ userId: request.userId, gameId: gameId, context: '_move:join_record_not_found', requestPayload: request, errorMessage: errorMsg });
         debug(`Error: Active Player join record not found for joinId ${request.joinId} in game ${gameId}`);
-        return { error: 'Active player join record not found for this move' };
+        return { error: errorMsg };
     }
     const clientIdToMove = joinRecord.clientId;
 
-    // Validate request details against the found join record
     if (joinRecord.side !== request.side || joinRecord.role !== request.role) {
+        const errorMsg = 'Request side/role mismatch with server state';
+        await this._error({ 
+            userId: request.userId, gameId: gameId, context: '_move:side_role_mismatch', 
+            requestPayload: request, 
+            responsePayload: { serverSide: joinRecord.side, serverRole: joinRecord.role }, 
+            errorMessage: errorMsg 
+        });
         debug(`Error: Request side/role (${request.side}/${request.role}) mismatch with server state (${joinRecord.side}/${joinRecord.role}) for join ${request.joinId}`);
-        return { error: 'Request side/role mismatch with server state' };
+        return { error: errorMsg };
     }
     if (joinRecord.role !== ChessClientRole.Player) {
-        return { error: 'Only players can move' };
+        const errorMsg = 'Only players can move';
+        await this._error({ userId: request.userId, gameId: gameId, context: '_move:not_a_player', requestPayload: request, responsePayload: { role: joinRecord.role }, errorMessage: errorMsg });
+        return { error: errorMsg };
     }
 
-    // Get the ChessClient instance
-    // Use __defineClient which registers if not found (should ideally exist)
     const clientToMove = await this.__defineClient(clientIdToMove); 
     if (!clientToMove) {
+        const errorMsg = 'Internal server error: Client instance for move not found';
+        await this._error({ userId: request.userId, gameId: gameId, context: '_move:client_instance_not_found', requestPayload: { clientIdToMove }, errorMessage: errorMsg });
         debug(`Error: Client instance not found for clientId ${clientIdToMove} referenced by join record ${joinRecord.joinId}`);
-        return { error: 'Internal server error: Client instance for move not found' };
+        return { error: errorMsg };
     }
     if (clientToMove.clientId !== request.clientId) {
         debug(`Warning: Client ID mismatch during move. Request clientId: ${request.clientId}, Found client's clientId: ${clientToMove.clientId} via joinId ${request.joinId}. Proceeding with found client.`);
@@ -398,8 +444,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
     // --- Server trusts the BASE client simulation result --- 
     if (clientMoveResponse.error || !clientMoveResponse.data) {
-        debug(`Move failed via BASE client simulation logic (${joinRecord.joinId}): ${clientMoveResponse.error}`);
-        // Even on error from base client logic, return current *server* state
+        const errorMsg = clientMoveResponse.error || 'Base client move logic failed';
+        await this._error({
+            userId: request.userId, gameId: gameId, context: '_move:base_client_simulation_failed',
+            requestPayload: request.move, 
+            responsePayload: { clientMoveResponseError: clientMoveResponse.error, currentServerFen: game.fen, currentServerStatus: game.status },
+            errorMessage: errorMsg
+        });
+        debug(`Move failed via BASE client simulation logic (${joinRecord.joinId}): ${errorMsg}`);
         const responseDataOnError: ChessServerResponse['data'] = {
             clientId: request.clientId, gameId: gameId, joinId: request.joinId,
             side: request.side, role: request.role, 
@@ -408,7 +460,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
             updatedAt: game.updatedAt, createdAt: game.createdAt,
         };
         // Return the error reported by the BASE client's simulation logic
-        return { error: clientMoveResponse.error || 'Base client move logic failed', data: responseDataOnError };
+        return { error: errorMsg, data: responseDataOnError };
     }
 
     // --- MOVE SIMULATION SUCCEEDED (according to base client logic) --- 
@@ -441,11 +493,18 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         });
         debug(`Successfully inserted move record into badma_moves for game ${gameId}`);
     } catch (insertError: any) {
+        const errorMsg = `Failed to record move: ${insertError.message || 'Unknown DB error'}`;
+        await this._error({
+            userId: request.userId, gameId: gameId, context: '_move:db_insert_move_failed',
+            requestPayload: request.move,
+            responsePayload: { dbError: insertError.message || insertError },
+            errorMessage: errorMsg
+        });
         debug(`Error inserting move record into badma_moves: ${insertError.message || insertError}`);
         // Decide if this error should halt the entire move process or just be logged
         // For now, logging the error but not returning it, allowing the response below.
         // Consider returning an error if recording the move is critical:
-        // return { error: `Failed to record move: ${insertError.message || 'Unknown DB error'}` };
+        // return { error: errorMsg };
     }
     // ---> КОНЕЦ ДОБАВЛЕННОЙ ЛОГИКИ <---
 

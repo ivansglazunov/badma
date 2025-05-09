@@ -17,6 +17,34 @@ export class HasyxChessClient extends ChessClient {
     debug('HasyxChessClient initialized 🚀');
   }
 
+  // --- Error Logging Method (for HasyxChessClient internal DB errors) ---
+  private async _error(details: { 
+      userId?: string, 
+      gameId?: string, 
+      context: string, 
+      requestPayload?: any, 
+      responsePayload?: any, 
+      errorMessage: string 
+  }): Promise<void> {
+      debug(`Logging HasyxChessClient error: context=${details.context}, msg='${details.errorMessage}'`, { request: details.requestPayload, response: details.responsePayload });
+      try {
+          await this._hasyx.insert({
+              table: 'badma_errors',
+              object: {
+                  user_id: details.userId,
+                  game_id: details.gameId,
+                  context: `HasyxChessClient:${details.context}`,
+                  request_payload: details.requestPayload,
+                  response_payload: details.responsePayload,
+                  error_message: details.errorMessage,
+              }
+          });
+          debug(`Successfully logged HasyxChessClient error to badma.errors: ${details.context}`);
+      } catch (logError: any) {
+          debug(`CRITICAL: HasyxChessClient failed to log its own error to badma.errors: ${logError.message}`, { originalErrorContext: details.context, originalErrorMessage: details.errorMessage, loggingError: logError });
+      }
+  }
+
   protected override async _create(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('HasyxChessClient _create sending request to server:', request);
     try {
@@ -61,8 +89,10 @@ export class HasyxChessClient extends ChessClient {
       debug('HasyxChessClient _create+_join received response from server:', response);
       return response;
     } catch (error: any) {
-      debug('HasyxChessClient _create error calling server:', error);
-      return { error: error.message || 'Server communication error during create' };
+      const errorMsg = error.message || 'Server communication error during create';
+      debug('HasyxChessClient _create error calling server:', errorMsg, error);
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_create:catch_all', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
   }
 
@@ -105,8 +135,10 @@ export class HasyxChessClient extends ChessClient {
       debug('HasyxChessClient _join received response from server:', response);
       return response;
     } catch (error: any) {
-      debug('HasyxChessClient _join error calling server:', error);
-      return { error: error.message || 'Server communication error during join' };
+      const errorMsg = error.message || 'Server communication error during join';
+      debug('HasyxChessClient _join error calling server:', errorMsg, error);
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_join:catch_all', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
   }
 
@@ -149,14 +181,20 @@ export class HasyxChessClient extends ChessClient {
       debug('HasyxChessClient _leave received response from server:', response);
       return response;
     } catch (error: any) {
-      debug('HasyxChessClient _leave error calling server:', error);
-      return { error: error.message || 'Server communication error during leave' };
+      const errorMsg = error.message || 'Server communication error during leave';
+      debug('HasyxChessClient _leave error calling server:', errorMsg, error);
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_leave:catch_all', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
   }
 
   protected override async _move(request: ChessClientRequest): Promise<ChessServerResponse> {
     debug('HasyxChessClient _move sending request to server:', request);
-    if (!request.move) return { error: '!move' };
+    if (!request.move) {
+        const errorMsg = '!move argument missing';
+        await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:missing_move_arg', requestPayload: request, errorMessage: errorMsg });
+        return { error: errorMsg };
+    }
     try {
       // The client's internal state (this.fen, this.status) should have been
       // updated by this.chess.move() in the calling asyncMove method BEFORE _move is called.
@@ -174,10 +212,16 @@ export class HasyxChessClient extends ChessClient {
       });
 
       if (gameUpdateResult.error) {
-        debug('HasyxChessClient _move error during badma_games update:', gameUpdateResult.error);
-        // Return error but try to include current client state if possible for context
+        const errorMsg = `Failed to update game state: ${gameUpdateResult.error}`;
+        debug('HasyxChessClient _move error during badma_games update:', errorMsg, gameUpdateResult.error);
+        await this._error({ 
+            userId: request.userId, gameId: request.gameId, context: '_move:game_update_failed', 
+            requestPayload: { request, clientFen: this.fen, clientStatus: this.status }, 
+            responsePayload: { gameUpdateError: gameUpdateResult.error }, 
+            errorMessage: errorMsg 
+        });
         return { 
-          error: `Failed to update game state: ${gameUpdateResult.error}`,
+          error: errorMsg,
           data: {
             clientId: request.clientId,
             gameId: request.gameId as string,
@@ -208,11 +252,16 @@ export class HasyxChessClient extends ChessClient {
       });
 
       if (moveInsertResult.error) {
-        debug('HasyxChessClient _move error during badma_moves insert:', moveInsertResult.error);
-        // Even if move insert fails, the game state might have been updated.
-        // Consider how to handle this inconsistency. For now, return the error.
+        const errorMsg = `Failed to record move: ${moveInsertResult.error}`;
+        debug('HasyxChessClient _move error during badma_moves insert:', errorMsg, moveInsertResult.error);
+        await this._error({ 
+            userId: request.userId, gameId: request.gameId, context: '_move:move_insert_failed', 
+            requestPayload: request.move, 
+            responsePayload: { moveInsertError: moveInsertResult.error }, 
+            errorMessage: errorMsg 
+        });
         return { 
-          error: `Failed to record move: ${moveInsertResult.error}`,
+          error: errorMsg,
           data: { // Return client state which reflects the game state that *was* updated
             clientId: request.clientId,
             gameId: request.gameId as string,
@@ -243,8 +292,10 @@ export class HasyxChessClient extends ChessClient {
       debug('HasyxChessClient _move received response from server:', { data: responseData });
       return { data: responseData };
     } catch (error: any) {
-      debug('HasyxChessClient _move error calling server:', error);
-      return { error: error.message || 'Server communication error during move' };
+      const errorMsg = error.message || 'Server communication error during move';
+      debug('HasyxChessClient _move error calling server:', errorMsg, error);
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_move:catch_all', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
   }
 
@@ -301,8 +352,10 @@ export class HasyxChessClient extends ChessClient {
       debug('HasyxChessClient _sync received response from server:', response);
       return response;
     } catch (error: any) {
-      debug('HasyxChessClient _sync error calling server:', error);
-      return { error: error.message || 'Server communication error during sync' };
+      const errorMsg = error.message || 'Server communication error during sync';
+      debug('HasyxChessClient _sync error calling server:', errorMsg, error);
+      await this._error({ userId: request.userId, gameId: request.gameId, context: '_sync:catch_all', requestPayload: request, errorMessage: errorMsg });
+      return { error: errorMsg };
     }
   }
 } 

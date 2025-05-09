@@ -92,6 +92,18 @@ const sqlSchema = `
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
 
+  -- Errors table
+  CREATE TABLE IF NOT EXISTS ${badmaSchema}.errors (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES ${publicSchema}.users(id) ON DELETE SET NULL,
+    game_id UUID REFERENCES ${badmaSchema}.games(id) ON DELETE SET NULL,
+    context TEXT,
+    request_payload JSONB,
+    response_payload JSONB,
+    error_message TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  );
+
   -- <<< ADDED Trigger for badma.games storage_updated_at >>>
   DROP TRIGGER IF EXISTS set_storage_updated_at_trigger ON ${badmaSchema}.games;
   CREATE TRIGGER set_storage_updated_at_trigger
@@ -106,7 +118,8 @@ const tablesToTrack = [
   { schema: badmaSchema, name: 'games' },
   { schema: badmaSchema, name: 'moves' },
   { schema: badmaSchema, name: 'joins' },
-  { schema: badmaSchema, name: 'ais' }
+  { schema: badmaSchema, name: 'ais' },
+  { schema: badmaSchema, name: 'errors' }
 ];
 
 // --- Relationships Definition (from init-gql) ---
@@ -220,6 +233,43 @@ const relationships = [
       name: 'ais',
       using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'ais' }, column: 'user_id' } }
     }
+  },
+  // Relationships for badma.errors
+  {
+    type: 'pg_create_object_relationship',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'errors' },
+      name: 'user',
+      using: { foreign_key_constraint_on: 'user_id' }
+    }
+  },
+  {
+    type: 'pg_create_object_relationship',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'errors' },
+      name: 'game',
+      using: { foreign_key_constraint_on: 'game_id' }
+    }
+  },
+  {
+    type: 'pg_create_array_relationship',
+    args: {
+      source: 'default',
+      table: { schema: publicSchema, name: 'users' },
+      name: 'errors',
+      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'errors' }, column: 'user_id' } }
+    }
+  },
+  {
+    type: 'pg_create_array_relationship',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'games' },
+      name: 'errors',
+      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'errors' }, column: 'game_id' } }
+    }
   }
 ];
 
@@ -321,6 +371,48 @@ const aisUserPermissions = [
   }
 ];
 
+// Permissions for badma.errors table
+const errorsPermissions = [
+  {
+    type: 'pg_create_select_permission',
+    args: {
+      source: 'default', table: { schema: badmaSchema, name: 'errors' }, role: 'admin',
+      permission: { columns: '*', filter: {} }
+    }
+  },
+  {
+    type: 'pg_create_insert_permission',
+    args: {
+      source: 'default', table: { schema: badmaSchema, name: 'errors' }, role: 'admin',
+      permission: { columns: ['user_id', 'game_id', 'context', 'request_payload', 'response_payload', 'error_message'], check: {} }
+    }
+  },
+  {
+    type: 'pg_create_update_permission',
+    args: {
+      source: 'default', table: { schema: badmaSchema, name: 'errors' }, role: 'admin',
+      permission: { columns: ['context', 'request_payload', 'response_payload', 'error_message'], filter: {}, check: {} }
+    }
+  },
+  {
+    type: 'pg_create_delete_permission',
+    args: {
+      source: 'default', table: { schema: badmaSchema, name: 'errors' }, role: 'admin',
+      permission: { filter: {} }
+    }
+  },
+  {
+    type: 'pg_create_select_permission',
+    args: {
+      source: 'default', table: { schema: badmaSchema, name: 'errors' }, role: 'user',
+      permission: {
+        columns: ['id', 'user_id', 'game_id', 'context', 'request_payload', 'response_payload', 'error_message', 'created_at'],
+        filter: { user_id: { _eq: 'X-Hasura-User-Id' } }
+      }
+    }
+  }
+];
+
 // --- Migration Functions ---
 
 async function applySQLSchema() {
@@ -357,7 +449,7 @@ async function applyPermissionsFunc() {
 
   // Drop existing permissions first (idempotency)
   const allTables = tablesToTrack.map(t => t.name);
-  const rolesToDrop = ['user', 'admin', 'anonymous']; // Added anonymous role
+  const rolesToDrop = ['user', 'admin', 'anonymous'];
 
   for (const table of allTables) {
     for (const role of rolesToDrop) {
@@ -387,6 +479,14 @@ async function applyPermissionsFunc() {
   debug('  📝 Applying ais permissions...');
   for (const permission of aisUserPermissions) {
     debug(`     Applying ${permission.type.split('_').pop()} for user.ais...`);
+    await hasura.v1(permission);
+  }
+
+  // Apply errors permissions
+  debug('  📝 Applying errors permissions...');
+  for (const permission of errorsPermissions) {
+    const permType = permission.type.replace('pg_create_', '').replace('_permission', '');
+    debug(`     Applying ${permType} for ${permission.args.role}.${permission.args.table.name}...`);
     await hasura.v1(permission);
   }
 

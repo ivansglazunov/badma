@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 import { TournamentRoundRobin } from '@/lib/tournament-round-robin';
 import { TournamentStatus } from '@/lib/tournament';
 import { Badma_Games, Badma_Tournament_Participants, Badma_Tournament_Scores, Users } from '@/types/hasura-types';
+import { gql } from 'graphql-tag';
 
 const debug = Debug('test:little-tournament');
 
@@ -242,25 +243,36 @@ describe('Little Round Robin Tournament Test', () => {
     expect(currentTournament.status).toBe('finished'); 
 
     // 9. Get final scores and display
-    const finalScores = await adminHasyx.select<any[]>({
-        table: 'badma_tournament_participants', // Corrected
-        where: { tournament_id: { _eq: tournamentId }, role: { _eq: 1 } },
-        returning: [
-            'user_id',
-            {
-                user: ['name']
-            },
-            {
-                scores_aggregate: {
-                    aggregate: { 
-                        sum: ['score'],
-                        count: [] 
-                    }
-                }
-            }
-        ],
-        order_by: { scores_aggregate: { sum: { score: 'desc' } } } 
-    });
+    // const finalScores = await adminHasyx.select<any[]>({
+    //     table: 'badma_tournament_participants', // Corrected
+    //     where: { tournament_id: { _eq: tournamentId }, role: { _eq: 1 } },
+    //     returning: [
+    //         'user_id',
+    //         {
+    //             user: ['name']
+    //         },
+    //         {
+    //             scores_aggregate: {
+    //                 aggregate: { 
+    //                     sum: ['score'],
+    //                     count: [] 
+    //                 }
+    //             }
+    //         }
+    //     ],
+    //     order_by: { scores_aggregate: { sum: { score: 'desc' } } } 
+    // });
+    const finalScores = (await adminHasyx.apolloClient.query({ query: gql`query {
+  badma_tournament_participants(where: { tournament_id: { _eq: "${tournamentId}" }, role: { _eq: 1 } }) {
+    user_id user { name }
+    scores_aggregate {
+      aggregate {
+        sum { score }
+        count
+      }
+    }
+  }
+}` }))?.data?.badma_tournament_participants;
 
     console.log(`
 --- Little Tournament (${tournamentId}) Final Results ---
