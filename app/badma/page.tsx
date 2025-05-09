@@ -31,7 +31,7 @@ export default function BadmaDiagnosticPage() {
   return (
     <SidebarProvider>
       {/* Make sure that activeUrl is correct */}
-      <Sidebar activeUrl={'/badma'} data={sidebar} />
+      <Sidebar data={sidebar} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />

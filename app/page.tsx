@@ -38,7 +38,7 @@ export default async function Page() {
   // const session = null;
   return (
     <SidebarProvider>
-      <Sidebar activeUrl={'/'} data={sidebar} />
+      <Sidebar data={sidebar} />
       <SidebarInset>
         <App />
       </SidebarInset>

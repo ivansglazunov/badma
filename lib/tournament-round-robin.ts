@@ -2,7 +2,7 @@ import { Hasyx } from 'hasyx';
 import { Tournament, TournamentGameRow, TournamentStatus } from './tournament';
 import Debug from './debug';
 import { v4 as uuidv4 } from 'uuid';
-import { ChessStatus } from './chess'; // For score calculation
+import { ChessClientStatus } from './chess-client'; // For score calculation
 
 const debug = Debug('tournament-round-robin');
 
@@ -145,7 +145,7 @@ export class TournamentRoundRobin extends Tournament {
       return;
     }
 
-    const gameStatus = gameRow.status as ChessStatus;
+    const gameStatus = gameRow.status as ChessClientStatus;
     let p1Score = 0;
     let p2Score = 0;
 
