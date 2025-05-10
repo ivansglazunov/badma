@@ -198,8 +198,14 @@ export async function GET(request: NextRequest) {
     serverResponse = await server.request(serverRequestData);
     debug('Received response from HasyxChessServer:', serverResponse);
 
+    hasyx.debug({ 
+      route: '/api/badma', 
+      request: serverRequestData, 
+      response: serverResponse 
+    });
+
   } catch (error: any) {
-    debug('Error during server interaction:', error);
+    debug('Error in /api/badma handler:', error);
     serverResponse = { error: `Server error: ${error.message}` };
   }
 
