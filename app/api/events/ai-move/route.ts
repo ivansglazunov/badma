@@ -102,6 +102,12 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     });
     const generate = Generator(schema);
     const hasyx = new Hasyx(adminClient, generate);
+
+    hasyx.debug({ 
+      route: '/api/events/ai-move', 
+      request: eventPayload, 
+      response: null 
+    });
     
     // --- Запрос к badma_joins --- 
     const joins = await hasyx.select<JoinRecord[]>({
