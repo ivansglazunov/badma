@@ -1,22 +1,139 @@
 "use client";
 
-import { LogOut, LoaderCircle, Crown, Joystick, X } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { useClient, useSession } from "hasyx";
+import { useClient, useSubscription } from "hasyx";
 import { Avatar, AvatarFallback, AvatarImage } from "hasyx/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "hasyx/components/ui/tabs";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "hasyx/components/ui/carousel";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "hasyx/components/ui/dialog";
 
 import Board from "@/lib/board";
 import { OAuthButtons } from "hasyx/components/auth/oauth-buttons";
 import { useTheme } from "hasyx/components/theme-switcher";
 import { Button } from "hasyx/components/ui/button";
-import { Card } from "hasyx/components/ui/card";
-import { useState } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "hasyx/components/ui/card";
 import { Input } from "hasyx/components/ui/input";
 
 import { cn } from "hasyx/lib/utils"
 import { useMounted } from "@/hooks/mounted";
+
+interface TournamentType {
+  id: string;
+  status: 'await' | 'ready' | 'continue' | 'finished';
+  type: string;
+  created_at: string;
+}
+
+interface UserType {
+  id: string;
+  name?: string | null;
+  image?: string | null;
+}
+
+interface GameType {
+  id: string;
+  status?: string | null;
+}
+
+interface TournamentGameType {
+  id: string;
+  game: GameType;
+}
+
+const getStatusBadgeClass = (status: TournamentType['status']): string => {
+  switch (status) {
+    case 'await':
+      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200';
+    case 'ready':
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200';
+    case 'continue':
+      return 'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-200';
+    case 'finished':
+      return 'bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-gray-300';
+    default:
+      return 'bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-gray-300';
+  }
+};
+
+const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournamentId }) => {
+  const { data, loading, error } = useSubscription(
+    {
+      table: 'users',
+      where: {
+        tournament_participations: {
+          tournament_id: { _eq: tournamentId },
+        }
+      },
+      returning: ['id', 'name', 'image']
+    },
+    { skip: !tournamentId }
+  );
+  const participants: UserType[] = React.useMemo(() => {
+    if (Array.isArray(data)) return data as UserType[];
+    if (data && (data as any).users) return (data as any).users as UserType[];
+    return [];
+  }, [data]);
+
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading participants...</div>;
+  if (error) return <p className="p-4 text-red-500">Error loading participants: {error.message}. Ensure the relationship 'tournament_participations' is correctly set up on the 'users' table and permissions allow access.</p>;
+  if (!participants.length) return <p className="p-4 text-muted-foreground">No active participants found for this tournament.</p>;
+
+  return (
+    <div className="space-y-3 p-1">
+      {participants.map(user => (
+        <div key={user.id} className="flex items-center space-x-3 p-2 hover:bg-muted/30 rounded-md">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={user.image ?? undefined} alt={user.name ?? 'User'} />
+            <AvatarFallback>{user.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
+          </Avatar>
+          <span className="text-sm text-foreground">{user.name ?? 'Anonymous User'}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+let handleOpenGameGlobal: (gameId: string) => void = () => {};
+
+const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }) => {
+  const { data, loading, error } = useSubscription(
+    {
+      table: 'badma_tournament_games',
+      where: { tournament_id: { _eq: tournamentId } },
+      returning: ['id', { game: ['id', 'status'] }]
+    },
+    { skip: !tournamentId }
+  );
+ const games: TournamentGameType[] = React.useMemo(() => {
+    if (Array.isArray(data)) return data as TournamentGameType[];
+    if (data && (data as any).badma_tournament_games) return (data as any).badma_tournament_games as TournamentGameType[];
+    return [];
+  }, [data]);
+
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
+  if (error) return <p className="p-4 text-red-500">Error loading games: {error.message}</p>;
+  if (!games.length) return <p className="p-4 text-muted-foreground">No games found for this tournament.</p>;
+
+  return (
+    <div className="space-y-2 p-1">
+      {games.map(tg => (
+        <div 
+          key={tg.id} 
+          className="flex items-center justify-between p-2 hover:bg-muted/30 rounded-md cursor-pointer"
+          onClick={() => handleOpenGameGlobal(tg.game.id)}
+        >
+          <span className="text-sm text-foreground">Game ID: {tg.game.id.substring(0, 8)}...</span>
+          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${tg.game.status ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
+            {tg.game.status ?? 'Unknown'}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export function GameCard({ disabled = false }: { disabled?: boolean }) {
   return <Card className={`w-[min(15vw,15vh)] h-[min(30vw,30vh)] transform ${disabled ? "" : "hover:-translate-y-20 hover:scale-120"} transition-all duration-300 shadow-xl/30`}>
@@ -79,81 +196,314 @@ export function GameFree() {
 }
 
 export default function App() {
-  const hasyx = useClient();
+  const { data: session, status: sessionStatus } = useSession();
+  const user = session?.user;
+  const client = useClient();
   const { theme, setTheme } = useTheme();
-  const session = useSession();
-  const [tab, setTab] = useState("classic");
+
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
+  const viewOrder = React.useMemo(() => ['tournaments', 'games', 'create'], []);
+  const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profile, setProfile] = useState(false);
+  const [selectedTournament, setSelectedTournament] = useState<TournamentType | null>(null);
+  const [isTournamentModalOpen, setIsTournamentModalOpen] = useState(false);
+  const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   
-  const isAuthenticated = session?.status === "authenticated";
+  const isAuthenticated = sessionStatus === "authenticated";
+  const isLoadingSession = sessionStatus === "loading";
+
+  const handleOpenGame = (gameId: string) => {
+    setSelectedGameId(gameId);
+    if (isTournamentModalOpen) setIsTournamentModalOpen(false);
+    if (profile) setProfile(false);
+  };
+  
+  useEffect(() => {
+    handleOpenGameGlobal = handleOpenGame;
+  }, [isTournamentModalOpen, profile, handleOpenGame]);
+
+  const handleCloseGame = () => {
+    setSelectedGameId(null);
+  };
+
+  const handleTournamentClick = (tournament: TournamentType) => {
+    setSelectedTournament(tournament);
+    setIsTournamentModalOpen(true);
+  };
+
+  const {
+    data: tournamentsData,
+    loading: tournamentsLoading,
+    error: tournamentsError,
+  } = useSubscription(
+    {
+      table: 'badma_tournaments',
+      returning: ['id', 'status', 'type', 'created_at'], 
+      order_by: { created_at: 'desc' }
+    },
+    {
+      skip: !isAuthenticated,
+    }
+  );
+
+  const actualTournaments: TournamentType[] = React.useMemo(() => {
+    if (Array.isArray(tournamentsData)) {
+      return tournamentsData as TournamentType[];
+    }
+    if (tournamentsData && (tournamentsData as any).badma_tournaments) {
+       return (tournamentsData as any).badma_tournaments as TournamentType[];
+    }
+    if (tournamentsData && (tournamentsData as any).tournaments) {
+       return (tournamentsData as any).tournaments as TournamentType[];
+    }
+    return [];
+  }, [tournamentsData]);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    const selectedIndex = viewOrder.indexOf(mainViewTab);
+    if (selectedIndex !== -1 && selectedIndex !== carouselApi.selectedScrollSnap()) {
+      carouselApi.scrollTo(selectedIndex);
+    }
+
+    const handleSelect = () => {
+      const currentSnap = carouselApi.selectedScrollSnap();
+      if (viewOrder[currentSnap] !== mainViewTab) {
+        setMainViewTab(viewOrder[currentSnap]);
+      }
+    };
+
+    carouselApi.on("select", handleSelect);
+
+    return () => {
+      if (carouselApi) {
+        carouselApi.off("select", handleSelect);
+      }
+    };
+  }, [carouselApi, mainViewTab, viewOrder]);
+
+  if (isLoadingSession) {
+    return (
+      <div className="flex flex-1 flex-col bg-background items-center justify-center h-screen">
+        <LoaderCircle className="animate-spin h-12 w-12 text-purple-500" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-1 flex-col bg-background items-center justify-center h-screen p-4">
+        <OAuthButtons />
+      </div>
+    );
+  }
 
   return (<>
-    <Tabs
-      className="flex flex-1 flex-col bg-background relative"
-      value={isAuthenticated ? tab : "classic"}
-      onValueChange={setTab}
-    >
-      <div className="absolute top-3 right-3">
-        <Button variant="outline" size="icon" className="rounded-full">
-          <X/>
-        </Button>
+    <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
+      <div className="absolute top-3 right-3 z-50">
       </div>
-      <div className="flex-grow">
-        <TabsContent value="classic" className="flex items-center justify-center h-full">
-          <GameClassic />
-        </TabsContent>
-        <TabsContent value="free" className="flex flex-col items-center justify-center h-full relative">
-          <GameFree />
-        </TabsContent>
+      
+      <Carousel 
+        setApi={setCarouselApi} 
+        opts={{ align: "start", loop: false }} 
+        className="flex-grow flex flex-col pt-12 pb-20"
+      >
+        <CarouselContent className="h-full">
+          <CarouselItem key="tournaments" className="h-full">
+            <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
+              <div className="flex items-center mb-6">
+                <Trophy className="h-10 w-10 mr-3 text-purple-500" />
+                <h2 className="text-3xl font-semibold">Tournaments</h2>
+              </div>
+              {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
+              {tournamentsError && (
+                <p className="text-red-500">
+                  Error loading tournaments: {(tournamentsError as any)?.message || "Unknown error"}
+                </p>
+              )}
+              {!tournamentsLoading && !tournamentsError && actualTournaments.length > 0 ? (
+                <div className="w-full max-w-2xl space-y-1">
+                  {actualTournaments.map((tournament) => (
+                    <div 
+                      key={tournament.id} 
+                      className="flex items-center justify-between p-3 hover:bg-muted/50 dark:hover:bg-muted/20 rounded-md cursor-pointer transition-colors"
+                      onClick={() => handleTournamentClick(tournament)}
+                    >
+                      <span className="text-sm font-medium text-foreground truncate pr-2">{tournament.type}</span>
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
+                          {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
+                        </span>
+                        {tournament.created_at && (
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(tournament.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                 !tournamentsLoading && !tournamentsError && <p>No tournaments found.</p>
+              )}
+            </div>
+          </CarouselItem>
+          <CarouselItem key="games" className="h-full">
+            <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+              <Gamepad2 className="h-16 w-16 mb-4 text-purple-500" />
+              <h2 className="text-2xl font-semibold mb-2">Play a Game</h2>
+              <p className="text-muted-foreground mb-4">Start a new game or continue an existing one.</p>
+              <Button onClick={() => handleOpenGame("default_free_game_id")}>Start Free Play</Button>
+            </div>
+          </CarouselItem>
+          <CarouselItem key="create" className="h-full">
+            <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+              <PlusCircle className="h-16 w-16 mb-4 text-purple-500" />
+              <h2 className="text-2xl font-semibold mb-2">Create New Game</h2>
+              <p className="text-muted-foreground">Game creation form will be here.</p>
+            </div>
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>
+
+      <div className={cn(
+        "fixed inset-0 z-35 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
+        selectedGameId ? "translate-y-0" : "translate-y-full"
+      )}>
+        {selectedGameId && (
+          <>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="absolute top-4 right-4 z-50 rounded-full"
+              onClick={handleCloseGame}
+            >
+              <X/>
+            </Button>
+            <div className="w-full h-full flex items-center justify-center p-4">
+              <GameFree /> 
+            </div>
+          </>
+        )}
       </div>
 
-      <div className={`absolute top-0 left-0 w-full h-full transition-all duration-300 p-10 pb-25 flex items-center justify-center ${profile
-        ? `opacity-100 top-0`
-        : `opacity-0 top-full pointer-events-none`
-      }`}>
-        <Card className={`max-w-md h-full p-3 flex-1 shadow-xl/30`}>
+      {selectedTournament && (
+        <Dialog open={isTournamentModalOpen} onOpenChange={setIsTournamentModalOpen}>
+          <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col">
+            <DialogHeader>
+              <DialogTitle>{selectedTournament.type}</DialogTitle>
+              <DialogDescription>
+                Status: {selectedTournament.status} {selectedTournament.created_at && `- Created: ${new Date(selectedTournament.created_at).toLocaleDateString()}`}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex-grow overflow-y-auto py-4">
+              <Tabs defaultValue="participants" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="participants" className="flex items-center"><Users className="h-4 w-4 mr-2" />Participants</TabsTrigger>
+                  <TabsTrigger value="games" className="flex items-center"><ListChecks className="h-4 w-4 mr-2" />Games</TabsTrigger>
+                </TabsList>
+                <TabsContent value="participants" className="pt-4">
+                  <TournamentParticipantsTab tournamentId={selectedTournament.id} />
+                </TabsContent>
+                <TabsContent value="games" className="pt-4">
+                  <TournamentGamesTab tournamentId={selectedTournament.id} />
+                </TabsContent>
+              </Tabs>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">Close</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      <div className={`absolute inset-0 w-full h-full transition-all duration-300 p-6 md:p-10 flex items-center justify-center ${profile
+        ? `opacity-100 z-40 bg-background/80 backdrop-blur-sm`
+        : `opacity-0 pointer-events-none` 
+      }`} onClick={(event) => {
+        if (event.currentTarget === event.target) {
+          setProfile(false);
+        }
+      }}>
+        <Card className={`max-w-md w-full h-auto max-h-[90vh] md:max-h-[80vh] p-3 shadow-xl/30 flex flex-col`}>
           <Tabs defaultValue="account" className="w-full h-full flex flex-col">
             <TabsList className="w-full">
               <TabsTrigger value="account">Account</TabsTrigger>
               <TabsTrigger value="payment">Payment</TabsTrigger>
               <TabsTrigger value="notifications">Notifications</TabsTrigger>
             </TabsList>
-            <div className="flex-1">
-              <TabsContent value="account" className="h-full flex flex-col">
-                <div className="flex-grow">
-                  <Input value={theme} onChange={(e) => setTheme(e.target.value)} />
+            <div className="flex-1 overflow-y-auto p-1">
+              <TabsContent value="account" className="h-full flex flex-col p-2">
+                <div className="flex-grow space-y-4">
+                  <p>User: {user?.name || 'N/A'}</p>
+                  <p>Email: {user?.email || 'N/A'}</p>
+                  <div>
+                    <label htmlFor="themeChanger" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Theme</label>
+                    <Input id="themeChanger" value={theme} onChange={(e) => setTheme(e.target.value)} placeholder="Type 'dark' or 'light'" />
+                  </div>
                 </div>
-                <div>
-                  {isAuthenticated ? <Button variant="outline"
+                <div className="mt-auto pt-4">
+                  <Button variant="outline"
                     className="w-full"
-                    onClick={() => signOut({ callbackUrl: '/' })} disabled={session.status === "loading"}
+                    onClick={() => signOut({ callbackUrl: '/' })} disabled={isLoadingSession}
                     >
                     <LogOut className="mr-2 h-4 w-4" /> Sign Out
                   </Button>
-                  : <OAuthButtons />}
                 </div>
               </TabsContent>
-              <TabsContent value="payment">Payment Settings</TabsContent>
-              <TabsContent value="notifications">Notifications Settings</TabsContent>
+              <TabsContent value="payment" className="p-2">Payment Settings Placeholder</TabsContent>
+              <TabsContent value="notifications" className="p-2">Notifications Settings Placeholder</TabsContent>
             </div>
           </Tabs>
         </Card>
       </div>
 
-      <div className={`p-2 relative ${isAuthenticated ? "top-0" : "top-100vh"} transition-all duration-300`}>
-        <TabsList className="w-full h-15 bg-black bg-purple-900">
-          <TabsTrigger value="classic"><Crown/> Classic</TabsTrigger>
-          <div className={`bg-transparent border-none data-[state=active]:bg-transparent p-1 relative ${isAuthenticated ? "bottom-0" : "bottom-100vh"} transition-all duration-300`} onClick={() => setProfile(!profile)}>
-            <Avatar className={`relative transition-all duration-300 size-25 transform ${profile ? "scale-120 bottom-4" : "scale-100 bottom-2"
-              }`}>
-              {!!session?.data?.user?.image && <AvatarImage src={session?.data?.user?.image} />}
-              <AvatarFallback>{session?.data?.user?.name || '?'}</AvatarFallback>
-              {session?.status === "loading" && <LoaderCircle className="animate-spin absolute top-0 left-0 w-full h-full"/>}
+      <div className={cn(
+        "p-2 sticky bottom-0 left-0 right-0 z-30 bg-transparent transition-transform duration-300 ease-in-out",
+        selectedGameId ? "translate-y-full" : "translate-y-0"
+      )}>
+        <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
+          <div className="flex-1 flex justify-start items-center space-x-1">
+            <Button variant="ghost" className="flex-grow-0 text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("tournaments")}>
+              <Trophy className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Tournaments</span>
+            </Button>
+            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+              <Globe className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Rating</span>
+            </Button>
+          </div>
+
+          <div className={`flex-shrink-0 bg-transparent border-none relative`} onClick={() => setProfile(!profile)}>
+            <Avatar className={`relative z-50 transition-all duration-300 size-16 md:size-20 transform ${profile ? "scale-125 -translate-y-5 border-4 border-purple-400" : "scale-100 -translate-y-3 border-2 border-purple-700"} shadow-lg`}>
+              {!!user?.image && <AvatarImage src={user.image} />}
+              <AvatarFallback className="text-lg">{user?.name ? user.name.charAt(0).toUpperCase() : '?'}</AvatarFallback>
+              {isLoadingSession && <LoaderCircle className="animate-spin absolute top-0 left-0 w-full h-full text-white"/>}
             </Avatar>
           </div>
-          <TabsTrigger value="free"><Joystick/>Free</TabsTrigger>
-        </TabsList>
+          
+          <div className="flex-1 flex justify-end items-center space-x-1">
+            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+              <Shirt className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Skins</span>
+            </Button>
+            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+              <Sparkles className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Perks</span>
+            </Button>
+            <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("games")}>
+              <Gamepad2 className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Games</span>
+            </Button>
+            <Button variant="ghost" size="icon" className="text-white flex flex-col items-center justify-center h-12 w-12 aspect-square" onClick={() => setMainViewTab("create")}>
+              <PlusCircle className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
       </div>
-    </Tabs>
+    </div>
   </>);
 }

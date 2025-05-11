@@ -183,14 +183,29 @@ const relationships = [
       using: { foreign_key_constraint_on: 'game_id' }
     }
   },
-  // Relationship from games to tournament_games (NEW)
+  // Relationship from games to tournament_games
   {
     type: 'pg_create_array_relationship',
     args: {
       source: 'default',
-      table: { schema: badmaSchema, name: 'games' }, // On the 'games' table
-      name: 'tournament_games', // Name of the relationship
+      table: { schema: badmaSchema, name: 'games' }, 
+      name: 'tournament_games', 
       using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'tournament_games' }, column: 'game_id' } }
+    }
+  },
+  // ADDED: Relationship from public.users to badma.tournament_participants
+  {
+    type: 'pg_create_array_relationship',
+    args: {
+      source: 'default',
+      table: { schema: publicSchema, name: 'users' }, // Relationship is ON the 'users' table
+      name: 'tournament_participations', // Name for the relationship
+      using: { 
+        foreign_key_constraint_on: { // How it's linked
+          table: { schema: badmaSchema, name: 'tournament_participants' }, 
+          column: 'user_id'
+        } 
+      }
     }
   }
 ];

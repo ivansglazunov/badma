@@ -6943,6 +6943,10 @@ export type Users = {
   /** An aggregate relationship */
   notification_permissions_aggregate: Notification_Permissions_Aggregate;
   password?: Maybe<Scalars["String"]["output"]>;
+  /** An array relationship */
+  tournament_participations: Array<Badma_Tournament_Participants>;
+  /** An aggregate relationship */
+  tournament_participations_aggregate: Badma_Tournament_Participants_Aggregate;
   updated_at: Scalars["timestamptz"]["output"];
 };
 
@@ -7090,6 +7094,24 @@ export type UsersNotification_Permissions_AggregateArgs = {
   where?: InputMaybe<Notification_Permissions_Bool_Exp>;
 };
 
+/** columns and relationships of "users" */
+export type UsersTournament_ParticipationsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersTournament_Participations_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Tournament_Participants_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Tournament_Participants_Order_By>>;
+  where?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+};
+
 /** aggregated selection of "users" */
 export type Users_Aggregate = {
   __typename?: "users_aggregate";
@@ -7141,6 +7163,8 @@ export type Users_Bool_Exp = {
   notification_permissions?: InputMaybe<Notification_Permissions_Bool_Exp>;
   notification_permissions_aggregate?: InputMaybe<Notification_Permissions_Aggregate_Bool_Exp>;
   password?: InputMaybe<String_Comparison_Exp>;
+  tournament_participations?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
+  tournament_participations_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -7171,6 +7195,7 @@ export type Users_Insert_Input = {
   notification_messages?: InputMaybe<Notification_Messages_Arr_Rel_Insert_Input>;
   notification_permissions?: InputMaybe<Notification_Permissions_Arr_Rel_Insert_Input>;
   password?: InputMaybe<Scalars["String"]["input"]>;
+  tournament_participations?: InputMaybe<Badma_Tournament_Participants_Arr_Rel_Insert_Input>;
   updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
 };
 
@@ -7244,6 +7269,7 @@ export type Users_Order_By = {
   notification_messages_aggregate?: InputMaybe<Notification_Messages_Aggregate_Order_By>;
   notification_permissions_aggregate?: InputMaybe<Notification_Permissions_Aggregate_Order_By>;
   password?: InputMaybe<Order_By>;
+  tournament_participations_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
 

@@ -293,6 +293,16 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
     // Note: userId in requestData should be trusted ONLY if it comes from a verified source (like a token)
     // The API route handler is responsible for injecting the correct userId.
+    // Adding a hasyx.debug here to see the initial request to the server
+    this._hasyx.debug({ 
+        route: 'HasyxChessServer:request',
+        gameId: requestData.gameId,
+        userId: requestData.userId,
+        clientId: requestData.clientId,
+        message: 'HasyxChessServer main request entry point',
+        requestOperation: requestData.operation,
+        requestPayload: requestData
+    });
 
     try {
       switch (requestData.operation) {
@@ -320,6 +330,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
   protected async _sync(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
     debug('_sync processing for clientId:', request.clientId);
+    this._hasyx.debug({
+        route: 'HasyxChessServer:_sync',
+        gameId: request.gameId,
+        userId: request.userId,
+        clientId: request.clientId,
+        message: 'Entered _sync method',
+        requestData: request
+    });
     if (!(await this.__checkUser(request.userId))) return { error: '!user' };
 
     const gameId = request.gameId!;
@@ -365,31 +383,53 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
   protected async _move(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
     debug('_move processing (using BASE asyncMove logic via .call)', request);
+    this._hasyx.debug({ // Use this._hasyx.debug
+        route: 'HasyxChessServer:_move',
+        gameId: request.gameId,
+        userId: request.userId,
+        joinId: request.joinId,
+        message: 'Entered _move method',
+        requestData: request 
+    });
+
     if (!(await this.__checkUser(request.userId))) {
       const errorMsg = '!user';
       await this._logDbError({ userId: request.userId, gameId: request.gameId, context: '_move:user_check_failed', requestPayload: request, errorMessage: errorMsg });
+      this._hasyx.debug({ route: 'HasyxChessServer:_move', gameId: request.gameId, userId: request.userId, message: 'User check failed', error: errorMsg });
       return { error: errorMsg };
     }
 
     const gameId = request.gameId!;
     const game = await this.__getGame(gameId);
+    this._hasyx.debug({ route: 'HasyxChessServer:_move', gameId: gameId, userId: request.userId, message: 'Fetched game state', data: game });
     if (!game) {
       const errorMsg = '!game';
       await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:game_not_found', requestPayload: request, errorMessage: errorMsg });
+      this._hasyx.debug({ route: 'HasyxChessServer:_move', gameId: gameId, userId: request.userId, message: 'Game not found', error: errorMsg });
       return { error: errorMsg };
     }
 
     if (game.status !== 'ready' && game.status !== 'continue') {
         const errorMsg = `Game not playable (status: ${game.status})`;
         await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:game_not_playable', requestPayload: request, responsePayload: { currentStatus: game.status }, errorMessage: errorMsg });
+        this._hasyx.debug({ route: 'HasyxChessServer:_move', gameId: gameId, userId: request.userId, message: 'Game not playable', error: errorMsg, gameStatus: game.status });
         return { error: errorMsg };
     }
 
     const joinRecord = await this.__findJoinByJoinIdAndClient(gameId, request.userId!, request.joinId!); 
+    this._hasyx.debug({
+        route: 'HasyxChessServer:_move',
+        gameId: gameId,
+        userId: request.userId,
+        joinId: request.joinId,
+        message: 'Fetched joinRecord by joinId and client',
+        data: joinRecord
+    });
 
     if (!joinRecord || !joinRecord.clientId) {
         const errorMsg = 'Active player join record not found for this move';
         await this._logDbError({ userId: request.userId, gameId: gameId, context: '_move:join_record_not_found', requestPayload: request, errorMessage: errorMsg });
+        this._hasyx.debug({ route: 'HasyxChessServer:_move', gameId: gameId, userId: request.userId, joinId: request.joinId, message: 'Active player join record not found', error: errorMsg });
         debug(`Error: Active Player join record not found for joinId ${request.joinId} in game ${gameId}`);
         return { error: errorMsg };
     }
@@ -424,6 +464,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         // Force update the client ID in the instance to match the request (in case of reconnects etc.)
         clientToMove.clientId = request.clientId; 
     }
+    this._hasyx.debug({
+        route: 'HasyxChessServer:_move',
+        gameId: gameId,
+        userId: request.userId,
+        clientId: clientToMove.clientId,
+        message: 'Client instance defined/resolved for move',
+        data: { clientId: clientToMove.clientId, initialRequestClientId: request.clientId }
+    });
 
     // Sync client state FROM CURRENT SERVER game state BEFORE simulating move
     clientToMove.userId = request.userId!; // Ensure user ID is set
@@ -437,10 +485,42 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     clientToMove.updatedAt = game.updatedAt; // Sync updatedAt
 
     debug(`Synchronized client ${clientToMove.clientId} state before move simulation:`, { fen: clientToMove.fen, status: clientToMove.status });
+    this._hasyx.debug({
+        route: 'HasyxChessServer:_move',
+        gameId: gameId,
+        userId: request.userId,
+        clientId: clientToMove.clientId,
+        message: 'Client state synchronized, attempting ChessClient.prototype.asyncMove.call',
+        data: { fen: clientToMove.fen, status: clientToMove.status, moveRequest: request.move }
+    });
 
     // <<< Call BASE asyncMove logic on the ChessClient instance >>>
     // This simulates the move using the client's internal chess engine
-    const clientMoveResponse = await ChessClient.prototype.asyncMove.call(clientToMove, request.move!); 
+    let clientMoveResponse;
+    try {
+        clientMoveResponse = await ChessClient.prototype.asyncMove.call(clientToMove, request.move!); 
+        this._hasyx.debug({
+            route: 'HasyxChessServer:_move',
+            gameId: gameId,
+            userId: request.userId,
+            clientId: clientToMove.clientId,
+            message: 'ChessClient.prototype.asyncMove.call response',
+            data: clientMoveResponse
+        });
+    } catch (asyncMoveError: any) {
+        this._hasyx.debug({
+            route: 'HasyxChessServer:_move',
+            gameId: gameId,
+            userId: request.userId,
+            clientId: clientToMove.clientId,
+            message: 'Error during ChessClient.prototype.asyncMove.call',
+            error: asyncMoveError.message,
+            stack: asyncMoveError.stack,
+            requestMove: request.move
+        });
+        // Re-throw to allow existing error handling to take over (which includes _logDbError)
+        throw asyncMoveError;
+    }
 
     // --- Server trusts the BASE client simulation result --- 
     if (clientMoveResponse.error || !clientMoveResponse.data) {
@@ -450,6 +530,15 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
             requestPayload: request.move, 
             responsePayload: { clientMoveResponseError: clientMoveResponse.error, currentServerFen: game.fen, currentServerStatus: game.status },
             errorMessage: errorMsg
+        });
+        this._hasyx.debug({ 
+            route: 'HasyxChessServer:_move',
+            gameId: gameId,
+            userId: request.userId,
+            clientId: clientToMove.clientId, // Assuming clientToMove is defined, might need to use request.clientId if not
+            message: 'Base client move logic failed after asyncMove.call',
+            error: errorMsg,
+            clientResponse: clientMoveResponse
         });
         debug(`Move failed via BASE client simulation logic (${joinRecord.joinId}): ${errorMsg}`);
         const responseDataOnError: ChessServerResponse['data'] = {
@@ -474,7 +563,13 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         status: updatedStatus, 
         updatedAt: updatedTime 
     });
-    debug(`Server game state updated based on BASE client simulation logic (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
+    this._hasyx.debug({
+        route: 'HasyxChessServer:_move',
+        gameId: gameId,
+        userId: request.userId,
+        message: 'Server game state updated after successful client simulation',
+        data: { updatedFen, updatedStatus, gameId }
+    });
 
     // ---> ДОБАВЛЕНА ЗАПИСЬ ХОДА В badma_moves <---
     try {
@@ -491,6 +586,13 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
                 created_at: new Date(updatedTime).toISOString() // Используем время обновления сервера
             }
         });
+        this._hasyx.debug({
+            route: 'HasyxChessServer:_move',
+            gameId: gameId,
+            userId: request.userId,
+            message: 'Successfully inserted move record into badma_moves',
+            moveData: request.move
+        });
         debug(`Successfully inserted move record into badma_moves for game ${gameId}`);
     } catch (insertError: any) {
         const errorMsg = `Failed to record move: ${insertError.message || 'Unknown DB error'}`;
@@ -499,6 +601,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
             requestPayload: request.move,
             responsePayload: { dbError: insertError.message || insertError },
             errorMessage: errorMsg
+        });
+        this._hasyx.debug({ 
+            route: 'HasyxChessServer:_move',
+            gameId: gameId,
+            userId: request.userId,
+            message: 'Error inserting move record into badma_moves',
+            error: errorMsg,
+            dbError: insertError.message || insertError
         });
         debug(`Error inserting move record into badma_moves: ${insertError.message || insertError}`);
         // Decide if this error should halt the entire move process or just be logged
@@ -521,6 +631,14 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         createdAt: game.createdAt,
     };
      debug('_move successful response data (based on base client sim):', responseData);
+     this._hasyx.debug({
+        route: 'HasyxChessServer:_move',
+        gameId: gameId,
+        userId: request.userId,
+        joinId: request.joinId,
+        message: '_move successful, returning final response data',
+        data: responseData
+    });
     return { data: responseData };
   }
 } 
