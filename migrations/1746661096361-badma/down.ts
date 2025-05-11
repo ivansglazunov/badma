@@ -17,7 +17,7 @@ const hasura = new Hasura({
 
 const badmaSchema = 'badma';
 const publicSchema = 'public';
-const badmaTables = ['servers', 'games', 'moves', 'joins', 'ais'];
+const badmaTables = ['servers', 'games', 'moves', 'joins', 'ais', 'errors'];
 
 // Permissions to drop (matching those created in up.ts)
 const userPermissionsToDrop = [
@@ -52,6 +52,12 @@ const relationshipsToDrop = [
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'joins' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'ais' }, relationship: 'user' } },
   { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'ais' } },
+  
+  // Relationships for badma.errors (adding these to fix unmigration issues)
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'errors' }, relationship: 'user' } },
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'errors' }, relationship: 'game' } },
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: publicSchema, name: 'users' }, relationship: 'errors' } },
+  { type: 'pg_drop_relationship', args: { source: 'default', table: { schema: badmaSchema, name: 'games' }, relationship: 'errors' } },
 ];
 
 // Tables to untrack
@@ -71,6 +77,7 @@ const dropTablesSQL = `
   DROP TABLE IF EXISTS badma.joins CASCADE;
   DROP TABLE IF EXISTS badma.games CASCADE;
   DROP TABLE IF EXISTS badma.servers CASCADE;
+  DROP TABLE IF EXISTS badma.errors CASCADE;
   DROP SCHEMA IF EXISTS badma CASCADE;
 `;
 

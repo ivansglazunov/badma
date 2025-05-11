@@ -150,98 +150,67 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     const engine = aiConfig.options?.engine || 'js-chess-engine';
     const level = aiConfig.options?.level || 0;
     debug(`🧠 Using AI engine: ${engine}, level: ${level}`);
-
+    
     let aiMove: AiMoveResult | null = null;
     let moveResult: ChessServerResponse = { error: 'AI did not attempt a move' };
     let successfulMove = false;
-    const MAX_ATTEMPTS = 3;
 
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    // Только одна попытка - если не получилось, сразу фиксируем поражение
+    hasyxForDebug.debug({
+      route: '/api/events/ai-move',
+      gameId: gameData.id,
+      userId: userId,
+      message: `Attempting to get AI move via go(). FEN: ${gameData.fen}, Level: ${level}`
+    });
+    
+    try {
+      aiMove = go(gameData.fen, level);
+      hasyxForDebug.debug({ 
+        route: '/api/events/ai-move', 
+        gameId: gameData.id, 
+        userId: userId, 
+        message: 'AI move suggested by go()', 
+        data: aiMove 
+      });
+    } catch (goError: any) {
+      debug(`❌ Error during go() execution: ${goError.message}`);
       hasyxForDebug.debug({
         route: '/api/events/ai-move',
         gameId: gameData.id,
         userId: userId,
-        attempt: attempt,
-        message: `Attempting to get AI move via go(). FEN: ${gameData.fen}, Level: ${level}`
+        message: 'Error during go() execution',
+        error: goError.message,
+        stack: goError.stack,
+        fen: gameData.fen,
+        level: level
       });
-      try {
-        aiMove = go(gameData.fen, level);
-        hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, attempt: attempt, message: 'AI move suggested by go()', data: aiMove });
-      } catch (goError: any) {
-        debug(`❌ Error during go() execution (attempt ${attempt}/${MAX_ATTEMPTS}): ${goError.message}`);
-        hasyxForDebug.debug({
-          route: '/api/events/ai-move',
-          gameId: gameData.id,
-          userId: userId,
-          attempt: attempt,
-          message: 'Error during go() execution',
-          error: goError.message,
-          stack: goError.stack,
-          fen: gameData.fen,
-          level: level
-        });
-        aiMove = null; // Ensure aiMove is null if go() fails
-      }
-
-      debug(`📝 AI suggested move (attempt ${attempt}/${MAX_ATTEMPTS}): ${JSON.stringify(aiMove)}`);
-
-      if (!aiMove) {
-        debug(`❌ AI engine failed to generate a move (attempt ${attempt}/${MAX_ATTEMPTS})`);
-        hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, attempt: attempt, message: 'AI engine (go function) returned no move (null/undefined)', fen: gameData.fen, level: level });
-        moveResult = { error: 'AI engine failed to generate a move' };
-        if (attempt === MAX_ATTEMPTS) break;
-        await new Promise(resolve => setTimeout(resolve, 500)); // Small delay before retrying go()
-        continue;
-      }
-
-      const clientId = uuidv4();
-      const moveRequestPayload = {
-        operation: 'move' as const,
-        clientId: clientId,
-        userId: userId, // AI's user ID
-        gameId: gameData.id,
-        joinId: join.id, // AI's join ID
-        side: currentSide, // The side AI is playing (which is currentSide from FEN)
-        role: ChessClientRole.Player,
-        move: {
-          from: aiMove.from,
-          to: aiMove.to,
-          promotion: aiMove.promotion === null ? undefined : aiMove.promotion
-        },
-        updatedAt: Date.now(),
-        createdAt: Date.now()
-      };
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, attempt: attempt, message: 'Attempting chessServer.request for move', data: moveRequestPayload });
-      moveResult = await chessServer.request(moveRequestPayload);
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, attempt: attempt, message: 'chessServer.request for move completed', data: moveResult });
-
-      if (moveResult.error) {
-        debug(`❌ AI move failed on chessServer (attempt ${attempt}/${MAX_ATTEMPTS}): ${moveResult.error}`);
-        hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, attempt: attempt, message: 'AI move failed on chessServer (moveResult.error)', error: moveResult.error, requestPayload: moveRequestPayload });
-        if (attempt === MAX_ATTEMPTS) break;
-        await new Promise(resolve => setTimeout(resolve, 500)); // Small delay before retrying
-      } else {
-        successfulMove = true;
-        break;
-      }
+      aiMove = null;
     }
 
-    if (!successfulMove) {
-      debug(`❌ AI failed to make a valid move after ${MAX_ATTEMPTS} attempts. Game ID: ${gameData.id}, User ID: ${userId}`);
-      hasyxForDebug.debug({
-        route: '/api/events/ai-move',
-        gameId: gameData.id,
-        userId: userId,
-        message: `AI failed to make a valid move after ${MAX_ATTEMPTS} attempts. Last error: ${moveResult.error}`,
-        lastAiMoveAttempt: aiMove,
-        lastMoveResult: moveResult
+    debug(`📝 AI suggested move: ${JSON.stringify(aiMove)}`);
+    
+    if (!aiMove) {
+      debug(`❌ AI engine failed to generate a move`);
+      hasyxForDebug.debug({ 
+        route: '/api/events/ai-move', 
+        gameId: gameData.id, 
+        userId: userId, 
+        message: 'AI engine (go function) returned no move (null/undefined)', 
+        fen: gameData.fen, 
+        level: level 
       });
-
-      // currentSide is whose turn it WAS. If White (1) couldn't move, White surrenders.
+      
+      // Не пытаемся повторить, сразу фиксируем поражение
       const newStatus = currentSide === 1 ? 'white_surrender' : 'black_surrender';
-
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: `Updating game status to ${newStatus} due to AI failure.` });
-      await hasyx.update({ // Use main hasyx client
+      
+      hasyxForDebug.debug({ 
+        route: '/api/events/ai-move', 
+        gameId: gameData.id, 
+        userId: userId, 
+        message: `Updating game status to ${newStatus} due to AI failure to generate move.` 
+      });
+      
+      await hasyx.update({
         table: 'badma_games',
         where: { id: { _eq: gameData.id } },
         _set: { status: newStatus, updated_at: new Date().toISOString() }
@@ -249,8 +218,8 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
 
       return {
         success: false,
-        message: `AI failed to make a valid move after ${MAX_ATTEMPTS} attempts. Game ended.`,
-        error: `AI failed: ${moveResult.error || 'Could not generate a valid move.'}`,
+        message: `AI failed to generate a valid move. Game ended.`,
+        error: `AI failed: Could not generate a move.`,
         game: {
           id: gameData.id,
           newStatus: newStatus
@@ -258,8 +227,84 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       };
     }
 
-    debug(`✅ AI move successful!`);
+    const clientId = uuidv4();
+    const moveRequestPayload = {
+      operation: 'move' as const,
+      clientId: clientId,
+      userId: userId, // AI's user ID
+      gameId: gameData.id,
+      joinId: join.id, // AI's join ID
+      side: currentSide, // The side AI is playing (which is currentSide from FEN)
+      role: ChessClientRole.Player,
+      move: {
+        from: aiMove.from,
+        to: aiMove.to,
+        promotion: aiMove.promotion === null ? undefined : aiMove.promotion
+      },
+      updatedAt: Date.now(),
+      createdAt: Date.now()
+    };
+    
+    hasyxForDebug.debug({ 
+      route: '/api/events/ai-move', 
+      gameId: gameData.id, 
+      userId: userId, 
+      message: 'Attempting chessServer.request for move', 
+      data: moveRequestPayload 
+    });
+    
+    moveResult = await chessServer.request(moveRequestPayload);
+    
+    hasyxForDebug.debug({ 
+      route: '/api/events/ai-move', 
+      gameId: gameData.id, 
+      userId: userId, 
+      message: 'chessServer.request for move completed', 
+      data: moveResult 
+    });
 
+    if (moveResult.error) {
+      debug(`❌ AI move failed on chessServer: ${moveResult.error}`);
+      hasyxForDebug.debug({ 
+        route: '/api/events/ai-move', 
+        gameId: gameData.id, 
+        userId: userId, 
+        message: 'AI move failed on chessServer (moveResult.error)', 
+        error: moveResult.error, 
+        requestPayload: moveRequestPayload 
+      });
+      
+      // Не пытаемся повторить, сразу фиксируем поражение
+      const newStatus = currentSide === 1 ? 'white_surrender' : 'black_surrender';
+      
+      hasyxForDebug.debug({ 
+        route: '/api/events/ai-move', 
+        gameId: gameData.id, 
+        userId: userId, 
+        message: `Updating game status to ${newStatus} due to AI move validation failure.` 
+      });
+      
+      await hasyx.update({
+        table: 'badma_games',
+        where: { id: { _eq: gameData.id } },
+        _set: { status: newStatus, updated_at: new Date().toISOString() }
+      });
+
+      return {
+        success: false,
+        message: `AI move validation failed. Game ended.`,
+        error: `AI failed: ${moveResult.error}`,
+        game: {
+          id: gameData.id,
+          newStatus: newStatus
+        }
+      };
+    } else {
+      successfulMove = true;
+    }
+
+    debug(`✅ AI move successful!`);
+    
     if (!aiMove) {
       // This case should ideally not be reached if successfulMove is true,
       // as successfulMove implies aiMove was valid and processed.
