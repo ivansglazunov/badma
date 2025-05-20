@@ -1,36 +1,31 @@
 import { SidebarData } from "hasyx/components/sidebar";
-import pckg from "../package.json";
+import pckg from "hasyx/package.json";
 
 export const sidebar: SidebarData = {
   name: pckg.name,
   version: pckg.version,
-  logo: 'logo.svg',
+  logo: "logo.svg",
   navMain: [
+    {
+      title: "Home",
+      url: "/",
+      items: [],
+    },
     {
       title: "Hasyx",
       url: "#",
       items: [
         {
           title: "Diagnostics",
-          url: "/hasyx",
-        },
-      ],
-    },
-    {
-      title: "Badma",
-      url: "#",
-      items: [
-        {
-          title: "Application",
-          url: "/",
+          url: "/hasyx/diagnostics",
         },
         {
-          title: "Diagnostics",
-          url: "/badma",
+          title: "A-Frame",
+          url: "/hasyx/aframe",
         },
         {
-          title: "Games",
-          url: "/badma/games",
+          title: "Payments",
+          url: "/hasyx/payments",
         },
       ],
     },

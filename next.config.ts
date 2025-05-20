@@ -37,16 +37,23 @@ const config: NextConfig = {
   // Keep these if needed for client export compatibility
   skipTrailingSlashRedirect: isBuildingForClient,
   skipMiddlewareUrlNormalize: isBuildingForClient,
-  
-  // Keep ignoring errors during client build if necessary, 
-  // but be aware this might hide real issues with static export incompatibility.
-  // Consider removing these ignore flags later to see actual Next.js errors.
+
   typescript: {
     ignoreBuildErrors: isBuildingForClient,
   },
   eslint: {
     ignoreDuringBuilds: isBuildingForClient,
   },
+
+  serverExternalPackages: [
+    'better-sqlite3',
+    '@mastra/libsql',
+    '@libsql/client',
+    '@libsql/hrana-client',
+    '@mastra/core',
+    '@mastra/memory',
+    '@openrouter/ai-sdk-provider'
+  ],
   
   // Add CORS headers to all API routes
   async headers() {
@@ -65,9 +72,5 @@ const config: NextConfig = {
     ];
   },
 };
-
-// REMOVED the entire block that was moving the app/api directory.
-// Next.js with output: 'export' will handle API routes appropriately 
-// (either build them if static GET, or error if dynamic).
 
 export default config;
