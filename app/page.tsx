@@ -2,18 +2,13 @@
 
 import { SidebarLayout } from "hasyx/components/sidebar/layout";
 import sidebar from "@/app/sidebar";
+import App from "@/app/app";
 
 // Now this is an async server component
 export default function Page() {
   return (
     <SidebarLayout sidebarData={sidebar} title={'/'}>
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <img 
-          src="/logo.svg" 
-          alt="Logo" 
-          className="w-64 h-64"
-        />
-      </div>
+      <App />
     </SidebarLayout>
   );
 }

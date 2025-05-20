@@ -1,5 +1,5 @@
 import { SidebarData } from "hasyx/components/sidebar";
-import pckg from "hasyx/package.json";
+import pckg from "@/package.json";
 
 export const sidebar: SidebarData = {
   name: pckg.name,
@@ -9,7 +9,12 @@ export const sidebar: SidebarData = {
     {
       title: "Home",
       url: "/",
-      items: [],
+      items: [
+        {
+          title: "Application",
+          url: "/",
+        },
+      ],
     },
     {
       title: "Hasyx",
