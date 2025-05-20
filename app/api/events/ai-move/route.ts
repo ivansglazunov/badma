@@ -14,6 +14,19 @@ import { Badma_Games } from '@/types/hasura-types';
 
 const debug = Debug('event:ai-move');
 
+// Функция для безопасного логирования - избегает использования приватного метода debug у Hasyx
+function safeDebugLog(hasyx: Hasyx, data: any) {
+  try {
+    // @ts-ignore - игнорируем проверку типа для доступа к методу debug
+    if (hasyx && typeof hasyx.debug === 'function') {
+      // @ts-ignore
+      hasyx.debug(data);
+    }
+  } catch (e) {
+    debug(`Failed to use hasyx.debug: ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
 // Типы для данных внутри event.data, специфичные для badma_games
 interface BadmaGameData {
   id: string;
@@ -58,7 +71,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
 
   const gameIdForEarlyLog = eventPayload.event.data.new?.id || eventPayload.event.data.old?.id || 'unknown_game_id';
 
-  hasyxForDebug.debug({
+  safeDebugLog(hasyxForDebug, {
     route: '/api/events/ai-move',
     gameId: gameIdForEarlyLog,
     message: 'Raw event received by hasyxEvent wrapper',
@@ -78,7 +91,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     const generate = Generator(schema);
     const hasyx = new Hasyx(adminClient, generate);
 
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData?.id, message: 'Entered main try block', eventOp: op, tableName: table?.name });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData?.id, message: 'Entered main try block', eventOp: op, tableName: table?.name });
     debug(`🔍 Game data received: id=${gameData.id}, status=${gameData.status}, fen=${gameData.fen ? 'present' : 'missing'}`);
 
     if (table.schema !== 'badma' || table.name !== 'games' || !['INSERT', 'UPDATE'].includes(op)) {
@@ -93,7 +106,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
 
     if (!gameData.fen) {
       debug('⚠️ Skipping: FEN is missing in game data.');
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'Skipped: FEN missing' });
+      safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'Skipped: FEN missing' });
       return { success: true, message: 'Skipped: FEN missing' };
     }
 
@@ -102,7 +115,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     const currentSide = tempChessForTurn.turn; // Determine whose turn it is from FEN (1 for White, 2 for Black)
     debug(`🎮 Current turn determined from FEN: ${currentSide} (${currentSide === 1 ? 'White' : 'Black'})`);
 
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'Fetching join record for current turn player', data: { game_id: gameData.id, currentSideToPlay: currentSide, role: ChessClientRole.Player } });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'Fetching join record for current turn player', data: { game_id: gameData.id, currentSideToPlay: currentSide, role: ChessClientRole.Player } });
     const joins = await hasyx.select<JoinRecord[]>({
       table: 'badma_joins',
       where: {
@@ -115,10 +128,10 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       returning: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at']
     });
 
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'Fetched joins result', data: joins });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'Fetched joins result', data: joins });
     if (!joins || joins.length === 0) {
       debug(`🔴 CRITICAL: No join record found for game ${gameData.id} and side ${currentSide}. Cannot determine AI user.`);
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'CRITICAL: No join record found for current player', data: { currentSideToPlay: currentSide } });
+      safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'CRITICAL: No join record found for current player', data: { currentSideToPlay: currentSide } });
       return { success: true, message: 'No AI move needed: No join record for current side' };
     }
 
@@ -126,7 +139,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     const userId = join.user_id; // This is the User ID of the AI player
     debug(`👤 User ID for current turn (from join record ${join.id} with side ${join.side}): ${userId}`);
 
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'Fetching AI config' });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'Fetching AI config' });
     const aiConfigs = await hasyx.select<AiConfig[]>({
       table: 'badma_ais',
       where: { user_id: { _eq: userId } }, // AI config for the current player
@@ -134,10 +147,10 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       returning: ['id', 'user_id', 'options']
     });
 
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'Fetched AI configs result', data: aiConfigs });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'Fetched AI configs result', data: aiConfigs });
     if (!aiConfigs || aiConfigs.length === 0) {
       debug(`⚠️ No AI configuration found for user ${userId}. Check badma_ais table.`);
-      hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'No AI configuration found for this user' });
+      safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, userId: userId, message: 'No AI configuration found for this user' });
       return { success: true, message: `No AI move needed: User ${userId} has no AI configuration` };
     }
 
@@ -145,7 +158,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     debug(`🤖 Found AI configuration: ${JSON.stringify(aiConfig.options)}`);
 
     const chessServer = new HasyxChessServer(hasyx); // Use the main hasyx client for the server
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'HasyxChessServer instantiated' });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'HasyxChessServer instantiated' });
 
     const engine = aiConfig.options?.engine || 'js-chess-engine';
     const level = aiConfig.options?.level || 0;
@@ -156,7 +169,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     let successfulMove = false;
 
     // Только одна попытка - если не получилось, сразу фиксируем поражение
-    hasyxForDebug.debug({
+    safeDebugLog(hasyxForDebug, {
       route: '/api/events/ai-move',
       gameId: gameData.id,
       userId: userId,
@@ -165,7 +178,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     
     try {
       aiMove = go(gameData.fen, level);
-      hasyxForDebug.debug({ 
+      safeDebugLog(hasyxForDebug, { 
         route: '/api/events/ai-move', 
         gameId: gameData.id, 
         userId: userId, 
@@ -174,7 +187,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       });
     } catch (goError: any) {
       debug(`❌ Error during go() execution: ${goError.message}`);
-      hasyxForDebug.debug({
+      safeDebugLog(hasyxForDebug, {
         route: '/api/events/ai-move',
         gameId: gameData.id,
         userId: userId,
@@ -191,7 +204,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     
     if (!aiMove) {
       debug(`❌ AI engine failed to generate a move`);
-      hasyxForDebug.debug({ 
+      safeDebugLog(hasyxForDebug, { 
         route: '/api/events/ai-move', 
         gameId: gameData.id, 
         userId: userId, 
@@ -203,7 +216,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       // Не пытаемся повторить, сразу фиксируем поражение
       const newStatus = currentSide === 1 ? 'white_surrender' : 'black_surrender';
       
-      hasyxForDebug.debug({ 
+      safeDebugLog(hasyxForDebug, { 
         route: '/api/events/ai-move', 
         gameId: gameData.id, 
         userId: userId, 
@@ -245,7 +258,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       createdAt: Date.now()
     };
     
-    hasyxForDebug.debug({ 
+    safeDebugLog(hasyxForDebug, { 
       route: '/api/events/ai-move', 
       gameId: gameData.id, 
       userId: userId, 
@@ -255,7 +268,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
     
     moveResult = await chessServer.request(moveRequestPayload);
     
-    hasyxForDebug.debug({ 
+    safeDebugLog(hasyxForDebug, { 
       route: '/api/events/ai-move', 
       gameId: gameData.id, 
       userId: userId, 
@@ -265,7 +278,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
 
     if (moveResult.error) {
       debug(`❌ AI move failed on chessServer: ${moveResult.error}`);
-      hasyxForDebug.debug({ 
+      safeDebugLog(hasyxForDebug, { 
         route: '/api/events/ai-move', 
         gameId: gameData.id, 
         userId: userId, 
@@ -277,7 +290,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       // Не пытаемся повторить, сразу фиксируем поражение
       const newStatus = currentSide === 1 ? 'white_surrender' : 'black_surrender';
       
-      hasyxForDebug.debug({ 
+      safeDebugLog(hasyxForDebug, { 
         route: '/api/events/ai-move', 
         gameId: gameData.id, 
         userId: userId, 
@@ -310,7 +323,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       // as successfulMove implies aiMove was valid and processed.
       // However, keeping it for type safety and unexpected edge cases.
       debug('Error: successfulMove is true, but aiMove is null. This indicates a logic flaw.');
-      hasyxForDebug.debug({
+      safeDebugLog(hasyxForDebug, {
           route: '/api/events/ai-move',
           gameId: gameData.id,
           userId: userId, // userId is available here
@@ -333,13 +346,13 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
         newFen: moveResult.data?.fen     // FEN from the successful moveResult
       }
     };
-    hasyxForDebug.debug({ route: '/api/events/ai-move', gameId: gameData.id, message: 'AI move process successful, returning final response.', data: successResponse });
+    safeDebugLog(hasyxForDebug, { route: '/api/events/ai-move', gameId: gameData.id, message: 'AI move process successful, returning final response.', data: successResponse });
     return successResponse;
 
   } catch (error) {
     debug(`❌ Error processing AI move: ${error instanceof Error ? error.message : String(error)}`);
     // Use hasyxForDebug and gameIdForEarlyLog as gameData/userId might not be available if error occurred before their definition
-    hasyxForDebug.debug({
+    safeDebugLog(hasyxForDebug, {
         route: '/api/events/ai-move',
         gameId: gameIdForEarlyLog,
         message: 'Error in main catch block of AI move handler',
