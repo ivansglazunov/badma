@@ -221,7 +221,7 @@ async function finalizeTournamentCheck(
         
   // Добавляем задержку для уверенности, что все асинхронные операции завершились
   debug('Waiting for tournament status to settle before final check...');
-  await new Promise(resolve => setTimeout(resolve, 3000)); // Ждем 3 секунды
+  await new Promise(resolve => setTimeout(resolve, 5000)); // Ждем 3 секунды
   
   // Повторно запрашиваем статус турнира непосредственно перед проверкой
   updatedTournament = await adminHasyxInstance.select<any>({

@@ -25939,6 +25939,18 @@
               "deprecationReason": null
             },
             {
+              "name": "payments_operations",
+              "description": "An object relationship",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "payments_operations",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "payments_plans",
               "description": "An object relationship",
               "args": [],
@@ -26282,6 +26294,16 @@
               "defaultValue": null
             },
             {
+              "name": "payments_operations",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "payments_operations_bool_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "payments_plans",
               "description": null,
               "type": {
@@ -26428,6 +26450,16 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "payments_methods_obj_rel_insert_input",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payments_operations",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "payments_operations_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -26770,6 +26802,16 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "payments_methods_order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "payments_operations",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "payments_operations_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -43297,6 +43339,18 @@
               "deprecationReason": null
             },
             {
+              "name": "hasyx",
+              "description": "An object relationship",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "hasyx",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": null,
               "args": [],
@@ -44256,6 +44310,16 @@
               "defaultValue": null
             },
             {
+              "name": "hasyx",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "hasyx_bool_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "id",
               "description": null,
               "type": {
@@ -44677,6 +44741,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "hasyx",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "hasyx_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -45745,6 +45819,41 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "payments_operations_obj_rel_insert_input",
+          "description": "input type for inserting object relation for remote table \"payments.operations\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "payments_operations_insert_input",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "on_conflict",
+              "description": "upsert condition",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "payments_operations_on_conflict",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "payments_operations_on_conflict",
           "description": "on_conflict condition type for table \"payments.operations\"",
           "fields": null,
@@ -45882,6 +45991,16 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "hasyx",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -73744,7 +73863,7 @@
         "table": "users"
       }
     },
-    "timestamp": "2025-05-20T15:41:19.185Z",
+    "timestamp": "2025-05-21T09:49:06.807Z",
     "version": "1.0.0"
   }
 }

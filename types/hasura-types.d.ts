@@ -4059,6 +4059,8 @@ export type Hasyx = {
   /** An object relationship */
   payments_methods?: Maybe<Payments_Methods>;
   /** An object relationship */
+  payments_operations?: Maybe<Payments_Operations>;
+  /** An object relationship */
   payments_plans?: Maybe<Payments_Plans>;
   /** An object relationship */
   payments_providers?: Maybe<Payments_Providers>;
@@ -4106,6 +4108,7 @@ export type Hasyx_Bool_Exp = {
   id?: InputMaybe<String_Comparison_Exp>;
   namespace?: InputMaybe<String_Comparison_Exp>;
   payments_methods?: InputMaybe<Payments_Methods_Bool_Exp>;
+  payments_operations?: InputMaybe<Payments_Operations_Bool_Exp>;
   payments_plans?: InputMaybe<Payments_Plans_Bool_Exp>;
   payments_providers?: InputMaybe<Payments_Providers_Bool_Exp>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Bool_Exp>;
@@ -4124,6 +4127,7 @@ export type Hasyx_Insert_Input = {
   id?: InputMaybe<Scalars["String"]["input"]>;
   namespace?: InputMaybe<Scalars["String"]["input"]>;
   payments_methods?: InputMaybe<Payments_Methods_Obj_Rel_Insert_Input>;
+  payments_operations?: InputMaybe<Payments_Operations_Obj_Rel_Insert_Input>;
   payments_plans?: InputMaybe<Payments_Plans_Obj_Rel_Insert_Input>;
   payments_providers?: InputMaybe<Payments_Providers_Obj_Rel_Insert_Input>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Obj_Rel_Insert_Input>;
@@ -4169,6 +4173,7 @@ export type Hasyx_Order_By = {
   id?: InputMaybe<Order_By>;
   namespace?: InputMaybe<Order_By>;
   payments_methods?: InputMaybe<Payments_Methods_Order_By>;
+  payments_operations?: InputMaybe<Payments_Operations_Order_By>;
   payments_plans?: InputMaybe<Payments_Plans_Order_By>;
   payments_providers?: InputMaybe<Payments_Providers_Order_By>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Order_By>;
@@ -7037,6 +7042,8 @@ export type Payments_Operations = {
   error_message?: Maybe<Scalars["String"]["output"]>;
   /** Operation ID in the external system (e.g. PaymentId, TransactionId), may not be available immediately */
   external_operation_id?: Maybe<Scalars["String"]["output"]>;
+  /** An object relationship */
+  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   initiated_at?: Maybe<Scalars["timestamptz"]["output"]>;
   metadata?: Maybe<Scalars["jsonb"]["output"]>;
@@ -7171,6 +7178,7 @@ export type Payments_Operations_Bool_Exp = {
   description?: InputMaybe<String_Comparison_Exp>;
   error_message?: InputMaybe<String_Comparison_Exp>;
   external_operation_id?: InputMaybe<String_Comparison_Exp>;
+  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   initiated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   metadata?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -7231,6 +7239,7 @@ export type Payments_Operations_Insert_Input = {
   error_message?: InputMaybe<Scalars["String"]["input"]>;
   /** Operation ID in the external system (e.g. PaymentId, TransactionId), may not be available immediately */
   external_operation_id?: InputMaybe<Scalars["String"]["input"]>;
+  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   initiated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   metadata?: InputMaybe<Scalars["jsonb"]["input"]>;
@@ -7368,6 +7377,13 @@ export type Payments_Operations_Mutation_Response = {
   returning: Array<Payments_Operations>;
 };
 
+/** input type for inserting object relation for remote table "payments.operations" */
+export type Payments_Operations_Obj_Rel_Insert_Input = {
+  data: Payments_Operations_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Payments_Operations_On_Conflict>;
+};
+
 /** on_conflict condition type for table "payments.operations" */
 export type Payments_Operations_On_Conflict = {
   constraint: Payments_Operations_Constraint;
@@ -7385,6 +7401,7 @@ export type Payments_Operations_Order_By = {
   description?: InputMaybe<Order_By>;
   error_message?: InputMaybe<Order_By>;
   external_operation_id?: InputMaybe<Order_By>;
+  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   initiated_at?: InputMaybe<Order_By>;
   metadata?: InputMaybe<Order_By>;
