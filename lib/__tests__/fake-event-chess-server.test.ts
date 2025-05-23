@@ -415,7 +415,7 @@ async function createFakeUser({ adminHasyx, password }: { adminHasyx: Hasyx, pas
   const email = `${userId}@example.com`;
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
-  const now = new Date().toISOString();
+  const now = Date.now(); // Use Unix timestamp instead of ISO string
 
   debug(`Creating fake user ${email}`);
   const result = await adminHasyx.insert({

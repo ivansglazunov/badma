@@ -31,7 +31,7 @@ async function createFakeUser(adminHasyx: Hasyx, namePrefix: string = 'TestUser'
   const email = `${namePrefix.toLowerCase().replace(/\s+/g, '-')}-${userId.substring(0, 4)}@example.com`;
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash('password123', saltRounds);
-  const now = new Date().toISOString();
+  const now = Date.now(); // Use Unix timestamp instead of ISO string
 
   const result = await adminHasyx.insert<Users>({
     table: 'users', // This is correct, as it's in public schema
@@ -87,9 +87,12 @@ interface TournamentGameSubscribedData {
 }
 
 // Функция для конвертации строковой даты в unixtime (миллисекунды с 1970)
-function dateToUnixtime(dateString: string): number {
-  if (!dateString) return 0;
-  return new Date(dateString).getTime();
+function dateToUnixtime(dateValue: string | number): number {
+  if (!dateValue) return 0;
+  // If it's already a number (Unix timestamp), return as is
+  if (typeof dateValue === 'number') return dateValue;
+  // If it's a string, convert to Unix timestamp
+  return new Date(dateValue).getTime();
 }
 
 interface MoveData {
@@ -98,7 +101,7 @@ interface MoveData {
     from: string;   // Заменяем move на from
     to: string;     // Добавляем поле to
     promotion?: string | null; // Добавляем опциональное поле promotion
-    created_at: string; // В будущем будет number после рефакторинга
+    created_at: number; // Fixed: using number (Unix timestamp) instead of string
 }
 
 interface JoinData {
