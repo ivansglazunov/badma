@@ -35,7 +35,7 @@ export abstract class Tournament {
     await this.hasyx.update({
       table: 'badma_tournaments',
       where: { id: { _eq: this.tournamentId } },
-      _set: { status: 'continue' as TournamentStatus, updated_at: new Date().toISOString() },
+      _set: { status: 'continue' as TournamentStatus, updated_at: Date.now() },
     });
     debug(`Tournament ${this.tournamentId} status set to 'continue'`);
   }
@@ -70,7 +70,7 @@ export abstract class Tournament {
     await this.hasyx.update({
       table: 'badma_tournaments',
       where: { id: { _eq: this.tournamentId } },
-      _set: { status: 'finished' as TournamentStatus, updated_at: new Date().toISOString() },
+      _set: { status: 'finished' as TournamentStatus, updated_at: Date.now() },
     });
     debug(`Tournament ${this.tournamentId} status set to 'finished'`);
   }

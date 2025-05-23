@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe } from "lucide-react";
+import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
 
@@ -11,6 +11,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "hasyx
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "hasyx/components/ui/dialog";
 
 import Board from "@/lib/board";
+import Game from "@/lib/game";
 import { OAuthButtons } from "hasyx/components/auth/oauth-buttons";
 import { useTheme } from "hasyx/components/theme-switcher";
 import { Button } from "hasyx/components/ui/button";
@@ -182,7 +183,14 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
               <div className="ml-11 space-y-1">
                 <div className="text-xs font-medium text-muted-foreground mb-1">Games ({userGames.length}):</div>
                 {userGames.map((game: any) => (
-                  <div key={game.id} className="flex items-center justify-between text-xs bg-muted/30 rounded px-2 py-1">
+                  <div 
+                    key={game.id} 
+                    className="flex items-center justify-between text-xs bg-muted/30 rounded px-2 py-1 cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering parent click handlers
+                      handleOpenGameGlobal(game.id);
+                    }}
+                  >
                     <span className="font-mono">{game.id.substring(0, 8)}...</span>
                     <div className="flex items-center space-x-2">
                       <span className="text-muted-foreground">
@@ -270,6 +278,188 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
   );
 };
 
+// User Profile Components
+const UserProfileGamesTab: React.FC<{ userId: string }> = ({ userId }) => {
+  const { data, loading, error } = useSubscription(
+    {
+      table: 'badma_joins',
+      where: { 
+        user_id: { _eq: userId },
+        role: { _eq: 1 } // Only player joins
+      },
+      returning: [
+        'id',
+        'side',
+        {
+          game: [
+            'id',
+            'status',
+            'created_at',
+            'updated_at',
+            {
+              moves: ['id']
+            }
+          ]
+        }
+      ],
+      order_by: { created_at: 'desc' }
+    },
+    { skip: !userId }
+  );
+
+  const games = React.useMemo(() => {
+    if (Array.isArray(data)) return data;
+    if (data && (data as any).badma_joins) return (data as any).badma_joins;
+    return [];
+  }, [data]);
+
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
+  if (error) return <p className="p-4 text-red-500">Error loading games: {error.message}</p>;
+  if (!games.length) return <p className="p-4 text-muted-foreground">No games found.</p>;
+
+  return (
+    <div className="space-y-2 p-1">
+      {games.map((join: any) => {
+        const game = join.game;
+        const moveCount = game.moves?.length || 0;
+        const isFinished = ['finished', 'checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender'].includes(game.status);
+        const sideText = join.side === 1 ? 'White' : 'Black';
+        
+        return (
+          <div 
+            key={join.id} 
+            className="flex items-center justify-between p-3 hover:bg-muted/30 rounded-md cursor-pointer border border-muted/20"
+            onClick={() => handleOpenGameGlobal(game.id)}
+          >
+            <div className="flex flex-col flex-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium text-foreground">Game ID: {game.id.substring(0, 8)}...</span>
+                <span className="text-xs px-1.5 py-0.5 bg-muted rounded">{sideText}</span>
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                <span>{moveCount} moves</span>
+                {game.created_at && (
+                  <span className="ml-3">Created: {new Date(game.created_at).toLocaleDateString()}</span>
+                )}
+                {game.updated_at && game.updated_at !== game.created_at && (
+                  <span className="ml-3">Updated: {new Date(game.updated_at).toLocaleDateString()}</span>
+                )}
+              </div>
+            </div>
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+              isFinished
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+            }`}>
+              {game.status ?? 'Unknown'}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => {
+  const { data, loading, error } = useSubscription(
+    {
+      table: 'badma_tournament_participants',
+      where: { 
+        user_id: { _eq: userId },
+        role: { _eq: 1 } // Only player participation
+      },
+      returning: [
+        'id',
+        {
+          tournament: [
+            'id',
+            'type',
+            'status',
+            'created_at'
+          ]
+        },
+        {
+          scores: ['score']
+        }
+      ],
+      order_by: { created_at: 'desc' }
+    },
+    { skip: !userId }
+  );
+
+  // Get tournament scores to find max scores
+  const { data: allScoresData } = useSubscription(
+    {
+      table: 'badma_tournament_scores',
+      returning: [
+        'tournament_id',
+        'participant_id',
+        'score'
+      ]
+    }
+  );
+
+  const tournaments = React.useMemo(() => {
+    if (Array.isArray(data)) return data;
+    if (data && (data as any).badma_tournament_participants) return (data as any).badma_tournament_participants;
+    return [];
+  }, [data]);
+
+  const maxScoresByTournament = React.useMemo(() => {
+    const scores = Array.isArray(allScoresData) ? allScoresData : (allScoresData as any)?.badma_tournament_scores || [];
+    const maxScores: Record<string, number> = {};
+    
+    scores.forEach((score: any) => {
+      const tournamentId = score.tournament_id;
+      if (!maxScores[tournamentId] || score.score > maxScores[tournamentId]) {
+        maxScores[tournamentId] = score.score;
+      }
+    });
+    
+    return maxScores;
+  }, [allScoresData]);
+
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading tournaments...</div>;
+  if (error) return <p className="p-4 text-red-500">Error loading tournaments: {error.message}</p>;
+  if (!tournaments.length) return <p className="p-4 text-muted-foreground">No tournaments found.</p>;
+
+  return (
+    <div className="space-y-2 p-1">
+      {tournaments.map((participant: any) => {
+        const tournament = participant.tournament;
+        const userScore = (participant.scores || []).reduce((sum: number, score: any) => sum + (score.score || 0), 0);
+        const maxScore = maxScoresByTournament[tournament.id] || 0;
+        
+        return (
+          <div 
+            key={participant.id} 
+            className="p-3 hover:bg-muted/30 rounded-md border border-muted/20"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col flex-1">
+                <span className="text-sm font-medium text-foreground">{tournament.type}</span>
+                <span className="text-xs text-muted-foreground">ID: {tournament.id.substring(0, 8)}...</span>
+                <div className="text-xs text-muted-foreground mt-1">
+                  Score: <span className="font-medium text-green-600">{userScore}</span>
+                  {maxScore > 0 && (
+                    <span> / <span className="text-yellow-600">{maxScore}</span> max</span>
+                  )}
+                  {tournament.created_at && (
+                    <span className="ml-3">Created: {new Date(tournament.created_at).toLocaleDateString()}</span>
+                  )}
+                </div>
+              </div>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
+                {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 export function GameCard({ disabled = false }: { disabled?: boolean }) {
   return <Card className={`w-[min(15vw,15vh)] h-[min(30vw,30vh)] transform ${disabled ? "" : "hover:-translate-y-20 hover:scale-120"} transition-all duration-300 shadow-xl/30`}>
   </Card>;
@@ -337,7 +527,7 @@ export default function App() {
   const { theme, setTheme } = useTheme();
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
-  const viewOrder = React.useMemo(() => ['tournaments', 'games', 'create'], []);
+  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'create'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profile, setProfile] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState<TournamentType | null>(null);
@@ -349,13 +539,12 @@ export default function App() {
 
   const handleOpenGame = (gameId: string) => {
     setSelectedGameId(gameId);
-    if (isTournamentModalOpen) setIsTournamentModalOpen(false);
     if (profile) setProfile(false);
   };
   
   useEffect(() => {
     handleOpenGameGlobal = handleOpenGame;
-  }, [isTournamentModalOpen, profile, handleOpenGame]);
+  }, [profile, handleOpenGame]);
 
   const handleCloseGame = () => {
     setSelectedGameId(null);
@@ -468,6 +657,39 @@ export default function App() {
         className="flex-grow flex flex-col pt-12 pb-20"
       >
         <CarouselContent className="h-full">
+          <CarouselItem key="profile" className="h-full">
+            <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
+              <div className="flex flex-col items-center mb-6">
+                <Avatar className="h-24 w-24 mb-4">
+                  <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? 'User'} />
+                  <AvatarFallback className="text-2xl">{user?.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
+                </Avatar>
+                <h2 className="text-2xl font-semibold mb-1">
+                  {user?.name || (user?.email ? user.email.substring(0, 8) + '...' : 'Anonymous')}
+                </h2>
+                {user?.email && (
+                  <p className="text-sm text-muted-foreground">
+                    {user.email}
+                  </p>
+                )}
+              </div>
+              
+              <div className="w-full max-w-2xl">
+                <Tabs defaultValue="games" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="games" className="flex items-center"><Gamepad2 className="h-4 w-4 mr-2" />Games</TabsTrigger>
+                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="games" className="pt-4">
+                    {user?.email && <UserProfileGamesTab userId={user.email} />}
+                  </TabsContent>
+                  <TabsContent value="tournaments" className="pt-4">
+                    {user?.email && <UserProfileTournamentsTab userId={user.email} />}
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </div>
+          </CarouselItem>
           <CarouselItem key="tournaments" className="h-full">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex items-center mb-6">
@@ -547,7 +769,7 @@ export default function App() {
       </Carousel>
 
       <div className={cn(
-        "fixed inset-0 z-35 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
+        "fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
         selectedGameId ? "translate-y-0" : "translate-y-full"
       )}>
         {selectedGameId && (
@@ -561,7 +783,7 @@ export default function App() {
               <X/>
             </Button>
             <div className="w-full h-full flex items-center justify-center p-4">
-              <GameFree /> 
+              <Game gameId={selectedGameId} onClose={handleCloseGame} />
             </div>
           </>
         )}
@@ -646,6 +868,10 @@ export default function App() {
       )}>
         <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
           <div className="flex-1 flex justify-start items-center space-x-1">
+            <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
+              <User className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Profile</span>
+            </Button>
             <Button variant="ghost" className="flex-grow-0 text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("tournaments")}>
               <Trophy className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Tournaments</span>

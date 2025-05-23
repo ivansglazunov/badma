@@ -31,7 +31,7 @@ export class TournamentRoundRobin extends Tournament {
       await this.hasyx.update({
         table: 'badma_tournaments',
         where: { id: { _eq: this.tournamentId } },
-        _set: { status: 'await' as TournamentStatus, updated_at: new Date().toISOString() },
+        _set: { status: 'await' as TournamentStatus, updated_at: Date.now() },
       });
       return;
     }
@@ -76,8 +76,8 @@ export class TournamentRoundRobin extends Tournament {
               },
             ],
           },
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          created_at: Date.now(),
+          updated_at: Date.now(),
         });
       }
     }
@@ -126,7 +126,7 @@ export class TournamentRoundRobin extends Tournament {
           await this.hasyx.update({
             table: 'badma_games',
             where: { id: { _eq: gameData.id } },
-            _set: { status: 'ready', updated_at: new Date().toISOString() },
+            _set: { status: 'ready', updated_at: Date.now() },
           });
           debug(`Game ${gameData.id} status updated to 'ready'.`);
         } catch (error) {
@@ -141,7 +141,7 @@ export class TournamentRoundRobin extends Tournament {
         await this.hasyx.update({
             table: 'badma_tournaments',
             where: { id: { _eq: this.tournamentId } },
-            _set: { status: 'ready' as TournamentStatus, updated_at: new Date().toISOString() },
+            _set: { status: 'ready' as TournamentStatus, updated_at: Date.now() },
         });
         debug(`Tournament ${this.tournamentId} status set to 'ready' after game creation.`);
     }

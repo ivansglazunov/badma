@@ -1,6 +1,6 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.20",
+  "version": "0.1.0-alpha.21",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -30,7 +30,7 @@
   "dependencies": {
     "chess.js": "^0.12.1",
     "events": "^3.3.0",
-    "hasyx": "^0.1.177",
+    "hasyx": "^0.1.180",
     "js-chess-engine": "^1.0.2",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",

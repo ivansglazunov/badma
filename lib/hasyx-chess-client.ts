@@ -62,8 +62,8 @@ export class HasyxChessClient extends ChessClient {
           user_id: request.userId,
           fen: this.fen,
           status: 'await',
-          updated_at: typeof request.updatedAt === 'number' ? new Date(request.updatedAt).toISOString() : request.updatedAt,
-          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
+          updated_at: request.updatedAt,
+          created_at: request.createdAt,
         }
       });
       if (game.error) {
@@ -114,7 +114,7 @@ export class HasyxChessClient extends ChessClient {
           side: request.side,
           role: request.role,
           client_id: request.clientId,
-          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
+          created_at: request.createdAt,
         },
       });
       if (join.error) {
@@ -160,7 +160,7 @@ export class HasyxChessClient extends ChessClient {
           side: request.side,
           role: 0,
           client_id: request.clientId,
-          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
+          created_at: request.createdAt,
         },
       });
       if (join.error) {
@@ -200,7 +200,7 @@ export class HasyxChessClient extends ChessClient {
       // updated by this.chess.move() in the calling asyncMove method BEFORE _move is called.
 
       // 1. Update badma_games table with the new FEN and status from the client's state
-      const updatedGameTime = typeof request.updatedAt === 'number' ? new Date(request.updatedAt).toISOString() : request.updatedAt;
+      const updatedGameTime = request.updatedAt;
       const gameUpdateResult = await this._hasyx.update({
         table: 'badma_games',
         where: { id: { _eq: request.gameId } },
@@ -247,7 +247,7 @@ export class HasyxChessClient extends ChessClient {
           user_id: request.userId,
           game_id: request.gameId,
           ...(request.side !== undefined && { side: request.side }),
-          created_at: typeof request.createdAt === 'number' ? new Date(request.createdAt).toISOString() : request.createdAt,
+          created_at: request.createdAt,
         },
       });
 
@@ -346,8 +346,8 @@ export class HasyxChessClient extends ChessClient {
         role: join?.role,
         fen: game.fen,
         status: game.status,
-        updatedAt: new Date(game.updated_at).getTime(),
-        createdAt: new Date(game.created_at).getTime(),
+        updatedAt: typeof game.updated_at === 'string' ? new Date(game.updated_at).getTime() : game.updated_at,
+        createdAt: typeof game.created_at === 'string' ? new Date(game.created_at).getTime() : game.created_at,
       };
       debug('HasyxChessClient _sync received response from server:', response);
       return response;

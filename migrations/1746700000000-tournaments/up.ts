@@ -18,19 +18,19 @@ const sqlSchema = `
 
   CREATE TABLE IF NOT EXISTS ${badmaSchema}.tournaments (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      status TEXT NOT NULL CHECK (status IN ('await', 'ready', 'continue', 'finished')),
-      type TEXT NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      type TEXT NOT NULL DEFAULT 'round-robin',
+      status TEXT NOT NULL DEFAULT 'await',
+      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
 
   CREATE TABLE IF NOT EXISTS ${badmaSchema}.tournament_participants (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
       tournament_id UUID NOT NULL REFERENCES ${badmaSchema}.tournaments(id) ON DELETE CASCADE,
-      role INTEGER NOT NULL CHECK (role IN (0, 1)), -- 1 for join, 0 for leave
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      role INTEGER NOT NULL DEFAULT 1,
+      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
   COMMENT ON COLUMN ${badmaSchema}.tournament_participants.role IS '1 for join, 0 for leave';
 
@@ -38,8 +38,8 @@ const sqlSchema = `
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       game_id UUID NOT NULL REFERENCES ${badmaSchema}.games(id) ON DELETE CASCADE,
       tournament_id UUID NOT NULL REFERENCES ${badmaSchema}.tournaments(id) ON DELETE CASCADE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
       UNIQUE (game_id, tournament_id)
   );
 
@@ -47,47 +47,10 @@ const sqlSchema = `
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       tournament_participant_id UUID NOT NULL REFERENCES ${badmaSchema}.tournament_participants(id) ON DELETE CASCADE,
       game_id UUID NOT NULL REFERENCES ${badmaSchema}.games(id) ON DELETE CASCADE,
-      score NUMERIC NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      score DECIMAL(5,2) NOT NULL DEFAULT 0.0,
+      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
-
-  -- Triggers for updated_at --
-  -- Ensure the function exists (it's also in the main badma migration, but good to be safe)
-  CREATE OR REPLACE FUNCTION ${badmaSchema}.set_current_timestamp_updated_at()
-  RETURNS TRIGGER AS $$
-  DECLARE
-    _new RECORD;
-  BEGIN
-    _new := NEW;
-    _new."updated_at" = NOW();
-    RETURN _new;
-  END;
-  $$ LANGUAGE plpgsql;
-
-  DROP TRIGGER IF EXISTS set_tournaments_updated_at ON ${badmaSchema}.tournaments;
-  CREATE TRIGGER set_tournaments_updated_at
-  BEFORE UPDATE ON ${badmaSchema}.tournaments
-  FOR EACH ROW
-  EXECUTE FUNCTION ${badmaSchema}.set_current_timestamp_updated_at();
-
-  DROP TRIGGER IF EXISTS set_tournament_participants_updated_at ON ${badmaSchema}.tournament_participants;
-  CREATE TRIGGER set_tournament_participants_updated_at
-  BEFORE UPDATE ON ${badmaSchema}.tournament_participants
-  FOR EACH ROW
-  EXECUTE FUNCTION ${badmaSchema}.set_current_timestamp_updated_at();
-
-  DROP TRIGGER IF EXISTS set_tournament_games_updated_at ON ${badmaSchema}.tournament_games;
-  CREATE TRIGGER set_tournament_games_updated_at
-  BEFORE UPDATE ON ${badmaSchema}.tournament_games
-  FOR EACH ROW
-  EXECUTE FUNCTION ${badmaSchema}.set_current_timestamp_updated_at();
-
-  DROP TRIGGER IF EXISTS set_tournament_scores_updated_at ON ${badmaSchema}.tournament_scores;
-  CREATE TRIGGER set_tournament_scores_updated_at
-  BEFORE UPDATE ON ${badmaSchema}.tournament_scores
-  FOR EACH ROW
-  EXECUTE FUNCTION ${badmaSchema}.set_current_timestamp_updated_at();
 `;
 
 const tablesToTrack = [

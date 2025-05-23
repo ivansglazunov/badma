@@ -25,11 +25,11 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  bigint: { input: any; output: any };
+  bigint: { input: number; output: number };
   jsonb: { input: any; output: any };
-  numeric: { input: any; output: any };
-  timestamptz: { input: any; output: any };
-  uuid: { input: any; output: any };
+  numeric: { input: number; output: number };
+  timestamptz: { input: number; output: number };
+  uuid: { input: string; output: string };
 };
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
@@ -94,13 +94,9 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "accounts" */
 export type Accounts = {
   __typename?: "accounts";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   access_token?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   expires_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   id_token?: Maybe<Scalars["String"]["output"]>;
   oauth_token?: Maybe<Scalars["String"]["output"]>;
@@ -193,14 +189,11 @@ export type Accounts_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "accounts". All fields are combined with a logical 'AND'. */
 export type Accounts_Bool_Exp = {
   _and?: InputMaybe<Array<Accounts_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Accounts_Bool_Exp>;
   _or?: InputMaybe<Array<Accounts_Bool_Exp>>;
   access_token?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   expires_at?: InputMaybe<Bigint_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   id_token?: InputMaybe<String_Comparison_Exp>;
   oauth_token?: InputMaybe<String_Comparison_Exp>;
@@ -234,7 +227,6 @@ export type Accounts_Insert_Input = {
   access_token?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   expires_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   id_token?: InputMaybe<Scalars["String"]["input"]>;
   oauth_token?: InputMaybe<Scalars["String"]["input"]>;
@@ -253,8 +245,6 @@ export type Accounts_Insert_Input = {
 /** aggregate max on columns */
 export type Accounts_Max_Fields = {
   __typename?: "accounts_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   access_token?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   expires_at?: Maybe<Scalars["bigint"]["output"]>;
@@ -274,8 +264,6 @@ export type Accounts_Max_Fields = {
 
 /** order by max() on columns of table "accounts" */
 export type Accounts_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   access_token?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   expires_at?: InputMaybe<Order_By>;
@@ -296,8 +284,6 @@ export type Accounts_Max_Order_By = {
 /** aggregate min on columns */
 export type Accounts_Min_Fields = {
   __typename?: "accounts_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   access_token?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   expires_at?: Maybe<Scalars["bigint"]["output"]>;
@@ -317,8 +303,6 @@ export type Accounts_Min_Fields = {
 
 /** order by min() on columns of table "accounts" */
 export type Accounts_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   access_token?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   expires_at?: InputMaybe<Order_By>;
@@ -345,13 +329,6 @@ export type Accounts_Mutation_Response = {
   returning: Array<Accounts>;
 };
 
-/** input type for inserting object relation for remote table "accounts" */
-export type Accounts_Obj_Rel_Insert_Input = {
-  data: Accounts_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Accounts_On_Conflict>;
-};
-
 /** on_conflict condition type for table "accounts" */
 export type Accounts_On_Conflict = {
   constraint: Accounts_Constraint;
@@ -361,12 +338,9 @@ export type Accounts_On_Conflict = {
 
 /** Ordering options when selecting data from "accounts". */
 export type Accounts_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   access_token?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   expires_at?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   id_token?: InputMaybe<Order_By>;
   oauth_token?: InputMaybe<Order_By>;
@@ -389,10 +363,6 @@ export type Accounts_Pk_Columns_Input = {
 
 /** select columns of table "accounts" */
 export enum Accounts_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   AccessToken = "access_token",
   /** column name */
@@ -487,8 +457,6 @@ export type Accounts_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Accounts_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   access_token?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   expires_at?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -596,11 +564,7 @@ export type Accounts_Variance_Order_By = {
 /** columns and relationships of "badma.ais" */
 export type Badma_Ais = {
   __typename?: "badma_ais";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   options: Scalars["jsonb"]["output"];
   updated_at: Scalars["timestamptz"]["output"];
@@ -668,12 +632,9 @@ export type Badma_Ais_Arr_Rel_Insert_Input = {
 /** Boolean expression to filter rows from the table "badma.ais". All fields are combined with a logical 'AND'. */
 export type Badma_Ais_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Ais_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Ais_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Ais_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   options?: InputMaybe<Jsonb_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -705,7 +666,6 @@ export type Badma_Ais_Delete_Key_Input = {
 /** input type for inserting data into table "badma.ais" */
 export type Badma_Ais_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   options?: InputMaybe<Scalars["jsonb"]["input"]>;
   updated_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
@@ -716,8 +676,6 @@ export type Badma_Ais_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Ais_Max_Fields = {
   __typename?: "badma_ais_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
@@ -726,8 +684,6 @@ export type Badma_Ais_Max_Fields = {
 
 /** order by max() on columns of table "badma.ais" */
 export type Badma_Ais_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -737,8 +693,6 @@ export type Badma_Ais_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Ais_Min_Fields = {
   __typename?: "badma_ais_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
   updated_at?: Maybe<Scalars["timestamptz"]["output"]>;
@@ -747,8 +701,6 @@ export type Badma_Ais_Min_Fields = {
 
 /** order by min() on columns of table "badma.ais" */
 export type Badma_Ais_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -764,13 +716,6 @@ export type Badma_Ais_Mutation_Response = {
   returning: Array<Badma_Ais>;
 };
 
-/** input type for inserting object relation for remote table "badma.ais" */
-export type Badma_Ais_Obj_Rel_Insert_Input = {
-  data: Badma_Ais_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Ais_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.ais" */
 export type Badma_Ais_On_Conflict = {
   constraint: Badma_Ais_Constraint;
@@ -780,10 +725,7 @@ export type Badma_Ais_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.ais". */
 export type Badma_Ais_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   options?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -803,10 +745,6 @@ export type Badma_Ais_Prepend_Input = {
 
 /** select columns of table "badma.ais" */
 export enum Badma_Ais_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -838,8 +776,6 @@ export type Badma_Ais_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Ais_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   options?: InputMaybe<Scalars["jsonb"]["input"]>;
@@ -881,16 +817,12 @@ export type Badma_Ais_Updates = {
 /** columns and relationships of "badma.errors" */
 export type Badma_Errors = {
   __typename?: "badma_errors";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   context?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   error_message?: Maybe<Scalars["String"]["output"]>;
   /** An object relationship */
   game?: Maybe<Badma_Games>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   request_payload?: Maybe<Scalars["jsonb"]["output"]>;
   response_payload?: Maybe<Scalars["jsonb"]["output"]>;
@@ -964,8 +896,6 @@ export type Badma_Errors_Arr_Rel_Insert_Input = {
 /** Boolean expression to filter rows from the table "badma.errors". All fields are combined with a logical 'AND'. */
 export type Badma_Errors_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Errors_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Errors_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Errors_Bool_Exp>>;
   context?: InputMaybe<String_Comparison_Exp>;
@@ -973,7 +903,6 @@ export type Badma_Errors_Bool_Exp = {
   error_message?: InputMaybe<String_Comparison_Exp>;
   game?: InputMaybe<Badma_Games_Bool_Exp>;
   game_id?: InputMaybe<Uuid_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   request_payload?: InputMaybe<Jsonb_Comparison_Exp>;
   response_payload?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -1012,7 +941,6 @@ export type Badma_Errors_Insert_Input = {
   error_message?: InputMaybe<Scalars["String"]["input"]>;
   game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   request_payload?: InputMaybe<Scalars["jsonb"]["input"]>;
   response_payload?: InputMaybe<Scalars["jsonb"]["input"]>;
@@ -1023,8 +951,6 @@ export type Badma_Errors_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Errors_Max_Fields = {
   __typename?: "badma_errors_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   context?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   error_message?: Maybe<Scalars["String"]["output"]>;
@@ -1035,8 +961,6 @@ export type Badma_Errors_Max_Fields = {
 
 /** order by max() on columns of table "badma.errors" */
 export type Badma_Errors_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   context?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   error_message?: InputMaybe<Order_By>;
@@ -1048,8 +972,6 @@ export type Badma_Errors_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Errors_Min_Fields = {
   __typename?: "badma_errors_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   context?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   error_message?: Maybe<Scalars["String"]["output"]>;
@@ -1060,8 +982,6 @@ export type Badma_Errors_Min_Fields = {
 
 /** order by min() on columns of table "badma.errors" */
 export type Badma_Errors_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   context?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   error_message?: InputMaybe<Order_By>;
@@ -1079,13 +999,6 @@ export type Badma_Errors_Mutation_Response = {
   returning: Array<Badma_Errors>;
 };
 
-/** input type for inserting object relation for remote table "badma.errors" */
-export type Badma_Errors_Obj_Rel_Insert_Input = {
-  data: Badma_Errors_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Errors_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.errors" */
 export type Badma_Errors_On_Conflict = {
   constraint: Badma_Errors_Constraint;
@@ -1095,14 +1008,11 @@ export type Badma_Errors_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.errors". */
 export type Badma_Errors_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   context?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   error_message?: InputMaybe<Order_By>;
   game?: InputMaybe<Badma_Games_Order_By>;
   game_id?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   request_payload?: InputMaybe<Order_By>;
   response_payload?: InputMaybe<Order_By>;
@@ -1123,10 +1033,6 @@ export type Badma_Errors_Prepend_Input = {
 
 /** select columns of table "badma.errors" */
 export enum Badma_Errors_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   Context = "context",
   /** column name */
@@ -1167,8 +1073,6 @@ export type Badma_Errors_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Errors_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   context?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   error_message?: InputMaybe<Scalars["String"]["input"]>;
@@ -1219,16 +1123,12 @@ export type Badma_Errors_Updates = {
 /** columns and relationships of "badma.games" */
 export type Badma_Games = {
   __typename?: "badma_games";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   /** An array relationship */
   errors: Array<Badma_Errors>;
   /** An aggregate relationship */
   errors_aggregate: Badma_Errors_Aggregate;
   fen?: Maybe<Scalars["String"]["output"]>;
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   /** An array relationship */
   joins: Array<Badma_Joins>;
@@ -1404,15 +1304,12 @@ export type Badma_Games_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "badma.games". All fields are combined with a logical 'AND'. */
 export type Badma_Games_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Games_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Games_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Games_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   errors?: InputMaybe<Badma_Errors_Bool_Exp>;
   errors_aggregate?: InputMaybe<Badma_Errors_Aggregate_Bool_Exp>;
   fen?: InputMaybe<String_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   joins?: InputMaybe<Badma_Joins_Bool_Exp>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Bool_Exp>;
@@ -1448,7 +1345,6 @@ export type Badma_Games_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   errors?: InputMaybe<Badma_Errors_Arr_Rel_Insert_Input>;
   fen?: InputMaybe<Scalars["String"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   joins?: InputMaybe<Badma_Joins_Arr_Rel_Insert_Input>;
   mode?: InputMaybe<Scalars["String"]["input"]>;
@@ -1467,8 +1363,6 @@ export type Badma_Games_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Games_Max_Fields = {
   __typename?: "badma_games_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   fen?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1484,8 +1378,6 @@ export type Badma_Games_Max_Fields = {
 
 /** order by max() on columns of table "badma.games" */
 export type Badma_Games_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   fen?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -1502,8 +1394,6 @@ export type Badma_Games_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Games_Min_Fields = {
   __typename?: "badma_games_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   fen?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1519,8 +1409,6 @@ export type Badma_Games_Min_Fields = {
 
 /** order by min() on columns of table "badma.games" */
 export type Badma_Games_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   fen?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -1559,12 +1447,9 @@ export type Badma_Games_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.games". */
 export type Badma_Games_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   errors_aggregate?: InputMaybe<Badma_Errors_Aggregate_Order_By>;
   fen?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Order_By>;
   mode?: InputMaybe<Order_By>;
@@ -1587,10 +1472,6 @@ export type Badma_Games_Pk_Columns_Input = {
 
 /** select columns of table "badma.games" */
 export enum Badma_Games_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -1679,8 +1560,6 @@ export type Badma_Games_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Games_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   fen?: InputMaybe<Scalars["String"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -1784,15 +1663,11 @@ export type Badma_Games_Variance_Order_By = {
 /** columns and relationships of "badma.joins" */
 export type Badma_Joins = {
   __typename?: "badma_joins";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   /** An object relationship */
   game: Badma_Games;
   game_id: Scalars["uuid"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   role: Scalars["Int"]["output"];
   side: Scalars["Int"]["output"];
@@ -1879,15 +1754,12 @@ export type Badma_Joins_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "badma.joins". All fields are combined with a logical 'AND'. */
 export type Badma_Joins_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Joins_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Joins_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Joins_Bool_Exp>>;
   client_id?: InputMaybe<Uuid_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   game?: InputMaybe<Badma_Games_Bool_Exp>;
   game_id?: InputMaybe<Uuid_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   role?: InputMaybe<Int_Comparison_Exp>;
   side?: InputMaybe<Int_Comparison_Exp>;
@@ -1913,7 +1785,6 @@ export type Badma_Joins_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   role?: InputMaybe<Scalars["Int"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1924,8 +1795,6 @@ export type Badma_Joins_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Joins_Max_Fields = {
   __typename?: "badma_joins_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1937,8 +1806,6 @@ export type Badma_Joins_Max_Fields = {
 
 /** order by max() on columns of table "badma.joins" */
 export type Badma_Joins_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
@@ -1951,8 +1818,6 @@ export type Badma_Joins_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Joins_Min_Fields = {
   __typename?: "badma_joins_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   client_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
@@ -1964,8 +1829,6 @@ export type Badma_Joins_Min_Fields = {
 
 /** order by min() on columns of table "badma.joins" */
 export type Badma_Joins_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
@@ -1984,13 +1847,6 @@ export type Badma_Joins_Mutation_Response = {
   returning: Array<Badma_Joins>;
 };
 
-/** input type for inserting object relation for remote table "badma.joins" */
-export type Badma_Joins_Obj_Rel_Insert_Input = {
-  data: Badma_Joins_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Joins_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.joins" */
 export type Badma_Joins_On_Conflict = {
   constraint: Badma_Joins_Constraint;
@@ -2000,13 +1856,10 @@ export type Badma_Joins_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.joins". */
 export type Badma_Joins_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   client_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   game?: InputMaybe<Badma_Games_Order_By>;
   game_id?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   role?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
@@ -2021,10 +1874,6 @@ export type Badma_Joins_Pk_Columns_Input = {
 
 /** select columns of table "badma.joins" */
 export enum Badma_Joins_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   ClientId = "client_id",
   /** column name */
@@ -2101,8 +1950,6 @@ export type Badma_Joins_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Joins_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   client_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -2194,15 +2041,11 @@ export type Badma_Joins_Variance_Order_By = {
 /** columns and relationships of "badma.moves" */
 export type Badma_Moves = {
   __typename?: "badma_moves";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
   from?: Maybe<Scalars["String"]["output"]>;
   /** An object relationship */
   game: Badma_Games;
   game_id: Scalars["uuid"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   promotion?: Maybe<Scalars["String"]["output"]>;
   side?: Maybe<Scalars["Int"]["output"]>;
@@ -2289,15 +2132,12 @@ export type Badma_Moves_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "badma.moves". All fields are combined with a logical 'AND'. */
 export type Badma_Moves_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Moves_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Moves_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Moves_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   from?: InputMaybe<String_Comparison_Exp>;
   game?: InputMaybe<Badma_Games_Bool_Exp>;
   game_id?: InputMaybe<Uuid_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   promotion?: InputMaybe<String_Comparison_Exp>;
   side?: InputMaybe<Int_Comparison_Exp>;
@@ -2324,7 +2164,6 @@ export type Badma_Moves_Insert_Input = {
   from?: InputMaybe<Scalars["String"]["input"]>;
   game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   promotion?: InputMaybe<Scalars["String"]["input"]>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2337,8 +2176,6 @@ export type Badma_Moves_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Moves_Max_Fields = {
   __typename?: "badma_moves_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   from?: Maybe<Scalars["String"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
@@ -2352,8 +2189,6 @@ export type Badma_Moves_Max_Fields = {
 
 /** order by max() on columns of table "badma.moves" */
 export type Badma_Moves_Max_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
@@ -2368,8 +2203,6 @@ export type Badma_Moves_Max_Order_By = {
 /** aggregate min on columns */
 export type Badma_Moves_Min_Fields = {
   __typename?: "badma_moves_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   from?: Maybe<Scalars["String"]["output"]>;
   game_id?: Maybe<Scalars["uuid"]["output"]>;
@@ -2383,8 +2216,6 @@ export type Badma_Moves_Min_Fields = {
 
 /** order by min() on columns of table "badma.moves" */
 export type Badma_Moves_Min_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
   game_id?: InputMaybe<Order_By>;
@@ -2405,13 +2236,6 @@ export type Badma_Moves_Mutation_Response = {
   returning: Array<Badma_Moves>;
 };
 
-/** input type for inserting object relation for remote table "badma.moves" */
-export type Badma_Moves_Obj_Rel_Insert_Input = {
-  data: Badma_Moves_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Moves_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.moves" */
 export type Badma_Moves_On_Conflict = {
   constraint: Badma_Moves_Constraint;
@@ -2421,13 +2245,10 @@ export type Badma_Moves_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.moves". */
 export type Badma_Moves_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   from?: InputMaybe<Order_By>;
   game?: InputMaybe<Badma_Games_Order_By>;
   game_id?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   promotion?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
@@ -2444,10 +2265,6 @@ export type Badma_Moves_Pk_Columns_Input = {
 
 /** select columns of table "badma.moves" */
 export enum Badma_Moves_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -2524,8 +2341,6 @@ export type Badma_Moves_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Moves_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   from?: InputMaybe<Scalars["String"]["input"]>;
   game_id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -2615,13 +2430,9 @@ export type Badma_Moves_Variance_Order_By = {
 /** columns and relationships of "badma.servers" */
 export type Badma_Servers = {
   __typename?: "badma_servers";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   active_at: Scalars["timestamptz"]["output"];
   created_at: Scalars["timestamptz"]["output"];
   global_address: Scalars["String"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   local_address: Scalars["String"]["output"];
 };
@@ -2650,14 +2461,11 @@ export type Badma_Servers_Aggregate_FieldsCountArgs = {
 /** Boolean expression to filter rows from the table "badma.servers". All fields are combined with a logical 'AND'. */
 export type Badma_Servers_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Servers_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Badma_Servers_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Servers_Bool_Exp>>;
   active_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   global_address?: InputMaybe<String_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   local_address?: InputMaybe<String_Comparison_Exp>;
 };
@@ -2673,7 +2481,6 @@ export type Badma_Servers_Insert_Input = {
   active_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   global_address?: InputMaybe<Scalars["String"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   local_address?: InputMaybe<Scalars["String"]["input"]>;
 };
@@ -2681,8 +2488,6 @@ export type Badma_Servers_Insert_Input = {
 /** aggregate max on columns */
 export type Badma_Servers_Max_Fields = {
   __typename?: "badma_servers_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   active_at?: Maybe<Scalars["timestamptz"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   global_address?: Maybe<Scalars["String"]["output"]>;
@@ -2693,8 +2498,6 @@ export type Badma_Servers_Max_Fields = {
 /** aggregate min on columns */
 export type Badma_Servers_Min_Fields = {
   __typename?: "badma_servers_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   active_at?: Maybe<Scalars["timestamptz"]["output"]>;
   created_at?: Maybe<Scalars["timestamptz"]["output"]>;
   global_address?: Maybe<Scalars["String"]["output"]>;
@@ -2711,13 +2514,6 @@ export type Badma_Servers_Mutation_Response = {
   returning: Array<Badma_Servers>;
 };
 
-/** input type for inserting object relation for remote table "badma.servers" */
-export type Badma_Servers_Obj_Rel_Insert_Input = {
-  data: Badma_Servers_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Badma_Servers_On_Conflict>;
-};
-
 /** on_conflict condition type for table "badma.servers" */
 export type Badma_Servers_On_Conflict = {
   constraint: Badma_Servers_Constraint;
@@ -2727,12 +2523,9 @@ export type Badma_Servers_On_Conflict = {
 
 /** Ordering options when selecting data from "badma.servers". */
 export type Badma_Servers_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
   active_at?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   global_address?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   local_address?: InputMaybe<Order_By>;
 };
@@ -2744,10 +2537,6 @@ export type Badma_Servers_Pk_Columns_Input = {
 
 /** select columns of table "badma.servers" */
 export enum Badma_Servers_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
   /** column name */
   ActiveAt = "active_at",
   /** column name */
@@ -2779,8 +2568,6 @@ export type Badma_Servers_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Badma_Servers_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   active_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
   global_address?: InputMaybe<Scalars["String"]["input"]>;
@@ -3791,8 +3578,6 @@ export type Badma_Tournaments = {
   _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
   _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["timestamptz"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   /** An array relationship */
   participants: Array<Badma_Tournament_Participants>;
@@ -3872,7 +3657,6 @@ export type Badma_Tournaments_Bool_Exp = {
   _not?: InputMaybe<Badma_Tournaments_Bool_Exp>;
   _or?: InputMaybe<Array<Badma_Tournaments_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   participants?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
   participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp>;
@@ -3892,7 +3676,6 @@ export enum Badma_Tournaments_Constraint {
 /** input type for inserting data into table "badma.tournaments" */
 export type Badma_Tournaments_Insert_Input = {
   created_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   participants?: InputMaybe<Badma_Tournament_Participants_Arr_Rel_Insert_Input>;
   status?: InputMaybe<Scalars["String"]["input"]>;
@@ -3953,7 +3736,6 @@ export type Badma_Tournaments_Order_By = {
   _hasyx_schema_name?: InputMaybe<Order_By>;
   _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
@@ -4270,18 +4052,6 @@ export type Debug_Updates = {
 export type Hasyx = {
   __typename?: "hasyx";
   /** An object relationship */
-  badma_ais?: Maybe<Badma_Ais>;
-  /** An object relationship */
-  badma_errors?: Maybe<Badma_Errors>;
-  /** An object relationship */
-  badma_games?: Maybe<Badma_Games>;
-  /** An object relationship */
-  badma_joins?: Maybe<Badma_Joins>;
-  /** An object relationship */
-  badma_moves?: Maybe<Badma_Moves>;
-  /** An object relationship */
-  badma_servers?: Maybe<Badma_Servers>;
-  /** An object relationship */
   badma_tournaments?: Maybe<Badma_Tournaments>;
   hid?: Maybe<Scalars["String"]["output"]>;
   id?: Maybe<Scalars["String"]["output"]>;
@@ -4297,8 +4067,6 @@ export type Hasyx = {
   /** An object relationship */
   payments_subscriptions?: Maybe<Payments_Subscriptions>;
   project?: Maybe<Scalars["String"]["output"]>;
-  /** An object relationship */
-  public_accounts?: Maybe<Accounts>;
   /** An object relationship */
   public_debug?: Maybe<Debug>;
   /** An object relationship */
@@ -4335,12 +4103,6 @@ export type Hasyx_Bool_Exp = {
   _and?: InputMaybe<Array<Hasyx_Bool_Exp>>;
   _not?: InputMaybe<Hasyx_Bool_Exp>;
   _or?: InputMaybe<Array<Hasyx_Bool_Exp>>;
-  badma_ais?: InputMaybe<Badma_Ais_Bool_Exp>;
-  badma_errors?: InputMaybe<Badma_Errors_Bool_Exp>;
-  badma_games?: InputMaybe<Badma_Games_Bool_Exp>;
-  badma_joins?: InputMaybe<Badma_Joins_Bool_Exp>;
-  badma_moves?: InputMaybe<Badma_Moves_Bool_Exp>;
-  badma_servers?: InputMaybe<Badma_Servers_Bool_Exp>;
   badma_tournaments?: InputMaybe<Badma_Tournaments_Bool_Exp>;
   hid?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
@@ -4351,7 +4113,6 @@ export type Hasyx_Bool_Exp = {
   payments_providers?: InputMaybe<Payments_Providers_Bool_Exp>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Bool_Exp>;
   project?: InputMaybe<String_Comparison_Exp>;
-  public_accounts?: InputMaybe<Accounts_Bool_Exp>;
   public_debug?: InputMaybe<Debug_Bool_Exp>;
   public_notifications?: InputMaybe<Notifications_Bool_Exp>;
   public_users?: InputMaybe<Users_Bool_Exp>;
@@ -4361,12 +4122,6 @@ export type Hasyx_Bool_Exp = {
 
 /** input type for inserting data into table "hasyx" */
 export type Hasyx_Insert_Input = {
-  badma_ais?: InputMaybe<Badma_Ais_Obj_Rel_Insert_Input>;
-  badma_errors?: InputMaybe<Badma_Errors_Obj_Rel_Insert_Input>;
-  badma_games?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
-  badma_joins?: InputMaybe<Badma_Joins_Obj_Rel_Insert_Input>;
-  badma_moves?: InputMaybe<Badma_Moves_Obj_Rel_Insert_Input>;
-  badma_servers?: InputMaybe<Badma_Servers_Obj_Rel_Insert_Input>;
   badma_tournaments?: InputMaybe<Badma_Tournaments_Obj_Rel_Insert_Input>;
   hid?: InputMaybe<Scalars["String"]["input"]>;
   id?: InputMaybe<Scalars["String"]["input"]>;
@@ -4377,7 +4132,6 @@ export type Hasyx_Insert_Input = {
   payments_providers?: InputMaybe<Payments_Providers_Obj_Rel_Insert_Input>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Obj_Rel_Insert_Input>;
   project?: InputMaybe<Scalars["String"]["input"]>;
-  public_accounts?: InputMaybe<Accounts_Obj_Rel_Insert_Input>;
   public_debug?: InputMaybe<Debug_Obj_Rel_Insert_Input>;
   public_notifications?: InputMaybe<Notifications_Obj_Rel_Insert_Input>;
   public_users?: InputMaybe<Users_Obj_Rel_Insert_Input>;
@@ -4414,12 +4168,6 @@ export type Hasyx_Obj_Rel_Insert_Input = {
 
 /** Ordering options when selecting data from "hasyx". */
 export type Hasyx_Order_By = {
-  badma_ais?: InputMaybe<Badma_Ais_Order_By>;
-  badma_errors?: InputMaybe<Badma_Errors_Order_By>;
-  badma_games?: InputMaybe<Badma_Games_Order_By>;
-  badma_joins?: InputMaybe<Badma_Joins_Order_By>;
-  badma_moves?: InputMaybe<Badma_Moves_Order_By>;
-  badma_servers?: InputMaybe<Badma_Servers_Order_By>;
   badma_tournaments?: InputMaybe<Badma_Tournaments_Order_By>;
   hid?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -4430,7 +4178,6 @@ export type Hasyx_Order_By = {
   payments_providers?: InputMaybe<Payments_Providers_Order_By>;
   payments_subscriptions?: InputMaybe<Payments_Subscriptions_Order_By>;
   project?: InputMaybe<Order_By>;
-  public_accounts?: InputMaybe<Accounts_Order_By>;
   public_debug?: InputMaybe<Debug_Order_By>;
   public_notifications?: InputMaybe<Notifications_Order_By>;
   public_users?: InputMaybe<Users_Order_By>;

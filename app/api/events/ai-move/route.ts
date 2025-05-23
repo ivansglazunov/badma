@@ -226,7 +226,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       await hasyx.update({
         table: 'badma_games',
         where: { id: { _eq: gameData.id } },
-        _set: { status: newStatus, updated_at: new Date().toISOString() }
+        _set: { status: newStatus, updated_at: Date.now() }
       });
 
       return {
@@ -300,7 +300,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       await hasyx.update({
         table: 'badma_games',
         where: { id: { _eq: gameData.id } },
-        _set: { status: newStatus, updated_at: new Date().toISOString() }
+        _set: { status: newStatus, updated_at: Date.now() }
       });
 
       return {

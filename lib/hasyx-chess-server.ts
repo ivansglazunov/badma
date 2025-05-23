@@ -54,8 +54,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       id: userId,
       name: userId,
       email: `${userId}@example.com`,
-      created_at: new Date(Date.now()).toISOString(),
-      updated_at: new Date(Date.now()).toISOString(),
+      created_at: Date.now(),
+      updated_at: Date.now(),
     } });
     debug('__addUser', user);
     return (user as any)?.id;
@@ -93,7 +93,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
   public async __addJoinRecord(recordData: any): Promise<void> {
     const serializedJoin = HasyxChessServer.serializeJoin(recordData);
     if (!serializedJoin.id) serializedJoin.id = uuidv4();
-    const now = new Date().toISOString();
+    const now = Date.now();
     if (!serializedJoin.created_at) serializedJoin.created_at = now;
 
     await this._hasyx.insert({ 
@@ -165,7 +165,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
       await this._hasyx.update({
         table: 'badma_joins',
         where: { id: { _eq: joinId } },
-        _set: { client_id: null, updated_at: new Date().toISOString() }
+        _set: { client_id: null, updated_at: Date.now() }
       });
       debug(`__clearJoinClientReference executed for joinId: ${joinId}`);
   }
@@ -239,8 +239,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (game.fen !== undefined) result.fen = game.fen;
     if (game.status !== undefined) result.status = game.status;
     if (game.side !== undefined) result.side = game.side;
-    if (game.createdAt !== undefined) result.created_at = new Date(game.createdAt).toISOString();
-    if (game.updatedAt !== undefined) result.updated_at = new Date(game.updatedAt).toISOString();
+    if (game.createdAt !== undefined) result.created_at = game.createdAt;
+    if (game.updatedAt !== undefined) result.updated_at = game.updatedAt;
     return result;
   }
 
@@ -252,8 +252,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (game.fen !== undefined) result.fen = game.fen;
     if (game.status !== undefined) result.status = game.status;
     if (game.side !== undefined) result.side = game.side;
-    if (game.created_at !== undefined) result.createdAt = new Date(game.created_at).getTime();
-    if (game.updated_at !== undefined) result.updatedAt = new Date(game.updated_at).getTime();
+    if (game.created_at !== undefined) result.createdAt = game.created_at;
+    if (game.updated_at !== undefined) result.updatedAt = game.updated_at;
     return result;
   }
 
@@ -265,7 +265,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (join.side !== undefined) result.side = join.side;
     if (join.role !== undefined) result.role = join.role;
     if (join.clientId !== undefined) result.client_id = join.clientId; // Can be null/undefined
-    if (join.createdAt !== undefined) result.created_at = new Date(join.createdAt).toISOString();
+    if (join.createdAt !== undefined) result.created_at = join.createdAt;
     return result;
   }
 
@@ -278,7 +278,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     if (join.side !== undefined) result.side = join.side;
     if (join.role !== undefined) result.role = join.role;
     if (join.client_id !== undefined) result.clientId = join.client_id; // Can be null/undefined
-    if (join.created_at !== undefined) result.createdAt = new Date(join.created_at).getTime();
+    if (join.created_at !== undefined) result.createdAt = join.created_at;
     return result;
   }
 
@@ -583,7 +583,7 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
                 side: request.side, // Чей был ход
                 user_id: request.userId,
                 game_id: gameId,
-                created_at: new Date(updatedTime).toISOString() // Используем время обновления сервера
+                created_at: updatedTime // Используем время обновления сервера
             }
         });
         this._hasyx.debug({

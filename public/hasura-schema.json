@@ -1142,30 +1142,6 @@
           "description": "columns and relationships of \"accounts\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "access_token",
               "description": null,
               "args": [],
@@ -1200,18 +1176,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "bigint",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1943,26 +1907,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -2016,16 +1960,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "bigint_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -2246,16 +2180,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -2395,30 +2319,6 @@
           "name": "accounts_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "access_token",
               "description": null,
@@ -2612,26 +2512,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "access_token",
               "description": null,
               "type": {
@@ -2791,30 +2671,6 @@
           "name": "accounts_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "access_token",
               "description": null,
@@ -3007,26 +2863,6 @@
           "description": "order by min() on columns of table \"accounts\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "access_token",
               "description": null,
@@ -3235,41 +3071,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "accounts_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"accounts\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "accounts_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "accounts_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "accounts_on_conflict",
           "description": "on_conflict condition type for table \"accounts\"",
           "fields": null,
@@ -3332,26 +3133,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "access_token",
               "description": null,
               "type": {
@@ -3377,16 +3158,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -3559,18 +3330,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "access_token",
               "description": "column name",
@@ -3998,26 +3757,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "access_token",
               "description": null,
@@ -4501,30 +4240,6 @@
           "description": "columns and relationships of \"badma.ais\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "args": [],
@@ -4536,18 +4251,6 @@
                   "name": "timestamptz",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -4990,26 +4693,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -5043,16 +4726,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "timestamptz_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -5217,16 +4890,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -5286,30 +4949,6 @@
           "name": "badma_ais_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -5371,26 +5010,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
@@ -5440,30 +5059,6 @@
           "name": "badma_ais_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -5524,26 +5119,6 @@
           "description": "order by min() on columns of table \"badma.ais\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -5642,41 +5217,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "badma_ais_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"badma.ais\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "badma_ais_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_ais_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "badma_ais_on_conflict",
           "description": "on_conflict condition type for table \"badma.ais\"",
           "fields": null,
@@ -5739,41 +5279,11 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -5887,18 +5397,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": "column name",
@@ -6034,26 +5532,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -6241,30 +5719,6 @@
           "description": "columns and relationships of \"badma.errors\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "context",
               "description": null,
               "args": [],
@@ -6323,18 +5777,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -6783,26 +6225,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -6876,16 +6298,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "uuid_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -7128,16 +6540,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -7197,30 +6599,6 @@
           "name": "badma_errors_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "context",
               "description": null,
@@ -7306,26 +6684,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "context",
               "description": null,
               "type": {
@@ -7395,30 +6753,6 @@
           "name": "badma_errors_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "context",
               "description": null,
@@ -7503,26 +6837,6 @@
           "description": "order by min() on columns of table \"badma.errors\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "context",
               "description": null,
@@ -7641,41 +6955,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "badma_errors_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"badma.errors\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "badma_errors_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_errors_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "badma_errors_on_conflict",
           "description": "on_conflict condition type for table \"badma.errors\"",
           "fields": null,
@@ -7738,26 +7017,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "context",
               "description": null,
               "type": {
@@ -7803,16 +7062,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -7936,18 +7185,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "context",
               "description": "column name",
@@ -8131,26 +7368,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "context",
               "description": null,
@@ -8386,30 +7603,6 @@
           "description": "columns and relationships of \"badma.games\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "args": [],
@@ -8606,18 +7799,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -9873,26 +9054,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -9956,16 +9117,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -10220,16 +9371,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -10369,30 +9510,6 @@
           "name": "badma_games_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -10538,26 +9655,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
@@ -10677,30 +9774,6 @@
           "name": "badma_games_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -10845,26 +9918,6 @@
           "description": "order by min() on columns of table \"badma.games\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -11130,26 +10183,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
@@ -11175,16 +10208,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -11357,18 +10380,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": "column name",
@@ -11798,26 +10809,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -12325,30 +11316,6 @@
           "description": "columns and relationships of \"badma.joins\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "client_id",
               "description": null,
               "args": [],
@@ -12404,18 +11371,6 @@
                   "name": "uuid",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -13068,26 +12023,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -13151,16 +12086,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "uuid_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -13315,16 +12240,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -13384,30 +12299,6 @@
           "name": "badma_joins_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "client_id",
               "description": null,
@@ -13505,26 +12396,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "client_id",
               "description": null,
               "type": {
@@ -13604,30 +12475,6 @@
           "name": "badma_joins_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "client_id",
               "description": null,
@@ -13724,26 +12571,6 @@
           "description": "order by min() on columns of table \"badma.joins\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "client_id",
               "description": null,
@@ -13872,41 +12699,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "badma_joins_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"badma.joins\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "badma_joins_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_joins_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "badma_joins_on_conflict",
           "description": "on_conflict condition type for table \"badma.joins\"",
           "fields": null,
@@ -13969,26 +12761,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "client_id",
               "description": null,
               "type": {
@@ -14024,16 +12796,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -14126,18 +12888,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "client_id",
               "description": "column name",
@@ -14503,26 +13253,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "client_id",
               "description": null,
@@ -14966,30 +13696,6 @@
           "description": "columns and relationships of \"badma.moves\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "args": [],
@@ -15045,18 +13751,6 @@
                   "name": "uuid",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -15703,26 +14397,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -15786,16 +14460,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "uuid_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -15960,16 +14624,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -16049,30 +14703,6 @@
           "name": "badma_moves_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -16194,26 +14824,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
@@ -16313,30 +14923,6 @@
           "name": "badma_moves_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -16457,26 +15043,6 @@
           "description": "order by min() on columns of table \"badma.moves\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -16625,41 +15191,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "badma_moves_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"badma.moves\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "badma_moves_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_moves_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "badma_moves_on_conflict",
           "description": "on_conflict condition type for table \"badma.moves\"",
           "fields": null,
@@ -16722,26 +15253,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "created_at",
               "description": null,
               "type": {
@@ -16777,16 +15288,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -16899,18 +15400,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "created_at",
               "description": "column name",
@@ -17242,26 +15731,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "created_at",
               "description": null,
@@ -17649,30 +16118,6 @@
           "description": "columns and relationships of \"badma.servers\"",
           "fields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "active_at",
               "description": null,
               "args": [],
@@ -17716,18 +16161,6 @@
                   "name": "String",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -17922,26 +16355,6 @@
               "defaultValue": null
             },
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "_not",
               "description": null,
               "type": {
@@ -17995,16 +16408,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "String_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -18088,16 +16491,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -18127,30 +16520,6 @@
           "name": "badma_servers_max_fields",
           "description": "aggregate max on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "active_at",
               "description": null,
@@ -18222,30 +16591,6 @@
           "name": "badma_servers_min_fields",
           "description": "aggregate min on columns",
           "fields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "active_at",
               "description": null,
@@ -18365,41 +16710,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "badma_servers_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"badma.servers\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "badma_servers_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_servers_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "badma_servers_on_conflict",
           "description": "on_conflict condition type for table \"badma.servers\"",
           "fields": null,
@@ -18462,26 +16772,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "active_at",
               "description": null,
               "type": {
@@ -18507,16 +16797,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -18579,18 +16859,6 @@
           "inputFields": null,
           "interfaces": null,
           "enumValues": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": "column name",
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "active_at",
               "description": "column name",
@@ -18726,26 +16994,6 @@
           "description": "Initial value of the column from where the streaming should start",
           "fields": null,
           "inputFields": [
-            {
-              "name": "_hasyx_schema_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "_hasyx_table_name",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "active_at",
               "description": null,
@@ -24725,18 +22973,6 @@
               "deprecationReason": null
             },
             {
-              "name": "hasyx",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "hasyx",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "id",
               "description": null,
               "args": [],
@@ -25364,16 +23600,6 @@
               "defaultValue": null
             },
             {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -25487,16 +23713,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "timestamptz",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -25931,16 +24147,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "hasyx",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "hasyx_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -27673,78 +25879,6 @@
           "description": "columns and relationships of \"hasyx\"",
           "fields": [
             {
-              "name": "badma_ais",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_ais",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "badma_errors",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_errors",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "badma_games",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_games",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "badma_joins",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_joins",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "badma_moves",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_moves",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "badma_servers",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "badma_servers",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "badma_tournaments",
               "description": "An object relationship",
               "args": [],
@@ -27859,18 +25993,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "public_accounts",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "accounts",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -28122,66 +26244,6 @@
               "defaultValue": null
             },
             {
-              "name": "badma_ais",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_ais_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_errors",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_errors_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_games",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_games_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_joins",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_joins_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_moves",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_moves_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_servers",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_servers_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "badma_tournaments",
               "description": null,
               "type": {
@@ -28282,16 +26344,6 @@
               "defaultValue": null
             },
             {
-              "name": "public_accounts",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "accounts_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "public_debug",
               "description": null,
               "type": {
@@ -28352,66 +26404,6 @@
           "description": "input type for inserting data into table \"hasyx\"",
           "fields": null,
           "inputFields": [
-            {
-              "name": "badma_ais",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_ais_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_errors",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_errors_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_games",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_games_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_joins",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_joins_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_moves",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_moves_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_servers",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_servers_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "badma_tournaments",
               "description": null,
@@ -28508,16 +26500,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "public_accounts",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "accounts_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -28775,66 +26757,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "badma_ais",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_ais_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_errors",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_errors_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_games",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_games_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_joins",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_joins_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_moves",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_moves_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "badma_servers",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "badma_servers_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "badma_tournaments",
               "description": null,
               "type": {
@@ -28930,16 +26852,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "public_accounts",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "accounts_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -75951,7 +73863,7 @@
         "table": "users"
       }
     },
-    "timestamp": "2025-05-23T10:22:11.190Z",
+    "timestamp": 1748014689907,
     "version": "1.0.0"
   }
 }

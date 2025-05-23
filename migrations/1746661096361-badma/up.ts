@@ -37,8 +37,8 @@ const sqlSchema = `
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     local_address TEXT NOT NULL,
     global_address TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    active_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+    active_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
 
   -- Games table (immutable except fen)
@@ -50,8 +50,8 @@ const sqlSchema = `
     mode TEXT NOT NULL DEFAULT 'classic',
     fen TEXT, -- Dynamically updated with each move
     status TEXT NOT NULL DEFAULT 'await',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL,
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+    updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
     storage_inserted_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     storage_updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT side_within_sides CHECK (side <= sides),
@@ -68,7 +68,7 @@ const sqlSchema = `
     side INTEGER,
     user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
     game_id UUID NOT NULL REFERENCES ${badmaSchema}.games(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
 
   -- Joins table (immutable)
@@ -79,7 +79,7 @@ const sqlSchema = `
     side INTEGER NOT NULL,
     role INTEGER NOT NULL,
     client_id UUID NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
     -- Removed constraint side_valid_range as side can be 0 for spectator/observer
   );
 
@@ -88,8 +88,8 @@ const sqlSchema = `
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
     options JSONB NOT NULL DEFAULT '{"engine": "js-chess-engine", "level": 0}'::jsonb,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
+    updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
 
   -- Errors table
@@ -101,7 +101,7 @@ const sqlSchema = `
     request_payload JSONB,
     response_payload JSONB,
     error_message TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
 
   -- <<< ADDED Trigger for badma.games storage_updated_at >>>
