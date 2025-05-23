@@ -25,17 +25,46 @@ interface TournamentType {
   status: 'await' | 'ready' | 'continue' | 'finished';
   type: string;
   created_at: string;
+  tournament_games?: Array<{
+    id: string;
+    game: {
+      id: string;
+      status?: string | null;
+    };
+  }>;
+  participants?: Array<{
+    id: string;
+    user_id: string;
+    role: number;
+  }>;
 }
 
 interface UserType {
   id: string;
   name?: string | null;
   image?: string | null;
+  tournament_scores?: Array<{
+    score: number;
+  }>;
+  scores?: Array<{
+    id: string;
+    score: number;
+  }>;
+  games_via_joins?: Array<{
+    id: string;
+    status?: string | null;
+    moves?: Array<{
+      id: string;
+    }>;
+  }>;
 }
 
 interface GameType {
   id: string;
   status?: string | null;
+  moves?: Array<{
+    id: string;
+  }>;
 }
 
 interface TournamentGameType {
@@ -61,37 +90,119 @@ const getStatusBadgeClass = (status: TournamentType['status']): string => {
 const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournamentId }) => {
   const { data, loading, error } = useSubscription(
     {
-      table: 'users',
+      table: 'badma_tournament_participants',
       where: {
-        tournament_participations: {
-          tournament_id: { _eq: tournamentId },
-        }
+        tournament_id: { _eq: tournamentId },
+        role: { _eq: 1 }
       },
-      returning: ['id', 'name', 'image']
+      returning: [
+        'id',
+        'user_id',
+        {
+          user: ['id', 'name', 'image']
+        },
+        {
+          scores: ['id', 'score']
+        }
+      ]
     },
     { skip: !tournamentId }
   );
-  const participants: UserType[] = React.useMemo(() => {
-    if (Array.isArray(data)) return data as UserType[];
-    if (data && (data as any).users) return (data as any).users as UserType[];
+
+  // Get games for participants separately to avoid complex nested queries
+  const { data: gamesData } = useSubscription(
+    {
+      table: 'badma_joins',
+      where: {
+        role: { _eq: 1 },
+        game: {
+          tournament_games: {
+            tournament_id: { _eq: tournamentId }
+          }
+        }
+      },
+      returning: [
+        'id',
+        'user_id',
+        {
+          game: [
+            'id',
+            'status',
+            {
+              moves: ['id']
+            }
+          ]
+        }
+      ]
+    },
+    { skip: !tournamentId }
+  );
+
+  const participants = React.useMemo(() => {
+    if (Array.isArray(data)) return data;
+    if (data && (data as any).badma_tournament_participants) return (data as any).badma_tournament_participants;
     return [];
   }, [data]);
 
+  const gamesByUser = React.useMemo(() => {
+    const games = Array.isArray(gamesData) ? gamesData : (gamesData as any)?.badma_joins || [];
+    const grouped: Record<string, any[]> = {};
+    games.forEach((join: any) => {
+      if (!grouped[join.user_id]) grouped[join.user_id] = [];
+      grouped[join.user_id].push(join.game);
+    });
+    return grouped;
+  }, [gamesData]);
+
   if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading participants...</div>;
-  if (error) return <p className="p-4 text-red-500">Error loading participants: {error.message}. Ensure the relationship 'tournament_participations' is correctly set up on the 'users' table and permissions allow access.</p>;
+  if (error) return <p className="p-4 text-red-500">Error loading participants: {error.message}. Ensure the relationship is correctly set up.</p>;
   if (!participants.length) return <p className="p-4 text-muted-foreground">No active participants found for this tournament.</p>;
 
   return (
-    <div className="space-y-3 p-1">
-      {participants.map(user => (
-        <div key={user.id} className="flex items-center space-x-3 p-2 hover:bg-muted/30 rounded-md">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={user.image ?? undefined} alt={user.name ?? 'User'} />
-            <AvatarFallback>{user.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
-          </Avatar>
-          <span className="text-sm text-foreground">{user.name ?? 'Anonymous User'}</span>
-        </div>
-      ))}
+    <div className="space-y-4 p-1">
+      {participants.map((participant: any) => {
+        const totalScore = (participant.scores || []).reduce((sum: number, score: any) => sum + (score.score || 0), 0);
+        const userGames = gamesByUser[participant.user_id] || [];
+        
+        return (
+          <div key={participant.id} className="p-3 hover:bg-muted/30 rounded-md border border-muted/20">
+            <div className="flex items-center space-x-3 mb-2">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={participant.user?.image ?? undefined} alt={participant.user?.name ?? 'User'} />
+                <AvatarFallback>{participant.user?.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <span className="text-sm font-medium text-foreground">{participant.user?.name ?? 'Anonymous User'}</span>
+                <div className="text-xs text-muted-foreground">
+                  Total Score: <span className="font-medium text-green-600">{totalScore}</span>
+                </div>
+              </div>
+            </div>
+            {userGames.length > 0 && (
+              <div className="ml-11 space-y-1">
+                <div className="text-xs font-medium text-muted-foreground mb-1">Games ({userGames.length}):</div>
+                {userGames.map((game: any) => (
+                  <div key={game.id} className="flex items-center justify-between text-xs bg-muted/30 rounded px-2 py-1">
+                    <span className="font-mono">{game.id.substring(0, 8)}...</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-muted-foreground">
+                        {game.moves?.length || 0} moves
+                      </span>
+                      <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                        game.status === 'finished' || game.status === 'checkmate' 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                      }`}>
+                        {game.status ?? 'Unknown'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -103,7 +214,18 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
     {
       table: 'badma_tournament_games',
       where: { tournament_id: { _eq: tournamentId } },
-      returning: ['id', { game: ['id', 'status'] }]
+      returning: [
+        'id', 
+        { 
+          game: [
+            'id', 
+            'status',
+            {
+              moves: ['id']
+            }
+          ] 
+        }
+      ]
     },
     { skip: !tournamentId }
   );
@@ -119,18 +241,31 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
 
   return (
     <div className="space-y-2 p-1">
-      {games.map(tg => (
-        <div 
-          key={tg.id} 
-          className="flex items-center justify-between p-2 hover:bg-muted/30 rounded-md cursor-pointer"
-          onClick={() => handleOpenGameGlobal(tg.game.id)}
-        >
-          <span className="text-sm text-foreground">Game ID: {tg.game.id.substring(0, 8)}...</span>
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${tg.game.status ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
-            {tg.game.status ?? 'Unknown'}
-          </span>
-        </div>
-      ))}
+      {games.map(tg => {
+        const moveCount = tg.game.moves?.length || 0;
+        
+        return (
+          <div 
+            key={tg.id} 
+            className="flex items-center justify-between p-3 hover:bg-muted/30 rounded-md cursor-pointer border border-muted/20"
+            onClick={() => handleOpenGameGlobal(tg.game.id)}
+          >
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-foreground">Game ID: {tg.game.id.substring(0, 8)}...</span>
+              <span className="text-xs text-muted-foreground">{moveCount} moves played</span>
+            </div>
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+              tg.game.status === 'finished' || tg.game.status === 'checkmate'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : tg.game.status 
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' 
+                  : 'bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
+            }`}>
+              {tg.game.status ?? 'Unknown'}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -238,7 +373,30 @@ export default function App() {
   } = useSubscription(
     {
       table: 'badma_tournaments',
-      returning: ['id', 'status', 'type', 'created_at'], 
+      returning: [
+        'id', 
+        'status', 
+        'type', 
+        'created_at',
+        { 
+          tournament_games: [
+            'id',
+            { 
+              game: [
+                'id', 
+                'status'
+              ] 
+            }
+          ] 
+        },
+        { 
+          participants: [
+            'id', 
+            'user_id', 
+            'role'
+          ] 
+        }
+      ], 
       order_by: { created_at: 'desc' }
     },
     {
@@ -324,25 +482,46 @@ export default function App() {
               )}
               {!tournamentsLoading && !tournamentsError && actualTournaments.length > 0 ? (
                 <div className="w-full max-w-2xl space-y-1">
-                  {actualTournaments.map((tournament) => (
-                    <div 
-                      key={tournament.id} 
-                      className="flex items-center justify-between p-3 hover:bg-muted/50 dark:hover:bg-muted/20 rounded-md cursor-pointer transition-colors"
-                      onClick={() => handleTournamentClick(tournament)}
-                    >
-                      <span className="text-sm font-medium text-foreground truncate pr-2">{tournament.type}</span>
-                      <div className="flex items-center space-x-2 flex-shrink-0">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
-                          {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
-                        </span>
-                        {tournament.created_at && (
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(tournament.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {actualTournaments.map((tournament) => {
+                    const allGames = tournament.tournament_games || [];
+                    const totalGames = allGames.length;
+                    const finishedGames = allGames.filter(tg => 
+                      tg.game && ['finished', 'checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender'].includes(tg.game.status || '')
+                    ).length;
+                    const activeParticipants = (tournament.participants || []).filter(p => p.role === 1);
+                    const participantCount = activeParticipants.length;
+                    
+                    return (
+                      <div 
+                        key={tournament.id} 
+                        className="flex items-center justify-between p-3 hover:bg-muted/50 dark:hover:bg-muted/20 rounded-md cursor-pointer transition-colors border border-muted/20"
+                        onClick={() => handleTournamentClick(tournament)}
+                      >
+                        <div className="flex flex-col flex-1 pr-2">
+                          <span className="text-sm font-medium text-foreground truncate">{tournament.type}</span>
+                          <span className="text-xs text-muted-foreground">ID: {tournament.id.substring(0, 8)}...</span>
+                          <div className="flex items-center space-x-3 text-xs text-muted-foreground mt-1">
+                            <span>
+                              Games: <span className="text-green-600 font-medium">{finishedGames}</span>/{totalGames}
+                            </span>
+                            <span>
+                              Players: <span className="font-medium">{participantCount}</span>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2 flex-shrink-0">
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
+                            {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
                           </span>
-                        )}
+                          {tournament.created_at && (
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(tournament.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                  !tournamentsLoading && !tournamentsError && <p>No tournaments found.</p>

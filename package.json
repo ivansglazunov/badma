@@ -1,6 +1,6 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.19",
+  "version": "0.1.0-alpha.20",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -13,7 +13,8 @@
     "postinstall": "npm run ws -- -y",
     "migrate": "npx hasyx migrate",
     "unmigrate": "npx hasyx unmigrate",
-    "npm-publish": "npm run build && npm publish"
+    "npm-publish": "npm run build && npm publish",
+    "events": "npx hasyx events"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,7 @@
   "dependencies": {
     "chess.js": "^0.12.1",
     "events": "^3.3.0",
-    "hasyx": "^0.1.164",
+    "hasyx": "^0.1.177",
     "js-chess-engine": "^1.0.2",
     "react-chessboard": "^4.7.3",
     "react-resize-detector": "^12.0.2",
