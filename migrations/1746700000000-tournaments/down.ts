@@ -16,7 +16,7 @@ const badmaSchema = 'badma';
 const permissionsToDrop = [
   // tournaments
   { role: 'admin', table: 'tournaments', types: ['select', 'insert', 'update', 'delete'] },
-  { role: 'user', table: 'tournaments', types: ['select'] },
+  { role: 'user', table: 'tournaments', types: ['select', 'insert', 'update'] },
   { role: 'anonymous', table: 'tournaments', types: ['select'] },
   // tournament_participants
   { role: 'admin', table: 'tournament_participants', types: ['select', 'insert', 'update', 'delete'] },
@@ -45,10 +45,17 @@ const relationshipsToDrop = [
   { table: 'tournament_participants', name: 'tournament' },
   { table: 'tournament_participants', name: 'user' },
   // For tournaments
+  { table: 'tournaments', name: 'user' },
   { table: 'tournaments', name: 'tournament_games' },
   { table: 'tournaments', name: 'participants' },
   // For games (NEW)
   { table: 'games', name: 'tournament_games' },
+];
+
+// Define relationships on public schema tables to drop
+const publicRelationshipsToDrop = [
+  { schema: 'public', table: 'users', name: 'tournament_participations' },
+  { schema: 'public', table: 'users', name: 'tournaments' },
 ];
 
 const tablesToUntrackAndDrop = [
@@ -91,6 +98,8 @@ async function dropPermissionsFunc() {
 
 async function dropRelationshipsFunc() {
   debug('🔗 Dropping tournament relationships...');
+  
+  // Drop relationships from badma schema tables
   for (const rel of relationshipsToDrop) {
      debug(`  🗑️ Dropping relationship ${rel.name} for table ${badmaSchema}.${rel.table}...`);
      try {
@@ -106,6 +115,24 @@ async function dropRelationshipsFunc() {
         debug(`     Could not drop relationship ${rel.name} on ${rel.table} (may not exist): ${e.message}`);
     }
   }
+  
+  // Drop relationships from public schema tables
+  for (const rel of publicRelationshipsToDrop) {
+     debug(`  🗑️ Dropping relationship ${rel.name} for table ${rel.schema}.${rel.table}...`);
+     try {
+        await hasura.v1({
+            type: 'pg_drop_relationship',
+            args: {
+                source: 'default',
+                table: { schema: rel.schema, name: rel.table },
+                relationship: rel.name,
+            }
+        });
+    } catch (e: any) {
+        debug(`     Could not drop relationship ${rel.name} on ${rel.schema}.${rel.table} (may not exist): ${e.message}`);
+    }
+  }
+  
   debug('✅ Tournament relationships dropped.');
 }
 

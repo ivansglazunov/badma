@@ -11,6 +11,7 @@ import { useTheme } from 'hasyx/components/theme-switcher';
 import Board from './board';
 import axios from 'axios';
 import Debug from './debug';
+import React from 'react';
 
 const debug = Debug('game');
 
@@ -175,13 +176,8 @@ export function GameCore({ gameData, currentUserId }: GameCoreProps) {
 
 export default function Game({ gameId, onClose }: GameProps) {
   const { data: session } = useSession();
-  const currentUserEmail = session?.user?.email;
 
-  console.log('Game component debug:', {
-    gameId,
-    currentUserEmail,
-    sessionUser: session?.user
-  });
+  const currentUserId = session?.user?.id;
 
   const { data, loading, error } = useSubscription(
     {
@@ -237,7 +233,7 @@ export default function Game({ gameId, onClose }: GameProps) {
   return (
     <GameCore 
       gameData={gameData}
-      currentUserId={currentUserEmail}
+      currentUserId={currentUserId}
     />
   );
 } 

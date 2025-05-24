@@ -4,7 +4,8 @@ import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle,
 import { signOut, useSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
 
-import { useClient, useSubscription } from "hasyx";
+import { useClient, useHasyx, useSubscription } from "hasyx";
+import { createApolloClient, Generator, Hasyx } from "hasyx";
 import { Avatar, AvatarFallback, AvatarImage } from "hasyx/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "hasyx/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "hasyx/components/ui/carousel";
@@ -17,63 +18,18 @@ import { useTheme } from "hasyx/components/theme-switcher";
 import { Button } from "hasyx/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "hasyx/components/ui/card";
 import { Input } from "hasyx/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "hasyx/components/ui/select";
+import { Label } from "hasyx/components/ui/label";
+import { Separator } from "hasyx/components/ui/separator";
+import { Badge } from "hasyx/components/ui/badge";
+import axios from "axios";
 
 import { cn } from "hasyx/lib/utils"
 import { useMounted } from "@/hooks/mounted";
+import schema from "@/public/hasura-schema.json";
+import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
 
-interface TournamentType {
-  id: string;
-  status: 'await' | 'ready' | 'continue' | 'finished';
-  type: string;
-  created_at: string;
-  tournament_games?: Array<{
-    id: string;
-    game: {
-      id: string;
-      status?: string | null;
-    };
-  }>;
-  participants?: Array<{
-    id: string;
-    user_id: string;
-    role: number;
-  }>;
-}
-
-interface UserType {
-  id: string;
-  name?: string | null;
-  image?: string | null;
-  tournament_scores?: Array<{
-    score: number;
-  }>;
-  scores?: Array<{
-    id: string;
-    score: number;
-  }>;
-  games_via_joins?: Array<{
-    id: string;
-    status?: string | null;
-    moves?: Array<{
-      id: string;
-    }>;
-  }>;
-}
-
-interface GameType {
-  id: string;
-  status?: string | null;
-  moves?: Array<{
-    id: string;
-  }>;
-}
-
-interface TournamentGameType {
-  id: string;
-  game: GameType;
-}
-
-const getStatusBadgeClass = (status: TournamentType['status']): string => {
+const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
     case 'await':
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200';
@@ -100,11 +56,15 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
         'id',
         'user_id',
         {
-          user: ['id', 'name', 'image']
+          scores_aggregate: {
+            aggregate: {
+              sum: ['score']
+            }
+          }
         },
         {
-          scores: ['id', 'score']
-        }
+          user: ['id', 'name', 'image']
+        },
       ]
     },
     { skip: !tournamentId }
@@ -162,7 +122,7 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
   return (
     <div className="space-y-4 p-1">
       {participants.map((participant: any) => {
-        const totalScore = (participant.scores || []).reduce((sum: number, score: any) => sum + (score.score || 0), 0);
+        const totalScore = participant.scores_aggregate?.aggregate?.sum?.score || 0;
         const userGames = gamesByUser[participant.user_id] || [];
         
         return (
@@ -237,9 +197,9 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
     },
     { skip: !tournamentId }
   );
- const games: TournamentGameType[] = React.useMemo(() => {
-    if (Array.isArray(data)) return data as TournamentGameType[];
-    if (data && (data as any).badma_tournament_games) return (data as any).badma_tournament_games as TournamentGameType[];
+ const games: Badma_Tournament_Games[] = React.useMemo(() => {
+    if (Array.isArray(data)) return data as Badma_Tournament_Games[];
+    if (data && (data as any).badma_tournament_games) return (data as any).badma_tournament_games as Badma_Tournament_Games[];
     return [];
   }, [data]);
 
@@ -379,7 +339,11 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
           ]
         },
         {
-          scores: ['score']
+          scores_aggregate: {
+            aggregate: {
+              sum: ['score']
+            }
+          }
         }
       ],
       order_by: { created_at: 'desc' }
@@ -427,7 +391,7 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
     <div className="space-y-2 p-1">
       {tournaments.map((participant: any) => {
         const tournament = participant.tournament;
-        const userScore = (participant.scores || []).reduce((sum: number, score: any) => sum + (score.score || 0), 0);
+        const userScore = participant.scores_aggregate?.aggregate?.sum?.score || 0;
         const maxScore = maxScoresByTournament[tournament.id] || 0;
         
         return (
@@ -523,15 +487,40 @@ export function GameFree() {
 export default function App() {
   const { data: session, status: sessionStatus } = useSession();
   const user = session?.user;
-  const client = useClient();
   const { theme, setTheme } = useTheme();
+  const hasyx = useHasyx();
+
+  // Get current user's full data including ID
+  const { data: currentUserData, loading: userLoading } = useSubscription(
+    {
+      table: 'users',
+      where: { id: { _eq: user?.id } },
+      returning: ['id', 'name', 'image'],
+      limit: 1
+    },
+    { skip: !user?.id }
+  );
+
+  const currentUserId = React.useMemo(() => {
+    if (Array.isArray(currentUserData)) {
+      return currentUserData[0]?.id;
+    }
+    if (currentUserData && (currentUserData as any).users) {
+      return (currentUserData as any).users[0]?.id;
+    }
+    return currentUserData?.id;
+  }, [currentUserData]);
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
   const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'create'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profile, setProfile] = useState(false);
-  const [selectedTournament, setSelectedTournament] = useState<TournamentType | null>(null);
+  const [selectedTournament, setSelectedTournament] = useState<Badma_Tournaments | null>(null);
   const [isTournamentModalOpen, setIsTournamentModalOpen] = useState(false);
+  const [isCreateTournamentModalOpen, setIsCreateTournamentModalOpen] = useState(false);
+  const [newTournamentType, setNewTournamentType] = useState('round-robin');
+  const [isCreatingTournament, setIsCreatingTournament] = useState(false);
+  const [isAddingAiPlayers, setIsAddingAiPlayers] = useState(false);
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   
   const isAuthenticated = sessionStatus === "authenticated";
@@ -550,7 +539,7 @@ export default function App() {
     setSelectedGameId(null);
   };
 
-  const handleTournamentClick = (tournament: TournamentType) => {
+  const handleTournamentClick = (tournament: Badma_Tournaments) => {
     setSelectedTournament(tournament);
     setIsTournamentModalOpen(true);
   };
@@ -564,6 +553,7 @@ export default function App() {
       table: 'badma_tournaments',
       returning: [
         'id', 
+        'user_id',
         'status', 
         'type', 
         'created_at',
@@ -593,15 +583,15 @@ export default function App() {
     }
   );
 
-  const actualTournaments: TournamentType[] = React.useMemo(() => {
+  const actualTournaments: Badma_Tournaments[] = React.useMemo(() => {
     if (Array.isArray(tournamentsData)) {
-      return tournamentsData as TournamentType[];
+      return tournamentsData as Badma_Tournaments[];
     }
     if (tournamentsData && (tournamentsData as any).badma_tournaments) {
-       return (tournamentsData as any).badma_tournaments as TournamentType[];
+       return (tournamentsData as any).badma_tournaments as Badma_Tournaments[];
     }
     if (tournamentsData && (tournamentsData as any).tournaments) {
-       return (tournamentsData as any).tournaments as TournamentType[];
+       return (tournamentsData as any).tournaments as Badma_Tournaments[];
     }
     return [];
   }, [tournamentsData]);
@@ -629,6 +619,50 @@ export default function App() {
       }
     };
   }, [carouselApi, mainViewTab, viewOrder]);
+
+  const handleCreateTournament = async () => {
+    if (!currentUserId) return;
+    
+    setIsCreatingTournament(true);
+    try {
+      const result = await hasyx.insert({
+        table: 'badma_tournaments',
+        object: {
+          user_id: currentUserId,
+          status: 'await',
+          type: newTournamentType,
+        },
+        returning: ['id', 'status', 'type', 'created_at', 'user_id']
+      });
+
+      setIsCreateTournamentModalOpen(false);
+      setSelectedTournament(result);
+      setIsTournamentModalOpen(true);
+      setNewTournamentType('round-robin'); // Reset form
+    } catch (error) {
+      console.error('Error creating tournament:', error);
+    } finally {
+      setIsCreatingTournament(false);
+    }
+  };
+
+  const handleAddAiPlayers = async () => {
+    if (!selectedTournament) return;
+    
+    setIsAddingAiPlayers(true);
+    try {
+      await axios.post('/api/badma/tournament-ai', null, {
+        params: { id: selectedTournament.id }
+      });
+      
+      // Refresh tournament data after adding AI players
+      // The subscription should automatically update the participants
+    } catch (error) {
+      console.error('Error adding AI players:', error);
+    } finally {
+      setIsAddingAiPlayers(false);
+    }
+  };
 
   if (isLoadingSession) {
     return (
@@ -681,10 +715,10 @@ export default function App() {
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
                   </TabsList>
                   <TabsContent value="games" className="pt-4">
-                    {user?.email && <UserProfileGamesTab userId={user.email} />}
+                    {currentUserId && <UserProfileGamesTab userId={currentUserId} />}
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
-                    {user?.email && <UserProfileTournamentsTab userId={user.email} />}
+                    {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
                   </TabsContent>
                 </Tabs>
               </div>
@@ -692,9 +726,18 @@ export default function App() {
           </CarouselItem>
           <CarouselItem key="tournaments" className="h-full">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
-              <div className="flex items-center mb-6">
-                <Trophy className="h-10 w-10 mr-3 text-purple-500" />
-                <h2 className="text-3xl font-semibold">Tournaments</h2>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <Trophy className="h-10 w-10 mr-3 text-purple-500" />
+                  <h2 className="text-3xl font-semibold">Tournaments</h2>
+                </div>
+                <Button 
+                  size="icon" 
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  onClick={() => setIsCreateTournamentModalOpen(true)}
+                >
+                  <PlusCircle className="h-5 w-5" />
+                </Button>
               </div>
               {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
               {tournamentsError && (
@@ -719,19 +762,15 @@ export default function App() {
                         className="flex items-center justify-between p-3 hover:bg-muted/50 dark:hover:bg-muted/20 rounded-md cursor-pointer transition-colors border border-muted/20"
                         onClick={() => handleTournamentClick(tournament)}
                       >
-                        <div className="flex flex-col flex-1 pr-2">
+                        <div className="flex flex-col flex-1 items-start pr-3 min-w-0">
                           <span className="text-sm font-medium text-foreground truncate">{tournament.type}</span>
-                          <span className="text-xs text-muted-foreground">ID: {tournament.id.substring(0, 8)}...</span>
-                          <div className="flex items-center space-x-3 text-xs text-muted-foreground mt-1">
-                            <span>
-                              Games: <span className="text-green-600 font-medium">{finishedGames}</span>/{totalGames}
-                            </span>
-                            <span>
-                              Players: <span className="font-medium">{participantCount}</span>
-                            </span>
-                          </div>
+                          <span className="text-xs text-muted-foreground truncate">ID: {tournament.id.substring(0, 8)}...</span>
                         </div>
-                        <div className="flex items-center space-x-2 flex-shrink-0">
+                        <div className="flex flex-col flex-1 items-center flex-shrink-0 px-3 min-w-0">
+                          <span className="text-xs text-muted-foreground">Games: <span className="text-green-600 font-medium">{finishedGames}</span>/{totalGames}</span>
+                          <span className="text-xs text-muted-foreground">Players: <span className="font-medium">{participantCount}</span></span>
+                        </div>
+                        <div className="flex flex-col flex-1 items-end flex-shrink-0 space-y-1 min-w-0">
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
                             {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
                           </span>
@@ -769,7 +808,7 @@ export default function App() {
       </Carousel>
 
       <div className={cn(
-        "fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
+        "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
         selectedGameId ? "translate-y-0" : "translate-y-full"
       )}>
         {selectedGameId && (
@@ -800,15 +839,73 @@ export default function App() {
             </DialogHeader>
             <div className="flex-grow overflow-y-auto py-4">
               <Tabs defaultValue="participants" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="participants" className="flex items-center"><Users className="h-4 w-4 mr-2" />Participants</TabsTrigger>
                   <TabsTrigger value="games" className="flex items-center"><ListChecks className="h-4 w-4 mr-2" />Games</TabsTrigger>
+                  <TabsTrigger value="settings" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Settings</TabsTrigger>
                 </TabsList>
                 <TabsContent value="participants" className="pt-4">
                   <TournamentParticipantsTab tournamentId={selectedTournament.id} />
                 </TabsContent>
                 <TabsContent value="games" className="pt-4">
                   <TournamentGamesTab tournamentId={selectedTournament.id} />
+                </TabsContent>
+                <TabsContent value="settings" className="pt-4">
+                  <div className="space-y-6 p-1">
+                    <div>
+                      <Label className="text-sm font-medium">Tournament Type</Label>
+                      <Select value={selectedTournament.type} disabled>
+                        <SelectTrigger className="w-full mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="round-robin">Round Robin</SelectItem>
+                          <SelectItem value="swiss">Swiss System</SelectItem>
+                          <SelectItem value="knockout">Knockout</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div>
+                      <Label className="text-sm font-medium mb-2 block">Tournament Status</Label>
+                      <div className="flex items-center space-x-3">
+                        <Badge className={getStatusBadgeClass(selectedTournament.status)}>
+                          {selectedTournament.status.charAt(0).toUpperCase() + selectedTournament.status.slice(1)}
+                        </Badge>
+                        {selectedTournament.status === 'await' && (
+                          <Button size="sm" variant="outline">
+                            Start Tournament
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <Separator />
+                    
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">AI Players</Label>
+                      <div className="flex items-center space-x-3">
+                        <Button 
+                          onClick={handleAddAiPlayers}
+                          disabled={isAddingAiPlayers}
+                          size="sm"
+                          className="flex items-center"
+                        >
+                          {isAddingAiPlayers ? (
+                            <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                          ) : (
+                            <PlusCircle className="h-4 w-4 mr-2" />
+                          )}
+                          Add AI Players
+                        </Button>
+                        <span className="text-xs text-muted-foreground">
+                          Adds 4 AI players to the tournament
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>
@@ -820,6 +917,53 @@ export default function App() {
           </DialogContent>
         </Dialog>
       )}
+
+      <Dialog open={isCreateTournamentModalOpen} onOpenChange={setIsCreateTournamentModalOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Create New Tournament</DialogTitle>
+            <DialogDescription>
+              Set up a new tournament with your preferred settings.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="tournament-type" className="text-sm font-medium">
+                  Tournament Type
+                </Label>
+                <Select value={newTournamentType} onValueChange={setNewTournamentType}>
+                  <SelectTrigger className="w-full mt-1">
+                    <SelectValue placeholder="Select tournament type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="round-robin">Round Robin</SelectItem>
+                    <SelectItem value="swiss">Swiss System</SelectItem>
+                    <SelectItem value="knockout">Knockout</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button 
+              onClick={handleCreateTournament}
+              disabled={isCreatingTournament}
+              className="flex items-center"
+            >
+              {isCreatingTournament ? (
+                <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+              ) : (
+                <PlusCircle className="h-4 w-4 mr-2" />
+              )}
+              Create Tournament
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className={`absolute inset-0 w-full h-full transition-all duration-300 p-6 md:p-10 flex items-center justify-center ${profile
         ? `opacity-100 z-40 bg-background/80 backdrop-blur-sm`

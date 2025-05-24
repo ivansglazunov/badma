@@ -22,7 +22,7 @@ const publicSchema = 'public';
 const triggerFunctionSQL = `
 CREATE OR REPLACE FUNCTION _set_storage_updated_at() RETURNS TRIGGER AS $$
 BEGIN
-  NEW.storage_updated_at = NOW();
+  NEW.storage_updated_at = EXTRACT(EPOCH FROM NOW()) * 1000; -- Use Unix timestamp (milliseconds)
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -52,8 +52,8 @@ const sqlSchema = `
     status TEXT NOT NULL DEFAULT 'await',
     created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
     updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
-    storage_inserted_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    storage_updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    storage_inserted_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000, -- Changed to BIGINT
+    storage_updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000, -- Changed to BIGINT
     CONSTRAINT side_within_sides CHECK (side <= sides),
     CONSTRAINT side_min_value CHECK (side >= 1)
   );

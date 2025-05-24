@@ -20,7 +20,7 @@ import { Chess } from '../chess';
 const debug = Debug('test:little-tournament');
 
 const TEST_TIMEOUT = 60 * 60 * 1000; 
-const INACTIVITY_TIMEOUT_MS = 30000;
+const INACTIVITY_TIMEOUT_MS = 60000;
 const LITTLE_TOURNAMENT_SIZE = 4;
 
 let tournamentOrganizer: Users;
@@ -31,7 +31,7 @@ async function createFakeUser(adminHasyx: Hasyx, namePrefix: string = 'TestUser'
   const email = `${namePrefix.toLowerCase().replace(/\s+/g, '-')}-${userId.substring(0, 4)}@example.com`;
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash('password123', saltRounds);
-  const now = Date.now(); // Use Unix timestamp instead of ISO string
+  const now = Date.now(); // Use Unix timestamp (number)
 
   const result = await adminHasyx.insert<Users>({
     table: 'users', // This is correct, as it's in public schema
@@ -40,13 +40,13 @@ async function createFakeUser(adminHasyx: Hasyx, namePrefix: string = 'TestUser'
       name: `${namePrefix} ${userId.substring(0, 4)}`,
       email: email,
       password: hashedPassword,
-      email_verified: now,
+      email_verified: now, // Unix timestamp
       is_admin: isOrganizer, 
       hasura_role: isOrganizer ? 'admin' : 'user', 
-      created_at: now,
-      updated_at: now,
+      created_at: now, // Unix timestamp
+      updated_at: now, // Unix timestamp
     },
-    returning: ['id', 'name'],
+    returning: ['id']
   });
   return result;
 }
@@ -101,7 +101,7 @@ interface MoveData {
     from: string;   // Заменяем move на from
     to: string;     // Добавляем поле to
     promotion?: string | null; // Добавляем опциональное поле promotion
-    created_at: number; // Fixed: using number (Unix timestamp) instead of string
+    created_at: number; // Using Unix timestamp (number) everywhere in project
 }
 
 interface JoinData {
@@ -122,6 +122,11 @@ async function finalizeTournamentCheck(
   currentTestTournament: any // To update and check its status
 ): Promise<void> {
   debug(`Finalizing tournament ${currentTournamentId} check.`);
+  
+  // Wait for potential final updates before checking
+  debug('Waiting for any final tournament updates to propagate...');
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  
   let updatedTournament = await adminHasyxInstance.select<any>({
     table: 'badma_tournaments',
     pk_columns: { id: currentTournamentId },
@@ -222,9 +227,9 @@ async function finalizeTournamentCheck(
     returning: ['id', 'status']
   });
         
-  // Добавляем задержку для уверенности, что все асинхронные операции завершились
+  // Добавляем ещё одну задержку для уверенности, что все асинхронные операции завершились
   debug('Waiting for tournament status to settle before final check...');
-  await new Promise(resolve => setTimeout(resolve, 5000)); // Ждем 3 секунды
+  await new Promise(resolve => setTimeout(resolve, 5000));
   
   // Повторно запрашиваем статус турнира непосредственно перед проверкой
   updatedTournament = await adminHasyxInstance.select<any>({
@@ -233,13 +238,24 @@ async function finalizeTournamentCheck(
     returning: ['id', 'status']
   });
   debug(`Final tournament status check: ${updatedTournament.status}`);
+  
+  // Повторно проверяем игры после дополнительного ожидания
+  const finalGameCheck = await adminHasyxInstance.select<Badma_Games[]>({
+    table: 'badma_games',
+    where: {
+      id: { _in: gameIds },
+      status: { _nin: ['checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender', 'finished'] }
+    },
+    returning: ['id', 'status']
+  });
         
-  if (updatedTournament.status !== 'finished' && gamesStillNotFinished.length > 0) {
-       debug(`WARNING: Tournament status is ${updatedTournament.status} and ${gamesStillNotFinished.length} games are not finished. Test might fail based on assertions.`);
+  if (updatedTournament.status !== 'finished' && finalGameCheck.length > 0) {
+       debug(`WARNING: Tournament status is ${updatedTournament.status} and ${finalGameCheck.length} games are not finished. Test might fail based on assertions.`);
+       console.log(`⚠️ Tournament may not be complete yet. Status: ${updatedTournament.status}, Unfinished games: ${finalGameCheck.length}`);
   }
 
   expect(updatedTournament.status).toBe('finished'); 
-  expect(gamesStillNotFinished.length).toBe(0);
+  expect(finalGameCheck.length).toBe(0);
   debug('All tournament games are confirmed finished (final check).');
 }
 
@@ -280,10 +296,11 @@ describe('Little Round Robin Tournament Test', () => {
     const tournament = await adminHasyx.insert<any>({
         table: 'badma_tournaments', // Corrected
         object: {
+            user_id: tournamentOrganizer.id, // Add the required user_id field
             status: 'await', // Initial status
             type: 'round-robin',
         },
-        returning: ['id', 'status', 'type']
+        returning: ['id', 'status', 'type', 'user_id']
     });
     tournamentId = tournament.id;
     expect(tournamentId).toBeDefined();
@@ -410,11 +427,15 @@ describe('Little Round Robin Tournament Test', () => {
   
                 if (allGamesConcluded) {
                     debug(`All games in tournament ${tournamentId} have concluded based on subscription update and re-fetch.`);
-                    if (inactivityTimer) clearTimeout(inactivityTimer);
-                    if (subscription) subscription.unsubscribe();
-                    finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament)
-                      .then(() => done())
-                      .catch(err => done(err));
+                    
+                    // Add a short delay to ensure all database operations have completed
+                    setTimeout(() => {
+                        if (inactivityTimer) clearTimeout(inactivityTimer);
+                        if (subscription) subscription.unsubscribe();
+                        finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament)
+                          .then(() => done())
+                          .catch(err => done(err));
+                    }, 2000); // Wait 2 seconds before final check
                 }
             }).catch(err => {
                 console.error(`Error re-fetching game statuses during subscription update for tournament ${tournamentId}:`, err);

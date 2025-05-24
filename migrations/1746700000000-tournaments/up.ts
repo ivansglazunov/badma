@@ -18,6 +18,7 @@ const sqlSchema = `
 
   CREATE TABLE IF NOT EXISTS ${badmaSchema}.tournaments (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
       type TEXT NOT NULL DEFAULT 'round-robin',
       status TEXT NOT NULL DEFAULT 'await',
       created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
@@ -62,6 +63,15 @@ const tablesToTrack = [
 
 const relationships = [
   // For tournaments
+  {
+    type: 'pg_create_object_relationship',
+    args: {
+      source: 'default',
+      table: { schema: badmaSchema, name: 'tournaments' },
+      name: 'user',
+      using: { foreign_key_constraint_on: 'user_id' }
+    }
+  },
   {
     type: 'pg_create_array_relationship',
     args: {
@@ -170,26 +180,64 @@ const relationships = [
         } 
       }
     }
+  },
+  // ADDED: Relationship from public.users to badma.tournaments
+  {
+    type: 'pg_create_array_relationship',
+    args: {
+      source: 'default',
+      table: { schema: publicSchema, name: 'users' },
+      name: 'tournaments',
+      using: { 
+        foreign_key_constraint_on: { 
+          table: { schema: badmaSchema, name: 'tournaments' }, 
+          column: 'user_id'
+        } 
+      }
+    }
   }
 ];
 
 const permissions = [
-  // tournaments
-  { role: 'admin', table: 'tournaments', types: ['select', 'insert', 'update', 'delete'], permission: { columns: '*', filter: {}, check: {} } },
-  { role: 'user', table: 'tournaments', types: ['select'], permission: { columns: '*', filter: {} } },
-  { role: 'anonymous', table: 'tournaments', types: ['select'], permission: { columns: '*', filter: {} } },
+  // tournaments - admin
+  { role: 'admin', table: 'tournaments', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournaments', type: 'insert', permission: { columns: '*', check: {} } },
+  { role: 'admin', table: 'tournaments', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'tournaments', type: 'delete', permission: { filter: {} } },
+  // tournaments - user
+  { role: 'user', table: 'tournaments', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'user', table: 'tournaments', type: 'insert', permission: { 
+    columns: ['type'], 
+    check: { user_id: { _eq: 'X-Hasura-User-Id' } } 
+  } },
+  { role: 'user', table: 'tournaments', type: 'update', permission: { 
+    columns: ['status'], 
+    filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
+    check: { user_id: { _eq: 'X-Hasura-User-Id' } }
+  } },
+  // tournaments - anonymous
+  { role: 'anonymous', table: 'tournaments', type: 'select', permission: { columns: '*', filter: {} } },
   // tournament_participants
-  { role: 'admin', table: 'tournament_participants', types: ['select', 'insert', 'update', 'delete'], permission: { columns: '*', filter: {}, check: {} } },
-  { role: 'user', table: 'tournament_participants', types: ['select'], permission: { columns: '*', filter: {} } },
-  { role: 'anonymous', table: 'tournament_participants', types: ['select'], permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_participants', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_participants', type: 'insert', permission: { columns: '*', check: {} } },
+  { role: 'admin', table: 'tournament_participants', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'tournament_participants', type: 'delete', permission: { filter: {} } },
+  { role: 'user', table: 'tournament_participants', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'anonymous', table: 'tournament_participants', type: 'select', permission: { columns: '*', filter: {} } },
   // tournament_games
-  { role: 'admin', table: 'tournament_games', types: ['select', 'insert', 'update', 'delete'], permission: { columns: '*', filter: {}, check: {} } },
-  { role: 'user', table: 'tournament_games', types: ['select'], permission: { columns: '*', filter: {} } },
-  { role: 'anonymous', table: 'tournament_games', types: ['select'], permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_games', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_games', type: 'insert', permission: { columns: '*', check: {} } },
+  { role: 'admin', table: 'tournament_games', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'tournament_games', type: 'delete', permission: { filter: {} } },
+  { role: 'user', table: 'tournament_games', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'anonymous', table: 'tournament_games', type: 'select', permission: { columns: '*', filter: {} } },
   // tournament_scores
-  { role: 'admin', table: 'tournament_scores', types: ['select', 'insert', 'update', 'delete'], permission: { columns: '*', filter: {}, check: {} } },
-  { role: 'user', table: 'tournament_scores', types: ['select'], permission: { columns: '*', filter: {} } },
-  { role: 'anonymous', table: 'tournament_scores', types: ['select'], permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_scores', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'admin', table: 'tournament_scores', type: 'insert', permission: { columns: '*', check: {} } },
+  { role: 'admin', table: 'tournament_scores', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'tournament_scores', type: 'delete', permission: { filter: {} } },
+  { role: 'user', table: 'tournament_scores', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'anonymous', table: 'tournament_scores', type: 'select', permission: { columns: '*', filter: {} } },
 ];
 
 async function applySQLSchema() {
@@ -219,19 +267,17 @@ async function createRelationshipsFunc() {
 async function applyPermissionsFunc() {
   debug('🔧 Applying tournament permissions...');
   for (const p of permissions) {
-    for (const type of p.types) {
-      const action = `pg_create_${type}_permission`;
-      debug(`     Applying ${type} for ${p.role}.${p.table}...`);
-      await hasura.v1({
-        type: action,
-        args: {
-          source: 'default',
-          table: { schema: badmaSchema, name: p.table },
-          role: p.role,
-          permission: p.permission,
-        }
-      });
-    }
+    const action = `pg_create_${p.type}_permission`;
+    debug(`     Applying ${p.type} for ${p.role}.${p.table}...`);
+    await hasura.v1({
+      type: action,
+      args: {
+        source: 'default',
+        table: { schema: badmaSchema, name: p.table },
+        role: p.role,
+        permission: p.permission,
+      }
+    });
   }
   debug('✅ Tournament permissions successfully applied.');
 }
