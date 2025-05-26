@@ -282,6 +282,107 @@ async function applyPermissionsFunc() {
   debug('✅ Tournament permissions successfully applied.');
 }
 
+async function applyAggregationPermissionsFunc() {
+  debug('🔧 Applying tournament aggregation permissions...');
+
+  // Tournament tables that should have aggregation permissions
+  const tournamentTablesForAggregation = [
+    'tournaments', 'tournament_participants', 'tournament_games', 'tournament_scores'
+  ];
+
+  // Update existing select permissions to include aggregations
+  for (const tableName of tournamentTablesForAggregation) {
+    // For user role - update existing permission to include aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'user'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    await hasura.v1({
+      type: 'pg_create_select_permission',
+      args: {
+        source: 'default',
+        table: { schema: badmaSchema, name: tableName },
+        role: 'user',
+        permission: {
+          columns: '*',
+          filter: {},
+          allow_aggregations: true
+        }
+      }
+    });
+    debug(`     Applied aggregation permission for user.${tableName}`);
+
+    // For anonymous role - update existing permission to include aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'anonymous'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    await hasura.v1({
+      type: 'pg_create_select_permission',
+      args: {
+        source: 'default',
+        table: { schema: badmaSchema, name: tableName },
+        role: 'anonymous',
+        permission: {
+          columns: '*',
+          filter: {},
+          allow_aggregations: true
+        }
+      }
+    });
+    debug(`     Applied aggregation permission for anonymous.${tableName}`);
+
+    // For admin role - create full permission with aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'admin'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    await hasura.v1({
+      type: 'pg_create_select_permission',
+      args: {
+        source: 'default',
+        table: { schema: badmaSchema, name: tableName },
+        role: 'admin',
+        permission: {
+          columns: '*',
+          filter: {},
+          allow_aggregations: true
+        }
+      }
+    });
+    debug(`     Applied aggregation permission for admin.${tableName}`);
+  }
+
+  debug('✅ Tournament aggregation permissions successfully applied.');
+}
+
 async function up() {
   debug('🚀 Starting Tournaments schema migration UP...');
   try {
@@ -289,6 +390,7 @@ async function up() {
     await trackTablesFunc();
     await createRelationshipsFunc();
     await applyPermissionsFunc();
+    await applyAggregationPermissionsFunc();
     debug('✨ Tournaments schema migration UP completed successfully!');
   } catch (error) {
     debug('❗ Critical error during Tournaments UP migration:', error instanceof Error ? error.message : String(error), error);

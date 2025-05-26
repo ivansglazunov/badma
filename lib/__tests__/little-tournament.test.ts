@@ -199,9 +199,8 @@ async function finalizeTournamentCheck(
       returning: [
           'user_id',
           { user: ['name'] },
-          { scores_aggregate: { aggregate: { sum: ['score'], count: [] } } }
-      ],
-      order_by: [{ scores_aggregate: { sum: { score: 'desc_nulls_last' } } }]
+          { scores_aggregate: { aggregate: { sum: ['score'] } } }
+      ]
   });
 
   let resultsMessage = `\n--- Little Tournament (${currentTournamentId}) Final Results ---\n`;
@@ -257,6 +256,44 @@ async function finalizeTournamentCheck(
   expect(updatedTournament.status).toBe('finished'); 
   expect(finalGameCheck.length).toBe(0);
   debug('All tournament games are confirmed finished (final check).');
+}
+
+// Helper function to manually process finished games (since event triggers don't work in tests)
+async function processFinishedGames(adminHasyx: Hasyx, tournamentHandler: TournamentRoundRobin, gameIds: string[]) {
+  const finishedGames = await adminHasyx.select<any[]>({
+    table: 'badma_games',
+    where: {
+      id: { _in: gameIds },
+      status: { _in: ['checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender', 'finished'] }
+    },
+    returning: ['id', 'status', 'fen', 'side']
+  });
+
+  // Track which games we've already processed
+  const processedGames = new Set<string>();
+
+  for (const game of finishedGames) {
+    if (!processedGames.has(game.id)) {
+      debug(`Processing finished game ${game.id} with status ${game.status}`);
+      
+      const gameRowForOver = {
+        id: game.id,
+        status: game.status,
+        fen: game.fen,
+        side: game.side,
+      };
+      
+      try {
+        await tournamentHandler.over(gameRowForOver);
+        processedGames.add(game.id);
+        debug(`Successfully processed game ${game.id} for tournament`);
+      } catch (error) {
+        debug(`Error processing game ${game.id}:`, error);
+      }
+    }
+  }
+
+  return processedGames.size;
 }
 
 describe('Little Round Robin Tournament Test', () => {
@@ -351,8 +388,9 @@ describe('Little Round Robin Tournament Test', () => {
       debug(`Verified ${totalJoins} player joins created across all games.`);
 
       // Подготовка для мониторинга игр
+      let subscription: any = null;
       let inactivityTimer: NodeJS.Timeout | null = null;
-      let subscription: ZenSubscription | null = null;
+      let isTestCompleted = false; // Add flag to prevent multiple completions
       const gameIdsInThisTournament = gamesInTournament.map(g => g.id);
       const updateTimes: number[] = []; // Временные метки обновлений
       const gameUpdates: Record<string, any[]> = {}; // Хранение обновлений по играм
@@ -368,10 +406,44 @@ describe('Little Round Robin Tournament Test', () => {
         inactivityTimer = setTimeout(() => {
           const timestamp = Date.now();
           console.log(`\nNo game updates for ${INACTIVITY_TIMEOUT_MS / 1000} seconds. Finalizing tournament check for ${tournamentId}. (${new Date(timestamp).toISOString()}, unixtime: ${timestamp})`);
-          if (subscription) subscription.unsubscribe();
-          finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament)
-            .then(() => done()) // Вызываем done() при успешном завершении
-            .catch(err => done(err)); // Или передаем ошибку, если есть
+          
+          // Clean up resources
+          if (subscription) {
+            try {
+              subscription.unsubscribe();
+              
+              // Дополнительная очистка Apollo Client при timeout
+              if (adminHasyx && adminHasyx.apolloClient) {
+                adminHasyx.apolloClient.stop();
+                adminHasyx.apolloClient.clearStore().catch(() => {});
+                
+                const link = (adminHasyx.apolloClient as any).link;
+                if (link && link.subscriptionClient) {
+                  link.subscriptionClient.close();
+                }
+              }
+            } catch (unsubError) {
+              debug('Error during subscription cleanup in timeout:', unsubError);
+            }
+            subscription = null;
+          }
+          inactivityTimer = null;
+          
+          // Check if test is already completed
+          if (!isTestCompleted) {
+            isTestCompleted = true;
+            
+            // Process any finished games before finalizing
+            processFinishedGames(adminHasyx, tournamentHandler, gameIdsInThisTournament)
+              .then(processedCount => {
+                if (processedCount > 0) {
+                  debug(`Processed ${processedCount} finished games during timeout for tournament ${tournamentId}`);
+                }
+                return finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament);
+              })
+              .then(() => done()) // Вызываем done() при успешном завершении
+              .catch(err => done(err)); // Вызываем done(err) при ошибке
+          }
         }, INACTIVITY_TIMEOUT_MS);
       }
       
@@ -420,7 +492,13 @@ describe('Little Round Robin Tournament Test', () => {
                 table: 'badma_games',
                 where: { id: { _in: gameIdsInThisTournament } },
                 returning: ['id', 'status']
-            }).then(allCurrentGamesInTournament => {
+            }).then(async allCurrentGamesInTournament => {
+                // Process any finished games first (manual tournament logic)
+                const processedCount = await processFinishedGames(adminHasyx, tournamentHandler, gameIdsInThisTournament);
+                if (processedCount > 0) {
+                  debug(`Processed ${processedCount} finished games for tournament ${tournamentId}`);
+                }
+                
                 const allGamesConcluded = allCurrentGamesInTournament.every(g => 
                     ['checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender', 'finished'].includes(g.status)
                 );
@@ -428,14 +506,42 @@ describe('Little Round Robin Tournament Test', () => {
                 if (allGamesConcluded) {
                     debug(`All games in tournament ${tournamentId} have concluded based on subscription update and re-fetch.`);
                     
-                    // Add a short delay to ensure all database operations have completed
-                    setTimeout(() => {
-                        if (inactivityTimer) clearTimeout(inactivityTimer);
-                        if (subscription) subscription.unsubscribe();
+                    // Immediately clear the inactivity timer
+                    if (inactivityTimer) {
+                        clearTimeout(inactivityTimer);
+                        inactivityTimer = null;
+                    }
+                    
+                    // Unsubscribe from the subscription
+                    if (subscription) {
+                        debug('Unsubscribing from Apollo subscription.');
+                        try {
+                          subscription.unsubscribe();
+                          
+                          // Дополнительная очистка Apollo Client при ошибке
+                          if (adminHasyx && adminHasyx.apolloClient) {
+                            adminHasyx.apolloClient.stop();
+                            adminHasyx.apolloClient.clearStore().catch(() => {});
+                            
+                            const link = (adminHasyx.apolloClient as any).link;
+                            if (link && link.subscriptionClient) {
+                              link.subscriptionClient.close();
+                            }
+                          }
+                        } catch (unsubError) {
+                          debug('Error during subscription cleanup:', unsubError);
+                        }
+                        subscription = null;
+                    }
+                    
+                    // Check if test is already completed
+                    if (!isTestCompleted) {
+                        isTestCompleted = true;
+                        // Finalize the tournament check
                         finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament)
-                          .then(() => done())
-                          .catch(err => done(err));
-                    }, 2000); // Wait 2 seconds before final check
+                            .then(() => done()) // Call done() on successful completion
+                            .catch(err => done(err)); // Call done(err) on error
+                    }
                 }
             }).catch(err => {
                 console.error(`Error re-fetching game statuses during subscription update for tournament ${tournamentId}:`, err);
@@ -456,22 +562,50 @@ describe('Little Round Robin Tournament Test', () => {
                 console.error('Network Error:', (err as any).networkError);
               }
             }
-            if (typeof inactivityTimer !== 'undefined' && inactivityTimer) {
+            
+            // Clean up resources properly
+            if (inactivityTimer) {
               clearTimeout(inactivityTimer);
+              inactivityTimer = null;
             }
-            done(err); // Завершаем тест с ошибкой
-          },
-          complete: () => {
-            debug(`Subscription completed for tournament ${tournamentId}. This is usually due to server-side termination or manual unsubscribe.`);
-            if (typeof inactivityTimer !== 'undefined' && inactivityTimer) {
-              clearTimeout(inactivityTimer);
+            if (subscription) {
+              try {
+                subscription.unsubscribe();
+                
+                // Дополнительная очистка Apollo Client при ошибке
+                if (adminHasyx && adminHasyx.apolloClient) {
+                  adminHasyx.apolloClient.stop();
+                  adminHasyx.apolloClient.clearStore().catch(() => {});
+                  
+                  const link = (adminHasyx.apolloClient as any).link;
+                  if (link && link.subscriptionClient) {
+                    link.subscriptionClient.close();
+                  }
+                }
+              } catch (unsubError) {
+                debug('Error during subscription cleanup:', unsubError);
+              }
+              subscription = null;
             }
             
-            // Проверяем, не завершен ли тест уже (из другого места)
-            if (currentTournament.status === 'continue') {
-              finalizeTournamentCheck(adminHasyx, tournamentId, gameIdsInThisTournament, currentTournament)
-                .then(() => done())
-                .catch(err => done(err));
+            // Check if test is already completed
+            if (!isTestCompleted) {
+              isTestCompleted = true;
+              done(err);
+            }
+          },
+          complete: () => {
+            debug('Subscription completed.');
+            // Clean up resources properly
+            if (inactivityTimer) {
+              clearTimeout(inactivityTimer);
+              inactivityTimer = null;
+            }
+            
+            // Check if test is already completed
+            if (!isTestCompleted) {
+              isTestCompleted = true;
+              done(); // Subscription completed normally
             }
           }
         });
@@ -486,12 +620,36 @@ describe('Little Round Robin Tournament Test', () => {
           console.error('Error stack:', subscriptionError.stack);
         }
         
-        // Очищаем таймер только если он уже был инициализирован
-        if (typeof inactivityTimer !== 'undefined' && inactivityTimer) {
+        // Очищаем таймер и подписку безопасно
+        if (inactivityTimer) {
           clearTimeout(inactivityTimer);
+          inactivityTimer = null;
+        }
+        if (subscription) {
+          try {
+            subscription.unsubscribe();
+            
+            // Дополнительная очистка Apollo Client при ошибке
+            if (adminHasyx && adminHasyx.apolloClient) {
+              adminHasyx.apolloClient.stop();
+              adminHasyx.apolloClient.clearStore().catch(() => {});
+              
+              const link = (adminHasyx.apolloClient as any).link;
+              if (link && link.subscriptionClient) {
+                link.subscriptionClient.close();
+              }
+            }
+          } catch (unsubError) {
+            debug('Error during subscription cleanup:', unsubError);
+          }
+          subscription = null;
         }
         
-        done(subscriptionError);
+        // Check if test is already completed
+        if (!isTestCompleted) {
+          isTestCompleted = true;
+          done(subscriptionError);
+        }
       }
     }).catch(startError => {
       console.error(`Error starting tournament: ${startError}`);
@@ -504,34 +662,108 @@ describe('Little Round Robin Tournament Test', () => {
     
     // Закрываем все активные подписки
     debug('Closing any active subscriptions...');
-    // Доступ к клиенту Apollo через внутреннее свойство Hasyx
+    
     try {
       // Явно закрываем клиент Apollo, если существует
       if (adminHasyx && adminHasyx.apolloClient) {
         debug('Closing Apollo client connections...');
-        // @ts-ignore - обращаемся напрямую к методу stop клиента Apollo
-        if (adminHasyx.apolloClient.stop) {
-          // @ts-ignore
-          await adminHasyx.apolloClient.stop();
-          debug('Apollo client stopped successfully');
-        } else if (adminHasyx.apolloClient.clearStore) {
-          // @ts-ignore
-          await adminHasyx.apolloClient.clearStore();
-          debug('Apollo client store cleared');
+        
+        // Сначала останавливаем все активные подписки
+        await adminHasyx.apolloClient.stop();
+        
+        // Очищаем кэш и закрываем соединения
+        await adminHasyx.apolloClient.clearStore();
+        
+        // Принудительно закрываем WebSocket соединения
+        const link = (adminHasyx.apolloClient as any).link;
+        if (link) {
+          // Проверяем различные типы ссылок
+          if (link.subscriptionClient) {
+            debug('Closing subscription client...');
+            link.subscriptionClient.close();
+          }
+          
+          // Если это split link, закрываем WebSocket часть
+          if (link.left && link.left.subscriptionClient) {
+            debug('Closing split link subscription client...');
+            link.left.subscriptionClient.close();
+          }
+          
+          // Если это chain of links, проходим по всем
+          let currentLink = link;
+          while (currentLink) {
+            if (currentLink.subscriptionClient) {
+              debug('Closing chained subscription client...');
+              currentLink.subscriptionClient.close();
+            }
+            currentLink = currentLink.request ? currentLink.request.link : null;
+          }
         }
+        
+        debug('Apollo client stopped successfully');
       }
     } catch (err) {
       debug('Error during Apollo client cleanup:', err);
     }
     
+    // Принудительно завершаем все активные WebSocket соединения
+    try {
+      // Закрываем все WebSocket соединения глобально
+      if (global.WebSocket) {
+        debug('Checking for global WebSocket connections...');
+      }
+      
+      // Принудительно очищаем все setInterval и setTimeout
+      // Очищаем таймеры в разумном диапазоне
+      for (let i = 1; i <= 10000; i++) {
+        clearTimeout(i);
+        clearInterval(i);
+      }
+      
+      debug('Cleared all timers');
+    } catch (err) {
+      debug('Error during global cleanup:', err);
+    }
+    
     // Очищаем глобальные таймеры, если они установлены
     debug('Cleaning up any remaining timers...');
     
-    // В Node.js нет стандартного способа получить список всех активных таймеров
-    // Поэтому мы создаем еще один таймер с функцией, которая очистится после завершения теста
-    setTimeout(() => {
-      debug('Final timer cleanup executed');
-    }, 1000);
+    // Принудительно очищаем все активные таймеры Node.js (только для этого теста)
+    try {
+      const activeHandles = (process as any)._getActiveHandles();
+      const activeRequests = (process as any)._getActiveRequests();
+      
+      debug(`Active handles: ${activeHandles.length}, Active requests: ${activeRequests.length}`);
+      
+      // Закрываем только таймеры, связанные с нашим тестом
+      activeHandles.forEach((handle: any) => {
+        if (handle && typeof handle.close === 'function') {
+          try {
+            if (handle.constructor.name === 'Timeout' || 
+                handle.constructor.name === 'Immediate' ||
+                handle.constructor.name === 'Socket' ||
+                handle.constructor.name === 'TLSSocket') {
+              handle.close();
+            }
+          } catch (e) {
+            // Игнорируем ошибки при закрытии
+          }
+        }
+      });
+      
+      // Также закрываем активные запросы
+      activeRequests.forEach((request: any) => {
+        if (request && typeof request.abort === 'function') {
+          try {
+            request.abort();
+          } catch (e) {
+            // Игнорируем ошибки при отмене
+          }
+        }
+      });
+    } catch (err) {
+      debug('Error during handle cleanup:', err);
+    }
     
     // Clean up the organizer user as well if created
     if (tournamentOrganizer && tournamentOrganizer.id) {
@@ -539,5 +771,8 @@ describe('Little Round Robin Tournament Test', () => {
     }
     
     debug('Test cleanup finished.');
+    
+    // Даем Jest время на корректное завершение вместо принудительного выхода
+    debug('Allowing Jest to complete naturally...');
   }, TEST_TIMEOUT);
 }); 

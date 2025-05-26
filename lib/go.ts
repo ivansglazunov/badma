@@ -1,4 +1,4 @@
-import jsChessEngine from 'js-chess-engine';
+import * as jsChessEngine from 'js-chess-engine';
 
 /**
  * Возвращает лучший ход для заданной позиции FEN и уровня сложности.

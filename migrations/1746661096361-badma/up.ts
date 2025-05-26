@@ -493,6 +493,115 @@ async function applyPermissionsFunc() {
   debug('✅ Badma permissions successfully applied.');
 }
 
+async function applyAggregationPermissionsFunc() {
+  debug('🔧 Applying badma aggregation permissions...');
+
+  // Tables that should have aggregation permissions
+  const tablesForAggregation = [
+    'games', 'moves', 'joins', 'ais', 'errors', 'servers'
+  ];
+
+  // Update existing select permissions to include aggregations
+  for (const tableName of tablesForAggregation) {
+    // For user role - update existing permission to include aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'user'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    // Recreate user permission with aggregations
+    const userTableConfig = userPermissions.find(p => p.args.table.name === tableName);
+    if (userTableConfig) {
+      await hasura.v1({
+        type: 'pg_create_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'user',
+          permission: {
+            columns: userTableConfig.args.permission.columns,
+            filter: userTableConfig.args.permission.filter,
+            allow_aggregations: true
+          }
+        }
+      });
+      debug(`     Applied aggregation permission for user.${tableName}`);
+    }
+
+    // For anonymous role - update existing permission to include aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'anonymous'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    // Recreate anonymous permission with aggregations
+    const anonymousTableConfig = anonymousPermissions.find(p => p.args.table.name === tableName);
+    if (anonymousTableConfig) {
+      await hasura.v1({
+        type: 'pg_create_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'anonymous',
+          permission: {
+            columns: anonymousTableConfig.args.permission.columns,
+            filter: anonymousTableConfig.args.permission.filter,
+            allow_aggregations: true
+          }
+        }
+      });
+      debug(`     Applied aggregation permission for anonymous.${tableName}`);
+    }
+
+    // For admin role - create full permission with aggregations
+    try {
+      await hasura.v1({
+        type: 'pg_drop_select_permission',
+        args: {
+          source: 'default',
+          table: { schema: badmaSchema, name: tableName },
+          role: 'admin'
+        }
+      });
+    } catch (error) {
+      // Permission might not exist, that's ok
+    }
+
+    await hasura.v1({
+      type: 'pg_create_select_permission',
+      args: {
+        source: 'default',
+        table: { schema: badmaSchema, name: tableName },
+        role: 'admin',
+        permission: {
+          columns: '*',
+          filter: {},
+          allow_aggregations: true
+        }
+      }
+    });
+    debug(`     Applied aggregation permission for admin.${tableName}`);
+  }
+
+  debug('✅ Badma aggregation permissions successfully applied.');
+}
+
 async function up() {
   debug('🚀 Starting Badma schema migration UP...');
   try {
@@ -500,6 +609,7 @@ async function up() {
     await trackTablesFunc();
     await createRelationshipsFunc();
     await applyPermissionsFunc(); // Apply GQL permissions after tables/relationships
+    await applyAggregationPermissionsFunc();
     debug('✨ Badma schema migration UP completed successfully!');
   } catch (error) {
     // console.error('❗ Critical error during Badma UP migration:', error);

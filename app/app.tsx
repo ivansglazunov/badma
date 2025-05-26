@@ -56,18 +56,18 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
         'id',
         'user_id',
         {
+          user: ['id', 'name', 'image']
+        },
+        {
           scores_aggregate: {
             aggregate: {
               sum: ['score']
             }
           }
-        },
-        {
-          user: ['id', 'name', 'image']
-        },
+        }
       ]
     },
-    { skip: !tournamentId }
+    { skip: !tournamentId, role: 'user' }
   );
 
   // Get games for participants separately to avoid complex nested queries
