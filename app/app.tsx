@@ -28,6 +28,7 @@ import { cn } from "hasyx/lib/utils"
 import { useMounted } from "@/hooks/mounted";
 import schema from "@/public/hasura-schema.json";
 import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
+import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -859,9 +860,11 @@ export default function App() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="round-robin">Round Robin</SelectItem>
-                          <SelectItem value="swiss">Swiss System</SelectItem>
-                          <SelectItem value="knockout">Knockout</SelectItem>
+                          {tournaments.map(type => (
+                            <SelectItem key={type} value={type}>
+                              {tournamentDescriptions[type] || type}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -937,9 +940,11 @@ export default function App() {
                     <SelectValue placeholder="Select tournament type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="round-robin">Round Robin</SelectItem>
-                    <SelectItem value="swiss">Swiss System</SelectItem>
-                    <SelectItem value="knockout">Knockout</SelectItem>
+                    {tournaments.map(type => (
+                      <SelectItem key={type} value={type}>
+                        {tournamentDescriptions[type] || type}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

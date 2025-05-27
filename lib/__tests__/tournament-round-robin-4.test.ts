@@ -17,11 +17,11 @@ import { Badma_Games, Badma_Tournament_Participants, Users, Badma_Tournament_Sco
 import { Subscription as ZenSubscription } from 'zen-observable-ts';
 import { Chess } from '../chess';
 
-const debug = Debug('test:little-tournament');
+const debug = Debug('test:tournament-round-robin-4');
 
 const TEST_TIMEOUT = 60 * 60 * 1000; 
 const INACTIVITY_TIMEOUT_MS = 60000;
-const LITTLE_TOURNAMENT_SIZE = 4;
+const TOURNAMENT_SIZE = 4;
 
 let tournamentOrganizer: Users;
 
@@ -296,7 +296,7 @@ async function processFinishedGames(adminHasyx: Hasyx, tournamentHandler: Tourna
   return processedGames.size;
 }
 
-describe('Little Round Robin Tournament Test', () => {
+describe('Tournament Round Robin 4 Players Test', () => {
   let adminHasyx: Hasyx;
   const users: Users[] = [];
   let tournamentId: string;
@@ -319,7 +319,7 @@ describe('Little Round Robin Tournament Test', () => {
     debug(`Created Tournament Organizer: ${tournamentOrganizer.name} (ID: ${tournamentOrganizer.id})`);
 
     // 1. Create 5 players
-    for (let i = 0; i < LITTLE_TOURNAMENT_SIZE; i++) {
+    for (let i = 0; i < TOURNAMENT_SIZE; i++) {
       const user = await createFakeUser(adminHasyx, `TourneyPlayer${i + 1}`);
       users.push(user);
       // 2. Add AI config: first player level 3, others level 1
@@ -327,7 +327,7 @@ describe('Little Round Robin Tournament Test', () => {
       await addAiConfig(adminHasyx, user.id, aiLevel);
       debug(`Created user ${user.name} (ID: ${user.id}) with AI level ${aiLevel}`);
     }
-    expect(users.length).toBe(LITTLE_TOURNAMENT_SIZE);
+    expect(users.length).toBe(TOURNAMENT_SIZE);
 
     // 3. Create a tournament
     const tournament = await adminHasyx.insert<any>({
@@ -374,7 +374,7 @@ describe('Little Round Robin Tournament Test', () => {
         returning: ['id', 'user_id', { joins: ['id', 'user_id'] }],
       });
       
-      const expectedGames = (LITTLE_TOURNAMENT_SIZE * (LITTLE_TOURNAMENT_SIZE - 1)) / 2;
+      const expectedGames = (TOURNAMENT_SIZE * (TOURNAMENT_SIZE - 1)) / 2;
       expect(gamesInTournament.length).toBe(expectedGames);
       debug(`Verified ${gamesInTournament.length} games created.`);
       

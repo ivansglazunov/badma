@@ -5,10 +5,8 @@ import { createApolloClient, Generator, Hasyx } from 'hasyx';
 import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events';
 import schema from '../../../../public/hasura-schema.json';
 import Debug from '../../../../lib/debug';
-import { TournamentGameRow } from '../../../../lib/tournament'; // Assuming TournamentGameRow is exported
-import { TournamentRoundRobin } from '../../../../lib/tournament-round-robin';
-// Import other tournament types here as they are created, e.g.:
-// import { TournamentSwiss } from '../../../../lib/tournament-swiss';
+import { TournamentGameRow } from '../../../../lib/tournament';
+import { createTournament, TournamentType } from '../../../../lib/tournament-factory';
 
 const debug = Debug('event:tournaments-games');
 
@@ -25,8 +23,9 @@ interface TournamentLinkData {
   tournament_id: string;
   tournament: {
     id: string;
-    type: string; // e.g., 'round-robin'
+    type: string; // e.g., 'round-robin', 'swiss', etc.
     status: string;
+    user_id: string; // organizer ID
   };
 }
 
@@ -67,7 +66,7 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
         'id',
         'tournament_id',
         {
-          tournament: ['id', 'type', 'status'],
+          tournament: ['id', 'type', 'status', 'user_id'],
         },
       ],
     });
@@ -81,32 +80,30 @@ export const POST = hasyxEvent(async (eventPayload: HasuraEventPayload) => {
       const tournamentInfo = link.tournament;
       debug(`Processing game ${gameData.id} for tournament ${tournamentInfo.id} (type: ${tournamentInfo.type}, status: ${tournamentInfo.status})`);
 
-      let tournamentHandler;
-      // Instantiate the correct tournament handler based on type
-      switch (tournamentInfo.type) {
-        case 'round-robin':
-          tournamentHandler = new TournamentRoundRobin(hasyx, tournamentInfo.id);
-          break;
-        // case 'swiss':
-        //   tournamentHandler = new TournamentSwiss(hasyx, tournamentInfo.id);
-        //   break;
-        default:
-          debug(`⚠️ Unknown tournament type: ${tournamentInfo.type} for tournament ${tournamentInfo.id}. Skipping.`);
-          continue; // Skip to the next link if any
-      }
+      try {
+        // Use factory to create tournament handler
+        const tournamentHandler = createTournament(
+          hasyx, 
+          tournamentInfo.id, 
+          tournamentInfo.type as TournamentType,
+          tournamentInfo.user_id // organizer ID
+        );
 
-      if (tournamentHandler) {
         // Prepare the gameRow data for the 'over' method
-        // Ensure TournamentGameRow includes all fields _over might need from gameData
         const gameRowForOver: TournamentGameRow = {
           id: gameData.id,
           status: gameData.status,
-          fen: gameData.fen,       // Pass FEN
-          side: gameData.side,     // Pass current turn/side from game data
-          // Add any other fields from gameData that TournamentGameRow and _over expect
+          fen: gameData.fen,
+          side: gameData.side,
         };
+        
         await tournamentHandler.over(gameRowForOver);
         debug(`✅ Successfully processed game over for game ${gameData.id} in tournament ${tournamentInfo.id}`);
+        
+      } catch (tournamentError) {
+        debug(`❌ Error processing tournament ${tournamentInfo.id} of type ${tournamentInfo.type}: ${tournamentError instanceof Error ? tournamentError.message : String(tournamentError)}`);
+        // Continue with other tournaments if any
+        continue;
       }
     }
 

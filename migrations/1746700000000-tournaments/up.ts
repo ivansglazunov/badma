@@ -21,9 +21,11 @@ const sqlSchema = `
       user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
       type TEXT NOT NULL DEFAULT 'round-robin',
       status TEXT NOT NULL DEFAULT 'await',
+      metadata JSONB DEFAULT '{}',
       created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
       updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
   );
+  COMMENT ON COLUMN ${badmaSchema}.tournaments.metadata IS 'Tournament-specific metadata (e.g., current round for Swiss, bracket for Knockout)';
 
   CREATE TABLE IF NOT EXISTS ${badmaSchema}.tournament_participants (
       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -211,7 +213,7 @@ const permissions = [
     check: { user_id: { _eq: 'X-Hasura-User-Id' } } 
   } },
   { role: 'user', table: 'tournaments', type: 'update', permission: { 
-    columns: ['status'], 
+    columns: ['status', 'metadata'], 
     filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
     check: { user_id: { _eq: 'X-Hasura-User-Id' } }
   } },
