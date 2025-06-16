@@ -12,8 +12,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
 console.log(`Building config: isClient=${isBuildingForClient}, basePath=${basePath}`);
 
 const config: NextConfig = {
-  // Conditionally set output to 'export'
-  output: isBuildingForClient ? 'export' : undefined,
+  // Conditionally set output to 'export' for client, 'standalone' for server/Docker
+  output: isBuildingForClient ? 'export' : 'standalone',
   // Explicitly set distDir again
   distDir: isBuildingForClient ? 'client' : '.next',
   // Explicitly set basePath again
@@ -47,7 +47,7 @@ const config: NextConfig = {
   
   // Add CORS headers to all API routes
   async headers() {
-    return [
+    const headers = [
       {
         // Apply CORS headers to all API routes - used for regular requests
         source: '/api/:path*',
@@ -60,7 +60,35 @@ const config: NextConfig = {
         ],
       },
     ];
+    
+    // Development specific headers to prevent aggressive caching
+    if (process.env.NODE_ENV === 'development') {
+      headers.push({
+        // Apply no-cache headers to all non-static resources in development
+        source: '/((?!_next/static|icons/|favicon.ico|manifest.webmanifest).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      });
+      
+      // Special handling for service worker files
+      headers.push({
+        source: '/(sw.js|firebase-messaging-sw.js)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      });
+    }
+    
+    return headers;
   },
+
+  // Prevent double mount unmount
+  reactStrictMode: false,
 };
 
 export default config;

@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'; // Add useState for 
 
 // This page needs to be a client component for A-Frame
 export default function AframeClient() {
-  const sceneRef = useRef<HTMLElement>(null); // Use proper HTML element type
+  const sceneRef = useRef<any>(null); // Use 'any' for now to bypass type issues
   const logSent = useRef(false); // Flag to send only once
   const [aframeLoaded, setAframeLoaded] = useState(false);
 
@@ -39,7 +39,7 @@ export default function AframeClient() {
   useEffect(() => {
     if (!aframeLoaded) return; // Skip if A-Frame isn't loaded yet
     
-    const sceneEl = sceneRef.current;
+    const sceneEl = sceneRef.current as any; // Cast to any to access addEventListener easily
 
     // Function to handle the logging logic
     const handleSceneLoad = () => {
@@ -58,7 +58,7 @@ export default function AframeClient() {
 
     if (sceneEl) {
         // Check if the scene is already loaded (might happen with fast loading/re-renders)
-        if ((sceneEl as any).hasLoaded) {
+        if (sceneEl.hasLoaded) {
             console.log("Scene already loaded, logging immediately.");
             handleSceneLoad();
         } else {
@@ -87,7 +87,7 @@ export default function AframeClient() {
   return (<>
     <Scene
       id="my-aframe-scene" // Adding ID for ref
-      ref={sceneRef} // Use proper ref without callback
+      ref={(el) => { sceneRef.current = el; }} // Ensure ref callback returns void
       embedded style={sceneStyle} renderer="alpha: true; colorManagement: true;"
       webxr="requiredFeatures: local-floor; optionalFeatures: anchors, hit-test, dom-overlay, bounded-floor;" // Request AR features
       vr-mode-ui="enterAREnabled: true" // Ensure AR button is enabled

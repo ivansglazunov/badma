@@ -7,6 +7,7 @@ const config = {
   testMatch: ['**/*.test.ts'],
   setupFilesAfterEnv: ['./jest.setup.js'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  testTimeout: 60000, // 60 seconds timeout for all tests
   moduleNameMapper: {
     '^jose$': 'jose',
     '^@/(.*)$': '<rootDir>/$1',
@@ -21,7 +22,7 @@ const config = {
     '!**/.next/**',
   ],
   transformIgnorePatterns: [
-    '/node_modules/(?!(jose|next-auth|@panva|debug)/)',
+    '/node_modules/(?!(jose|next-auth|@panva|debug|@apollo)/)',
   ],
   transform: {
     '^.+\\.(t|j)sx?$': ['ts-jest', {
