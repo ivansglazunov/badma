@@ -8,8 +8,8 @@ import App from "./app";
 // Now this is an async server component
 export default function Page() {
   return (
-    <SidebarLayout sidebarData={sidebar} breadcrumb={[{ title: pckg.name, link: '/' }]}>
+    // <SidebarLayout sidebarData={sidebar} breadcrumb={[{ title: pckg.name, link: '/' }]}>
       <App />
-    </SidebarLayout>
+    // </SidebarLayout>
   );
 }
