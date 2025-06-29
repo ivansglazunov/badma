@@ -23,7 +23,8 @@
     "tsx": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx tsx",
     "logs": "npx hasyx logs",
     "logs-diffs": "npx hasyx logs-diffs",
-    "logs-states": "npx hasyx logs-states"
+    "logs-states": "npx hasyx logs-states",
+    "telegram": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx telegram"
   },
   "repository": {
     "type": "git",
@@ -39,7 +40,7 @@
   "dependencies": {
     "chess.js": "^0.12.1",
     "events": "^3.3.0",
-    "hasyx": "^0.1.325",
+    "hasyx": "^0.1.336",
     "js-chess-engine": "^1.0.2",
     "react": "^19",
     "react-chessboard": "^4.7.3",
