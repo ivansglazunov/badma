@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import './hover-card.css';
 
@@ -10,6 +10,17 @@ interface HoverCardProps {
   maxRotation?: number; // Maximum rotation in degrees
   maxLift?: number; // Maximum lift in pixels
   enableGlow?: boolean; // Enable glow effect
+  useDeviceOrientation?: boolean; // Use device orientation instead of mouse
+  orientationSensitivity?: number; // Sensitivity for device orientation (0-1)
+  returnToCenter?: number; // Time in ms to return to center after orientation change
+  onOrientationData?: (data: {
+    alpha: number | null;
+    beta: number | null;
+    gamma: number | null;
+    timestamp: number;
+    isSupported: boolean;
+    isActive: boolean;
+  } | null) => void; // Callback for orientation diagnostics
 }
 
 export const HoverCard: React.FC<HoverCardProps> = ({ 
@@ -19,21 +30,155 @@ export const HoverCard: React.FC<HoverCardProps> = ({
   disabled = false,
   maxRotation = 15,
   maxLift = 30,
-  enableGlow = true
+  enableGlow = true,
+  useDeviceOrientation = true,
+  orientationSensitivity = 0.8,
+  returnToCenter = 1500,
+  onOrientationData
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [elementCenter, setElementCenter] = useState({ x: 0, y: 0 });
+  const [orientationSupported, setOrientationSupported] = useState(false);
+  const [isUsingOrientation, setIsUsingOrientation] = useState(false);
+  const [orientationData, setOrientationData] = useState<{
+    alpha: number | null;
+    beta: number | null;
+    gamma: number | null;
+    timestamp: number;
+  } | null>(null);
   
   const cardRef = useRef<HTMLDivElement>(null);
+  const lastOrientationRef = useRef<{ gamma: number; beta: number } | null>(null);
+  const decayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const currentPositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   
   const { width, height, ref } = useResizeDetector<HTMLDivElement>({
     refreshMode: 'debounce',
     refreshRate: 100,
   });
 
+  // Check for device orientation support and set up listener
+  useEffect(() => {
+    if (!useDeviceOrientation || disabled) return;
+
+    const checkOrientationSupport = () => {
+      if (typeof window !== 'undefined' && window.DeviceOrientationEvent) {
+        setOrientationSupported(true);
+        
+        const handleOrientation = (event: DeviceOrientationEvent) => {
+          const now = Date.now();
+          
+          // Always update diagnostic data
+          setOrientationData({
+            alpha: event.alpha,
+            beta: event.beta,
+            gamma: event.gamma,
+            timestamp: now
+          });
+          
+          if (event.gamma === null || event.beta === null) return;
+          
+          setIsUsingOrientation(true);
+          
+          // Convert device orientation to normalized values
+          const gamma = Math.max(-90, Math.min(90, event.gamma));
+          const beta = Math.max(-90, Math.min(90, event.beta));
+          
+          const lastOrientation = lastOrientationRef.current;
+          
+          if (lastOrientation) {
+            // Calculate delta from previous orientation
+            const deltaGamma = gamma - lastOrientation.gamma;
+            const deltaBeta = beta - lastOrientation.beta;
+            
+            // Apply delta to current position with sensitivity
+            const currentPos = currentPositionRef.current;
+            const deltaX = -(deltaGamma / 90) * orientationSensitivity * 0.5; // Reduce sensitivity for delta
+            const deltaY = -(deltaBeta / 90) * orientationSensitivity * 0.5;
+            
+            // Add delta to current position (accumulate changes)
+            const newX = Math.max(-1, Math.min(1, currentPos.x + deltaX));
+            const newY = Math.max(-1, Math.min(1, currentPos.y + deltaY));
+            
+            currentPositionRef.current = { x: newX, y: newY };
+            setMousePosition({ x: newX, y: newY });
+          }
+          
+          // Update last orientation
+          lastOrientationRef.current = { gamma, beta };
+        };
+        
+        window.addEventListener('deviceorientation', handleOrientation, true);
+        
+        return () => {
+          window.removeEventListener('deviceorientation', handleOrientation, true);
+        };
+      }
+      return undefined;
+    };
+
+    const cleanup = checkOrientationSupport();
+    
+    return cleanup;
+  }, [useDeviceOrientation, disabled, orientationSensitivity, returnToCenter]);
+
+  // Constant decay effect - always running when device orientation is enabled
+  useEffect(() => {
+    if (!useDeviceOrientation || disabled) return;
+
+    const decayRate = 0.95; // How quickly to decay (0.95 = retain 95% each frame)
+    const threshold = 0.01; // Stop decay when position is very small
+    
+    decayIntervalRef.current = setInterval(() => {
+      const currentPos = currentPositionRef.current;
+      const magnitude = Math.sqrt(currentPos.x * currentPos.x + currentPos.y * currentPos.y);
+      
+      if (magnitude > threshold) {
+        const newX = currentPos.x * decayRate;
+        const newY = currentPos.y * decayRate;
+        
+        currentPositionRef.current = { x: newX, y: newY };
+        setMousePosition({ x: newX, y: newY });
+      } else if (magnitude > 0) {
+        // Stop completely when very small
+        currentPositionRef.current = { x: 0, y: 0 };
+        setMousePosition({ x: 0, y: 0 });
+        setIsUsingOrientation(false);
+      }
+    }, 16); // 60fps
+
+    return () => {
+      if (decayIntervalRef.current) {
+        clearInterval(decayIntervalRef.current);
+      }
+    };
+  }, [useDeviceOrientation, disabled]);
+
+  // Send diagnostic data to parent component
+  useEffect(() => {
+    if (onOrientationData) {
+      if (orientationData) {
+        onOrientationData({
+          ...orientationData,
+          isSupported: orientationSupported,
+          isActive: isUsingOrientation
+        });
+      } else {
+        onOrientationData({
+          alpha: null,
+          beta: null,
+          gamma: null,
+          timestamp: Date.now(),
+          isSupported: orientationSupported,
+          isActive: isUsingOrientation
+        });
+      }
+    }
+  }, [orientationData, orientationSupported, isUsingOrientation, onOrientationData]);
+
   const handleMouseEnter = useCallback(() => {
-    if (disabled) return;
+    if (disabled || isUsingOrientation) return;
     setIsHovered(true);
     if (cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
@@ -42,16 +187,16 @@ export const HoverCard: React.FC<HoverCardProps> = ({
         y: rect.top + rect.height / 2,
       });
     }
-  }, [disabled]);
+  }, [disabled, isUsingOrientation]);
 
   const handleMouseLeave = useCallback(() => {
-    if (disabled) return;
+    if (disabled || isUsingOrientation) return;
     setIsHovered(false);
     setMousePosition({ x: 0, y: 0 });
-  }, [disabled]);
+  }, [disabled, isUsingOrientation]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (disabled || !isHovered || !cardRef.current) return;
+    if (disabled || isUsingOrientation || !isHovered || !cardRef.current) return;
     
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -62,29 +207,32 @@ export const HoverCard: React.FC<HoverCardProps> = ({
     const relativeY = (e.clientY - centerY) / (rect.height / 2);
     
     setMousePosition({ x: relativeX, y: relativeY });
-  }, [disabled, isHovered]);
+  }, [disabled, isUsingOrientation, isHovered]);
 
-  // Calculate transform values based on mouse position and force
-  const rotateX = mousePosition.y * force * maxRotation;
-  const rotateY = -mousePosition.x * force * maxRotation; // Negative for natural feel
-  const translateY = isHovered ? -force * maxLift : 0; // Lift effect
-  const scale = isHovered ? 1 + force * 0.1 : 1; // Scale effect
+  // Calculate transform values based on mouse position and force - only rotation
+  let rotateX, rotateY;
   
-  // Add subtle glow effect based on hover
-  const boxShadow = enableGlow && isHovered 
-    ? `0 ${force * 40}px ${force * 80}px rgba(0, 0, 0, 0.3), 0 0 ${force * 20}px rgba(255, 255, 255, 0.1)`
-    : '0 4px 8px rgba(0, 0, 0, 0.1)';
+  if (isUsingOrientation) {
+    // For device orientation: double effect + invert both axes
+    rotateX = -mousePosition.y * force * maxRotation * 2; // Invert up/down
+    rotateY = mousePosition.x * force * maxRotation * 2;  // Invert left/right
+  } else {
+    // For mouse: original behavior
+    rotateX = mousePosition.y * force * maxRotation;
+    rotateY = -mousePosition.x * force * maxRotation; // Negative for natural feel
+  }
+  
+  // Keep original shadow without glow effects
+  const boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
 
   const transformStyle = {
     transform: `
       perspective(1200px) 
       rotateX(${rotateX}deg) 
-      rotateY(${rotateY}deg) 
-      translateY(${translateY}px) 
-      scale(${scale})
+      rotateY(${rotateY}deg)
     `,
     boxShadow,
-    transition: isHovered 
+    transition: (isHovered || isUsingOrientation)
       ? 'transform 0.08s ease-out, box-shadow 0.2s ease-out' 
       : 'transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), box-shadow 0.4s ease-out',
   };

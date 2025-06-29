@@ -5,10 +5,12 @@ A React component that creates interactive hover effects with 3D transforms, bui
 ## Features
 
 - 🎯 **Mouse-following tilt effects** - Card rotates based on mouse position
+- 📱 **Device orientation support** - Responds to device tilting with inertia effects
 - 📏 **Automatic size detection** - Uses `react-resize-detector` to adjust to content size
 - 🎚️ **Configurable force levels** - Control the intensity of hover effects (0-1)
 - ✨ **Smooth animations** - CSS transitions with optimized performance
 - 🎨 **Customizable parameters** - Maximum rotation, lift height, and glow effects
+- 🔄 **Inertia effects** - Card returns to center after device tilt
 - 🚫 **Disable option** - Can be disabled for accessibility or performance
 
 ## Usage
@@ -48,6 +50,9 @@ import { HoverCard } from '../components/hover-card';
 | `maxRotation` | `number` | `15` | Maximum rotation in degrees |
 | `maxLift` | `number` | `30` | Maximum lift in pixels |
 | `enableGlow` | `boolean` | `true` | Enable glow effect on hover |
+| `useDeviceOrientation` | `boolean` | `true` | Use device orientation instead of/along with mouse |
+| `orientationSensitivity` | `number` | `0.8` | Sensitivity for device orientation (0-1) |
+| `returnToCenter` | `number` | `1500` | Time in ms to return to center after orientation |
 
 ## Force Levels Guide
 
@@ -62,10 +67,14 @@ Visit `/badma/hover-card` to see the interactive demo with different force level
 ## Technical Implementation
 
 - Uses `useResizeDetector` from `react-resize-detector` for automatic size detection
-- Implements `onMouseMove`, `onMouseEnter`, and `onMouseLeave` events
+- Implements `onMouseMove`, `onMouseEnter`, and `onMouseLeave` events for mouse interaction
+- Listens to `DeviceOrientationEvent` for device tilt detection
 - Calculates relative mouse position from element center
+- Converts device orientation (gamma/beta) to position coordinates with inversion
 - Applies 3D CSS transforms with `perspective`, `rotateX`, `rotateY`, `translateY`, and `scale`
+- Uses timers with refs for inertia effects - card returns to center after orientation changes
 - Optimized with `useCallback` hooks and efficient state management
+- Prevents mouse events when device orientation is active
 
 ## Performance
 
