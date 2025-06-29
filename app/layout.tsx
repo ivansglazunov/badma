@@ -6,13 +6,17 @@ import "@/app/globals.css";
 import "hasyx/lib/styles.css";
 import { Generator } from "hasyx";
 import schema from "../public/hasura-schema.json";
+import { useEffect } from "react";
 
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import cola from 'cytoscape-cola';
 import edgehandles from 'cytoscape-edgehandles';
 import edgeConnections from 'cytoscape-edge-connections';
+import klay from 'cytoscape-klay';
 
+
+cytoscape.use(klay);
 cytoscape.use(dagre);
 cytoscape.use(cola);
 cytoscape.use(edgeConnections);
@@ -21,6 +25,11 @@ cytoscape.use(edgehandles);
 const generate = Generator(schema);
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    try {
+      import('eruda').then(eruda => eruda?.default?.init());
+    } catch(e) {}
+  }, []);
   return (
     <>
       <html lang="en" suppressHydrationWarning>

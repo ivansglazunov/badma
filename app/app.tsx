@@ -33,6 +33,7 @@ import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
     case 'await':
+
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200';
     case 'ready':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200';
@@ -731,14 +732,14 @@ export default function App() {
                 <div className="flex items-center">
                   <Trophy className="h-10 w-10 mr-3 text-purple-500" />
                   <h2 className="text-3xl font-semibold">Tournaments</h2>
+                  <Button 
+                    size="icon" 
+                    className="bg-purple-600 hover:bg-purple-700 text-white ml-3"
+                    onClick={() => setIsCreateTournamentModalOpen(true)}
+                  >
+                    <PlusCircle className="h-5 w-5" />
+                  </Button>
                 </div>
-                <Button 
-                  size="icon" 
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                  onClick={() => setIsCreateTournamentModalOpen(true)}
-                >
-                  <PlusCircle className="h-5 w-5" />
-                </Button>
               </div>
               {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
               {tournamentsError && (
@@ -862,14 +863,18 @@ export default function App() {
                         <SelectContent>
                           {tournaments.map(type => (
                             <SelectItem key={type} value={type}>
-                              {tournamentDescriptions[type] || type}
+                              {type}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
+                      {/* <span className="text-xs text-muted-foreground">
+                        {tournamentDescriptions[selectedTournament.type]}
+                      </span> */}
                     </div>
                     
                     <Separator />
+
                     
                     <div>
                       <Label className="text-sm font-medium mb-2 block">Tournament Status</Label>
@@ -922,7 +927,7 @@ export default function App() {
       )}
 
       <Dialog open={isCreateTournamentModalOpen} onOpenChange={setIsCreateTournamentModalOpen}>
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="max-w-[300px]">
           <DialogHeader>
             <DialogTitle>Create New Tournament</DialogTitle>
             <DialogDescription>
@@ -942,11 +947,14 @@ export default function App() {
                   <SelectContent>
                     {tournaments.map(type => (
                       <SelectItem key={type} value={type}>
-                        {tournamentDescriptions[type] || type}
+                        {type}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                <span className="text-xs text-muted-foreground">
+                  {tournamentDescriptions[newTournamentType]}
+                </span>
               </div>
             </div>
           </div>
@@ -1016,19 +1024,19 @@ export default function App() {
         selectedGameId ? "translate-y-full" : "translate-y-0"
       )}>
         <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
-          <div className="flex-1 flex justify-start items-center space-x-1">
+          <div className="flex-1 flex justify-start items-center">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
               <User className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Profile</span>
             </Button>
             <Button variant="ghost" className="flex-grow-0 text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("tournaments")}>
               <Trophy className="h-5 w-5 mb-0.5" />
-              <span className="text-xs leading-tight">Tournaments</span>
-            </Button>
-            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
-              <Globe className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Rating</span>
             </Button>
+            {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+              <Globe className="h-5 w-5 mb-0.5" />
+              <span className="text-xs leading-tight">Rating</span>
+            </Button> */}
           </div>
 
           <div className={`flex-shrink-0 bg-transparent border-none relative`} onClick={() => setProfile(!profile)}>
@@ -1040,20 +1048,21 @@ export default function App() {
           </div>
           
           <div className="flex-1 flex justify-end items-center space-x-1">
-            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+            {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Shirt className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Skins</span>
-            </Button>
-            <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+            </Button> */}
+            {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Sparkles className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Perks</span>
-            </Button>
+            </Button> */}
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("games")}>
               <Gamepad2 className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Games</span>
             </Button>
             <Button variant="ghost" size="icon" className="text-white flex flex-col items-center justify-center h-12 w-12 aspect-square" onClick={() => setMainViewTab("create")}>
               <PlusCircle className="h-6 w-6" />
+              <span className="text-xs leading-tight">Create</span>
             </Button>
           </div>
         </div>

@@ -12,6 +12,7 @@ import Board from './board';
 import axios from 'axios';
 import Debug from './debug';
 import React from 'react';
+import { HoverCard } from 'badma/components/hover-card';
 
 const debug = Debug('game');
 
@@ -146,6 +147,16 @@ export function GameCore({ gameData, currentUserId }: GameCoreProps) {
     hasClients: Object.keys(chessClients).length > 0,
     isSpectator: userJoins.length === 0
   });
+  const [useOrientation, setUseOrientation] = useState(true);
+  const [orientationSensitivity, setOrientationSensitivity] = useState(0.8);
+  const [orientationData, setOrientationData] = useState<{
+    alpha: number | null;
+    beta: number | null;
+    gamma: number | null;
+    timestamp: number;
+    isSupported: boolean;
+    isActive: boolean;
+  } | null>(null);
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full h-full min-h-screen">
@@ -161,13 +172,22 @@ export function GameCore({ gameData, currentUserId }: GameCoreProps) {
       )}
       <div className="flex-1 w-full flex items-center justify-center p-4">
         <div className="w-full h-full max-w-[min(80vw,80vh)] max-h-[min(80vw,80vh)] aspect-square">
-          <Board 
-            position={gameData.fen}
-            onMove={userJoins.length > 0 ? handleMove : undefined}
-            orientation={boardOrientation}
-            bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
-            bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
-          />
+          <HoverCard
+            force={1.3}
+            maxRotation={25}
+            maxLift={50}
+            useDeviceOrientation={useOrientation}
+            orientationSensitivity={orientationSensitivity}
+            onOrientationData={setOrientationData}
+          >
+            <Board 
+              position={gameData.fen}
+              onMove={userJoins.length > 0 ? handleMove : undefined}
+              orientation={boardOrientation}
+              bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
+              bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+            />
+          </HoverCard>
         </div>
       </div>
     </div>

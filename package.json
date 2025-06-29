@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "npm run unbuild; NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --runInBand",
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --runInBand",
     "dev": "NODE_OPTIONS=\"--experimental-vm-modules\" npx -y hasyx dev",
     "build": "NODE_ENV=production npx -y hasyx build",
     "unbuild": "npx -y hasyx unbuild",
@@ -39,8 +39,9 @@
   "description": "",
   "dependencies": {
     "chess.js": "^0.12.1",
+    "eruda": "^3.4.3",
     "events": "^3.3.0",
-    "hasyx": "^0.1.336",
+    "hasyx": "^0.1.340",
     "js-chess-engine": "^1.0.2",
     "react": "^19",
     "react-chessboard": "^4.7.3",
