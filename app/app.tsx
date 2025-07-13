@@ -29,6 +29,8 @@ import { useMounted } from "@/hooks/mounted";
 import schema from "@/public/hasura-schema.json";
 import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
 import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
+import { HoverCard } from "@/components/hover-card";
+import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/hooks/device-permissions";
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -492,6 +494,23 @@ export default function App() {
   const { theme, setTheme } = useTheme();
   const hasyx = useHasyx();
 
+  // Auto-request device permissions on app load
+  const motionPermissions = useDeviceMotionPermissions(true);
+  const orientationPermissions = useDeviceOrientationPermissions(true);
+
+  // Debug: Log permission changes
+  useEffect(() => {
+    console.log('Motion permission status:', motionPermissions.permissionStatus);
+    console.log('Motion needsUserInteraction:', motionPermissions.needsUserInteraction);
+    console.log('Motion hasTriedAutoRequest:', motionPermissions.hasTriedAutoRequest);
+  }, [motionPermissions.permissionStatus, motionPermissions.needsUserInteraction, motionPermissions.hasTriedAutoRequest]);
+
+  useEffect(() => {
+    console.log('Orientation permission status:', orientationPermissions.permissionStatus);
+    console.log('Orientation needsUserInteraction:', orientationPermissions.needsUserInteraction);
+    console.log('Orientation hasTriedAutoRequest:', orientationPermissions.hasTriedAutoRequest);
+  }, [orientationPermissions.permissionStatus, orientationPermissions.needsUserInteraction, orientationPermissions.hasTriedAutoRequest]);
+
   // Get current user's full data including ID
   const { data: currentUserData, loading: userLoading } = useSubscription(
     {
@@ -524,6 +543,7 @@ export default function App() {
   const [isCreatingTournament, setIsCreatingTournament] = useState(false);
   const [isAddingAiPlayers, setIsAddingAiPlayers] = useState(false);
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
+  const [showPermissionToast, setShowPermissionToast] = useState(false);
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
@@ -666,6 +686,20 @@ export default function App() {
     }
   };
 
+  // Show toast when permissions need user interaction
+  useEffect(() => {
+    if (motionPermissions.needsUserInteraction || orientationPermissions.needsUserInteraction) {
+      setShowPermissionToast(true);
+      
+      // Auto-hide toast after 5 seconds
+      const timer = setTimeout(() => {
+        setShowPermissionToast(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [motionPermissions.needsUserInteraction, orientationPermissions.needsUserInteraction]);
+
   if (isLoadingSession) {
     return (
       <div className="flex flex-1 flex-col bg-background items-center justify-center h-screen">
@@ -684,7 +718,34 @@ export default function App() {
 
   return (<>
     <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
-      <div className="absolute top-3 right-3 z-50">
+      <div className="absolute top-3 right-3 z-50 flex flex-col gap-2">
+        {/* Device Permissions Status - Only show if supported */}
+        {(motionPermissions.isSupported || orientationPermissions.isSupported) && (
+          <>
+            <div className="flex gap-2 text-xs">
+              {motionPermissions.isSupported && (
+                <div className={`px-2 py-1 rounded-full text-white text-xs ${
+                  motionPermissions.permissionStatus === 'granted' ? 'bg-green-500' :
+                  motionPermissions.permissionStatus === 'denied' ? 'bg-red-500' :
+                  motionPermissions.permissionStatus === 'requesting' ? 'bg-yellow-500' :
+                  'bg-gray-500'
+                }`}>
+                  📱 {motionPermissions.permissionStatus}
+                </div>
+              )}
+              {orientationPermissions.isSupported && (
+                <div className={`px-2 py-1 rounded-full text-white text-xs ${
+                  orientationPermissions.permissionStatus === 'granted' ? 'bg-green-500' :
+                  orientationPermissions.permissionStatus === 'denied' ? 'bg-red-500' :
+                  orientationPermissions.permissionStatus === 'requesting' ? 'bg-yellow-500' :
+                  'bg-gray-500'
+                }`}>
+                  🧭 {orientationPermissions.permissionStatus}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
       
       <Carousel 
@@ -1068,5 +1129,76 @@ export default function App() {
         </div>
       </div>
     </div>
+    <NeedClubCard />
+
+    {/* Show manual request button if needed */}
+    {((motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') || 
+      (orientationPermissions.needsUserInteraction && orientationPermissions.permissionStatus !== 'granted')) && (
+        <Dialog open>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Allow Device Access</DialogTitle>
+            </DialogHeader>
+            <button 
+              onClick={async () => {
+                if (motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') {
+                  await motionPermissions.requestPermission();
+                }
+                if (orientationPermissions.needsUserInteraction && orientationPermissions.permissionStatus !== 'granted') {
+                  await orientationPermissions.requestPermission();
+                }
+              }}
+              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors"
+            >
+              📱 Allow Device Access
+            </button>
+          </DialogContent>
+        </Dialog>
+    )}
   </>);
 }
+
+export function NeedClubCard() {
+  const [useOrientation, setUseOrientation] = useState(true);
+  const [orientationSensitivity, setOrientationSensitivity] = useState(0.8);
+  const [orientationData, setOrientationData] = useState<{
+    alpha: number | null;
+    beta: number | null;
+    gamma: number | null;
+    timestamp: number;
+    isSupported: boolean;
+    isActive: boolean;
+  } | null>(null);
+  return <div className="fixed bottom-0 left-0 right-0 top-0 w-full h-full z-50 flex items-center justify-center"> 
+    <HoverCard
+      force={1.3}
+      maxRotation={25}
+      maxLift={50}
+      useDeviceOrientation={useOrientation}
+      orientationSensitivity={orientationSensitivity}
+      onOrientationData={setOrientationData}
+    >
+      <div 
+        className={`w-[300px] h-[500px] bg-purple-600 rounded-lg shadow-xl flex items-center justify-center`}
+      >
+        <div className="text-white text-center">
+          <div className="space-y-2 text-xs opacity-60">
+            <h1 style={{ fontSize: '4rem' }}>🫶</h1>
+            <p className="text-xl">Omm Many Badma Chess</p>
+            <p>Для игры вам нужно:</p>
+            <div className="flex flex-row items-center justify-center gap-4">
+              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl">
+                <span className="text-2xl mb-1">🤝</span>
+                <span className="text-xs">Вступить в клуб</span>
+              </Button>
+              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl">
+                <span className="text-2xl mb-1">➕</span>
+                <span className="text-xs">Создать клуб</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </HoverCard>
+  </div>;
+};

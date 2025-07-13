@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { HoverCard } from '../../../components/hover-card';
+import { useDeviceOrientationPermissions } from '../../../hooks/device-permissions';
 
 type ForceLevel = 'low' | 'medium' | 'high';
 
@@ -53,7 +54,7 @@ export function HoverCardClient() {
     isSupported: boolean;
     isActive: boolean;
   } | null>(null);
-  const [permissionStatus, setPermissionStatus] = useState<'unknown' | 'granted' | 'denied' | 'requesting'>('unknown');
+  const devicePermissions = useDeviceOrientationPermissions(false);
   const [, forceUpdate] = useState({});
   const config = forceConfigs[activeLevel];
 
@@ -65,21 +66,7 @@ export function HoverCardClient() {
     return () => clearInterval(interval);
   }, []);
 
-  const requestOrientationPermission = async () => {
-    if (typeof DeviceOrientationEvent !== 'undefined' && 'requestPermission' in DeviceOrientationEvent) {
-      setPermissionStatus('requesting');
-      try {
-        const permission = await (DeviceOrientationEvent as any).requestPermission();
-        setPermissionStatus(permission === 'granted' ? 'granted' : 'denied');
-      } catch (error) {
-        console.error('Error requesting device orientation permission:', error);
-        setPermissionStatus('denied');
-      }
-    } else {
-      // On non-iOS devices, permission is usually granted by default
-      setPermissionStatus('granted');
-    }
-  };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8">
@@ -158,9 +145,9 @@ export function HoverCardClient() {
                 <p><strong>Supported:</strong> {orientationData.isSupported ? '✅ Yes' : '❌ No'}</p>
                 <p><strong>Active:</strong> {orientationData.isActive ? '✅ Yes' : '❌ No'}</p>
                 <p><strong>Permission:</strong> {
-                  permissionStatus === 'unknown' ? '❓ Unknown' :
-                  permissionStatus === 'granted' ? '✅ Granted' :
-                  permissionStatus === 'denied' ? '❌ Denied' :
+                  devicePermissions.permissionStatus === 'unknown' ? '❓ Unknown' :
+                  devicePermissions.permissionStatus === 'granted' ? '✅ Granted' :
+                  devicePermissions.permissionStatus === 'denied' ? '❌ Denied' :
                   '⏳ Requesting...'
                 }</p>
                 <p><strong>Timestamp:</strong> {new Date(orientationData.timestamp).toLocaleTimeString()}</p>
@@ -176,17 +163,17 @@ export function HoverCardClient() {
             {/* Permission Request Button */}
             {orientationData.isSupported && 
              (orientationData.alpha === null || orientationData.beta === null || orientationData.gamma === null) &&
-             permissionStatus !== 'granted' && (
+             devicePermissions.permissionStatus !== 'granted' && (
               <div className="flex flex-col items-center gap-2">
                 <p className="text-yellow-400 text-xs text-center">
                   📱 On iOS Safari, you need to grant permission to access device orientation sensors
                 </p>
                 <button
-                  onClick={requestOrientationPermission}
-                  disabled={permissionStatus === 'requesting'}
+                  onClick={devicePermissions.requestPermission}
+                  disabled={devicePermissions.permissionStatus === 'requesting'}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white text-sm rounded-lg transition-colors"
                 >
-                  {permissionStatus === 'requesting' ? 'Requesting...' : 'Grant Orientation Permission'}
+                  {devicePermissions.permissionStatus === 'requesting' ? 'Requesting...' : 'Grant Orientation Permission'}
                 </button>
               </div>
             )}

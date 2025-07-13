@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
+import { useDevicePermissions } from './device-permissions';
 
 interface ShockConfig {
   threshold?: number; // Minimum acceleration to trigger shock
@@ -16,8 +17,8 @@ interface ShockData {
   timestamp: number;
 }
 
-export const useShock = (
-  onShock: (data: ShockData) => void,
+export const useDeviceMotion = (
+  onMotion: (data: ShockData) => void,
   config: ShockConfig = {}
 ) => {
   const {
@@ -27,7 +28,7 @@ export const useShock = (
   } = config;
 
   const lastShockRef = useRef<number>(0);
-  const permissionGrantedRef = useRef<boolean>(false);
+  const devicePermissions = useDevicePermissions('motion');
 
   const handleMotion = useCallback((event: DeviceMotionEvent) => {
     const now = Date.now();
@@ -50,7 +51,7 @@ export const useShock = (
     // Check if magnitude exceeds threshold
     if (magnitude > threshold) {
       lastShockRef.current = now;
-      onShock({
+      onMotion({
         acceleration: {
           x: acceleration.x,
           y: acceleration.y,
@@ -60,32 +61,17 @@ export const useShock = (
         timestamp: now
       });
     }
-  }, [onShock, threshold, cooldown]);
+  }, [onMotion, threshold, cooldown]);
 
-  const requestPermission = useCallback(async (): Promise<boolean> => {
-    if (typeof DeviceMotionEvent !== 'undefined' && 'requestPermission' in DeviceMotionEvent) {
-      try {
-        const permission = await (DeviceMotionEvent as any).requestPermission();
-        permissionGrantedRef.current = permission === 'granted';
-        return permissionGrantedRef.current;
-      } catch (error) {
-        console.error('Error requesting device motion permission:', error);
-        return false;
-      }
-    } else {
-      // On non-iOS devices, permission is usually granted by default
-      permissionGrantedRef.current = true;
-      return true;
-    }
-  }, []);
+
 
   useEffect(() => {
     const setupMotionListener = async () => {
       if (typeof window === 'undefined') return;
 
       // Request permission if required
-      if (requirePermission && !permissionGrantedRef.current) {
-        const granted = await requestPermission();
+      if (requirePermission && devicePermissions.permissionStatus !== 'granted') {
+        const granted = await devicePermissions.requestPermission();
         if (!granted) return;
       }
 
@@ -101,11 +87,12 @@ export const useShock = (
     return () => {
       cleanup.then(cleanupFn => cleanupFn?.());
     };
-  }, [handleMotion, requirePermission, requestPermission]);
+  }, [handleMotion, requirePermission, devicePermissions]);
 
   return {
-    requestPermission,
-    isSupported: typeof DeviceMotionEvent !== 'undefined',
-    permissionGranted: permissionGrantedRef.current
+    requestPermission: devicePermissions.requestPermission,
+    isSupported: devicePermissions.isSupported,
+    permissionGranted: devicePermissions.permissionStatus === 'granted',
+    permissionStatus: devicePermissions.permissionStatus
   };
 }; 

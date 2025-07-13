@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useShock } from '../../../hooks/shock';
+import { useDeviceMotion } from '../../../hooks/device-motion';
+import { useDeviceMotionPermissions } from '../../../hooks/device-permissions';
 
 export function ShockHookClient() {
   const [isGlowing, setIsGlowing] = useState(false);
@@ -12,9 +13,7 @@ export function ShockHookClient() {
   } | null>(null);
   const [shockCount, setShockCount] = useState(0);
   const [lastShockTime, setLastShockTime] = useState<string>('');
-  const [permissionStatus, setPermissionStatus] = useState<'unknown' | 'granted' | 'denied' | 'requesting'>('unknown');
-
-  const { requestPermission, isSupported, permissionGranted } = useShock(
+  const { requestPermission, isSupported, permissionGranted, permissionStatus } = useDeviceMotion(
     (data) => {
       // Trigger glow effect
       setIsGlowing(true);
@@ -34,23 +33,7 @@ export function ShockHookClient() {
     }
   );
 
-  const handleRequestPermission = async () => {
-    setPermissionStatus('requesting');
-    try {
-      const granted = await requestPermission();
-      setPermissionStatus(granted ? 'granted' : 'denied');
-    } catch (error) {
-      console.error('Error requesting permission:', error);
-      setPermissionStatus('denied');
-    }
-  };
 
-  // Update permission status
-  useEffect(() => {
-    if (permissionGranted) {
-      setPermissionStatus('granted');
-    }
-  }, [permissionGranted]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-900">
@@ -186,7 +169,7 @@ export function ShockHookClient() {
             📱 Grant motion permission to detect device shakes
           </p>
           <button
-            onClick={handleRequestPermission}
+            onClick={requestPermission}
             disabled={permissionStatus === 'requesting'}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
           >

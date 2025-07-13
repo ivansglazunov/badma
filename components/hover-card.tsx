@@ -214,12 +214,12 @@ export const HoverCard: React.FC<HoverCardProps> = ({
   
   if (isUsingOrientation) {
     // For device orientation: double effect + invert both axes
-    rotateX = -mousePosition.y * force * maxRotation * 2; // Invert up/down
-    rotateY = mousePosition.x * force * maxRotation * 2;  // Invert left/right
+    rotateX = -mousePosition.y * force * maxRotation * 3; // Invert up/down
+    rotateY = mousePosition.x * force * maxRotation * 3;  // Invert left/right
   } else {
     // For mouse: original behavior
-    rotateX = mousePosition.y * force * maxRotation;
-    rotateY = -mousePosition.x * force * maxRotation; // Negative for natural feel
+    rotateX = mousePosition.y * force * maxRotation * 0.25;
+    rotateY = -mousePosition.x * force * maxRotation * 0.25; // Negative for natural feel
   }
   
   // Keep original shadow without glow effects
