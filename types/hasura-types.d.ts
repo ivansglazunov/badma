@@ -820,65 +820,63 @@ export type Accounts_Variance_Order_By = {
   updated_at?: InputMaybe<Order_By>;
 };
 
-/** columns and relationships of "auth_passive" */
-export type Auth_Passive = {
-  __typename?: "auth_passive";
+/** columns and relationships of "auth_jwt" */
+export type Auth_Jwt = {
+  __typename?: "auth_jwt";
   _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
   _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["bigint"]["output"];
   /** An object relationship */
   hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
-  /** JWT token for passive authentication */
   jwt?: Maybe<Scalars["String"]["output"]>;
-  /** Redirect URL after authentication */
   redirect?: Maybe<Scalars["String"]["output"]>;
   updated_at: Scalars["bigint"]["output"];
 };
 
-/** aggregated selection of "auth_passive" */
-export type Auth_Passive_Aggregate = {
-  __typename?: "auth_passive_aggregate";
-  aggregate?: Maybe<Auth_Passive_Aggregate_Fields>;
-  nodes: Array<Auth_Passive>;
+/** aggregated selection of "auth_jwt" */
+export type Auth_Jwt_Aggregate = {
+  __typename?: "auth_jwt_aggregate";
+  aggregate?: Maybe<Auth_Jwt_Aggregate_Fields>;
+  nodes: Array<Auth_Jwt>;
 };
 
-/** aggregate fields of "auth_passive" */
-export type Auth_Passive_Aggregate_Fields = {
-  __typename?: "auth_passive_aggregate_fields";
-  avg?: Maybe<Auth_Passive_Avg_Fields>;
+/** aggregate fields of "auth_jwt" */
+export type Auth_Jwt_Aggregate_Fields = {
+  __typename?: "auth_jwt_aggregate_fields";
+  avg?: Maybe<Auth_Jwt_Avg_Fields>;
   count: Scalars["Int"]["output"];
-  max?: Maybe<Auth_Passive_Max_Fields>;
-  min?: Maybe<Auth_Passive_Min_Fields>;
-  stddev?: Maybe<Auth_Passive_Stddev_Fields>;
-  stddev_pop?: Maybe<Auth_Passive_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Auth_Passive_Stddev_Samp_Fields>;
-  sum?: Maybe<Auth_Passive_Sum_Fields>;
-  var_pop?: Maybe<Auth_Passive_Var_Pop_Fields>;
-  var_samp?: Maybe<Auth_Passive_Var_Samp_Fields>;
-  variance?: Maybe<Auth_Passive_Variance_Fields>;
+  max?: Maybe<Auth_Jwt_Max_Fields>;
+  min?: Maybe<Auth_Jwt_Min_Fields>;
+  stddev?: Maybe<Auth_Jwt_Stddev_Fields>;
+  stddev_pop?: Maybe<Auth_Jwt_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Auth_Jwt_Stddev_Samp_Fields>;
+  sum?: Maybe<Auth_Jwt_Sum_Fields>;
+  var_pop?: Maybe<Auth_Jwt_Var_Pop_Fields>;
+  var_samp?: Maybe<Auth_Jwt_Var_Samp_Fields>;
+  variance?: Maybe<Auth_Jwt_Variance_Fields>;
 };
 
-/** aggregate fields of "auth_passive" */
-export type Auth_Passive_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Auth_Passive_Select_Column>>;
+/** aggregate fields of "auth_jwt" */
+export type Auth_Jwt_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Auth_Jwt_Select_Column>>;
   distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 /** aggregate avg on columns */
-export type Auth_Passive_Avg_Fields = {
-  __typename?: "auth_passive_avg_fields";
+export type Auth_Jwt_Avg_Fields = {
+  __typename?: "auth_jwt_avg_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
-/** Boolean expression to filter rows from the table "auth_passive". All fields are combined with a logical 'AND'. */
-export type Auth_Passive_Bool_Exp = {
-  _and?: InputMaybe<Array<Auth_Passive_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "auth_jwt". All fields are combined with a logical 'AND'. */
+export type Auth_Jwt_Bool_Exp = {
+  _and?: InputMaybe<Array<Auth_Jwt_Bool_Exp>>;
   _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
   _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
-  _not?: InputMaybe<Auth_Passive_Bool_Exp>;
-  _or?: InputMaybe<Array<Auth_Passive_Bool_Exp>>;
+  _not?: InputMaybe<Auth_Jwt_Bool_Exp>;
+  _or?: InputMaybe<Array<Auth_Jwt_Bool_Exp>>;
   created_at?: InputMaybe<Bigint_Comparison_Exp>;
   hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -887,83 +885,77 @@ export type Auth_Passive_Bool_Exp = {
   updated_at?: InputMaybe<Bigint_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "auth_passive" */
-export enum Auth_Passive_Constraint {
+/** unique or primary key constraints on table "auth_jwt" */
+export enum Auth_Jwt_Constraint {
   /** unique or primary key constraint on columns "id" */
-  AuthPassivePkey = "auth_passive_pkey",
+  AuthJwtPkey = "auth_jwt_pkey",
 }
 
-/** input type for incrementing numeric columns in table "auth_passive" */
-export type Auth_Passive_Inc_Input = {
+/** input type for incrementing numeric columns in table "auth_jwt" */
+export type Auth_Jwt_Inc_Input = {
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
 };
 
-/** input type for inserting data into table "auth_passive" */
-export type Auth_Passive_Insert_Input = {
+/** input type for inserting data into table "auth_jwt" */
+export type Auth_Jwt_Insert_Input = {
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** JWT token for passive authentication */
   jwt?: InputMaybe<Scalars["String"]["input"]>;
-  /** Redirect URL after authentication */
   redirect?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
 };
 
 /** aggregate max on columns */
-export type Auth_Passive_Max_Fields = {
-  __typename?: "auth_passive_max_fields";
+export type Auth_Jwt_Max_Fields = {
+  __typename?: "auth_jwt_max_fields";
   _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
   _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
-  /** JWT token for passive authentication */
   jwt?: Maybe<Scalars["String"]["output"]>;
-  /** Redirect URL after authentication */
   redirect?: Maybe<Scalars["String"]["output"]>;
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
 };
 
 /** aggregate min on columns */
-export type Auth_Passive_Min_Fields = {
-  __typename?: "auth_passive_min_fields";
+export type Auth_Jwt_Min_Fields = {
+  __typename?: "auth_jwt_min_fields";
   _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
   _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
-  /** JWT token for passive authentication */
   jwt?: Maybe<Scalars["String"]["output"]>;
-  /** Redirect URL after authentication */
   redirect?: Maybe<Scalars["String"]["output"]>;
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
 };
 
-/** response of any mutation on the table "auth_passive" */
-export type Auth_Passive_Mutation_Response = {
-  __typename?: "auth_passive_mutation_response";
+/** response of any mutation on the table "auth_jwt" */
+export type Auth_Jwt_Mutation_Response = {
+  __typename?: "auth_jwt_mutation_response";
   /** number of rows affected by the mutation */
   affected_rows: Scalars["Int"]["output"];
   /** data from the rows affected by the mutation */
-  returning: Array<Auth_Passive>;
+  returning: Array<Auth_Jwt>;
 };
 
-/** input type for inserting object relation for remote table "auth_passive" */
-export type Auth_Passive_Obj_Rel_Insert_Input = {
-  data: Auth_Passive_Insert_Input;
+/** input type for inserting object relation for remote table "auth_jwt" */
+export type Auth_Jwt_Obj_Rel_Insert_Input = {
+  data: Auth_Jwt_Insert_Input;
   /** upsert condition */
-  on_conflict?: InputMaybe<Auth_Passive_On_Conflict>;
+  on_conflict?: InputMaybe<Auth_Jwt_On_Conflict>;
 };
 
-/** on_conflict condition type for table "auth_passive" */
-export type Auth_Passive_On_Conflict = {
-  constraint: Auth_Passive_Constraint;
-  update_columns?: Array<Auth_Passive_Update_Column>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+/** on_conflict condition type for table "auth_jwt" */
+export type Auth_Jwt_On_Conflict = {
+  constraint: Auth_Jwt_Constraint;
+  update_columns?: Array<Auth_Jwt_Update_Column>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "auth_passive". */
-export type Auth_Passive_Order_By = {
+/** Ordering options when selecting data from "auth_jwt". */
+export type Auth_Jwt_Order_By = {
   _hasyx_schema_name?: InputMaybe<Order_By>;
   _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
@@ -974,13 +966,13 @@ export type Auth_Passive_Order_By = {
   updated_at?: InputMaybe<Order_By>;
 };
 
-/** primary key columns input for table: auth_passive */
-export type Auth_Passive_Pk_Columns_Input = {
+/** primary key columns input for table: auth_jwt */
+export type Auth_Jwt_Pk_Columns_Input = {
   id: Scalars["uuid"]["input"];
 };
 
-/** select columns of table "auth_passive" */
-export enum Auth_Passive_Select_Column {
+/** select columns of table "auth_jwt" */
+export enum Auth_Jwt_Select_Column {
   /** column name */
   HasyxSchemaName = "_hasyx_schema_name",
   /** column name */
@@ -997,68 +989,64 @@ export enum Auth_Passive_Select_Column {
   UpdatedAt = "updated_at",
 }
 
-/** input type for updating data in table "auth_passive" */
-export type Auth_Passive_Set_Input = {
+/** input type for updating data in table "auth_jwt" */
+export type Auth_Jwt_Set_Input = {
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** JWT token for passive authentication */
   jwt?: InputMaybe<Scalars["String"]["input"]>;
-  /** Redirect URL after authentication */
   redirect?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
 };
 
 /** aggregate stddev on columns */
-export type Auth_Passive_Stddev_Fields = {
-  __typename?: "auth_passive_stddev_fields";
+export type Auth_Jwt_Stddev_Fields = {
+  __typename?: "auth_jwt_stddev_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** aggregate stddev_pop on columns */
-export type Auth_Passive_Stddev_Pop_Fields = {
-  __typename?: "auth_passive_stddev_pop_fields";
+export type Auth_Jwt_Stddev_Pop_Fields = {
+  __typename?: "auth_jwt_stddev_pop_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** aggregate stddev_samp on columns */
-export type Auth_Passive_Stddev_Samp_Fields = {
-  __typename?: "auth_passive_stddev_samp_fields";
+export type Auth_Jwt_Stddev_Samp_Fields = {
+  __typename?: "auth_jwt_stddev_samp_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
-/** Streaming cursor of the table "auth_passive" */
-export type Auth_Passive_Stream_Cursor_Input = {
+/** Streaming cursor of the table "auth_jwt" */
+export type Auth_Jwt_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Auth_Passive_Stream_Cursor_Value_Input;
+  initial_value: Auth_Jwt_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Auth_Passive_Stream_Cursor_Value_Input = {
+export type Auth_Jwt_Stream_Cursor_Value_Input = {
   _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
   _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** JWT token for passive authentication */
   jwt?: InputMaybe<Scalars["String"]["input"]>;
-  /** Redirect URL after authentication */
   redirect?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
 };
 
 /** aggregate sum on columns */
-export type Auth_Passive_Sum_Fields = {
-  __typename?: "auth_passive_sum_fields";
+export type Auth_Jwt_Sum_Fields = {
+  __typename?: "auth_jwt_sum_fields";
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
 };
 
-/** update columns of table "auth_passive" */
-export enum Auth_Passive_Update_Column {
+/** update columns of table "auth_jwt" */
+export enum Auth_Jwt_Update_Column {
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -1071,32 +1059,32 @@ export enum Auth_Passive_Update_Column {
   UpdatedAt = "updated_at",
 }
 
-export type Auth_Passive_Updates = {
+export type Auth_Jwt_Updates = {
   /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Auth_Passive_Inc_Input>;
+  _inc?: InputMaybe<Auth_Jwt_Inc_Input>;
   /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Auth_Passive_Set_Input>;
+  _set?: InputMaybe<Auth_Jwt_Set_Input>;
   /** filter the rows which have to be updated */
-  where: Auth_Passive_Bool_Exp;
+  where: Auth_Jwt_Bool_Exp;
 };
 
 /** aggregate var_pop on columns */
-export type Auth_Passive_Var_Pop_Fields = {
-  __typename?: "auth_passive_var_pop_fields";
+export type Auth_Jwt_Var_Pop_Fields = {
+  __typename?: "auth_jwt_var_pop_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** aggregate var_samp on columns */
-export type Auth_Passive_Var_Samp_Fields = {
-  __typename?: "auth_passive_var_samp_fields";
+export type Auth_Jwt_Var_Samp_Fields = {
+  __typename?: "auth_jwt_var_samp_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** aggregate variance on columns */
-export type Auth_Passive_Variance_Fields = {
-  __typename?: "auth_passive_variance_fields";
+export type Auth_Jwt_Variance_Fields = {
+  __typename?: "auth_jwt_variance_fields";
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
@@ -5523,2059 +5511,16 @@ export type Debug_Variance_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
-/** columns and relationships of "deep._functions" */
-export type Deep__Functions = {
-  __typename?: "deep__functions";
-  created_at: Scalars["bigint"]["output"];
-  /** Function data as string */
-  data: Scalars["String"]["output"];
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "deep._functions" */
-export type Deep__Functions_Aggregate = {
-  __typename?: "deep__functions_aggregate";
-  aggregate?: Maybe<Deep__Functions_Aggregate_Fields>;
-  nodes: Array<Deep__Functions>;
-};
-
-/** aggregate fields of "deep._functions" */
-export type Deep__Functions_Aggregate_Fields = {
-  __typename?: "deep__functions_aggregate_fields";
-  avg?: Maybe<Deep__Functions_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep__Functions_Max_Fields>;
-  min?: Maybe<Deep__Functions_Min_Fields>;
-  stddev?: Maybe<Deep__Functions_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep__Functions_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep__Functions_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep__Functions_Sum_Fields>;
-  var_pop?: Maybe<Deep__Functions_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep__Functions_Var_Samp_Fields>;
-  variance?: Maybe<Deep__Functions_Variance_Fields>;
-};
-
-/** aggregate fields of "deep._functions" */
-export type Deep__Functions_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep__Functions_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Deep__Functions_Avg_Fields = {
-  __typename?: "deep__functions_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "deep._functions". All fields are combined with a logical 'AND'. */
-export type Deep__Functions_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep__Functions_Bool_Exp>>;
-  _not?: InputMaybe<Deep__Functions_Bool_Exp>;
-  _or?: InputMaybe<Array<Deep__Functions_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  data?: InputMaybe<String_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "deep._functions" */
-export enum Deep__Functions_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  FunctionsPkey = "_functions_pkey",
-}
-
-/** input type for incrementing numeric columns in table "deep._functions" */
-export type Deep__Functions_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep._functions" */
-export type Deep__Functions_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Function data as string */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Deep__Functions_Max_Fields = {
-  __typename?: "deep__functions_max_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Function data as string */
-  data?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Deep__Functions_Min_Fields = {
-  __typename?: "deep__functions_min_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Function data as string */
-  data?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** response of any mutation on the table "deep._functions" */
-export type Deep__Functions_Mutation_Response = {
-  __typename?: "deep__functions_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep__Functions>;
-};
-
-/** on_conflict condition type for table "deep._functions" */
-export type Deep__Functions_On_Conflict = {
-  constraint: Deep__Functions_Constraint;
-  update_columns?: Array<Deep__Functions_Update_Column>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "deep._functions". */
-export type Deep__Functions_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  data?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: deep._functions */
-export type Deep__Functions_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "deep._functions" */
-export enum Deep__Functions_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "deep._functions" */
-export type Deep__Functions_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Function data as string */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep__Functions_Stddev_Fields = {
-  __typename?: "deep__functions_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep__Functions_Stddev_Pop_Fields = {
-  __typename?: "deep__functions_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep__Functions_Stddev_Samp_Fields = {
-  __typename?: "deep__functions_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "deep__functions" */
-export type Deep__Functions_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep__Functions_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep__Functions_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Function data as string */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep__Functions_Sum_Fields = {
-  __typename?: "deep__functions_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "deep._functions" */
-export enum Deep__Functions_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Deep__Functions_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep__Functions_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep__Functions_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep__Functions_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep__Functions_Var_Pop_Fields = {
-  __typename?: "deep__functions_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep__Functions_Var_Samp_Fields = {
-  __typename?: "deep__functions_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Deep__Functions_Variance_Fields = {
-  __typename?: "deep__functions_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "deep._links" */
-export type Deep__Links = {
-  __typename?: "deep__links";
-  /** Deep space isolation key */
-  _deep: Scalars["String"]["output"];
-  /** Function data reference */
-  _function?: Maybe<Scalars["uuid"]["output"]>;
-  /** Sequential number */
-  _i: Scalars["bigint"]["output"];
-  /** Number data reference */
-  _number?: Maybe<Scalars["uuid"]["output"]>;
-  /** Object data reference */
-  _object?: Maybe<Scalars["uuid"]["output"]>;
-  /** String data reference */
-  _string?: Maybe<Scalars["uuid"]["output"]>;
-  created_at: Scalars["bigint"]["output"];
-  /** Link from reference */
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["String"]["output"];
-  /** Link to reference */
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  /** Link type reference */
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  updated_at: Scalars["bigint"]["output"];
-  /** Link value reference */
-  value_id?: Maybe<Scalars["String"]["output"]>;
-};
-
-/** aggregated selection of "deep._links" */
-export type Deep__Links_Aggregate = {
-  __typename?: "deep__links_aggregate";
-  aggregate?: Maybe<Deep__Links_Aggregate_Fields>;
-  nodes: Array<Deep__Links>;
-};
-
-/** aggregate fields of "deep._links" */
-export type Deep__Links_Aggregate_Fields = {
-  __typename?: "deep__links_aggregate_fields";
-  avg?: Maybe<Deep__Links_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep__Links_Max_Fields>;
-  min?: Maybe<Deep__Links_Min_Fields>;
-  stddev?: Maybe<Deep__Links_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep__Links_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep__Links_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep__Links_Sum_Fields>;
-  var_pop?: Maybe<Deep__Links_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep__Links_Var_Samp_Fields>;
-  variance?: Maybe<Deep__Links_Variance_Fields>;
-};
-
-/** aggregate fields of "deep._links" */
-export type Deep__Links_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep__Links_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Deep__Links_Avg_Fields = {
-  __typename?: "deep__links_avg_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "deep._links". All fields are combined with a logical 'AND'. */
-export type Deep__Links_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep__Links_Bool_Exp>>;
-  _deep?: InputMaybe<String_Comparison_Exp>;
-  _function?: InputMaybe<Uuid_Comparison_Exp>;
-  _i?: InputMaybe<Bigint_Comparison_Exp>;
-  _not?: InputMaybe<Deep__Links_Bool_Exp>;
-  _number?: InputMaybe<Uuid_Comparison_Exp>;
-  _object?: InputMaybe<Uuid_Comparison_Exp>;
-  _or?: InputMaybe<Array<Deep__Links_Bool_Exp>>;
-  _string?: InputMaybe<Uuid_Comparison_Exp>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  from_id?: InputMaybe<String_Comparison_Exp>;
-  id?: InputMaybe<String_Comparison_Exp>;
-  to_id?: InputMaybe<String_Comparison_Exp>;
-  type_id?: InputMaybe<String_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  value_id?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "deep._links" */
-export enum Deep__Links_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  LinksPkey = "_links_pkey",
-}
-
-/** input type for incrementing numeric columns in table "deep._links" */
-export type Deep__Links_Inc_Input = {
-  /** Sequential number */
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep._links" */
-export type Deep__Links_Insert_Input = {
-  /** Deep space isolation key */
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  /** Function data reference */
-  _function?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Sequential number */
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data reference */
-  _number?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Object data reference */
-  _object?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** String data reference */
-  _string?: InputMaybe<Scalars["uuid"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link from reference */
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link to reference */
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link type reference */
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link value reference */
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Deep__Links_Max_Fields = {
-  __typename?: "deep__links_max_fields";
-  /** Deep space isolation key */
-  _deep?: Maybe<Scalars["String"]["output"]>;
-  /** Function data reference */
-  _function?: Maybe<Scalars["uuid"]["output"]>;
-  /** Sequential number */
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  /** Number data reference */
-  _number?: Maybe<Scalars["uuid"]["output"]>;
-  /** Object data reference */
-  _object?: Maybe<Scalars["uuid"]["output"]>;
-  /** String data reference */
-  _string?: Maybe<Scalars["uuid"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Link from reference */
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  /** Link to reference */
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  /** Link type reference */
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Link value reference */
-  value_id?: Maybe<Scalars["String"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Deep__Links_Min_Fields = {
-  __typename?: "deep__links_min_fields";
-  /** Deep space isolation key */
-  _deep?: Maybe<Scalars["String"]["output"]>;
-  /** Function data reference */
-  _function?: Maybe<Scalars["uuid"]["output"]>;
-  /** Sequential number */
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  /** Number data reference */
-  _number?: Maybe<Scalars["uuid"]["output"]>;
-  /** Object data reference */
-  _object?: Maybe<Scalars["uuid"]["output"]>;
-  /** String data reference */
-  _string?: Maybe<Scalars["uuid"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Link from reference */
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  /** Link to reference */
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  /** Link type reference */
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Link value reference */
-  value_id?: Maybe<Scalars["String"]["output"]>;
-};
-
-/** response of any mutation on the table "deep._links" */
-export type Deep__Links_Mutation_Response = {
-  __typename?: "deep__links_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep__Links>;
-};
-
-/** on_conflict condition type for table "deep._links" */
-export type Deep__Links_On_Conflict = {
-  constraint: Deep__Links_Constraint;
-  update_columns?: Array<Deep__Links_Update_Column>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "deep._links". */
-export type Deep__Links_Order_By = {
-  _deep?: InputMaybe<Order_By>;
-  _function?: InputMaybe<Order_By>;
-  _i?: InputMaybe<Order_By>;
-  _number?: InputMaybe<Order_By>;
-  _object?: InputMaybe<Order_By>;
-  _string?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  from_id?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  to_id?: InputMaybe<Order_By>;
-  type_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  value_id?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: deep._links */
-export type Deep__Links_Pk_Columns_Input = {
-  id: Scalars["String"]["input"];
-};
-
-/** select columns of table "deep._links" */
-export enum Deep__Links_Select_Column {
-  /** column name */
-  Deep = "_deep",
-  /** column name */
-  Function = "_function",
-  /** column name */
-  I = "_i",
-  /** column name */
-  Number = "_number",
-  /** column name */
-  Object = "_object",
-  /** column name */
-  String = "_string",
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  FromId = "from_id",
-  /** column name */
-  Id = "id",
-  /** column name */
-  ToId = "to_id",
-  /** column name */
-  TypeId = "type_id",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  ValueId = "value_id",
-}
-
-/** input type for updating data in table "deep._links" */
-export type Deep__Links_Set_Input = {
-  /** Deep space isolation key */
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  /** Function data reference */
-  _function?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Sequential number */
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data reference */
-  _number?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Object data reference */
-  _object?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** String data reference */
-  _string?: InputMaybe<Scalars["uuid"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link from reference */
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link to reference */
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link type reference */
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link value reference */
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep__Links_Stddev_Fields = {
-  __typename?: "deep__links_stddev_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep__Links_Stddev_Pop_Fields = {
-  __typename?: "deep__links_stddev_pop_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep__Links_Stddev_Samp_Fields = {
-  __typename?: "deep__links_stddev_samp_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "deep__links" */
-export type Deep__Links_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep__Links_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep__Links_Stream_Cursor_Value_Input = {
-  /** Deep space isolation key */
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  /** Function data reference */
-  _function?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Sequential number */
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data reference */
-  _number?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Object data reference */
-  _object?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** String data reference */
-  _string?: InputMaybe<Scalars["uuid"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link from reference */
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link to reference */
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  /** Link type reference */
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Link value reference */
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep__Links_Sum_Fields = {
-  __typename?: "deep__links_sum_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "deep._links" */
-export enum Deep__Links_Update_Column {
-  /** column name */
-  Deep = "_deep",
-  /** column name */
-  Function = "_function",
-  /** column name */
-  I = "_i",
-  /** column name */
-  Number = "_number",
-  /** column name */
-  Object = "_object",
-  /** column name */
-  String = "_string",
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  FromId = "from_id",
-  /** column name */
-  Id = "id",
-  /** column name */
-  ToId = "to_id",
-  /** column name */
-  TypeId = "type_id",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  ValueId = "value_id",
-}
-
-export type Deep__Links_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep__Links_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep__Links_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep__Links_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep__Links_Var_Pop_Fields = {
-  __typename?: "deep__links_var_pop_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep__Links_Var_Samp_Fields = {
-  __typename?: "deep__links_var_samp_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Deep__Links_Variance_Fields = {
-  __typename?: "deep__links_variance_fields";
-  /** Sequential number */
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "deep._numbers" */
-export type Deep__Numbers = {
-  __typename?: "deep__numbers";
-  created_at: Scalars["bigint"]["output"];
-  /** Number data */
-  data: Scalars["numeric"]["output"];
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "deep._numbers" */
-export type Deep__Numbers_Aggregate = {
-  __typename?: "deep__numbers_aggregate";
-  aggregate?: Maybe<Deep__Numbers_Aggregate_Fields>;
-  nodes: Array<Deep__Numbers>;
-};
-
-/** aggregate fields of "deep._numbers" */
-export type Deep__Numbers_Aggregate_Fields = {
-  __typename?: "deep__numbers_aggregate_fields";
-  avg?: Maybe<Deep__Numbers_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep__Numbers_Max_Fields>;
-  min?: Maybe<Deep__Numbers_Min_Fields>;
-  stddev?: Maybe<Deep__Numbers_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep__Numbers_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep__Numbers_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep__Numbers_Sum_Fields>;
-  var_pop?: Maybe<Deep__Numbers_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep__Numbers_Var_Samp_Fields>;
-  variance?: Maybe<Deep__Numbers_Variance_Fields>;
-};
-
-/** aggregate fields of "deep._numbers" */
-export type Deep__Numbers_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep__Numbers_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Deep__Numbers_Avg_Fields = {
-  __typename?: "deep__numbers_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "deep._numbers". All fields are combined with a logical 'AND'. */
-export type Deep__Numbers_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep__Numbers_Bool_Exp>>;
-  _not?: InputMaybe<Deep__Numbers_Bool_Exp>;
-  _or?: InputMaybe<Array<Deep__Numbers_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  data?: InputMaybe<Numeric_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "deep._numbers" */
-export enum Deep__Numbers_Constraint {
-  /** unique or primary key constraint on columns "data" */
-  NumbersDataKey = "_numbers_data_key",
-  /** unique or primary key constraint on columns "id" */
-  NumbersPkey = "_numbers_pkey",
-}
-
-/** input type for incrementing numeric columns in table "deep._numbers" */
-export type Deep__Numbers_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data */
-  data?: InputMaybe<Scalars["numeric"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep._numbers" */
-export type Deep__Numbers_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data */
-  data?: InputMaybe<Scalars["numeric"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Deep__Numbers_Max_Fields = {
-  __typename?: "deep__numbers_max_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["numeric"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Deep__Numbers_Min_Fields = {
-  __typename?: "deep__numbers_min_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["numeric"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** response of any mutation on the table "deep._numbers" */
-export type Deep__Numbers_Mutation_Response = {
-  __typename?: "deep__numbers_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep__Numbers>;
-};
-
-/** on_conflict condition type for table "deep._numbers" */
-export type Deep__Numbers_On_Conflict = {
-  constraint: Deep__Numbers_Constraint;
-  update_columns?: Array<Deep__Numbers_Update_Column>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "deep._numbers". */
-export type Deep__Numbers_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  data?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: deep._numbers */
-export type Deep__Numbers_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "deep._numbers" */
-export enum Deep__Numbers_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "deep._numbers" */
-export type Deep__Numbers_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data */
-  data?: InputMaybe<Scalars["numeric"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep__Numbers_Stddev_Fields = {
-  __typename?: "deep__numbers_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep__Numbers_Stddev_Pop_Fields = {
-  __typename?: "deep__numbers_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep__Numbers_Stddev_Samp_Fields = {
-  __typename?: "deep__numbers_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "deep__numbers" */
-export type Deep__Numbers_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep__Numbers_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep__Numbers_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Number data */
-  data?: InputMaybe<Scalars["numeric"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep__Numbers_Sum_Fields = {
-  __typename?: "deep__numbers_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["numeric"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "deep._numbers" */
-export enum Deep__Numbers_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Deep__Numbers_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep__Numbers_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep__Numbers_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep__Numbers_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep__Numbers_Var_Pop_Fields = {
-  __typename?: "deep__numbers_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep__Numbers_Var_Samp_Fields = {
-  __typename?: "deep__numbers_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Deep__Numbers_Variance_Fields = {
-  __typename?: "deep__numbers_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Number data */
-  data?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "deep._objects" */
-export type Deep__Objects = {
-  __typename?: "deep__objects";
-  created_at: Scalars["bigint"]["output"];
-  /** Object data */
-  data: Scalars["jsonb"]["output"];
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** columns and relationships of "deep._objects" */
-export type Deep__ObjectsDataArgs = {
-  path?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregated selection of "deep._objects" */
-export type Deep__Objects_Aggregate = {
-  __typename?: "deep__objects_aggregate";
-  aggregate?: Maybe<Deep__Objects_Aggregate_Fields>;
-  nodes: Array<Deep__Objects>;
-};
-
-/** aggregate fields of "deep._objects" */
-export type Deep__Objects_Aggregate_Fields = {
-  __typename?: "deep__objects_aggregate_fields";
-  avg?: Maybe<Deep__Objects_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep__Objects_Max_Fields>;
-  min?: Maybe<Deep__Objects_Min_Fields>;
-  stddev?: Maybe<Deep__Objects_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep__Objects_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep__Objects_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep__Objects_Sum_Fields>;
-  var_pop?: Maybe<Deep__Objects_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep__Objects_Var_Samp_Fields>;
-  variance?: Maybe<Deep__Objects_Variance_Fields>;
-};
-
-/** aggregate fields of "deep._objects" */
-export type Deep__Objects_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep__Objects_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** append existing jsonb value of filtered columns with new jsonb value */
-export type Deep__Objects_Append_Input = {
-  /** Object data */
-  data?: InputMaybe<Scalars["jsonb"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Deep__Objects_Avg_Fields = {
-  __typename?: "deep__objects_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "deep._objects". All fields are combined with a logical 'AND'. */
-export type Deep__Objects_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep__Objects_Bool_Exp>>;
-  _not?: InputMaybe<Deep__Objects_Bool_Exp>;
-  _or?: InputMaybe<Array<Deep__Objects_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  data?: InputMaybe<Jsonb_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "deep._objects" */
-export enum Deep__Objects_Constraint {
-  /** unique or primary key constraint on columns "data" */
-  ObjectsDataKey = "_objects_data_key",
-  /** unique or primary key constraint on columns "id" */
-  ObjectsPkey = "_objects_pkey",
-}
-
-/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-export type Deep__Objects_Delete_At_Path_Input = {
-  /** Object data */
-  data?: InputMaybe<Array<Scalars["String"]["input"]>>;
-};
-
-/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-export type Deep__Objects_Delete_Elem_Input = {
-  /** Object data */
-  data?: InputMaybe<Scalars["Int"]["input"]>;
-};
-
-/** delete key/value pair or string element. key/value pairs are matched based on their key value */
-export type Deep__Objects_Delete_Key_Input = {
-  /** Object data */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** input type for incrementing numeric columns in table "deep._objects" */
-export type Deep__Objects_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep._objects" */
-export type Deep__Objects_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Object data */
-  data?: InputMaybe<Scalars["jsonb"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Deep__Objects_Max_Fields = {
-  __typename?: "deep__objects_max_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Deep__Objects_Min_Fields = {
-  __typename?: "deep__objects_min_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** response of any mutation on the table "deep._objects" */
-export type Deep__Objects_Mutation_Response = {
-  __typename?: "deep__objects_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep__Objects>;
-};
-
-/** on_conflict condition type for table "deep._objects" */
-export type Deep__Objects_On_Conflict = {
-  constraint: Deep__Objects_Constraint;
-  update_columns?: Array<Deep__Objects_Update_Column>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "deep._objects". */
-export type Deep__Objects_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  data?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: deep._objects */
-export type Deep__Objects_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** prepend existing jsonb value of filtered columns with new jsonb value */
-export type Deep__Objects_Prepend_Input = {
-  /** Object data */
-  data?: InputMaybe<Scalars["jsonb"]["input"]>;
-};
-
-/** select columns of table "deep._objects" */
-export enum Deep__Objects_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "deep._objects" */
-export type Deep__Objects_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Object data */
-  data?: InputMaybe<Scalars["jsonb"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep__Objects_Stddev_Fields = {
-  __typename?: "deep__objects_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep__Objects_Stddev_Pop_Fields = {
-  __typename?: "deep__objects_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep__Objects_Stddev_Samp_Fields = {
-  __typename?: "deep__objects_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "deep__objects" */
-export type Deep__Objects_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep__Objects_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep__Objects_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Object data */
-  data?: InputMaybe<Scalars["jsonb"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep__Objects_Sum_Fields = {
-  __typename?: "deep__objects_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "deep._objects" */
-export enum Deep__Objects_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Deep__Objects_Updates = {
-  /** append existing jsonb value of filtered columns with new jsonb value */
-  _append?: InputMaybe<Deep__Objects_Append_Input>;
-  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  _delete_at_path?: InputMaybe<Deep__Objects_Delete_At_Path_Input>;
-  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  _delete_elem?: InputMaybe<Deep__Objects_Delete_Elem_Input>;
-  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  _delete_key?: InputMaybe<Deep__Objects_Delete_Key_Input>;
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep__Objects_Inc_Input>;
-  /** prepend existing jsonb value of filtered columns with new jsonb value */
-  _prepend?: InputMaybe<Deep__Objects_Prepend_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep__Objects_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep__Objects_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep__Objects_Var_Pop_Fields = {
-  __typename?: "deep__objects_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep__Objects_Var_Samp_Fields = {
-  __typename?: "deep__objects_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Deep__Objects_Variance_Fields = {
-  __typename?: "deep__objects_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "deep._strings" */
-export type Deep__Strings = {
-  __typename?: "deep__strings";
-  created_at: Scalars["bigint"]["output"];
-  /** String data */
-  data: Scalars["String"]["output"];
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "deep._strings" */
-export type Deep__Strings_Aggregate = {
-  __typename?: "deep__strings_aggregate";
-  aggregate?: Maybe<Deep__Strings_Aggregate_Fields>;
-  nodes: Array<Deep__Strings>;
-};
-
-/** aggregate fields of "deep._strings" */
-export type Deep__Strings_Aggregate_Fields = {
-  __typename?: "deep__strings_aggregate_fields";
-  avg?: Maybe<Deep__Strings_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep__Strings_Max_Fields>;
-  min?: Maybe<Deep__Strings_Min_Fields>;
-  stddev?: Maybe<Deep__Strings_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep__Strings_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep__Strings_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep__Strings_Sum_Fields>;
-  var_pop?: Maybe<Deep__Strings_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep__Strings_Var_Samp_Fields>;
-  variance?: Maybe<Deep__Strings_Variance_Fields>;
-};
-
-/** aggregate fields of "deep._strings" */
-export type Deep__Strings_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep__Strings_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Deep__Strings_Avg_Fields = {
-  __typename?: "deep__strings_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "deep._strings". All fields are combined with a logical 'AND'. */
-export type Deep__Strings_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep__Strings_Bool_Exp>>;
-  _not?: InputMaybe<Deep__Strings_Bool_Exp>;
-  _or?: InputMaybe<Array<Deep__Strings_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  data?: InputMaybe<String_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "deep._strings" */
-export enum Deep__Strings_Constraint {
-  /** unique or primary key constraint on columns "data" */
-  StringsDataKey = "_strings_data_key",
-  /** unique or primary key constraint on columns "id" */
-  StringsPkey = "_strings_pkey",
-}
-
-/** input type for incrementing numeric columns in table "deep._strings" */
-export type Deep__Strings_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep._strings" */
-export type Deep__Strings_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** String data */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Deep__Strings_Max_Fields = {
-  __typename?: "deep__strings_max_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** String data */
-  data?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Deep__Strings_Min_Fields = {
-  __typename?: "deep__strings_min_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** String data */
-  data?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** response of any mutation on the table "deep._strings" */
-export type Deep__Strings_Mutation_Response = {
-  __typename?: "deep__strings_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep__Strings>;
-};
-
-/** on_conflict condition type for table "deep._strings" */
-export type Deep__Strings_On_Conflict = {
-  constraint: Deep__Strings_Constraint;
-  update_columns?: Array<Deep__Strings_Update_Column>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "deep._strings". */
-export type Deep__Strings_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  data?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: deep._strings */
-export type Deep__Strings_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "deep._strings" */
-export enum Deep__Strings_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "deep._strings" */
-export type Deep__Strings_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** String data */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep__Strings_Stddev_Fields = {
-  __typename?: "deep__strings_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep__Strings_Stddev_Pop_Fields = {
-  __typename?: "deep__strings_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep__Strings_Stddev_Samp_Fields = {
-  __typename?: "deep__strings_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "deep__strings" */
-export type Deep__Strings_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep__Strings_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep__Strings_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** String data */
-  data?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep__Strings_Sum_Fields = {
-  __typename?: "deep__strings_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "deep._strings" */
-export enum Deep__Strings_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Data = "data",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Deep__Strings_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep__Strings_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep__Strings_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep__Strings_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep__Strings_Var_Pop_Fields = {
-  __typename?: "deep__strings_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep__Strings_Var_Samp_Fields = {
-  __typename?: "deep__strings_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Deep__Strings_Variance_Fields = {
-  __typename?: "deep__strings_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_Links = {
-  __typename?: "deep_links";
-  _deep?: Maybe<Scalars["String"]["output"]>;
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** An array relationship */
-  deep: Array<Deep_Links>;
-  /** An aggregate relationship */
-  deep_aggregate: Deep_Links_Aggregate;
-  /** An object relationship */
-  from?: Maybe<Deep_Links>;
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  function?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  /** An array relationship */
-  in: Array<Deep_Links>;
-  /** An aggregate relationship */
-  in_aggregate: Deep_Links_Aggregate;
-  number?: Maybe<Scalars["numeric"]["output"]>;
-  object?: Maybe<Scalars["jsonb"]["output"]>;
-  /** An array relationship */
-  out: Array<Deep_Links>;
-  /** An aggregate relationship */
-  out_aggregate: Deep_Links_Aggregate;
-  string?: Maybe<Scalars["String"]["output"]>;
-  /** An object relationship */
-  to?: Maybe<Deep_Links>;
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  /** An object relationship */
-  type?: Maybe<Deep_Links>;
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  /** An array relationship */
-  typed: Array<Deep_Links>;
-  /** An aggregate relationship */
-  typed_aggregate: Deep_Links_Aggregate;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** An object relationship */
-  value?: Maybe<Deep_Links>;
-  value_id?: Maybe<Scalars["String"]["output"]>;
-  /** An array relationship */
-  valued: Array<Deep_Links>;
-  /** An aggregate relationship */
-  valued_aggregate: Deep_Links_Aggregate;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksDeepArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksDeep_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksInArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksIn_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksObjectArgs = {
-  path?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksOutArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksOut_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksTypedArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksTyped_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksValuedArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** columns and relationships of "deep.links" */
-export type Deep_LinksValued_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-/** aggregated selection of "deep.links" */
-export type Deep_Links_Aggregate = {
-  __typename?: "deep_links_aggregate";
-  aggregate?: Maybe<Deep_Links_Aggregate_Fields>;
-  nodes: Array<Deep_Links>;
-};
-
-export type Deep_Links_Aggregate_Bool_Exp = {
-  count?: InputMaybe<Deep_Links_Aggregate_Bool_Exp_Count>;
-};
-
-export type Deep_Links_Aggregate_Bool_Exp_Count = {
-  arguments?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  filter?: InputMaybe<Deep_Links_Bool_Exp>;
-  predicate: Int_Comparison_Exp;
-};
-
-/** aggregate fields of "deep.links" */
-export type Deep_Links_Aggregate_Fields = {
-  __typename?: "deep_links_aggregate_fields";
-  avg?: Maybe<Deep_Links_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Deep_Links_Max_Fields>;
-  min?: Maybe<Deep_Links_Min_Fields>;
-  stddev?: Maybe<Deep_Links_Stddev_Fields>;
-  stddev_pop?: Maybe<Deep_Links_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Deep_Links_Stddev_Samp_Fields>;
-  sum?: Maybe<Deep_Links_Sum_Fields>;
-  var_pop?: Maybe<Deep_Links_Var_Pop_Fields>;
-  var_samp?: Maybe<Deep_Links_Var_Samp_Fields>;
-  variance?: Maybe<Deep_Links_Variance_Fields>;
-};
-
-/** aggregate fields of "deep.links" */
-export type Deep_Links_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** order by aggregate values of table "deep.links" */
-export type Deep_Links_Aggregate_Order_By = {
-  avg?: InputMaybe<Deep_Links_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Deep_Links_Max_Order_By>;
-  min?: InputMaybe<Deep_Links_Min_Order_By>;
-  stddev?: InputMaybe<Deep_Links_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Deep_Links_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Deep_Links_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Deep_Links_Sum_Order_By>;
-  var_pop?: InputMaybe<Deep_Links_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Deep_Links_Var_Samp_Order_By>;
-  variance?: InputMaybe<Deep_Links_Variance_Order_By>;
-};
-
-/** append existing jsonb value of filtered columns with new jsonb value */
-export type Deep_Links_Append_Input = {
-  object?: InputMaybe<Scalars["jsonb"]["input"]>;
-};
-
-/** input type for inserting array relation for remote table "deep.links" */
-export type Deep_Links_Arr_Rel_Insert_Input = {
-  data: Array<Deep_Links_Insert_Input>;
-};
-
-/** aggregate avg on columns */
-export type Deep_Links_Avg_Fields = {
-  __typename?: "deep_links_avg_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by avg() on columns of table "deep.links" */
-export type Deep_Links_Avg_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "deep.links". All fields are combined with a logical 'AND'. */
-export type Deep_Links_Bool_Exp = {
-  _and?: InputMaybe<Array<Deep_Links_Bool_Exp>>;
-  _deep?: InputMaybe<String_Comparison_Exp>;
-  _i?: InputMaybe<Bigint_Comparison_Exp>;
-  _not?: InputMaybe<Deep_Links_Bool_Exp>;
-  _or?: InputMaybe<Array<Deep_Links_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  deep?: InputMaybe<Deep_Links_Bool_Exp>;
-  deep_aggregate?: InputMaybe<Deep_Links_Aggregate_Bool_Exp>;
-  from?: InputMaybe<Deep_Links_Bool_Exp>;
-  from_id?: InputMaybe<String_Comparison_Exp>;
-  function?: InputMaybe<String_Comparison_Exp>;
-  id?: InputMaybe<String_Comparison_Exp>;
-  in?: InputMaybe<Deep_Links_Bool_Exp>;
-  in_aggregate?: InputMaybe<Deep_Links_Aggregate_Bool_Exp>;
-  number?: InputMaybe<Numeric_Comparison_Exp>;
-  object?: InputMaybe<Jsonb_Comparison_Exp>;
-  out?: InputMaybe<Deep_Links_Bool_Exp>;
-  out_aggregate?: InputMaybe<Deep_Links_Aggregate_Bool_Exp>;
-  string?: InputMaybe<String_Comparison_Exp>;
-  to?: InputMaybe<Deep_Links_Bool_Exp>;
-  to_id?: InputMaybe<String_Comparison_Exp>;
-  type?: InputMaybe<Deep_Links_Bool_Exp>;
-  type_id?: InputMaybe<String_Comparison_Exp>;
-  typed?: InputMaybe<Deep_Links_Bool_Exp>;
-  typed_aggregate?: InputMaybe<Deep_Links_Aggregate_Bool_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  value?: InputMaybe<Deep_Links_Bool_Exp>;
-  value_id?: InputMaybe<String_Comparison_Exp>;
-  valued?: InputMaybe<Deep_Links_Bool_Exp>;
-  valued_aggregate?: InputMaybe<Deep_Links_Aggregate_Bool_Exp>;
-};
-
-/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-export type Deep_Links_Delete_At_Path_Input = {
-  object?: InputMaybe<Array<Scalars["String"]["input"]>>;
-};
-
-/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-export type Deep_Links_Delete_Elem_Input = {
-  object?: InputMaybe<Scalars["Int"]["input"]>;
-};
-
-/** delete key/value pair or string element. key/value pairs are matched based on their key value */
-export type Deep_Links_Delete_Key_Input = {
-  object?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** input type for incrementing numeric columns in table "deep.links" */
-export type Deep_Links_Inc_Input = {
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  number?: InputMaybe<Scalars["numeric"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "deep.links" */
-export type Deep_Links_Insert_Input = {
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  deep?: InputMaybe<Deep_Links_Arr_Rel_Insert_Input>;
-  from?: InputMaybe<Deep_Links_Obj_Rel_Insert_Input>;
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  function?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  in?: InputMaybe<Deep_Links_Arr_Rel_Insert_Input>;
-  number?: InputMaybe<Scalars["numeric"]["input"]>;
-  object?: InputMaybe<Scalars["jsonb"]["input"]>;
-  out?: InputMaybe<Deep_Links_Arr_Rel_Insert_Input>;
-  string?: InputMaybe<Scalars["String"]["input"]>;
-  to?: InputMaybe<Deep_Links_Obj_Rel_Insert_Input>;
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  type?: InputMaybe<Deep_Links_Obj_Rel_Insert_Input>;
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  typed?: InputMaybe<Deep_Links_Arr_Rel_Insert_Input>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  value?: InputMaybe<Deep_Links_Obj_Rel_Insert_Input>;
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-  valued?: InputMaybe<Deep_Links_Arr_Rel_Insert_Input>;
-};
-
-/** aggregate max on columns */
-export type Deep_Links_Max_Fields = {
-  __typename?: "deep_links_max_fields";
-  _deep?: Maybe<Scalars["String"]["output"]>;
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  function?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  number?: Maybe<Scalars["numeric"]["output"]>;
-  string?: Maybe<Scalars["String"]["output"]>;
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  value_id?: Maybe<Scalars["String"]["output"]>;
-};
-
-/** order by max() on columns of table "deep.links" */
-export type Deep_Links_Max_Order_By = {
-  _deep?: InputMaybe<Order_By>;
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  from_id?: InputMaybe<Order_By>;
-  function?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  string?: InputMaybe<Order_By>;
-  to_id?: InputMaybe<Order_By>;
-  type_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  value_id?: InputMaybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Deep_Links_Min_Fields = {
-  __typename?: "deep_links_min_fields";
-  _deep?: Maybe<Scalars["String"]["output"]>;
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  from_id?: Maybe<Scalars["String"]["output"]>;
-  function?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["String"]["output"]>;
-  number?: Maybe<Scalars["numeric"]["output"]>;
-  string?: Maybe<Scalars["String"]["output"]>;
-  to_id?: Maybe<Scalars["String"]["output"]>;
-  type_id?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  value_id?: Maybe<Scalars["String"]["output"]>;
-};
-
-/** order by min() on columns of table "deep.links" */
-export type Deep_Links_Min_Order_By = {
-  _deep?: InputMaybe<Order_By>;
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  from_id?: InputMaybe<Order_By>;
-  function?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  string?: InputMaybe<Order_By>;
-  to_id?: InputMaybe<Order_By>;
-  type_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  value_id?: InputMaybe<Order_By>;
-};
-
-/** response of any mutation on the table "deep.links" */
-export type Deep_Links_Mutation_Response = {
-  __typename?: "deep_links_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Deep_Links>;
-};
-
-/** input type for inserting object relation for remote table "deep.links" */
-export type Deep_Links_Obj_Rel_Insert_Input = {
-  data: Deep_Links_Insert_Input;
-};
-
-/** Ordering options when selecting data from "deep.links". */
-export type Deep_Links_Order_By = {
-  _deep?: InputMaybe<Order_By>;
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  deep_aggregate?: InputMaybe<Deep_Links_Aggregate_Order_By>;
-  from?: InputMaybe<Deep_Links_Order_By>;
-  from_id?: InputMaybe<Order_By>;
-  function?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  in_aggregate?: InputMaybe<Deep_Links_Aggregate_Order_By>;
-  number?: InputMaybe<Order_By>;
-  object?: InputMaybe<Order_By>;
-  out_aggregate?: InputMaybe<Deep_Links_Aggregate_Order_By>;
-  string?: InputMaybe<Order_By>;
-  to?: InputMaybe<Deep_Links_Order_By>;
-  to_id?: InputMaybe<Order_By>;
-  type?: InputMaybe<Deep_Links_Order_By>;
-  type_id?: InputMaybe<Order_By>;
-  typed_aggregate?: InputMaybe<Deep_Links_Aggregate_Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  value?: InputMaybe<Deep_Links_Order_By>;
-  value_id?: InputMaybe<Order_By>;
-  valued_aggregate?: InputMaybe<Deep_Links_Aggregate_Order_By>;
-};
-
-/** prepend existing jsonb value of filtered columns with new jsonb value */
-export type Deep_Links_Prepend_Input = {
-  object?: InputMaybe<Scalars["jsonb"]["input"]>;
-};
-
-/** select columns of table "deep.links" */
-export enum Deep_Links_Select_Column {
-  /** column name */
-  Deep = "_deep",
-  /** column name */
-  I = "_i",
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  FromId = "from_id",
-  /** column name */
-  Function = "function",
-  /** column name */
-  Id = "id",
-  /** column name */
-  Number = "number",
-  /** column name */
-  Object = "object",
-  /** column name */
-  String = "string",
-  /** column name */
-  ToId = "to_id",
-  /** column name */
-  TypeId = "type_id",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  ValueId = "value_id",
-}
-
-/** input type for updating data in table "deep.links" */
-export type Deep_Links_Set_Input = {
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  function?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  number?: InputMaybe<Scalars["numeric"]["input"]>;
-  object?: InputMaybe<Scalars["jsonb"]["input"]>;
-  string?: InputMaybe<Scalars["String"]["input"]>;
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Deep_Links_Stddev_Fields = {
-  __typename?: "deep_links_stddev_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev() on columns of table "deep.links" */
-export type Deep_Links_Stddev_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Deep_Links_Stddev_Pop_Fields = {
-  __typename?: "deep_links_stddev_pop_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_pop() on columns of table "deep.links" */
-export type Deep_Links_Stddev_Pop_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Deep_Links_Stddev_Samp_Fields = {
-  __typename?: "deep_links_stddev_samp_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by stddev_samp() on columns of table "deep.links" */
-export type Deep_Links_Stddev_Samp_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** Streaming cursor of the table "deep_links" */
-export type Deep_Links_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Deep_Links_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Deep_Links_Stream_Cursor_Value_Input = {
-  _deep?: InputMaybe<Scalars["String"]["input"]>;
-  _i?: InputMaybe<Scalars["bigint"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  from_id?: InputMaybe<Scalars["String"]["input"]>;
-  function?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["String"]["input"]>;
-  number?: InputMaybe<Scalars["numeric"]["input"]>;
-  object?: InputMaybe<Scalars["jsonb"]["input"]>;
-  string?: InputMaybe<Scalars["String"]["input"]>;
-  to_id?: InputMaybe<Scalars["String"]["input"]>;
-  type_id?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  value_id?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Deep_Links_Sum_Fields = {
-  __typename?: "deep_links_sum_fields";
-  _i?: Maybe<Scalars["bigint"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  number?: Maybe<Scalars["numeric"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** order by sum() on columns of table "deep.links" */
-export type Deep_Links_Sum_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-export type Deep_Links_Updates = {
-  /** append existing jsonb value of filtered columns with new jsonb value */
-  _append?: InputMaybe<Deep_Links_Append_Input>;
-  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  _delete_at_path?: InputMaybe<Deep_Links_Delete_At_Path_Input>;
-  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  _delete_elem?: InputMaybe<Deep_Links_Delete_Elem_Input>;
-  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  _delete_key?: InputMaybe<Deep_Links_Delete_Key_Input>;
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Deep_Links_Inc_Input>;
-  /** prepend existing jsonb value of filtered columns with new jsonb value */
-  _prepend?: InputMaybe<Deep_Links_Prepend_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Deep_Links_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Deep_Links_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Deep_Links_Var_Pop_Fields = {
-  __typename?: "deep_links_var_pop_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_pop() on columns of table "deep.links" */
-export type Deep_Links_Var_Pop_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Deep_Links_Var_Samp_Fields = {
-  __typename?: "deep_links_var_samp_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by var_samp() on columns of table "deep.links" */
-export type Deep_Links_Var_Samp_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Deep_Links_Variance_Fields = {
-  __typename?: "deep_links_variance_fields";
-  _i?: Maybe<Scalars["Float"]["output"]>;
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  number?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** order by variance() on columns of table "deep.links" */
-export type Deep_Links_Variance_Order_By = {
-  _i?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  number?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
 /** columns and relationships of "events" */
 export type Events = {
   __typename?: "events";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["bigint"]["output"];
   /** Actual end unix timestamp */
   end?: Maybe<Scalars["bigint"]["output"]>;
+  /** An object relationship */
+  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   /** Message ID reference */
   message_id: Scalars["uuid"]["output"];
@@ -7643,10 +5588,13 @@ export type Events_Avg_Fields = {
 /** Boolean expression to filter rows from the table "events". All fields are combined with a logical 'AND'. */
 export type Events_Bool_Exp = {
   _and?: InputMaybe<Array<Events_Bool_Exp>>;
+  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
+  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Events_Bool_Exp>;
   _or?: InputMaybe<Array<Events_Bool_Exp>>;
   created_at?: InputMaybe<Bigint_Comparison_Exp>;
   end?: InputMaybe<Bigint_Comparison_Exp>;
+  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   message_id?: InputMaybe<Uuid_Comparison_Exp>;
   plan_end?: InputMaybe<Bigint_Comparison_Exp>;
@@ -7684,6 +5632,7 @@ export type Events_Insert_Input = {
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   /** Actual end unix timestamp */
   end?: InputMaybe<Scalars["bigint"]["input"]>;
+  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** Message ID reference */
   message_id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -7707,6 +5656,8 @@ export type Events_Insert_Input = {
 /** aggregate max on columns */
 export type Events_Max_Fields = {
   __typename?: "events_max_fields";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Actual end unix timestamp */
   end?: Maybe<Scalars["bigint"]["output"]>;
@@ -7731,6 +5682,8 @@ export type Events_Max_Fields = {
 /** aggregate min on columns */
 export type Events_Min_Fields = {
   __typename?: "events_min_fields";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Actual end unix timestamp */
   end?: Maybe<Scalars["bigint"]["output"]>;
@@ -7761,6 +5714,13 @@ export type Events_Mutation_Response = {
   returning: Array<Events>;
 };
 
+/** input type for inserting object relation for remote table "events" */
+export type Events_Obj_Rel_Insert_Input = {
+  data: Events_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Events_On_Conflict>;
+};
+
 /** on_conflict condition type for table "events" */
 export type Events_On_Conflict = {
   constraint: Events_Constraint;
@@ -7770,8 +5730,11 @@ export type Events_On_Conflict = {
 
 /** Ordering options when selecting data from "events". */
 export type Events_Order_By = {
+  _hasyx_schema_name?: InputMaybe<Order_By>;
+  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   end?: InputMaybe<Order_By>;
+  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   message_id?: InputMaybe<Order_By>;
   plan_end?: InputMaybe<Order_By>;
@@ -7791,6 +5754,10 @@ export type Events_Pk_Columns_Input = {
 
 /** select columns of table "events" */
 export enum Events_Select_Column {
+  /** column name */
+  HasyxSchemaName = "_hasyx_schema_name",
+  /** column name */
+  HasyxTableName = "_hasyx_table_name",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -7897,6 +5864,8 @@ export type Events_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Events_Stream_Cursor_Value_Input = {
+  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
+  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   /** Actual end unix timestamp */
   end?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -8043,11 +6012,15 @@ export type Hasyx = {
   /** An object relationship */
   public_accounts?: Maybe<Accounts>;
   /** An object relationship */
-  public_auth_passive?: Maybe<Auth_Passive>;
+  public_auth_jwt?: Maybe<Auth_Jwt>;
   /** An object relationship */
   public_debug?: Maybe<Debug>;
   /** An object relationship */
+  public_events?: Maybe<Events>;
+  /** An object relationship */
   public_notifications?: Maybe<Notifications>;
+  /** An object relationship */
+  public_schedule?: Maybe<Schedule>;
   /** An object relationship */
   public_users?: Maybe<Users>;
   schema?: Maybe<Scalars["String"]["output"]>;
@@ -8093,9 +6066,11 @@ export type Hasyx_Bool_Exp = {
   payments_user_payment_provider_mappings?: InputMaybe<Payments_User_Payment_Provider_Mappings_Bool_Exp>;
   project?: InputMaybe<String_Comparison_Exp>;
   public_accounts?: InputMaybe<Accounts_Bool_Exp>;
-  public_auth_passive?: InputMaybe<Auth_Passive_Bool_Exp>;
+  public_auth_jwt?: InputMaybe<Auth_Jwt_Bool_Exp>;
   public_debug?: InputMaybe<Debug_Bool_Exp>;
+  public_events?: InputMaybe<Events_Bool_Exp>;
   public_notifications?: InputMaybe<Notifications_Bool_Exp>;
+  public_schedule?: InputMaybe<Schedule_Bool_Exp>;
   public_users?: InputMaybe<Users_Bool_Exp>;
   schema?: InputMaybe<String_Comparison_Exp>;
   table?: InputMaybe<String_Comparison_Exp>;
@@ -8116,9 +6091,11 @@ export type Hasyx_Insert_Input = {
   payments_user_payment_provider_mappings?: InputMaybe<Payments_User_Payment_Provider_Mappings_Obj_Rel_Insert_Input>;
   project?: InputMaybe<Scalars["String"]["input"]>;
   public_accounts?: InputMaybe<Accounts_Obj_Rel_Insert_Input>;
-  public_auth_passive?: InputMaybe<Auth_Passive_Obj_Rel_Insert_Input>;
+  public_auth_jwt?: InputMaybe<Auth_Jwt_Obj_Rel_Insert_Input>;
   public_debug?: InputMaybe<Debug_Obj_Rel_Insert_Input>;
+  public_events?: InputMaybe<Events_Obj_Rel_Insert_Input>;
   public_notifications?: InputMaybe<Notifications_Obj_Rel_Insert_Input>;
+  public_schedule?: InputMaybe<Schedule_Obj_Rel_Insert_Input>;
   public_users?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   schema?: InputMaybe<Scalars["String"]["input"]>;
   table?: InputMaybe<Scalars["String"]["input"]>;
@@ -8166,9 +6143,11 @@ export type Hasyx_Order_By = {
   payments_user_payment_provider_mappings?: InputMaybe<Payments_User_Payment_Provider_Mappings_Order_By>;
   project?: InputMaybe<Order_By>;
   public_accounts?: InputMaybe<Accounts_Order_By>;
-  public_auth_passive?: InputMaybe<Auth_Passive_Order_By>;
+  public_auth_jwt?: InputMaybe<Auth_Jwt_Order_By>;
   public_debug?: InputMaybe<Debug_Order_By>;
+  public_events?: InputMaybe<Events_Order_By>;
   public_notifications?: InputMaybe<Notifications_Order_By>;
+  public_schedule?: InputMaybe<Schedule_Order_By>;
   public_users?: InputMaybe<Users_Order_By>;
   schema?: InputMaybe<Order_By>;
   table?: InputMaybe<Order_By>;
@@ -9022,10 +7001,10 @@ export type Mutation_Root = {
   delete_accounts?: Maybe<Accounts_Mutation_Response>;
   /** delete single row from the table: "accounts" */
   delete_accounts_by_pk?: Maybe<Accounts>;
-  /** delete data from the table: "auth_passive" */
-  delete_auth_passive?: Maybe<Auth_Passive_Mutation_Response>;
-  /** delete single row from the table: "auth_passive" */
-  delete_auth_passive_by_pk?: Maybe<Auth_Passive>;
+  /** delete data from the table: "auth_jwt" */
+  delete_auth_jwt?: Maybe<Auth_Jwt_Mutation_Response>;
+  /** delete single row from the table: "auth_jwt" */
+  delete_auth_jwt_by_pk?: Maybe<Auth_Jwt>;
   /** delete data from the table: "badma.ais" */
   delete_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
   /** delete single row from the table: "badma.ais" */
@@ -9070,28 +7049,6 @@ export type Mutation_Root = {
   delete_debug?: Maybe<Debug_Mutation_Response>;
   /** delete single row from the table: "debug" */
   delete_debug_by_pk?: Maybe<Debug>;
-  /** delete data from the table: "deep._functions" */
-  delete_deep__functions?: Maybe<Deep__Functions_Mutation_Response>;
-  /** delete single row from the table: "deep._functions" */
-  delete_deep__functions_by_pk?: Maybe<Deep__Functions>;
-  /** delete data from the table: "deep._links" */
-  delete_deep__links?: Maybe<Deep__Links_Mutation_Response>;
-  /** delete single row from the table: "deep._links" */
-  delete_deep__links_by_pk?: Maybe<Deep__Links>;
-  /** delete data from the table: "deep._numbers" */
-  delete_deep__numbers?: Maybe<Deep__Numbers_Mutation_Response>;
-  /** delete single row from the table: "deep._numbers" */
-  delete_deep__numbers_by_pk?: Maybe<Deep__Numbers>;
-  /** delete data from the table: "deep._objects" */
-  delete_deep__objects?: Maybe<Deep__Objects_Mutation_Response>;
-  /** delete single row from the table: "deep._objects" */
-  delete_deep__objects_by_pk?: Maybe<Deep__Objects>;
-  /** delete data from the table: "deep._strings" */
-  delete_deep__strings?: Maybe<Deep__Strings_Mutation_Response>;
-  /** delete single row from the table: "deep._strings" */
-  delete_deep__strings_by_pk?: Maybe<Deep__Strings>;
-  /** delete data from the table: "deep.links" */
-  delete_deep_links?: Maybe<Deep_Links_Mutation_Response>;
   /** delete data from the table: "events" */
   delete_events?: Maybe<Events_Mutation_Response>;
   /** delete single row from the table: "events" */
@@ -9144,22 +7101,6 @@ export type Mutation_Root = {
   delete_schedule?: Maybe<Schedule_Mutation_Response>;
   /** delete single row from the table: "schedule" */
   delete_schedule_by_pk?: Maybe<Schedule>;
-  /** delete data from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  delete_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Mutation_Response>;
-  /** delete single row from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  delete_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_by_pk?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** delete data from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  delete_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Mutation_Response>;
-  /** delete single row from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  delete_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_by_pk?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** delete data from the table: "test_logs.test_users" */
-  delete_test_logs_test_users?: Maybe<Test_Logs_Test_Users_Mutation_Response>;
-  /** delete single row from the table: "test_logs.test_users" */
-  delete_test_logs_test_users_by_pk?: Maybe<Test_Logs_Test_Users>;
-  /** delete data from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  delete_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Mutation_Response>;
-  /** delete single row from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  delete_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_by_pk?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
   /** delete data from the table: "users" */
   delete_users?: Maybe<Users_Mutation_Response>;
   /** delete single row from the table: "users" */
@@ -9168,10 +7109,10 @@ export type Mutation_Root = {
   insert_accounts?: Maybe<Accounts_Mutation_Response>;
   /** insert a single row into the table: "accounts" */
   insert_accounts_one?: Maybe<Accounts>;
-  /** insert data into the table: "auth_passive" */
-  insert_auth_passive?: Maybe<Auth_Passive_Mutation_Response>;
-  /** insert a single row into the table: "auth_passive" */
-  insert_auth_passive_one?: Maybe<Auth_Passive>;
+  /** insert data into the table: "auth_jwt" */
+  insert_auth_jwt?: Maybe<Auth_Jwt_Mutation_Response>;
+  /** insert a single row into the table: "auth_jwt" */
+  insert_auth_jwt_one?: Maybe<Auth_Jwt>;
   /** insert data into the table: "badma.ais" */
   insert_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
   /** insert a single row into the table: "badma.ais" */
@@ -9216,30 +7157,6 @@ export type Mutation_Root = {
   insert_debug?: Maybe<Debug_Mutation_Response>;
   /** insert a single row into the table: "debug" */
   insert_debug_one?: Maybe<Debug>;
-  /** insert data into the table: "deep._functions" */
-  insert_deep__functions?: Maybe<Deep__Functions_Mutation_Response>;
-  /** insert a single row into the table: "deep._functions" */
-  insert_deep__functions_one?: Maybe<Deep__Functions>;
-  /** insert data into the table: "deep._links" */
-  insert_deep__links?: Maybe<Deep__Links_Mutation_Response>;
-  /** insert a single row into the table: "deep._links" */
-  insert_deep__links_one?: Maybe<Deep__Links>;
-  /** insert data into the table: "deep._numbers" */
-  insert_deep__numbers?: Maybe<Deep__Numbers_Mutation_Response>;
-  /** insert a single row into the table: "deep._numbers" */
-  insert_deep__numbers_one?: Maybe<Deep__Numbers>;
-  /** insert data into the table: "deep._objects" */
-  insert_deep__objects?: Maybe<Deep__Objects_Mutation_Response>;
-  /** insert a single row into the table: "deep._objects" */
-  insert_deep__objects_one?: Maybe<Deep__Objects>;
-  /** insert data into the table: "deep._strings" */
-  insert_deep__strings?: Maybe<Deep__Strings_Mutation_Response>;
-  /** insert a single row into the table: "deep._strings" */
-  insert_deep__strings_one?: Maybe<Deep__Strings>;
-  /** insert data into the table: "deep.links" */
-  insert_deep_links?: Maybe<Deep_Links_Mutation_Response>;
-  /** insert a single row into the table: "deep.links" */
-  insert_deep_links_one?: Maybe<Deep_Links>;
   /** insert data into the table: "events" */
   insert_events?: Maybe<Events_Mutation_Response>;
   /** insert a single row into the table: "events" */
@@ -9292,22 +7209,6 @@ export type Mutation_Root = {
   insert_schedule?: Maybe<Schedule_Mutation_Response>;
   /** insert a single row into the table: "schedule" */
   insert_schedule_one?: Maybe<Schedule>;
-  /** insert data into the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  insert_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Mutation_Response>;
-  /** insert a single row into the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  insert_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_one?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** insert data into the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  insert_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Mutation_Response>;
-  /** insert a single row into the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  insert_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_one?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** insert data into the table: "test_logs.test_users" */
-  insert_test_logs_test_users?: Maybe<Test_Logs_Test_Users_Mutation_Response>;
-  /** insert a single row into the table: "test_logs.test_users" */
-  insert_test_logs_test_users_one?: Maybe<Test_Logs_Test_Users>;
-  /** insert data into the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  insert_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Mutation_Response>;
-  /** insert a single row into the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  insert_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_one?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
   /** insert data into the table: "users" */
   insert_users?: Maybe<Users_Mutation_Response>;
   /** insert a single row into the table: "users" */
@@ -9318,14 +7219,12 @@ export type Mutation_Root = {
   update_accounts_by_pk?: Maybe<Accounts>;
   /** update multiples rows of table: "accounts" */
   update_accounts_many?: Maybe<Array<Maybe<Accounts_Mutation_Response>>>;
-  /** update data of the table: "auth_passive" */
-  update_auth_passive?: Maybe<Auth_Passive_Mutation_Response>;
-  /** update single row of the table: "auth_passive" */
-  update_auth_passive_by_pk?: Maybe<Auth_Passive>;
-  /** update multiples rows of table: "auth_passive" */
-  update_auth_passive_many?: Maybe<
-    Array<Maybe<Auth_Passive_Mutation_Response>>
-  >;
+  /** update data of the table: "auth_jwt" */
+  update_auth_jwt?: Maybe<Auth_Jwt_Mutation_Response>;
+  /** update single row of the table: "auth_jwt" */
+  update_auth_jwt_by_pk?: Maybe<Auth_Jwt>;
+  /** update multiples rows of table: "auth_jwt" */
+  update_auth_jwt_many?: Maybe<Array<Maybe<Auth_Jwt_Mutation_Response>>>;
   /** update data of the table: "badma.ais" */
   update_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
   /** update single row of the table: "badma.ais" */
@@ -9404,48 +7303,6 @@ export type Mutation_Root = {
   update_debug_by_pk?: Maybe<Debug>;
   /** update multiples rows of table: "debug" */
   update_debug_many?: Maybe<Array<Maybe<Debug_Mutation_Response>>>;
-  /** update data of the table: "deep._functions" */
-  update_deep__functions?: Maybe<Deep__Functions_Mutation_Response>;
-  /** update single row of the table: "deep._functions" */
-  update_deep__functions_by_pk?: Maybe<Deep__Functions>;
-  /** update multiples rows of table: "deep._functions" */
-  update_deep__functions_many?: Maybe<
-    Array<Maybe<Deep__Functions_Mutation_Response>>
-  >;
-  /** update data of the table: "deep._links" */
-  update_deep__links?: Maybe<Deep__Links_Mutation_Response>;
-  /** update single row of the table: "deep._links" */
-  update_deep__links_by_pk?: Maybe<Deep__Links>;
-  /** update multiples rows of table: "deep._links" */
-  update_deep__links_many?: Maybe<Array<Maybe<Deep__Links_Mutation_Response>>>;
-  /** update data of the table: "deep._numbers" */
-  update_deep__numbers?: Maybe<Deep__Numbers_Mutation_Response>;
-  /** update single row of the table: "deep._numbers" */
-  update_deep__numbers_by_pk?: Maybe<Deep__Numbers>;
-  /** update multiples rows of table: "deep._numbers" */
-  update_deep__numbers_many?: Maybe<
-    Array<Maybe<Deep__Numbers_Mutation_Response>>
-  >;
-  /** update data of the table: "deep._objects" */
-  update_deep__objects?: Maybe<Deep__Objects_Mutation_Response>;
-  /** update single row of the table: "deep._objects" */
-  update_deep__objects_by_pk?: Maybe<Deep__Objects>;
-  /** update multiples rows of table: "deep._objects" */
-  update_deep__objects_many?: Maybe<
-    Array<Maybe<Deep__Objects_Mutation_Response>>
-  >;
-  /** update data of the table: "deep._strings" */
-  update_deep__strings?: Maybe<Deep__Strings_Mutation_Response>;
-  /** update single row of the table: "deep._strings" */
-  update_deep__strings_by_pk?: Maybe<Deep__Strings>;
-  /** update multiples rows of table: "deep._strings" */
-  update_deep__strings_many?: Maybe<
-    Array<Maybe<Deep__Strings_Mutation_Response>>
-  >;
-  /** update data of the table: "deep.links" */
-  update_deep_links?: Maybe<Deep_Links_Mutation_Response>;
-  /** update multiples rows of table: "deep.links" */
-  update_deep_links_many?: Maybe<Array<Maybe<Deep_Links_Mutation_Response>>>;
   /** update data of the table: "events" */
   update_events?: Maybe<Events_Mutation_Response>;
   /** update single row of the table: "events" */
@@ -9542,44 +7399,6 @@ export type Mutation_Root = {
   update_schedule_by_pk?: Maybe<Schedule>;
   /** update multiples rows of table: "schedule" */
   update_schedule_many?: Maybe<Array<Maybe<Schedule_Mutation_Response>>>;
-  /** update data of the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  update_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Mutation_Response>;
-  /** update single row of the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  update_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_by_pk?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** update multiples rows of table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  update_test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_many?: Maybe<
-    Array<
-      Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Mutation_Response>
-    >
-  >;
-  /** update data of the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  update_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Mutation_Response>;
-  /** update single row of the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  update_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_by_pk?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** update multiples rows of table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  update_test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_many?: Maybe<
-    Array<
-      Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Mutation_Response>
-    >
-  >;
-  /** update data of the table: "test_logs.test_users" */
-  update_test_logs_test_users?: Maybe<Test_Logs_Test_Users_Mutation_Response>;
-  /** update single row of the table: "test_logs.test_users" */
-  update_test_logs_test_users_by_pk?: Maybe<Test_Logs_Test_Users>;
-  /** update multiples rows of table: "test_logs.test_users" */
-  update_test_logs_test_users_many?: Maybe<
-    Array<Maybe<Test_Logs_Test_Users_Mutation_Response>>
-  >;
-  /** update data of the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  update_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Mutation_Response>;
-  /** update single row of the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  update_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_by_pk?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  /** update multiples rows of table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  update_test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_many?: Maybe<
-    Array<
-      Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Mutation_Response>
-    >
-  >;
   /** update data of the table: "users" */
   update_users?: Maybe<Users_Mutation_Response>;
   /** update single row of the table: "users" */
@@ -9599,12 +7418,12 @@ export type Mutation_RootDelete_Accounts_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Auth_PassiveArgs = {
-  where: Auth_Passive_Bool_Exp;
+export type Mutation_RootDelete_Auth_JwtArgs = {
+  where: Auth_Jwt_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Auth_Passive_By_PkArgs = {
+export type Mutation_RootDelete_Auth_Jwt_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -9716,61 +7535,6 @@ export type Mutation_RootDelete_DebugArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Debug_By_PkArgs = {
   id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__FunctionsArgs = {
-  where: Deep__Functions_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__Functions_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__LinksArgs = {
-  where: Deep__Links_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__Links_By_PkArgs = {
-  id: Scalars["String"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__NumbersArgs = {
-  where: Deep__Numbers_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__Numbers_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__ObjectsArgs = {
-  where: Deep__Objects_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__Objects_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__StringsArgs = {
-  where: Deep__Strings_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep__Strings_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Deep_LinksArgs = {
-  where: Deep_Links_Bool_Exp;
 };
 
 /** mutation root */
@@ -9905,52 +7669,6 @@ export type Mutation_RootDelete_Schedule_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_UsersArgs =
-  {
-    where: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_UsersArgs =
-  {
-    where: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Logs_Test_UsersArgs = {
-  where: Test_Logs_Test_Users_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Logs_Test_Users_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_UsersArgs =
-  {
-    where: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootDelete_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** mutation root */
 export type Mutation_RootDelete_UsersArgs = {
   where: Users_Bool_Exp;
 };
@@ -9973,15 +7691,15 @@ export type Mutation_RootInsert_Accounts_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Auth_PassiveArgs = {
-  objects: Array<Auth_Passive_Insert_Input>;
-  on_conflict?: InputMaybe<Auth_Passive_On_Conflict>;
+export type Mutation_RootInsert_Auth_JwtArgs = {
+  objects: Array<Auth_Jwt_Insert_Input>;
+  on_conflict?: InputMaybe<Auth_Jwt_On_Conflict>;
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Auth_Passive_OneArgs = {
-  object: Auth_Passive_Insert_Input;
-  on_conflict?: InputMaybe<Auth_Passive_On_Conflict>;
+export type Mutation_RootInsert_Auth_Jwt_OneArgs = {
+  object: Auth_Jwt_Insert_Input;
+  on_conflict?: InputMaybe<Auth_Jwt_On_Conflict>;
 };
 
 /** mutation root */
@@ -10114,76 +7832,6 @@ export type Mutation_RootInsert_DebugArgs = {
 export type Mutation_RootInsert_Debug_OneArgs = {
   object: Debug_Insert_Input;
   on_conflict?: InputMaybe<Debug_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__FunctionsArgs = {
-  objects: Array<Deep__Functions_Insert_Input>;
-  on_conflict?: InputMaybe<Deep__Functions_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__Functions_OneArgs = {
-  object: Deep__Functions_Insert_Input;
-  on_conflict?: InputMaybe<Deep__Functions_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__LinksArgs = {
-  objects: Array<Deep__Links_Insert_Input>;
-  on_conflict?: InputMaybe<Deep__Links_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__Links_OneArgs = {
-  object: Deep__Links_Insert_Input;
-  on_conflict?: InputMaybe<Deep__Links_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__NumbersArgs = {
-  objects: Array<Deep__Numbers_Insert_Input>;
-  on_conflict?: InputMaybe<Deep__Numbers_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__Numbers_OneArgs = {
-  object: Deep__Numbers_Insert_Input;
-  on_conflict?: InputMaybe<Deep__Numbers_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__ObjectsArgs = {
-  objects: Array<Deep__Objects_Insert_Input>;
-  on_conflict?: InputMaybe<Deep__Objects_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__Objects_OneArgs = {
-  object: Deep__Objects_Insert_Input;
-  on_conflict?: InputMaybe<Deep__Objects_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__StringsArgs = {
-  objects: Array<Deep__Strings_Insert_Input>;
-  on_conflict?: InputMaybe<Deep__Strings_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep__Strings_OneArgs = {
-  object: Deep__Strings_Insert_Input;
-  on_conflict?: InputMaybe<Deep__Strings_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep_LinksArgs = {
-  objects: Array<Deep_Links_Insert_Input>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Deep_Links_OneArgs = {
-  object: Deep_Links_Insert_Input;
 };
 
 /** mutation root */
@@ -10344,60 +7992,6 @@ export type Mutation_RootInsert_Schedule_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_UsersArgs =
-  {
-    objects: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Insert_Input>;
-    on_conflict?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_On_Conflict>;
-  };
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_OneArgs =
-  {
-    object: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Insert_Input;
-    on_conflict?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_On_Conflict>;
-  };
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_UsersArgs =
-  {
-    objects: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Insert_Input>;
-    on_conflict?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_On_Conflict>;
-  };
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_OneArgs =
-  {
-    object: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Insert_Input;
-    on_conflict?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_On_Conflict>;
-  };
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Logs_Test_UsersArgs = {
-  objects: Array<Test_Logs_Test_Users_Insert_Input>;
-  on_conflict?: InputMaybe<Test_Logs_Test_Users_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Logs_Test_Users_OneArgs = {
-  object: Test_Logs_Test_Users_Insert_Input;
-  on_conflict?: InputMaybe<Test_Logs_Test_Users_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_UsersArgs =
-  {
-    objects: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Insert_Input>;
-    on_conflict?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_On_Conflict>;
-  };
-
-/** mutation root */
-export type Mutation_RootInsert_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_OneArgs =
-  {
-    object: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Insert_Input;
-    on_conflict?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_On_Conflict>;
-  };
-
-/** mutation root */
 export type Mutation_RootInsert_UsersArgs = {
   objects: Array<Users_Insert_Input>;
   on_conflict?: InputMaybe<Users_On_Conflict>;
@@ -10439,22 +8033,22 @@ export type Mutation_RootUpdate_Accounts_ManyArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Auth_PassiveArgs = {
-  _inc?: InputMaybe<Auth_Passive_Inc_Input>;
-  _set?: InputMaybe<Auth_Passive_Set_Input>;
-  where: Auth_Passive_Bool_Exp;
+export type Mutation_RootUpdate_Auth_JwtArgs = {
+  _inc?: InputMaybe<Auth_Jwt_Inc_Input>;
+  _set?: InputMaybe<Auth_Jwt_Set_Input>;
+  where: Auth_Jwt_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Auth_Passive_By_PkArgs = {
-  _inc?: InputMaybe<Auth_Passive_Inc_Input>;
-  _set?: InputMaybe<Auth_Passive_Set_Input>;
-  pk_columns: Auth_Passive_Pk_Columns_Input;
+export type Mutation_RootUpdate_Auth_Jwt_By_PkArgs = {
+  _inc?: InputMaybe<Auth_Jwt_Inc_Input>;
+  _set?: InputMaybe<Auth_Jwt_Set_Input>;
+  pk_columns: Auth_Jwt_Pk_Columns_Input;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Auth_Passive_ManyArgs = {
-  updates: Array<Auth_Passive_Updates>;
+export type Mutation_RootUpdate_Auth_Jwt_ManyArgs = {
+  updates: Array<Auth_Jwt_Updates>;
 };
 
 /** mutation root */
@@ -10704,128 +8298,6 @@ export type Mutation_RootUpdate_Debug_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Debug_ManyArgs = {
   updates: Array<Debug_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__FunctionsArgs = {
-  _inc?: InputMaybe<Deep__Functions_Inc_Input>;
-  _set?: InputMaybe<Deep__Functions_Set_Input>;
-  where: Deep__Functions_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Functions_By_PkArgs = {
-  _inc?: InputMaybe<Deep__Functions_Inc_Input>;
-  _set?: InputMaybe<Deep__Functions_Set_Input>;
-  pk_columns: Deep__Functions_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Functions_ManyArgs = {
-  updates: Array<Deep__Functions_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__LinksArgs = {
-  _inc?: InputMaybe<Deep__Links_Inc_Input>;
-  _set?: InputMaybe<Deep__Links_Set_Input>;
-  where: Deep__Links_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Links_By_PkArgs = {
-  _inc?: InputMaybe<Deep__Links_Inc_Input>;
-  _set?: InputMaybe<Deep__Links_Set_Input>;
-  pk_columns: Deep__Links_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Links_ManyArgs = {
-  updates: Array<Deep__Links_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__NumbersArgs = {
-  _inc?: InputMaybe<Deep__Numbers_Inc_Input>;
-  _set?: InputMaybe<Deep__Numbers_Set_Input>;
-  where: Deep__Numbers_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Numbers_By_PkArgs = {
-  _inc?: InputMaybe<Deep__Numbers_Inc_Input>;
-  _set?: InputMaybe<Deep__Numbers_Set_Input>;
-  pk_columns: Deep__Numbers_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Numbers_ManyArgs = {
-  updates: Array<Deep__Numbers_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__ObjectsArgs = {
-  _append?: InputMaybe<Deep__Objects_Append_Input>;
-  _delete_at_path?: InputMaybe<Deep__Objects_Delete_At_Path_Input>;
-  _delete_elem?: InputMaybe<Deep__Objects_Delete_Elem_Input>;
-  _delete_key?: InputMaybe<Deep__Objects_Delete_Key_Input>;
-  _inc?: InputMaybe<Deep__Objects_Inc_Input>;
-  _prepend?: InputMaybe<Deep__Objects_Prepend_Input>;
-  _set?: InputMaybe<Deep__Objects_Set_Input>;
-  where: Deep__Objects_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Objects_By_PkArgs = {
-  _append?: InputMaybe<Deep__Objects_Append_Input>;
-  _delete_at_path?: InputMaybe<Deep__Objects_Delete_At_Path_Input>;
-  _delete_elem?: InputMaybe<Deep__Objects_Delete_Elem_Input>;
-  _delete_key?: InputMaybe<Deep__Objects_Delete_Key_Input>;
-  _inc?: InputMaybe<Deep__Objects_Inc_Input>;
-  _prepend?: InputMaybe<Deep__Objects_Prepend_Input>;
-  _set?: InputMaybe<Deep__Objects_Set_Input>;
-  pk_columns: Deep__Objects_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Objects_ManyArgs = {
-  updates: Array<Deep__Objects_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__StringsArgs = {
-  _inc?: InputMaybe<Deep__Strings_Inc_Input>;
-  _set?: InputMaybe<Deep__Strings_Set_Input>;
-  where: Deep__Strings_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Strings_By_PkArgs = {
-  _inc?: InputMaybe<Deep__Strings_Inc_Input>;
-  _set?: InputMaybe<Deep__Strings_Set_Input>;
-  pk_columns: Deep__Strings_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep__Strings_ManyArgs = {
-  updates: Array<Deep__Strings_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep_LinksArgs = {
-  _append?: InputMaybe<Deep_Links_Append_Input>;
-  _delete_at_path?: InputMaybe<Deep_Links_Delete_At_Path_Input>;
-  _delete_elem?: InputMaybe<Deep_Links_Delete_Elem_Input>;
-  _delete_key?: InputMaybe<Deep_Links_Delete_Key_Input>;
-  _inc?: InputMaybe<Deep_Links_Inc_Input>;
-  _prepend?: InputMaybe<Deep_Links_Prepend_Input>;
-  _set?: InputMaybe<Deep_Links_Set_Input>;
-  where: Deep_Links_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Deep_Links_ManyArgs = {
-  updates: Array<Deep_Links_Updates>;
 };
 
 /** mutation root */
@@ -11176,91 +8648,6 @@ export type Mutation_RootUpdate_Schedule_By_PkArgs = {
 export type Mutation_RootUpdate_Schedule_ManyArgs = {
   updates: Array<Schedule_Updates>;
 };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_UsersArgs =
-  {
-    _inc?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Set_Input>;
-    where: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_By_PkArgs =
-  {
-    _inc?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Set_Input>;
-    pk_columns: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Pk_Columns_Input;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_ManyArgs =
-  {
-    updates: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Updates>;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_UsersArgs =
-  {
-    _inc?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Set_Input>;
-    where: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_By_PkArgs =
-  {
-    _inc?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Set_Input>;
-    pk_columns: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Pk_Columns_Input;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_ManyArgs =
-  {
-    updates: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Updates>;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Logs_Test_UsersArgs = {
-  _inc?: InputMaybe<Test_Logs_Test_Users_Inc_Input>;
-  _set?: InputMaybe<Test_Logs_Test_Users_Set_Input>;
-  where: Test_Logs_Test_Users_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Logs_Test_Users_By_PkArgs = {
-  _inc?: InputMaybe<Test_Logs_Test_Users_Inc_Input>;
-  _set?: InputMaybe<Test_Logs_Test_Users_Set_Input>;
-  pk_columns: Test_Logs_Test_Users_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Logs_Test_Users_ManyArgs = {
-  updates: Array<Test_Logs_Test_Users_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_UsersArgs =
-  {
-    _inc?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Set_Input>;
-    where: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_By_PkArgs =
-  {
-    _inc?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Inc_Input>;
-    _set?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Set_Input>;
-    pk_columns: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Pk_Columns_Input;
-  };
-
-/** mutation root */
-export type Mutation_RootUpdate_Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_ManyArgs =
-  {
-    updates: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Updates>;
-  };
 
 /** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
@@ -17185,12 +14572,12 @@ export type Query_Root = {
   accounts_aggregate: Accounts_Aggregate;
   /** fetch data from the table: "accounts" using primary key columns */
   accounts_by_pk?: Maybe<Accounts>;
-  /** fetch data from the table: "auth_passive" */
-  auth_passive: Array<Auth_Passive>;
-  /** fetch aggregated fields from the table: "auth_passive" */
-  auth_passive_aggregate: Auth_Passive_Aggregate;
-  /** fetch data from the table: "auth_passive" using primary key columns */
-  auth_passive_by_pk?: Maybe<Auth_Passive>;
+  /** fetch data from the table: "auth_jwt" */
+  auth_jwt: Array<Auth_Jwt>;
+  /** fetch aggregated fields from the table: "auth_jwt" */
+  auth_jwt_aggregate: Auth_Jwt_Aggregate;
+  /** fetch data from the table: "auth_jwt" using primary key columns */
+  auth_jwt_by_pk?: Maybe<Auth_Jwt>;
   /** fetch data from the table: "badma.ais" */
   badma_ais: Array<Badma_Ais>;
   /** fetch aggregated fields from the table: "badma.ais" */
@@ -17257,40 +14644,6 @@ export type Query_Root = {
   debug_aggregate: Debug_Aggregate;
   /** fetch data from the table: "debug" using primary key columns */
   debug_by_pk?: Maybe<Debug>;
-  /** fetch data from the table: "deep._functions" */
-  deep__functions: Array<Deep__Functions>;
-  /** fetch aggregated fields from the table: "deep._functions" */
-  deep__functions_aggregate: Deep__Functions_Aggregate;
-  /** fetch data from the table: "deep._functions" using primary key columns */
-  deep__functions_by_pk?: Maybe<Deep__Functions>;
-  /** fetch data from the table: "deep._links" */
-  deep__links: Array<Deep__Links>;
-  /** fetch aggregated fields from the table: "deep._links" */
-  deep__links_aggregate: Deep__Links_Aggregate;
-  /** fetch data from the table: "deep._links" using primary key columns */
-  deep__links_by_pk?: Maybe<Deep__Links>;
-  /** fetch data from the table: "deep._numbers" */
-  deep__numbers: Array<Deep__Numbers>;
-  /** fetch aggregated fields from the table: "deep._numbers" */
-  deep__numbers_aggregate: Deep__Numbers_Aggregate;
-  /** fetch data from the table: "deep._numbers" using primary key columns */
-  deep__numbers_by_pk?: Maybe<Deep__Numbers>;
-  /** fetch data from the table: "deep._objects" */
-  deep__objects: Array<Deep__Objects>;
-  /** fetch aggregated fields from the table: "deep._objects" */
-  deep__objects_aggregate: Deep__Objects_Aggregate;
-  /** fetch data from the table: "deep._objects" using primary key columns */
-  deep__objects_by_pk?: Maybe<Deep__Objects>;
-  /** fetch data from the table: "deep._strings" */
-  deep__strings: Array<Deep__Strings>;
-  /** fetch aggregated fields from the table: "deep._strings" */
-  deep__strings_aggregate: Deep__Strings_Aggregate;
-  /** fetch data from the table: "deep._strings" using primary key columns */
-  deep__strings_by_pk?: Maybe<Deep__Strings>;
-  /** fetch data from the table: "deep.links" */
-  deep_links: Array<Deep_Links>;
-  /** fetch aggregated fields from the table: "deep.links" */
-  deep_links_aggregate: Deep_Links_Aggregate;
   /** fetch data from the table: "events" */
   events: Array<Events>;
   /** fetch aggregated fields from the table: "events" */
@@ -17373,30 +14726,6 @@ export type Query_Root = {
   schedule_aggregate: Schedule_Aggregate;
   /** fetch data from the table: "schedule" using primary key columns */
   schedule_by_pk?: Maybe<Schedule>;
-  /** fetch data from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** fetch aggregated fields from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_aggregate: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate;
-  /** fetch data from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" using primary key columns */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_by_pk?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** fetch data from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** fetch aggregated fields from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_aggregate: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate;
-  /** fetch data from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" using primary key columns */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_by_pk?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** fetch data from the table: "test_logs.test_users" */
-  test_logs_test_users: Array<Test_Logs_Test_Users>;
-  /** fetch aggregated fields from the table: "test_logs.test_users" */
-  test_logs_test_users_aggregate: Test_Logs_Test_Users_Aggregate;
-  /** fetch data from the table: "test_logs.test_users" using primary key columns */
-  test_logs_test_users_by_pk?: Maybe<Test_Logs_Test_Users>;
-  /** fetch data from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  /** fetch aggregated fields from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_aggregate: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate;
-  /** fetch data from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" using primary key columns */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_by_pk?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -17425,23 +14754,23 @@ export type Query_RootAccounts_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
-export type Query_RootAuth_PassiveArgs = {
-  distinct_on?: InputMaybe<Array<Auth_Passive_Select_Column>>;
+export type Query_RootAuth_JwtArgs = {
+  distinct_on?: InputMaybe<Array<Auth_Jwt_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Auth_Passive_Order_By>>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+  order_by?: InputMaybe<Array<Auth_Jwt_Order_By>>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
-export type Query_RootAuth_Passive_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Auth_Passive_Select_Column>>;
+export type Query_RootAuth_Jwt_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Auth_Jwt_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Auth_Passive_Order_By>>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+  order_by?: InputMaybe<Array<Auth_Jwt_Order_By>>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
-export type Query_RootAuth_Passive_By_PkArgs = {
+export type Query_RootAuth_Jwt_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -17663,122 +14992,6 @@ export type Query_RootDebug_AggregateArgs = {
 
 export type Query_RootDebug_By_PkArgs = {
   id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootDeep__FunctionsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Functions_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Functions_Order_By>>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-export type Query_RootDeep__Functions_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Functions_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Functions_Order_By>>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-export type Query_RootDeep__Functions_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootDeep__LinksArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Links_Order_By>>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-export type Query_RootDeep__Links_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Links_Order_By>>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-export type Query_RootDeep__Links_By_PkArgs = {
-  id: Scalars["String"]["input"];
-};
-
-export type Query_RootDeep__NumbersArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Numbers_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Numbers_Order_By>>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-export type Query_RootDeep__Numbers_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Numbers_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Numbers_Order_By>>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-export type Query_RootDeep__Numbers_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootDeep__ObjectsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Objects_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Objects_Order_By>>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-export type Query_RootDeep__Objects_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Objects_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Objects_Order_By>>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-export type Query_RootDeep__Objects_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootDeep__StringsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Strings_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Strings_Order_By>>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-export type Query_RootDeep__Strings_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Strings_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Strings_Order_By>>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-export type Query_RootDeep__Strings_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootDeep_LinksArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-export type Query_RootDeep_Links_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
 };
 
 export type Query_RootEventsArgs = {
@@ -18065,119 +15278,6 @@ export type Query_RootSchedule_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
-export type Query_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-export type Query_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-export type Query_RootTest_Logs_Test_UsersArgs = {
-  distinct_on?: InputMaybe<Array<Test_Logs_Test_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Test_Logs_Test_Users_Order_By>>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-export type Query_RootTest_Logs_Test_Users_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Test_Logs_Test_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Test_Logs_Test_Users_Order_By>>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-export type Query_RootTest_Logs_Test_Users_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
-export type Query_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
 export type Query_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -18201,11 +15301,15 @@ export type Query_RootUsers_By_PkArgs = {
 /** columns and relationships of "schedule" */
 export type Schedule = {
   __typename?: "schedule";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at: Scalars["bigint"]["output"];
   /** Cron expression for scheduling */
   cron: Scalars["String"]["output"];
   /** Unix timestamp end time */
   end_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  hasyx?: Maybe<Hasyx>;
   id: Scalars["uuid"]["output"];
   /** Message ID reference */
   message_id?: Maybe<Scalars["uuid"]["output"]>;
@@ -18259,11 +15363,14 @@ export type Schedule_Avg_Fields = {
 /** Boolean expression to filter rows from the table "schedule". All fields are combined with a logical 'AND'. */
 export type Schedule_Bool_Exp = {
   _and?: InputMaybe<Array<Schedule_Bool_Exp>>;
+  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
+  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
   _not?: InputMaybe<Schedule_Bool_Exp>;
   _or?: InputMaybe<Array<Schedule_Bool_Exp>>;
   created_at?: InputMaybe<Bigint_Comparison_Exp>;
   cron?: InputMaybe<String_Comparison_Exp>;
   end_at?: InputMaybe<Bigint_Comparison_Exp>;
+  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   message_id?: InputMaybe<Uuid_Comparison_Exp>;
   start_at?: InputMaybe<Bigint_Comparison_Exp>;
@@ -18294,6 +15401,7 @@ export type Schedule_Insert_Input = {
   cron?: InputMaybe<Scalars["String"]["input"]>;
   /** Unix timestamp end time */
   end_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** Message ID reference */
   message_id?: InputMaybe<Scalars["uuid"]["input"]>;
@@ -18307,6 +15415,8 @@ export type Schedule_Insert_Input = {
 /** aggregate max on columns */
 export type Schedule_Max_Fields = {
   __typename?: "schedule_max_fields";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Cron expression for scheduling */
   cron?: Maybe<Scalars["String"]["output"]>;
@@ -18325,6 +15435,8 @@ export type Schedule_Max_Fields = {
 /** aggregate min on columns */
 export type Schedule_Min_Fields = {
   __typename?: "schedule_min_fields";
+  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
+  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Cron expression for scheduling */
   cron?: Maybe<Scalars["String"]["output"]>;
@@ -18349,6 +15461,13 @@ export type Schedule_Mutation_Response = {
   returning: Array<Schedule>;
 };
 
+/** input type for inserting object relation for remote table "schedule" */
+export type Schedule_Obj_Rel_Insert_Input = {
+  data: Schedule_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Schedule_On_Conflict>;
+};
+
 /** on_conflict condition type for table "schedule" */
 export type Schedule_On_Conflict = {
   constraint: Schedule_Constraint;
@@ -18358,9 +15477,12 @@ export type Schedule_On_Conflict = {
 
 /** Ordering options when selecting data from "schedule". */
 export type Schedule_Order_By = {
+  _hasyx_schema_name?: InputMaybe<Order_By>;
+  _hasyx_table_name?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   cron?: InputMaybe<Order_By>;
   end_at?: InputMaybe<Order_By>;
+  hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   message_id?: InputMaybe<Order_By>;
   start_at?: InputMaybe<Order_By>;
@@ -18375,6 +15497,10 @@ export type Schedule_Pk_Columns_Input = {
 
 /** select columns of table "schedule" */
 export enum Schedule_Select_Column {
+  /** column name */
+  HasyxSchemaName = "_hasyx_schema_name",
+  /** column name */
+  HasyxTableName = "_hasyx_table_name",
   /** column name */
   CreatedAt = "created_at",
   /** column name */
@@ -18453,6 +15579,8 @@ export type Schedule_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Schedule_Stream_Cursor_Value_Input = {
+  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
+  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   /** Cron expression for scheduling */
   cron?: InputMaybe<Scalars["String"]["input"]>;
@@ -18551,14 +15679,14 @@ export type Subscription_Root = {
   accounts_by_pk?: Maybe<Accounts>;
   /** fetch data from the table in a streaming manner: "accounts" */
   accounts_stream: Array<Accounts>;
-  /** fetch data from the table: "auth_passive" */
-  auth_passive: Array<Auth_Passive>;
-  /** fetch aggregated fields from the table: "auth_passive" */
-  auth_passive_aggregate: Auth_Passive_Aggregate;
-  /** fetch data from the table: "auth_passive" using primary key columns */
-  auth_passive_by_pk?: Maybe<Auth_Passive>;
-  /** fetch data from the table in a streaming manner: "auth_passive" */
-  auth_passive_stream: Array<Auth_Passive>;
+  /** fetch data from the table: "auth_jwt" */
+  auth_jwt: Array<Auth_Jwt>;
+  /** fetch aggregated fields from the table: "auth_jwt" */
+  auth_jwt_aggregate: Auth_Jwt_Aggregate;
+  /** fetch data from the table: "auth_jwt" using primary key columns */
+  auth_jwt_by_pk?: Maybe<Auth_Jwt>;
+  /** fetch data from the table in a streaming manner: "auth_jwt" */
+  auth_jwt_stream: Array<Auth_Jwt>;
   /** fetch data from the table: "badma.ais" */
   badma_ais: Array<Badma_Ais>;
   /** fetch aggregated fields from the table: "badma.ais" */
@@ -18647,52 +15775,6 @@ export type Subscription_Root = {
   debug_by_pk?: Maybe<Debug>;
   /** fetch data from the table in a streaming manner: "debug" */
   debug_stream: Array<Debug>;
-  /** fetch data from the table: "deep._functions" */
-  deep__functions: Array<Deep__Functions>;
-  /** fetch aggregated fields from the table: "deep._functions" */
-  deep__functions_aggregate: Deep__Functions_Aggregate;
-  /** fetch data from the table: "deep._functions" using primary key columns */
-  deep__functions_by_pk?: Maybe<Deep__Functions>;
-  /** fetch data from the table in a streaming manner: "deep._functions" */
-  deep__functions_stream: Array<Deep__Functions>;
-  /** fetch data from the table: "deep._links" */
-  deep__links: Array<Deep__Links>;
-  /** fetch aggregated fields from the table: "deep._links" */
-  deep__links_aggregate: Deep__Links_Aggregate;
-  /** fetch data from the table: "deep._links" using primary key columns */
-  deep__links_by_pk?: Maybe<Deep__Links>;
-  /** fetch data from the table in a streaming manner: "deep._links" */
-  deep__links_stream: Array<Deep__Links>;
-  /** fetch data from the table: "deep._numbers" */
-  deep__numbers: Array<Deep__Numbers>;
-  /** fetch aggregated fields from the table: "deep._numbers" */
-  deep__numbers_aggregate: Deep__Numbers_Aggregate;
-  /** fetch data from the table: "deep._numbers" using primary key columns */
-  deep__numbers_by_pk?: Maybe<Deep__Numbers>;
-  /** fetch data from the table in a streaming manner: "deep._numbers" */
-  deep__numbers_stream: Array<Deep__Numbers>;
-  /** fetch data from the table: "deep._objects" */
-  deep__objects: Array<Deep__Objects>;
-  /** fetch aggregated fields from the table: "deep._objects" */
-  deep__objects_aggregate: Deep__Objects_Aggregate;
-  /** fetch data from the table: "deep._objects" using primary key columns */
-  deep__objects_by_pk?: Maybe<Deep__Objects>;
-  /** fetch data from the table in a streaming manner: "deep._objects" */
-  deep__objects_stream: Array<Deep__Objects>;
-  /** fetch data from the table: "deep._strings" */
-  deep__strings: Array<Deep__Strings>;
-  /** fetch aggregated fields from the table: "deep._strings" */
-  deep__strings_aggregate: Deep__Strings_Aggregate;
-  /** fetch data from the table: "deep._strings" using primary key columns */
-  deep__strings_by_pk?: Maybe<Deep__Strings>;
-  /** fetch data from the table in a streaming manner: "deep._strings" */
-  deep__strings_stream: Array<Deep__Strings>;
-  /** fetch data from the table: "deep.links" */
-  deep_links: Array<Deep_Links>;
-  /** fetch aggregated fields from the table: "deep.links" */
-  deep_links_aggregate: Deep_Links_Aggregate;
-  /** fetch data from the table in a streaming manner: "deep.links" */
-  deep_links_stream: Array<Deep_Links>;
   /** fetch data from the table: "events" */
   events: Array<Events>;
   /** fetch aggregated fields from the table: "events" */
@@ -18803,38 +15885,6 @@ export type Subscription_Root = {
   schedule_by_pk?: Maybe<Schedule>;
   /** fetch data from the table in a streaming manner: "schedule" */
   schedule_stream: Array<Schedule>;
-  /** fetch data from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** fetch aggregated fields from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_aggregate: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate;
-  /** fetch data from the table: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" using primary key columns */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_by_pk?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** fetch data from the table in a streaming manner: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-  test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_stream: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  /** fetch data from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** fetch aggregated fields from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_aggregate: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate;
-  /** fetch data from the table: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" using primary key columns */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_by_pk?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** fetch data from the table in a streaming manner: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-  test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_stream: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  /** fetch data from the table: "test_logs.test_users" */
-  test_logs_test_users: Array<Test_Logs_Test_Users>;
-  /** fetch aggregated fields from the table: "test_logs.test_users" */
-  test_logs_test_users_aggregate: Test_Logs_Test_Users_Aggregate;
-  /** fetch data from the table: "test_logs.test_users" using primary key columns */
-  test_logs_test_users_by_pk?: Maybe<Test_Logs_Test_Users>;
-  /** fetch data from the table in a streaming manner: "test_logs.test_users" */
-  test_logs_test_users_stream: Array<Test_Logs_Test_Users>;
-  /** fetch data from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  /** fetch aggregated fields from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_aggregate: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate;
-  /** fetch data from the table: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" using primary key columns */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_by_pk?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  /** fetch data from the table in a streaming manner: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-  test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_stream: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -18871,30 +15921,30 @@ export type Subscription_RootAccounts_StreamArgs = {
   where?: InputMaybe<Accounts_Bool_Exp>;
 };
 
-export type Subscription_RootAuth_PassiveArgs = {
-  distinct_on?: InputMaybe<Array<Auth_Passive_Select_Column>>;
+export type Subscription_RootAuth_JwtArgs = {
+  distinct_on?: InputMaybe<Array<Auth_Jwt_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Auth_Passive_Order_By>>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+  order_by?: InputMaybe<Array<Auth_Jwt_Order_By>>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
-export type Subscription_RootAuth_Passive_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Auth_Passive_Select_Column>>;
+export type Subscription_RootAuth_Jwt_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Auth_Jwt_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Auth_Passive_Order_By>>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+  order_by?: InputMaybe<Array<Auth_Jwt_Order_By>>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
-export type Subscription_RootAuth_Passive_By_PkArgs = {
+export type Subscription_RootAuth_Jwt_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
-export type Subscription_RootAuth_Passive_StreamArgs = {
+export type Subscription_RootAuth_Jwt_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Auth_Passive_Stream_Cursor_Input>>;
-  where?: InputMaybe<Auth_Passive_Bool_Exp>;
+  cursor: Array<InputMaybe<Auth_Jwt_Stream_Cursor_Input>>;
+  where?: InputMaybe<Auth_Jwt_Bool_Exp>;
 };
 
 export type Subscription_RootBadma_AisArgs = {
@@ -19181,158 +16231,6 @@ export type Subscription_RootDebug_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Debug_Stream_Cursor_Input>>;
   where?: InputMaybe<Debug_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__FunctionsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Functions_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Functions_Order_By>>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Functions_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Functions_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Functions_Order_By>>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Functions_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootDeep__Functions_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep__Functions_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep__Functions_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__LinksArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Links_Order_By>>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Links_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Links_Order_By>>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Links_By_PkArgs = {
-  id: Scalars["String"]["input"];
-};
-
-export type Subscription_RootDeep__Links_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep__Links_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep__Links_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__NumbersArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Numbers_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Numbers_Order_By>>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Numbers_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Numbers_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Numbers_Order_By>>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Numbers_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootDeep__Numbers_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep__Numbers_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep__Numbers_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__ObjectsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Objects_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Objects_Order_By>>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Objects_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Objects_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Objects_Order_By>>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Objects_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootDeep__Objects_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep__Objects_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep__Objects_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__StringsArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Strings_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Strings_Order_By>>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Strings_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep__Strings_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep__Strings_Order_By>>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-export type Subscription_RootDeep__Strings_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootDeep__Strings_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep__Strings_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep__Strings_Bool_Exp>;
-};
-
-export type Subscription_RootDeep_LinksArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-export type Subscription_RootDeep_Links_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Deep_Links_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Deep_Links_Order_By>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
-};
-
-export type Subscription_RootDeep_Links_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Deep_Links_Stream_Cursor_Input>>;
-  where?: InputMaybe<Deep_Links_Bool_Exp>;
 };
 
 export type Subscription_RootEventsArgs = {
@@ -19708,152 +16606,6 @@ export type Subscription_RootSchedule_StreamArgs = {
   where?: InputMaybe<Schedule_Bool_Exp>;
 };
 
-export type Subscription_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-export type Subscription_RootTest_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_StreamArgs =
-  {
-    batch_size: Scalars["Int"]["input"];
-    cursor: Array<
-      InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stream_Cursor_Input>
-    >;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-export type Subscription_RootTest_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_StreamArgs =
-  {
-    batch_size: Scalars["Int"]["input"];
-    cursor: Array<
-      InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stream_Cursor_Input>
-    >;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Logs_Test_UsersArgs = {
-  distinct_on?: InputMaybe<Array<Test_Logs_Test_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Test_Logs_Test_Users_Order_By>>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-export type Subscription_RootTest_Logs_Test_Users_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Test_Logs_Test_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Test_Logs_Test_Users_Order_By>>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-export type Subscription_RootTest_Logs_Test_Users_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootTest_Logs_Test_Users_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Test_Logs_Test_Users_Stream_Cursor_Input>>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-export type Subscription_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_UsersArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_AggregateArgs =
-  {
-    distinct_on?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column>
-    >;
-    limit?: InputMaybe<Scalars["Int"]["input"]>;
-    offset?: InputMaybe<Scalars["Int"]["input"]>;
-    order_by?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Order_By>
-    >;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
-export type Subscription_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_By_PkArgs =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-export type Subscription_RootTest_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_StreamArgs =
-  {
-    batch_size: Scalars["Int"]["input"];
-    cursor: Array<
-      InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stream_Cursor_Input>
-    >;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
 export type Subscription_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -19879,1033 +16631,6 @@ export type Subscription_RootUsers_StreamArgs = {
   cursor: Array<InputMaybe<Users_Stream_Cursor_Input>>;
   where?: InputMaybe<Users_Bool_Exp>;
 };
-
-/** columns and relationships of "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users = {
-  __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users";
-  created_at: Scalars["bigint"]["output"];
-  email?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_aggregate";
-    aggregate?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate_Fields>;
-    nodes: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  };
-
-/** aggregate fields of "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_aggregate_fields";
-    avg?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Avg_Fields>;
-    count: Scalars["Int"]["output"];
-    max?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Max_Fields>;
-    min?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Min_Fields>;
-    stddev?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Fields>;
-    stddev_pop?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Pop_Fields>;
-    stddev_samp?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Samp_Fields>;
-    sum?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Sum_Fields>;
-    var_pop?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Var_Pop_Fields>;
-    var_samp?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Var_Samp_Fields>;
-    variance?: Maybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Variance_Fields>;
-  };
-
-/** aggregate fields of "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Aggregate_FieldsCountArgs =
-  {
-    columns?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column>
-    >;
-    distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  };
-
-/** aggregate avg on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Avg_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_avg_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Boolean expression to filter rows from the table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users". All fields are combined with a logical 'AND'. */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp =
-  {
-    _and?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>
-    >;
-    _not?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-    _or?: InputMaybe<
-      Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>
-    >;
-    created_at?: InputMaybe<Bigint_Comparison_Exp>;
-    email?: InputMaybe<String_Comparison_Exp>;
-    id?: InputMaybe<Uuid_Comparison_Exp>;
-    updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  };
-
-/** unique or primary key constraints on table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export enum Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Constraint {
-  /** unique or primary key constraint on columns "email" */
-  UsersEmailKey = "users_email_key",
-  /** unique or primary key constraint on columns "id" */
-  UsersPkey = "users_pkey",
-}
-
-/** input type for incrementing numeric columns in table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Inc_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** input type for inserting data into table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Insert_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    email?: InputMaybe<Scalars["String"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate max on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Max_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_max_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    email?: Maybe<Scalars["String"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** aggregate min on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Min_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_min_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    email?: Maybe<Scalars["String"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** response of any mutation on the table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Mutation_Response =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_mutation_response";
-    /** number of rows affected by the mutation */
-    affected_rows: Scalars["Int"]["output"];
-    /** data from the rows affected by the mutation */
-    returning: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users>;
-  };
-
-/** on_conflict condition type for table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_On_Conflict =
-  {
-    constraint: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Constraint;
-    update_columns?: Array<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Update_Column>;
-    where?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp>;
-  };
-
-/** Ordering options when selecting data from "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users". */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Order_By =
-  {
-    created_at?: InputMaybe<Order_By>;
-    email?: InputMaybe<Order_By>;
-    id?: InputMaybe<Order_By>;
-    updated_at?: InputMaybe<Order_By>;
-  };
-
-/** primary key columns input for table: test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Pk_Columns_Input =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** select columns of table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export enum Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Email = "email",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Set_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    email?: InputMaybe<Scalars["String"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate stddev on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_stddev_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_pop on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Pop_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_stddev_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_samp on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stddev_Samp_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_stddev_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Streaming cursor of the table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users" */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stream_Cursor_Input =
-  {
-    /** Stream column input with initial value */
-    initial_value: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stream_Cursor_Value_Input;
-    /** cursor ordering */
-    ordering?: InputMaybe<Cursor_Ordering>;
-  };
-
-/** Initial value of the column from where the streaming should start */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Stream_Cursor_Value_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    email?: InputMaybe<Scalars["String"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate sum on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Sum_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_sum_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** update columns of table "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed.users" */
-export enum Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Email = "email",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Updates =
-  {
-    /** increments the numeric columns with given value of the filtered values */
-    _inc?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Inc_Input>;
-    /** sets the columns of the filtered rows to the given values */
-    _set?: InputMaybe<Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Set_Input>;
-    /** filter the rows which have to be updated */
-    where: Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Bool_Exp;
-  };
-
-/** aggregate var_pop on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Var_Pop_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_var_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate var_samp on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Var_Samp_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_var_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate variance on columns */
-export type Test_Column_Unique_5aa334c5_A8f7_4acd_B396_33655de9a5ed_Users_Variance_Fields =
-  {
-    __typename?: "test_column_unique_5aa334c5_a8f7_4acd_b396_33655de9a5ed_users_variance_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** columns and relationships of "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users";
-    created_at: Scalars["bigint"]["output"];
-    id: Scalars["uuid"]["output"];
-    updated_at: Scalars["bigint"]["output"];
-  };
-
-/** aggregated selection of "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_aggregate";
-    aggregate?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate_Fields>;
-    nodes: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  };
-
-/** aggregate fields of "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_aggregate_fields";
-    avg?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Avg_Fields>;
-    count: Scalars["Int"]["output"];
-    max?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Max_Fields>;
-    min?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Min_Fields>;
-    stddev?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Fields>;
-    stddev_pop?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Pop_Fields>;
-    stddev_samp?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Samp_Fields>;
-    sum?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Sum_Fields>;
-    var_pop?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Var_Pop_Fields>;
-    var_samp?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Var_Samp_Fields>;
-    variance?: Maybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Variance_Fields>;
-  };
-
-/** aggregate fields of "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Aggregate_FieldsCountArgs =
-  {
-    columns?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column>
-    >;
-    distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  };
-
-/** aggregate avg on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Avg_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_avg_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Boolean expression to filter rows from the table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users". All fields are combined with a logical 'AND'. */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp =
-  {
-    _and?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>
-    >;
-    _not?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-    _or?: InputMaybe<
-      Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>
-    >;
-    created_at?: InputMaybe<Bigint_Comparison_Exp>;
-    id?: InputMaybe<Uuid_Comparison_Exp>;
-    updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  };
-
-/** unique or primary key constraints on table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export enum Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  UsersPkey = "users_pkey",
-}
-
-/** input type for incrementing numeric columns in table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Inc_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** input type for inserting data into table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Insert_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate max on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Max_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_max_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** aggregate min on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Min_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_min_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** response of any mutation on the table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Mutation_Response =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_mutation_response";
-    /** number of rows affected by the mutation */
-    affected_rows: Scalars["Int"]["output"];
-    /** data from the rows affected by the mutation */
-    returning: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users>;
-  };
-
-/** on_conflict condition type for table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_On_Conflict =
-  {
-    constraint: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Constraint;
-    update_columns?: Array<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Update_Column>;
-    where?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp>;
-  };
-
-/** Ordering options when selecting data from "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users". */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Order_By =
-  {
-    created_at?: InputMaybe<Order_By>;
-    id?: InputMaybe<Order_By>;
-    updated_at?: InputMaybe<Order_By>;
-  };
-
-/** primary key columns input for table: test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Pk_Columns_Input =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** select columns of table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export enum Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Set_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate stddev on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_stddev_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_pop on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Pop_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_stddev_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_samp on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stddev_Samp_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_stddev_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Streaming cursor of the table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users" */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stream_Cursor_Input =
-  {
-    /** Stream column input with initial value */
-    initial_value: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stream_Cursor_Value_Input;
-    /** cursor ordering */
-    ordering?: InputMaybe<Cursor_Ordering>;
-  };
-
-/** Initial value of the column from where the streaming should start */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Stream_Cursor_Value_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate sum on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Sum_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_sum_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** update columns of table "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a.users" */
-export enum Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Updates =
-  {
-    /** increments the numeric columns with given value of the filtered values */
-    _inc?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Inc_Input>;
-    /** sets the columns of the filtered rows to the given values */
-    _set?: InputMaybe<Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Set_Input>;
-    /** filter the rows which have to be updated */
-    where: Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Bool_Exp;
-  };
-
-/** aggregate var_pop on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Var_Pop_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_var_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate var_samp on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Var_Samp_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_var_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate variance on columns */
-export type Test_Computed_Nonexist_Db2822b9_C2c1_46de_A3cf_8862c1c7a13a_Users_Variance_Fields =
-  {
-    __typename?: "test_computed_nonexist_db2822b9_c2c1_46de_a3cf_8862c1c7a13a_users_variance_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** columns and relationships of "test_logs.test_users" */
-export type Test_Logs_Test_Users = {
-  __typename?: "test_logs_test_users";
-  created_at: Scalars["bigint"]["output"];
-  /** User email for testing */
-  email?: Maybe<Scalars["String"]["output"]>;
-  id: Scalars["uuid"]["output"];
-  /** User name for testing */
-  name?: Maybe<Scalars["String"]["output"]>;
-  /** User status for testing */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "test_logs.test_users" */
-export type Test_Logs_Test_Users_Aggregate = {
-  __typename?: "test_logs_test_users_aggregate";
-  aggregate?: Maybe<Test_Logs_Test_Users_Aggregate_Fields>;
-  nodes: Array<Test_Logs_Test_Users>;
-};
-
-/** aggregate fields of "test_logs.test_users" */
-export type Test_Logs_Test_Users_Aggregate_Fields = {
-  __typename?: "test_logs_test_users_aggregate_fields";
-  avg?: Maybe<Test_Logs_Test_Users_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Test_Logs_Test_Users_Max_Fields>;
-  min?: Maybe<Test_Logs_Test_Users_Min_Fields>;
-  stddev?: Maybe<Test_Logs_Test_Users_Stddev_Fields>;
-  stddev_pop?: Maybe<Test_Logs_Test_Users_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Test_Logs_Test_Users_Stddev_Samp_Fields>;
-  sum?: Maybe<Test_Logs_Test_Users_Sum_Fields>;
-  var_pop?: Maybe<Test_Logs_Test_Users_Var_Pop_Fields>;
-  var_samp?: Maybe<Test_Logs_Test_Users_Var_Samp_Fields>;
-  variance?: Maybe<Test_Logs_Test_Users_Variance_Fields>;
-};
-
-/** aggregate fields of "test_logs.test_users" */
-export type Test_Logs_Test_Users_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Test_Logs_Test_Users_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Test_Logs_Test_Users_Avg_Fields = {
-  __typename?: "test_logs_test_users_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "test_logs.test_users". All fields are combined with a logical 'AND'. */
-export type Test_Logs_Test_Users_Bool_Exp = {
-  _and?: InputMaybe<Array<Test_Logs_Test_Users_Bool_Exp>>;
-  _not?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-  _or?: InputMaybe<Array<Test_Logs_Test_Users_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  email?: InputMaybe<String_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
-  status?: InputMaybe<String_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "test_logs.test_users" */
-export enum Test_Logs_Test_Users_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  TestUsersPkey = "test_users_pkey",
-}
-
-/** input type for incrementing numeric columns in table "test_logs.test_users" */
-export type Test_Logs_Test_Users_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "test_logs.test_users" */
-export type Test_Logs_Test_Users_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User email for testing */
-  email?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** User name for testing */
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  /** User status for testing */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Test_Logs_Test_Users_Max_Fields = {
-  __typename?: "test_logs_test_users_max_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User email for testing */
-  email?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** User name for testing */
-  name?: Maybe<Scalars["String"]["output"]>;
-  /** User status for testing */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Test_Logs_Test_Users_Min_Fields = {
-  __typename?: "test_logs_test_users_min_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User email for testing */
-  email?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** User name for testing */
-  name?: Maybe<Scalars["String"]["output"]>;
-  /** User status for testing */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** response of any mutation on the table "test_logs.test_users" */
-export type Test_Logs_Test_Users_Mutation_Response = {
-  __typename?: "test_logs_test_users_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Test_Logs_Test_Users>;
-};
-
-/** on_conflict condition type for table "test_logs.test_users" */
-export type Test_Logs_Test_Users_On_Conflict = {
-  constraint: Test_Logs_Test_Users_Constraint;
-  update_columns?: Array<Test_Logs_Test_Users_Update_Column>;
-  where?: InputMaybe<Test_Logs_Test_Users_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "test_logs.test_users". */
-export type Test_Logs_Test_Users_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  email?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: test_logs.test_users */
-export type Test_Logs_Test_Users_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "test_logs.test_users" */
-export enum Test_Logs_Test_Users_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Email = "email",
-  /** column name */
-  Id = "id",
-  /** column name */
-  Name = "name",
-  /** column name */
-  Status = "status",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "test_logs.test_users" */
-export type Test_Logs_Test_Users_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User email for testing */
-  email?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** User name for testing */
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  /** User status for testing */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Test_Logs_Test_Users_Stddev_Fields = {
-  __typename?: "test_logs_test_users_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Test_Logs_Test_Users_Stddev_Pop_Fields = {
-  __typename?: "test_logs_test_users_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Test_Logs_Test_Users_Stddev_Samp_Fields = {
-  __typename?: "test_logs_test_users_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "test_logs_test_users" */
-export type Test_Logs_Test_Users_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Test_Logs_Test_Users_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Test_Logs_Test_Users_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User email for testing */
-  email?: InputMaybe<Scalars["String"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** User name for testing */
-  name?: InputMaybe<Scalars["String"]["input"]>;
-  /** User status for testing */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Test_Logs_Test_Users_Sum_Fields = {
-  __typename?: "test_logs_test_users_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "test_logs.test_users" */
-export enum Test_Logs_Test_Users_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Email = "email",
-  /** column name */
-  Id = "id",
-  /** column name */
-  Name = "name",
-  /** column name */
-  Status = "status",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Test_Logs_Test_Users_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Test_Logs_Test_Users_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Test_Logs_Test_Users_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Test_Logs_Test_Users_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Test_Logs_Test_Users_Var_Pop_Fields = {
-  __typename?: "test_logs_test_users_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Test_Logs_Test_Users_Var_Samp_Fields = {
-  __typename?: "test_logs_test_users_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Test_Logs_Test_Users_Variance_Fields = {
-  __typename?: "test_logs_test_users_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** columns and relationships of "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users = {
-  __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users";
-  created_at: Scalars["bigint"]["output"];
-  id: Scalars["uuid"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-};
-
-/** aggregated selection of "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_aggregate";
-    aggregate?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate_Fields>;
-    nodes: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  };
-
-/** aggregate fields of "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_aggregate_fields";
-    avg?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Avg_Fields>;
-    count: Scalars["Int"]["output"];
-    max?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Max_Fields>;
-    min?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Min_Fields>;
-    stddev?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Fields>;
-    stddev_pop?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Pop_Fields>;
-    stddev_samp?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Samp_Fields>;
-    sum?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Sum_Fields>;
-    var_pop?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Var_Pop_Fields>;
-    var_samp?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Var_Samp_Fields>;
-    variance?: Maybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Variance_Fields>;
-  };
-
-/** aggregate fields of "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Aggregate_FieldsCountArgs =
-  {
-    columns?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column>
-    >;
-    distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-  };
-
-/** aggregate avg on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Avg_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_avg_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Boolean expression to filter rows from the table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users". All fields are combined with a logical 'AND'. */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp =
-  {
-    _and?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>
-    >;
-    _not?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-    _or?: InputMaybe<
-      Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>
-    >;
-    created_at?: InputMaybe<Bigint_Comparison_Exp>;
-    id?: InputMaybe<Uuid_Comparison_Exp>;
-    updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  };
-
-/** unique or primary key constraints on table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export enum Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  UsersPkey = "users_pkey",
-}
-
-/** input type for incrementing numeric columns in table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Inc_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** input type for inserting data into table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Insert_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate max on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Max_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_max_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** aggregate min on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Min_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_min_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    id?: Maybe<Scalars["uuid"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** response of any mutation on the table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Mutation_Response =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_mutation_response";
-    /** number of rows affected by the mutation */
-    affected_rows: Scalars["Int"]["output"];
-    /** data from the rows affected by the mutation */
-    returning: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users>;
-  };
-
-/** on_conflict condition type for table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_On_Conflict =
-  {
-    constraint: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Constraint;
-    update_columns?: Array<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Update_Column>;
-    where?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp>;
-  };
-
-/** Ordering options when selecting data from "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users". */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Order_By =
-  {
-    created_at?: InputMaybe<Order_By>;
-    id?: InputMaybe<Order_By>;
-    updated_at?: InputMaybe<Order_By>;
-  };
-
-/** primary key columns input for table: test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Pk_Columns_Input =
-  {
-    id: Scalars["uuid"]["input"];
-  };
-
-/** select columns of table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export enum Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Select_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-/** input type for updating data in table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Set_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate stddev on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_stddev_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_pop on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Pop_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_stddev_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate stddev_samp on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stddev_Samp_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_stddev_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** Streaming cursor of the table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users" */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stream_Cursor_Input =
-  {
-    /** Stream column input with initial value */
-    initial_value: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stream_Cursor_Value_Input;
-    /** cursor ordering */
-    ordering?: InputMaybe<Cursor_Ordering>;
-  };
-
-/** Initial value of the column from where the streaming should start */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Stream_Cursor_Value_Input =
-  {
-    created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-    id?: InputMaybe<Scalars["uuid"]["input"]>;
-    updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  };
-
-/** aggregate sum on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Sum_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_sum_fields";
-    created_at?: Maybe<Scalars["bigint"]["output"]>;
-    updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  };
-
-/** update columns of table "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a.users" */
-export enum Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  UpdatedAt = "updated_at",
-}
-
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Updates =
-  {
-    /** increments the numeric columns with given value of the filtered values */
-    _inc?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Inc_Input>;
-    /** sets the columns of the filtered rows to the given values */
-    _set?: InputMaybe<Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Set_Input>;
-    /** filter the rows which have to be updated */
-    where: Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Bool_Exp;
-  };
-
-/** aggregate var_pop on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Var_Pop_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_var_pop_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate var_samp on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Var_Samp_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_var_samp_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
-
-/** aggregate variance on columns */
-export type Test_Trigger_Events_18ad5301_26fc_4f50_B8fe_694aadca290a_Users_Variance_Fields =
-  {
-    __typename?: "test_trigger_events_18ad5301_26fc_4f50_b8fe_694aadca290a_users_variance_fields";
-    created_at?: Maybe<Scalars["Float"]["output"]>;
-    updated_at?: Maybe<Scalars["Float"]["output"]>;
-  };
 
 /** columns and relationships of "users" */
 export type Users = {

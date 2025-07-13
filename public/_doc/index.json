@@ -2188,6 +2188,216 @@
           "level": 3,
           "text": "Adding Tests for New Features (e.g., Database Operators)",
           "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
         }
       ],
       "content": "",
@@ -2393,5 +2603,5 @@
       "path": "components/hover-card.md"
     }
   ],
-  "lastUpdated": "2025-07-13T01:56:05.178Z"
+  "lastUpdated": "2025-07-13T02:13:11.780Z"
 }

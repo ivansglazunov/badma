@@ -1187,7 +1187,7 @@ export function NeedClubCard() {
             <p className="text-xl">Omm Many Badma Chess</p>
             <p>Для игры вам нужно:</p>
             <div className="flex flex-row items-center justify-center gap-4">
-              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl">
+              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl disabled opacity-20">
                 <span className="text-2xl mb-1">🤝</span>
                 <span className="text-xs">Вступить в клуб</span>
               </Button>
