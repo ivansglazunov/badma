@@ -12,15 +12,6 @@
   z-index: 10;
 }
 
-/* Smooth transitions for better performance */
-.hover-card * {
-  pointer-events: none;
-}
-
-.hover-card {
-  pointer-events: auto;
-}
-
 /* Additional styling for better visual feedback */
 .hover-card-container {
   perspective: 1000px;

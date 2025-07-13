@@ -522,6 +522,58 @@ export default function App() {
     { skip: !user?.id }
   );
 
+  // Get clubs data for current user
+  const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
+    {
+      table: 'badma_clubs',
+      where: { 
+        _or: [
+          { user_id: { _eq: hasyx.userId } }, 
+          { in_clubs: { user_id: { _eq: hasyx.userId } } }
+        ] 
+      },
+      returning: [
+        'id',
+        'user_id',
+        'created_at',
+        'updated_at',
+        {
+          user: ['id', 'name', 'image']
+        },
+        {
+          in_clubs: [
+            'id',
+            'user_id',
+            'status',
+            'created_by_id',
+            'created_at',
+            'updated_at',
+            {
+              user: ['id', 'name', 'image']
+            },
+            {
+              created_by: ['id', 'name', 'image']
+            }
+          ]
+        }
+      ]
+    },
+    { skip: !hasyx.userId }
+  );
+
+  // Format clubs data for display
+  const clubsDataFormatted = React.useMemo(() => {
+    if (!clubsData) return null;
+    
+    if (Array.isArray(clubsData)) {
+      return clubsData;
+    }
+    if (clubsData && (clubsData as any).badma_clubs) {
+      return (clubsData as any).badma_clubs;
+    }
+    return clubsData;
+  }, [clubsData]);
+
   const currentUserId = React.useMemo(() => {
     if (Array.isArray(currentUserData)) {
       return currentUserData[0]?.id;
@@ -1129,7 +1181,7 @@ export default function App() {
         </div>
       </div>
     </div>
-    <NeedClubCard />
+    {!clubsDataFormatted?.length && <NeedClubCard />}
 
     {/* Show manual request button if needed */}
     {((motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') || 
@@ -1159,6 +1211,48 @@ export default function App() {
 }
 
 export function NeedClubCard() {
+  const { data: session } = useSession();
+  const hasyx = useHasyx();
+  
+  // Get clubs data for current user
+  const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
+    {
+      table: 'badma_clubs',
+      where: { 
+        _or: [
+          { user_id: { _eq: hasyx.userId } }, 
+          { in_clubs: { user_id: { _eq: hasyx.userId } } }
+        ] 
+      },
+      returning: [
+        'id',
+        'user_id',
+        'created_at',
+        'updated_at',
+        {
+          user: ['id', 'name', 'image']
+        },
+        {
+          in_clubs: [
+            'id',
+            'user_id',
+            'status',
+            'created_by_id',
+            'created_at',
+            'updated_at',
+            {
+              user: ['id', 'name', 'image']
+            },
+            {
+              created_by: ['id', 'name', 'image']
+            }
+          ]
+        }
+      ]
+    },
+    { skip: !hasyx.userId }
+  );
+
   const [useOrientation, setUseOrientation] = useState(true);
   const [orientationSensitivity, setOrientationSensitivity] = useState(0.8);
   const [orientationData, setOrientationData] = useState<{
@@ -1169,6 +1263,21 @@ export function NeedClubCard() {
     isSupported: boolean;
     isActive: boolean;
   } | null>(null);
+  const [isCreatingClub, setIsCreatingClub] = useState(false);
+
+  // Format clubs data for display
+  const clubsDataFormatted = React.useMemo(() => {
+    if (!clubsData) return null;
+    
+    if (Array.isArray(clubsData)) {
+      return clubsData;
+    }
+    if (clubsData && (clubsData as any).badma_clubs) {
+      return (clubsData as any).badma_clubs;
+    }
+    return clubsData;
+  }, [clubsData]);
+
   return <div className="fixed bottom-0 left-0 right-0 top-0 w-full h-full z-50 flex items-center justify-center"> 
     <HoverCard
       force={1.3}
@@ -1191,10 +1300,48 @@ export function NeedClubCard() {
                 <span className="text-2xl mb-1">🤝</span>
                 <span className="text-xs">Вступить в клуб</span>
               </Button>
-              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl">
-                <span className="text-2xl mb-1">➕</span>
-                <span className="text-xs">Создать клуб</span>
+              <Button 
+                className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl"
+                disabled={isCreatingClub || clubsLoading}
+                onClick={async () => {
+                  console.log('CREATING');
+                  if (!hasyx.userId) {
+                    console.error('No user ID available');
+                    return;
+                  }
+                  
+                  setIsCreatingClub(true);
+                  try {
+                    await hasyx.insert({ 
+                      table: 'badma_clubs', 
+                      object: { user_id: hasyx.userId } 
+                    });
+                    console.log('Club created successfully!');
+                  } catch (error) {
+                    console.error('Error creating club:', error);
+                  } finally {
+                    setIsCreatingClub(false);
+                  }
+                }}
+              >
+                {(isCreatingClub || clubsLoading) ? (
+                  <LoaderCircle className="animate-spin h-6 w-6 mb-1" />
+                ) : (
+                  <span className="text-2xl mb-1">➕</span>
+                )}
+                <span className="text-xs">{(isCreatingClub || clubsLoading) ? 'Загрузка...' : 'Создать клуб'}</span>
               </Button>
+            </div>
+            
+            {/* Clubs Diagnostic Data */}
+            <div className="mt-4 p-2 bg-black/20 rounded text-left text-xs">
+              <p className="font-bold mb-1">Clubs Diagnostic:</p>
+              <p>Loading: {clubsLoading ? 'true' : 'false'}</p>
+              <div className="mt-2 max-h-32 overflow-y-auto">
+                <pre className="text-xs whitespace-pre-wrap">
+                  {JSON.stringify(clubsDataFormatted, null, 2)}
+                </pre>
+              </div>
             </div>
           </div>
         </div>

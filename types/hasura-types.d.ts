@@ -1470,6 +1470,370 @@ export type Badma_Ais_Variance_Order_By = {
   updated_at?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "badma.clubs" */
+export type Badma_Clubs = {
+  __typename?: "badma_clubs";
+  created_at: Scalars["bigint"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** An array relationship */
+  in_clubs: Array<Badma_In_Clubs>;
+  /** An aggregate relationship */
+  in_clubs_aggregate: Badma_In_Clubs_Aggregate;
+  updated_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars["uuid"]["output"];
+};
+
+/** columns and relationships of "badma.clubs" */
+export type Badma_ClubsIn_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.clubs" */
+export type Badma_ClubsIn_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** aggregated selection of "badma.clubs" */
+export type Badma_Clubs_Aggregate = {
+  __typename?: "badma_clubs_aggregate";
+  aggregate?: Maybe<Badma_Clubs_Aggregate_Fields>;
+  nodes: Array<Badma_Clubs>;
+};
+
+export type Badma_Clubs_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Clubs_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Clubs_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Clubs_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.clubs" */
+export type Badma_Clubs_Aggregate_Fields = {
+  __typename?: "badma_clubs_aggregate_fields";
+  avg?: Maybe<Badma_Clubs_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Clubs_Max_Fields>;
+  min?: Maybe<Badma_Clubs_Min_Fields>;
+  stddev?: Maybe<Badma_Clubs_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_Clubs_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_Clubs_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_Clubs_Sum_Fields>;
+  var_pop?: Maybe<Badma_Clubs_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_Clubs_Var_Samp_Fields>;
+  variance?: Maybe<Badma_Clubs_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.clubs" */
+export type Badma_Clubs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.clubs" */
+export type Badma_Clubs_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Clubs_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Clubs_Max_Order_By>;
+  min?: InputMaybe<Badma_Clubs_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Clubs_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Clubs_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Clubs_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Clubs_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Clubs_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Clubs_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Clubs_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.clubs" */
+export type Badma_Clubs_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Clubs_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Clubs_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_Clubs_Avg_Fields = {
+  __typename?: "badma_clubs_avg_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.clubs" */
+export type Badma_Clubs_Avg_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.clubs". All fields are combined with a logical 'AND'. */
+export type Badma_Clubs_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Clubs_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Clubs_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Clubs_Bool_Exp>>;
+  created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  in_clubs?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+  in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp>;
+  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.clubs" */
+export enum Badma_Clubs_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  ClubsPkey = "clubs_pkey",
+}
+
+/** input type for incrementing numeric columns in table "badma.clubs" */
+export type Badma_Clubs_Inc_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.clubs" */
+export type Badma_Clubs_Insert_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  in_clubs?: InputMaybe<Badma_In_Clubs_Arr_Rel_Insert_Input>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Clubs_Max_Fields = {
+  __typename?: "badma_clubs_max_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.clubs" */
+export type Badma_Clubs_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Clubs_Min_Fields = {
+  __typename?: "badma_clubs_min_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.clubs" */
+export type Badma_Clubs_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.clubs" */
+export type Badma_Clubs_Mutation_Response = {
+  __typename?: "badma_clubs_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Clubs>;
+};
+
+/** input type for inserting object relation for remote table "badma.clubs" */
+export type Badma_Clubs_Obj_Rel_Insert_Input = {
+  data: Badma_Clubs_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Clubs_On_Conflict>;
+};
+
+/** on_conflict condition type for table "badma.clubs" */
+export type Badma_Clubs_On_Conflict = {
+  constraint: Badma_Clubs_Constraint;
+  update_columns?: Array<Badma_Clubs_Update_Column>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.clubs". */
+export type Badma_Clubs_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.clubs */
+export type Badma_Clubs_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.clubs" */
+export enum Badma_Clubs_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** input type for updating data in table "badma.clubs" */
+export type Badma_Clubs_Set_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_Clubs_Stddev_Fields = {
+  __typename?: "badma_clubs_stddev_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.clubs" */
+export type Badma_Clubs_Stddev_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_Clubs_Stddev_Pop_Fields = {
+  __typename?: "badma_clubs_stddev_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.clubs" */
+export type Badma_Clubs_Stddev_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_Clubs_Stddev_Samp_Fields = {
+  __typename?: "badma_clubs_stddev_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.clubs" */
+export type Badma_Clubs_Stddev_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_clubs" */
+export type Badma_Clubs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Clubs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Clubs_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_Clubs_Sum_Fields = {
+  __typename?: "badma_clubs_sum_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.clubs" */
+export type Badma_Clubs_Sum_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.clubs" */
+export enum Badma_Clubs_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+export type Badma_Clubs_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_Clubs_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Clubs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Clubs_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_Clubs_Var_Pop_Fields = {
+  __typename?: "badma_clubs_var_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.clubs" */
+export type Badma_Clubs_Var_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_Clubs_Var_Samp_Fields = {
+  __typename?: "badma_clubs_var_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.clubs" */
+export type Badma_Clubs_Var_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_Clubs_Variance_Fields = {
+  __typename?: "badma_clubs_variance_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.clubs" */
+export type Badma_Clubs_Variance_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** columns and relationships of "badma.errors" */
 export type Badma_Errors = {
   __typename?: "badma_errors";
@@ -2492,6 +2856,389 @@ export type Badma_Games_Variance_Order_By = {
   sides?: InputMaybe<Order_By>;
   storage_inserted_at?: InputMaybe<Order_By>;
   storage_updated_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "badma.in_clubs" */
+export type Badma_In_Clubs = {
+  __typename?: "badma_in_clubs";
+  /** An object relationship */
+  club: Badma_Clubs;
+  club_id: Scalars["uuid"]["output"];
+  created_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  created_by: Users;
+  created_by_id: Scalars["uuid"]["output"];
+  id: Scalars["uuid"]["output"];
+  status: Scalars["String"]["output"];
+  updated_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars["uuid"]["output"];
+};
+
+/** aggregated selection of "badma.in_clubs" */
+export type Badma_In_Clubs_Aggregate = {
+  __typename?: "badma_in_clubs_aggregate";
+  aggregate?: Maybe<Badma_In_Clubs_Aggregate_Fields>;
+  nodes: Array<Badma_In_Clubs>;
+};
+
+export type Badma_In_Clubs_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_In_Clubs_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.in_clubs" */
+export type Badma_In_Clubs_Aggregate_Fields = {
+  __typename?: "badma_in_clubs_aggregate_fields";
+  avg?: Maybe<Badma_In_Clubs_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_In_Clubs_Max_Fields>;
+  min?: Maybe<Badma_In_Clubs_Min_Fields>;
+  stddev?: Maybe<Badma_In_Clubs_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_In_Clubs_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_In_Clubs_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_In_Clubs_Sum_Fields>;
+  var_pop?: Maybe<Badma_In_Clubs_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_In_Clubs_Var_Samp_Fields>;
+  variance?: Maybe<Badma_In_Clubs_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.in_clubs" */
+export type Badma_In_Clubs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.in_clubs" */
+export type Badma_In_Clubs_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_In_Clubs_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_In_Clubs_Max_Order_By>;
+  min?: InputMaybe<Badma_In_Clubs_Min_Order_By>;
+  stddev?: InputMaybe<Badma_In_Clubs_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_In_Clubs_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_In_Clubs_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_In_Clubs_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_In_Clubs_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_In_Clubs_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_In_Clubs_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.in_clubs" */
+export type Badma_In_Clubs_Arr_Rel_Insert_Input = {
+  data: Array<Badma_In_Clubs_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_In_Clubs_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_In_Clubs_Avg_Fields = {
+  __typename?: "badma_in_clubs_avg_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Avg_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.in_clubs". All fields are combined with a logical 'AND'. */
+export type Badma_In_Clubs_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_In_Clubs_Bool_Exp>>;
+  _not?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_In_Clubs_Bool_Exp>>;
+  club?: InputMaybe<Badma_Clubs_Bool_Exp>;
+  club_id?: InputMaybe<Uuid_Comparison_Exp>;
+  created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  created_by?: InputMaybe<Users_Bool_Exp>;
+  created_by_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.in_clubs" */
+export enum Badma_In_Clubs_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  InClubsPkey = "in_clubs_pkey",
+}
+
+/** input type for incrementing numeric columns in table "badma.in_clubs" */
+export type Badma_In_Clubs_Inc_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.in_clubs" */
+export type Badma_In_Clubs_Insert_Input = {
+  club?: InputMaybe<Badma_Clubs_Obj_Rel_Insert_Input>;
+  club_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_by?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  created_by_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_In_Clubs_Max_Fields = {
+  __typename?: "badma_in_clubs_max_fields";
+  club_id?: Maybe<Scalars["uuid"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_by_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Max_Order_By = {
+  club_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  created_by_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_In_Clubs_Min_Fields = {
+  __typename?: "badma_in_clubs_min_fields";
+  club_id?: Maybe<Scalars["uuid"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_by_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  status?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Min_Order_By = {
+  club_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  created_by_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.in_clubs" */
+export type Badma_In_Clubs_Mutation_Response = {
+  __typename?: "badma_in_clubs_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_In_Clubs>;
+};
+
+/** on_conflict condition type for table "badma.in_clubs" */
+export type Badma_In_Clubs_On_Conflict = {
+  constraint: Badma_In_Clubs_Constraint;
+  update_columns?: Array<Badma_In_Clubs_Update_Column>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.in_clubs". */
+export type Badma_In_Clubs_Order_By = {
+  club?: InputMaybe<Badma_Clubs_Order_By>;
+  club_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  created_by?: InputMaybe<Users_Order_By>;
+  created_by_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.in_clubs */
+export type Badma_In_Clubs_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.in_clubs" */
+export enum Badma_In_Clubs_Select_Column {
+  /** column name */
+  ClubId = "club_id",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  CreatedById = "created_by_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Status = "status",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** input type for updating data in table "badma.in_clubs" */
+export type Badma_In_Clubs_Set_Input = {
+  club_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_by_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_In_Clubs_Stddev_Fields = {
+  __typename?: "badma_in_clubs_stddev_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Stddev_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_In_Clubs_Stddev_Pop_Fields = {
+  __typename?: "badma_in_clubs_stddev_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Stddev_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_In_Clubs_Stddev_Samp_Fields = {
+  __typename?: "badma_in_clubs_stddev_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Stddev_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_in_clubs" */
+export type Badma_In_Clubs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_In_Clubs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_In_Clubs_Stream_Cursor_Value_Input = {
+  club_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_by_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  status?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_In_Clubs_Sum_Fields = {
+  __typename?: "badma_in_clubs_sum_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Sum_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.in_clubs" */
+export enum Badma_In_Clubs_Update_Column {
+  /** column name */
+  ClubId = "club_id",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  CreatedById = "created_by_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Status = "status",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+export type Badma_In_Clubs_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_In_Clubs_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_In_Clubs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_In_Clubs_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_In_Clubs_Var_Pop_Fields = {
+  __typename?: "badma_in_clubs_var_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Var_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_In_Clubs_Var_Samp_Fields = {
+  __typename?: "badma_in_clubs_var_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Var_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_In_Clubs_Variance_Fields = {
+  __typename?: "badma_in_clubs_variance_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.in_clubs" */
+export type Badma_In_Clubs_Variance_Order_By = {
+  created_at?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
 
@@ -7009,6 +7756,10 @@ export type Mutation_Root = {
   delete_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
   /** delete single row from the table: "badma.ais" */
   delete_badma_ais_by_pk?: Maybe<Badma_Ais>;
+  /** delete data from the table: "badma.clubs" */
+  delete_badma_clubs?: Maybe<Badma_Clubs_Mutation_Response>;
+  /** delete single row from the table: "badma.clubs" */
+  delete_badma_clubs_by_pk?: Maybe<Badma_Clubs>;
   /** delete data from the table: "badma.errors" */
   delete_badma_errors?: Maybe<Badma_Errors_Mutation_Response>;
   /** delete single row from the table: "badma.errors" */
@@ -7017,6 +7768,10 @@ export type Mutation_Root = {
   delete_badma_games?: Maybe<Badma_Games_Mutation_Response>;
   /** delete single row from the table: "badma.games" */
   delete_badma_games_by_pk?: Maybe<Badma_Games>;
+  /** delete data from the table: "badma.in_clubs" */
+  delete_badma_in_clubs?: Maybe<Badma_In_Clubs_Mutation_Response>;
+  /** delete single row from the table: "badma.in_clubs" */
+  delete_badma_in_clubs_by_pk?: Maybe<Badma_In_Clubs>;
   /** delete data from the table: "badma.joins" */
   delete_badma_joins?: Maybe<Badma_Joins_Mutation_Response>;
   /** delete single row from the table: "badma.joins" */
@@ -7117,6 +7872,10 @@ export type Mutation_Root = {
   insert_badma_ais?: Maybe<Badma_Ais_Mutation_Response>;
   /** insert a single row into the table: "badma.ais" */
   insert_badma_ais_one?: Maybe<Badma_Ais>;
+  /** insert data into the table: "badma.clubs" */
+  insert_badma_clubs?: Maybe<Badma_Clubs_Mutation_Response>;
+  /** insert a single row into the table: "badma.clubs" */
+  insert_badma_clubs_one?: Maybe<Badma_Clubs>;
   /** insert data into the table: "badma.errors" */
   insert_badma_errors?: Maybe<Badma_Errors_Mutation_Response>;
   /** insert a single row into the table: "badma.errors" */
@@ -7125,6 +7884,10 @@ export type Mutation_Root = {
   insert_badma_games?: Maybe<Badma_Games_Mutation_Response>;
   /** insert a single row into the table: "badma.games" */
   insert_badma_games_one?: Maybe<Badma_Games>;
+  /** insert data into the table: "badma.in_clubs" */
+  insert_badma_in_clubs?: Maybe<Badma_In_Clubs_Mutation_Response>;
+  /** insert a single row into the table: "badma.in_clubs" */
+  insert_badma_in_clubs_one?: Maybe<Badma_In_Clubs>;
   /** insert data into the table: "badma.joins" */
   insert_badma_joins?: Maybe<Badma_Joins_Mutation_Response>;
   /** insert a single row into the table: "badma.joins" */
@@ -7231,6 +7994,12 @@ export type Mutation_Root = {
   update_badma_ais_by_pk?: Maybe<Badma_Ais>;
   /** update multiples rows of table: "badma.ais" */
   update_badma_ais_many?: Maybe<Array<Maybe<Badma_Ais_Mutation_Response>>>;
+  /** update data of the table: "badma.clubs" */
+  update_badma_clubs?: Maybe<Badma_Clubs_Mutation_Response>;
+  /** update single row of the table: "badma.clubs" */
+  update_badma_clubs_by_pk?: Maybe<Badma_Clubs>;
+  /** update multiples rows of table: "badma.clubs" */
+  update_badma_clubs_many?: Maybe<Array<Maybe<Badma_Clubs_Mutation_Response>>>;
   /** update data of the table: "badma.errors" */
   update_badma_errors?: Maybe<Badma_Errors_Mutation_Response>;
   /** update single row of the table: "badma.errors" */
@@ -7245,6 +8014,14 @@ export type Mutation_Root = {
   update_badma_games_by_pk?: Maybe<Badma_Games>;
   /** update multiples rows of table: "badma.games" */
   update_badma_games_many?: Maybe<Array<Maybe<Badma_Games_Mutation_Response>>>;
+  /** update data of the table: "badma.in_clubs" */
+  update_badma_in_clubs?: Maybe<Badma_In_Clubs_Mutation_Response>;
+  /** update single row of the table: "badma.in_clubs" */
+  update_badma_in_clubs_by_pk?: Maybe<Badma_In_Clubs>;
+  /** update multiples rows of table: "badma.in_clubs" */
+  update_badma_in_clubs_many?: Maybe<
+    Array<Maybe<Badma_In_Clubs_Mutation_Response>>
+  >;
   /** update data of the table: "badma.joins" */
   update_badma_joins?: Maybe<Badma_Joins_Mutation_Response>;
   /** update single row of the table: "badma.joins" */
@@ -7438,6 +8215,16 @@ export type Mutation_RootDelete_Badma_Ais_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_Badma_ClubsArgs = {
+  where: Badma_Clubs_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Clubs_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_Badma_ErrorsArgs = {
   where: Badma_Errors_Bool_Exp;
 };
@@ -7454,6 +8241,16 @@ export type Mutation_RootDelete_Badma_GamesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Badma_Games_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_In_ClubsArgs = {
+  where: Badma_In_Clubs_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_In_Clubs_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -7715,6 +8512,18 @@ export type Mutation_RootInsert_Badma_Ais_OneArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootInsert_Badma_ClubsArgs = {
+  objects: Array<Badma_Clubs_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Clubs_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Clubs_OneArgs = {
+  object: Badma_Clubs_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Clubs_On_Conflict>;
+};
+
+/** mutation root */
 export type Mutation_RootInsert_Badma_ErrorsArgs = {
   objects: Array<Badma_Errors_Insert_Input>;
   on_conflict?: InputMaybe<Badma_Errors_On_Conflict>;
@@ -7736,6 +8545,18 @@ export type Mutation_RootInsert_Badma_GamesArgs = {
 export type Mutation_RootInsert_Badma_Games_OneArgs = {
   object: Badma_Games_Insert_Input;
   on_conflict?: InputMaybe<Badma_Games_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_In_ClubsArgs = {
+  objects: Array<Badma_In_Clubs_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_In_Clubs_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_In_Clubs_OneArgs = {
+  object: Badma_In_Clubs_Insert_Input;
+  on_conflict?: InputMaybe<Badma_In_Clubs_On_Conflict>;
 };
 
 /** mutation root */
@@ -8081,6 +8902,25 @@ export type Mutation_RootUpdate_Badma_Ais_ManyArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_Badma_ClubsArgs = {
+  _inc?: InputMaybe<Badma_Clubs_Inc_Input>;
+  _set?: InputMaybe<Badma_Clubs_Set_Input>;
+  where: Badma_Clubs_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Clubs_By_PkArgs = {
+  _inc?: InputMaybe<Badma_Clubs_Inc_Input>;
+  _set?: InputMaybe<Badma_Clubs_Set_Input>;
+  pk_columns: Badma_Clubs_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Clubs_ManyArgs = {
+  updates: Array<Badma_Clubs_Updates>;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_Badma_ErrorsArgs = {
   _append?: InputMaybe<Badma_Errors_Append_Input>;
   _delete_at_path?: InputMaybe<Badma_Errors_Delete_At_Path_Input>;
@@ -8126,6 +8966,25 @@ export type Mutation_RootUpdate_Badma_Games_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Badma_Games_ManyArgs = {
   updates: Array<Badma_Games_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_In_ClubsArgs = {
+  _inc?: InputMaybe<Badma_In_Clubs_Inc_Input>;
+  _set?: InputMaybe<Badma_In_Clubs_Set_Input>;
+  where: Badma_In_Clubs_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_In_Clubs_By_PkArgs = {
+  _inc?: InputMaybe<Badma_In_Clubs_Inc_Input>;
+  _set?: InputMaybe<Badma_In_Clubs_Set_Input>;
+  pk_columns: Badma_In_Clubs_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_In_Clubs_ManyArgs = {
+  updates: Array<Badma_In_Clubs_Updates>;
 };
 
 /** mutation root */
@@ -14584,6 +15443,12 @@ export type Query_Root = {
   badma_ais_aggregate: Badma_Ais_Aggregate;
   /** fetch data from the table: "badma.ais" using primary key columns */
   badma_ais_by_pk?: Maybe<Badma_Ais>;
+  /** fetch data from the table: "badma.clubs" */
+  badma_clubs: Array<Badma_Clubs>;
+  /** fetch aggregated fields from the table: "badma.clubs" */
+  badma_clubs_aggregate: Badma_Clubs_Aggregate;
+  /** fetch data from the table: "badma.clubs" using primary key columns */
+  badma_clubs_by_pk?: Maybe<Badma_Clubs>;
   /** fetch data from the table: "badma.errors" */
   badma_errors: Array<Badma_Errors>;
   /** fetch aggregated fields from the table: "badma.errors" */
@@ -14596,6 +15461,12 @@ export type Query_Root = {
   badma_games_aggregate: Badma_Games_Aggregate;
   /** fetch data from the table: "badma.games" using primary key columns */
   badma_games_by_pk?: Maybe<Badma_Games>;
+  /** fetch data from the table: "badma.in_clubs" */
+  badma_in_clubs: Array<Badma_In_Clubs>;
+  /** fetch aggregated fields from the table: "badma.in_clubs" */
+  badma_in_clubs_aggregate: Badma_In_Clubs_Aggregate;
+  /** fetch data from the table: "badma.in_clubs" using primary key columns */
+  badma_in_clubs_by_pk?: Maybe<Badma_In_Clubs>;
   /** fetch data from the table: "badma.joins" */
   badma_joins: Array<Badma_Joins>;
   /** fetch aggregated fields from the table: "badma.joins" */
@@ -14794,6 +15665,26 @@ export type Query_RootBadma_Ais_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
+export type Query_RootBadma_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+export type Query_RootBadma_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+export type Query_RootBadma_Clubs_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
 export type Query_RootBadma_ErrorsArgs = {
   distinct_on?: InputMaybe<Array<Badma_Errors_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -14831,6 +15722,26 @@ export type Query_RootBadma_Games_AggregateArgs = {
 };
 
 export type Query_RootBadma_Games_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Query_RootBadma_In_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+export type Query_RootBadma_In_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+export type Query_RootBadma_In_Clubs_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -15695,6 +16606,14 @@ export type Subscription_Root = {
   badma_ais_by_pk?: Maybe<Badma_Ais>;
   /** fetch data from the table in a streaming manner: "badma.ais" */
   badma_ais_stream: Array<Badma_Ais>;
+  /** fetch data from the table: "badma.clubs" */
+  badma_clubs: Array<Badma_Clubs>;
+  /** fetch aggregated fields from the table: "badma.clubs" */
+  badma_clubs_aggregate: Badma_Clubs_Aggregate;
+  /** fetch data from the table: "badma.clubs" using primary key columns */
+  badma_clubs_by_pk?: Maybe<Badma_Clubs>;
+  /** fetch data from the table in a streaming manner: "badma.clubs" */
+  badma_clubs_stream: Array<Badma_Clubs>;
   /** fetch data from the table: "badma.errors" */
   badma_errors: Array<Badma_Errors>;
   /** fetch aggregated fields from the table: "badma.errors" */
@@ -15711,6 +16630,14 @@ export type Subscription_Root = {
   badma_games_by_pk?: Maybe<Badma_Games>;
   /** fetch data from the table in a streaming manner: "badma.games" */
   badma_games_stream: Array<Badma_Games>;
+  /** fetch data from the table: "badma.in_clubs" */
+  badma_in_clubs: Array<Badma_In_Clubs>;
+  /** fetch aggregated fields from the table: "badma.in_clubs" */
+  badma_in_clubs_aggregate: Badma_In_Clubs_Aggregate;
+  /** fetch data from the table: "badma.in_clubs" using primary key columns */
+  badma_in_clubs_by_pk?: Maybe<Badma_In_Clubs>;
+  /** fetch data from the table in a streaming manner: "badma.in_clubs" */
+  badma_in_clubs_stream: Array<Badma_In_Clubs>;
   /** fetch data from the table: "badma.joins" */
   badma_joins: Array<Badma_Joins>;
   /** fetch aggregated fields from the table: "badma.joins" */
@@ -15973,6 +16900,32 @@ export type Subscription_RootBadma_Ais_StreamArgs = {
   where?: InputMaybe<Badma_Ais_Bool_Exp>;
 };
 
+export type Subscription_RootBadma_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Clubs_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Clubs_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Clubs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
 export type Subscription_RootBadma_ErrorsArgs = {
   distinct_on?: InputMaybe<Array<Badma_Errors_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16023,6 +16976,32 @@ export type Subscription_RootBadma_Games_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Badma_Games_Stream_Cursor_Input>>;
   where?: InputMaybe<Badma_Games_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_In_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_In_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_In_Clubs_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_In_Clubs_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_In_Clubs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
 };
 
 export type Subscription_RootBadma_JoinsArgs = {
@@ -16646,6 +17625,10 @@ export type Users = {
   /** An aggregate relationship */
   ais_aggregate: Badma_Ais_Aggregate;
   created_at: Scalars["bigint"]["output"];
+  /** An array relationship */
+  created_in_clubs: Array<Badma_In_Clubs>;
+  /** An aggregate relationship */
+  created_in_clubs_aggregate: Badma_In_Clubs_Aggregate;
   /** User email address */
   email?: Maybe<Scalars["String"]["output"]>;
   /** Email verification timestamp */
@@ -16665,6 +17648,10 @@ export type Users = {
   id: Scalars["uuid"]["output"];
   /** User profile image URL */
   image?: Maybe<Scalars["String"]["output"]>;
+  /** An array relationship */
+  in_clubs: Array<Badma_In_Clubs>;
+  /** An aggregate relationship */
+  in_clubs_aggregate: Badma_In_Clubs_Aggregate;
   /** Admin flag */
   is_admin?: Maybe<Scalars["Boolean"]["output"]>;
   /** An array relationship */
@@ -16685,6 +17672,10 @@ export type Users = {
   notification_permissions: Array<Notification_Permissions>;
   /** An aggregate relationship */
   notification_permissions_aggregate: Notification_Permissions_Aggregate;
+  /** An array relationship */
+  owned_clubs: Array<Badma_Clubs>;
+  /** An aggregate relationship */
+  owned_clubs_aggregate: Badma_Clubs_Aggregate;
   /** User password hash */
   password?: Maybe<Scalars["String"]["output"]>;
   /** An array relationship */
@@ -16735,6 +17726,24 @@ export type UsersAis_AggregateArgs = {
 };
 
 /** columns and relationships of "users" */
+export type UsersCreated_In_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersCreated_In_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
 export type UsersErrorsArgs = {
   distinct_on?: InputMaybe<Array<Badma_Errors_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16768,6 +17777,24 @@ export type UsersGames_AggregateArgs = {
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   order_by?: InputMaybe<Array<Badma_Games_Order_By>>;
   where?: InputMaybe<Badma_Games_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersIn_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersIn_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_In_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -16840,6 +17867,24 @@ export type UsersNotification_Permissions_AggregateArgs = {
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   order_by?: InputMaybe<Array<Notification_Permissions_Order_By>>;
   where?: InputMaybe<Notification_Permissions_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersOwned_ClubsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersOwned_Clubs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Clubs_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
+  where?: InputMaybe<Badma_Clubs_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -16928,6 +17973,8 @@ export type Users_Bool_Exp = {
   ais?: InputMaybe<Badma_Ais_Bool_Exp>;
   ais_aggregate?: InputMaybe<Badma_Ais_Aggregate_Bool_Exp>;
   created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  created_in_clubs?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+  created_in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
   email_verified?: InputMaybe<Bigint_Comparison_Exp>;
   errors?: InputMaybe<Badma_Errors_Bool_Exp>;
@@ -16938,6 +17985,8 @@ export type Users_Bool_Exp = {
   hasyx?: InputMaybe<Hasyx_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   image?: InputMaybe<String_Comparison_Exp>;
+  in_clubs?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+  in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp>;
   is_admin?: InputMaybe<Boolean_Comparison_Exp>;
   joins?: InputMaybe<Badma_Joins_Bool_Exp>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Bool_Exp>;
@@ -16948,6 +17997,8 @@ export type Users_Bool_Exp = {
   notification_messages_aggregate?: InputMaybe<Notification_Messages_Aggregate_Bool_Exp>;
   notification_permissions?: InputMaybe<Notification_Permissions_Bool_Exp>;
   notification_permissions_aggregate?: InputMaybe<Notification_Permissions_Aggregate_Bool_Exp>;
+  owned_clubs?: InputMaybe<Badma_Clubs_Bool_Exp>;
+  owned_clubs_aggregate?: InputMaybe<Badma_Clubs_Aggregate_Bool_Exp>;
   password?: InputMaybe<String_Comparison_Exp>;
   tournament_participations?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
   tournament_participations_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp>;
@@ -16977,6 +18028,7 @@ export type Users_Insert_Input = {
   accounts?: InputMaybe<Accounts_Arr_Rel_Insert_Input>;
   ais?: InputMaybe<Badma_Ais_Arr_Rel_Insert_Input>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_in_clubs?: InputMaybe<Badma_In_Clubs_Arr_Rel_Insert_Input>;
   /** User email address */
   email?: InputMaybe<Scalars["String"]["input"]>;
   /** Email verification timestamp */
@@ -16989,6 +18041,7 @@ export type Users_Insert_Input = {
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** User profile image URL */
   image?: InputMaybe<Scalars["String"]["input"]>;
+  in_clubs?: InputMaybe<Badma_In_Clubs_Arr_Rel_Insert_Input>;
   /** Admin flag */
   is_admin?: InputMaybe<Scalars["Boolean"]["input"]>;
   joins?: InputMaybe<Badma_Joins_Arr_Rel_Insert_Input>;
@@ -16997,6 +18050,7 @@ export type Users_Insert_Input = {
   name?: InputMaybe<Scalars["String"]["input"]>;
   notification_messages?: InputMaybe<Notification_Messages_Arr_Rel_Insert_Input>;
   notification_permissions?: InputMaybe<Notification_Permissions_Arr_Rel_Insert_Input>;
+  owned_clubs?: InputMaybe<Badma_Clubs_Arr_Rel_Insert_Input>;
   /** User password hash */
   password?: InputMaybe<Scalars["String"]["input"]>;
   tournament_participations?: InputMaybe<Badma_Tournament_Participants_Arr_Rel_Insert_Input>;
@@ -17078,6 +18132,7 @@ export type Users_Order_By = {
   accounts_aggregate?: InputMaybe<Accounts_Aggregate_Order_By>;
   ais_aggregate?: InputMaybe<Badma_Ais_Aggregate_Order_By>;
   created_at?: InputMaybe<Order_By>;
+  created_in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Order_By>;
   email?: InputMaybe<Order_By>;
   email_verified?: InputMaybe<Order_By>;
   errors_aggregate?: InputMaybe<Badma_Errors_Aggregate_Order_By>;
@@ -17086,12 +18141,14 @@ export type Users_Order_By = {
   hasyx?: InputMaybe<Hasyx_Order_By>;
   id?: InputMaybe<Order_By>;
   image?: InputMaybe<Order_By>;
+  in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Order_By>;
   is_admin?: InputMaybe<Order_By>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Order_By>;
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
   notification_messages_aggregate?: InputMaybe<Notification_Messages_Aggregate_Order_By>;
   notification_permissions_aggregate?: InputMaybe<Notification_Permissions_Aggregate_Order_By>;
+  owned_clubs_aggregate?: InputMaybe<Badma_Clubs_Aggregate_Order_By>;
   password?: InputMaybe<Order_By>;
   tournament_participations_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Order_By>;
   tournaments_aggregate?: InputMaybe<Badma_Tournaments_Aggregate_Order_By>;
