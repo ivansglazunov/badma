@@ -31,6 +31,7 @@ import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types"
 import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 import { HoverCard } from "@/components/hover-card";
 import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/hooks/device-permissions";
+import { ClubTab } from "./club";
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -825,15 +826,19 @@ export default function App() {
               
               <div className="w-full max-w-2xl">
                 <Tabs defaultValue="games" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="games" className="flex items-center"><Gamepad2 className="h-4 w-4 mr-2" />Games</TabsTrigger>
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
+                    <TabsTrigger value="club" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Club</TabsTrigger>
                   </TabsList>
                   <TabsContent value="games" className="pt-4">
                     {currentUserId && <UserProfileGamesTab userId={currentUserId} />}
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
                     {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
+                  </TabsContent>
+                  <TabsContent value="club" className="pt-4">
+                    <ClubTab />
                   </TabsContent>
                 </Tabs>
               </div>
