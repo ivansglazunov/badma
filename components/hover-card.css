@@ -1,11 +1,6 @@
 .hover-card {
-  cursor: pointer;
   transform-origin: center center;
   will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
 }
 
 .hover-card:hover {
@@ -17,11 +12,3 @@
   perspective: 1000px;
   perspective-origin: center center;
 }
-
-/* Prevent text selection during hover effects */
-.hover-card {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-} 

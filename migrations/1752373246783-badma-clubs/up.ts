@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Hasura } from 'hasyx'; 
+import { Hasura, ColumnType } from 'hasyx/lib/hasura'; 
 import Debug from '../../lib/debug';
 
 const debug = Debug('migration:badma-clubs:up');
@@ -13,43 +13,193 @@ const hasura = new Hasura({
 const badmaSchema = 'badma';
 const publicSchema = 'public';
 
-const sqlSchema = `
-  CREATE TABLE IF NOT EXISTS ${badmaSchema}.clubs (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
-      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
-      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
-  );
+async function createClubsSchema(hasura: Hasura) {
+  debug('🔧 Creating badma schema...');
+  await hasura.defineSchema({ schema: badmaSchema });
+  debug('✅ Badma schema created successfully.');
+}
 
-  CREATE TABLE IF NOT EXISTS ${badmaSchema}.in_clubs (
-      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-      club_id UUID NOT NULL REFERENCES ${badmaSchema}.clubs(id) ON DELETE CASCADE,
-      user_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
-      status TEXT NOT NULL DEFAULT 'request' CHECK (status IN ('request', 'approved', 'denied')),
-      created_by_id UUID NOT NULL REFERENCES ${publicSchema}.users(id) ON DELETE CASCADE,
-      created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000,
-      updated_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000
-  );
+async function createClubsTable(hasura: Hasura) {
+  debug('🔧 Creating badma.clubs table...');
+  
+  await hasura.defineTable({ 
+    schema: badmaSchema, 
+    table: 'clubs',
+    id: 'id',
+    type: ColumnType.UUID
+  });
+  
+  // Define columns using high-level methods
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'clubs',
+    name: 'user_id',
+    type: ColumnType.UUID,
+    postfix: 'NOT NULL',
+    comment: 'User who created and owns the club'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'clubs',
+    name: 'title',
+    type: ColumnType.TEXT,
+    postfix: "NOT NULL DEFAULT ''",
+    comment: 'Club title/name'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'clubs',
+    name: 'created_at',
+    type: ColumnType.BIGINT,
+    postfix: 'NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000',
+    comment: 'Creation timestamp'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'clubs',
+    name: 'updated_at',
+    type: ColumnType.BIGINT,
+    postfix: 'NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000',
+    comment: 'Last update timestamp'
+  });
+  
+  // Create foreign key
+  await hasura.defineForeignKey({
+    from: { schema: badmaSchema, table: 'clubs', column: 'user_id' },
+    to: { schema: publicSchema, table: 'users', column: 'id' },
+    on_delete: 'CASCADE',
+    on_update: 'CASCADE'
+  });
+  
+  debug('✅ Badma.clubs table created successfully.');
+}
 
-  -- Create trigger function for status validation
-  CREATE OR REPLACE FUNCTION ${badmaSchema}.validate_status_update()
-  RETURNS TRIGGER AS $$
-  BEGIN
-    -- Only allow status changes from 'request' to 'approved' or 'denied'
-    IF OLD.status = 'request' AND NEW.status IN ('approved', 'denied') THEN
-      RETURN NEW;
-    ELSE
-      RAISE EXCEPTION 'Status can only be changed from request to approved or denied';
-    END IF;
-  END;
-  $$ LANGUAGE plpgsql;
+async function createInClubsTable(hasura: Hasura) {
+  debug('🔧 Creating badma.in_clubs table...');
+  
+  await hasura.defineTable({ 
+    schema: badmaSchema, 
+    table: 'in_clubs',
+    id: 'id',
+    type: ColumnType.UUID
+  });
+  
+  // Define columns using high-level methods
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'club_id',
+    type: ColumnType.UUID,
+    postfix: 'NOT NULL',
+    comment: 'Reference to clubs table'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'user_id',
+    type: ColumnType.UUID,
+    postfix: 'NOT NULL',
+    comment: 'User for whom the request was created'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'status',
+    type: ColumnType.TEXT,
+    postfix: "NOT NULL DEFAULT 'request' CHECK (status IN ('request', 'approved', 'denied'))",
+    comment: 'Request status'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'created_by_id',
+    type: ColumnType.UUID,
+    postfix: 'NOT NULL',
+    comment: 'User who created the request'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'created_at',
+    type: ColumnType.BIGINT,
+    postfix: 'NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000',
+    comment: 'Creation timestamp'
+  });
+  
+  await hasura.defineColumn({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'updated_at',
+    type: ColumnType.BIGINT,
+    postfix: 'NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()) * 1000',
+    comment: 'Last update timestamp'
+  });
+  
+  // Create foreign keys
+  await hasura.defineForeignKey({
+    from: { schema: badmaSchema, table: 'in_clubs', column: 'club_id' },
+    to: { schema: badmaSchema, table: 'clubs', column: 'id' },
+    on_delete: 'CASCADE',
+    on_update: 'CASCADE'
+  });
+  
+  await hasura.defineForeignKey({
+    from: { schema: badmaSchema, table: 'in_clubs', column: 'user_id' },
+    to: { schema: publicSchema, table: 'users', column: 'id' },
+    on_delete: 'CASCADE',
+    on_update: 'CASCADE'
+  });
+  
+  await hasura.defineForeignKey({
+    from: { schema: badmaSchema, table: 'in_clubs', column: 'created_by_id' },
+    to: { schema: publicSchema, table: 'users', column: 'id' },
+    on_delete: 'CASCADE',
+    on_update: 'CASCADE'
+  });
+  
+  debug('✅ Badma.in_clubs table created successfully.');
+}
 
-  -- Create trigger for in_clubs status validation
-  CREATE TRIGGER validate_in_clubs_status_update
-    BEFORE UPDATE ON ${badmaSchema}.in_clubs
-    FOR EACH ROW
-    EXECUTE FUNCTION ${badmaSchema}.validate_status_update();
-`;
+async function createStatusValidationTrigger(hasura: Hasura) {
+  debug('🔧 Creating status validation trigger...');
+  
+  // Create trigger function for status validation
+  await hasura.defineFunction({
+    schema: badmaSchema,
+    name: 'validate_status_update',
+    definition: `()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        -- Only allow status changes from 'request' to 'approved' or 'denied'
+        IF OLD.status = 'request' AND NEW.status IN ('approved', 'denied') THEN
+          RETURN NEW;
+        ELSE
+          RAISE EXCEPTION 'Status can only be changed from request to approved or denied';
+        END IF;
+      END;
+      $$`,
+    language: 'plpgsql'
+  });
+  
+  // Create trigger for in_clubs status validation
+  await hasura.defineTrigger({
+    schema: badmaSchema,
+    table: 'in_clubs',
+    name: 'validate_in_clubs_status_update',
+    function_name: `${badmaSchema}.validate_status_update`,
+    timing: 'BEFORE',
+    event: 'UPDATE'
+  });
+  
+  debug('✅ Status validation trigger created successfully.');
+}
 
 const tablesToTrack = [
   { schema: badmaSchema, name: 'clubs' },
@@ -164,7 +314,7 @@ const permissions = [
     check: { user_id: { _eq: 'X-Hasura-User-Id' } } 
   } },
   { role: 'user', table: 'clubs', type: 'update', permission: { 
-    columns: ['updated_at'], 
+    columns: ['title', 'updated_at'], 
     filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
     check: { user_id: { _eq: 'X-Hasura-User-Id' } }
   } },
@@ -214,17 +364,11 @@ const permissions = [
   { role: 'anonymous', table: 'in_clubs', type: 'select', permission: { columns: '*', filter: {} } },
 ];
 
-async function applySQLSchema() {
-  debug('🔧 Applying SQL schema for clubs...');
-  await hasura.sql(sqlSchema, 'default', true);
-  debug('✅ Clubs SQL schema applied.');
-}
-
 async function trackTablesFunc() {
   debug('🔍 Tracking club tables...');
   for (const table of tablesToTrack) {
     debug(`  📝 Tracking table ${table.schema}.${table.name}...`);
-    await hasura.v1({ type: 'pg_track_table', args: { source: 'default', schema: table.schema, name: table.name } });
+    await hasura.trackTable({ schema: table.schema, table: table.name });
   }
   debug('✅ Club table tracking complete.');
 }
@@ -360,7 +504,10 @@ async function applyAggregationPermissionsFunc() {
 async function up() {
   debug('🚀 Starting Clubs schema migration UP...');
   try {
-    await applySQLSchema();
+    await createClubsSchema(hasura);
+    await createClubsTable(hasura);
+    await createInClubsTable(hasura);
+    await createStatusValidationTrigger(hasura);
     await trackTablesFunc();
     await createRelationshipsFunc();
     await applyPermissionsFunc();

@@ -209,6 +209,12 @@ export const HoverCard: React.FC<HoverCardProps> = ({
     setMousePosition({ x: relativeX, y: relativeY });
   }, [disabled, isUsingOrientation, isHovered]);
 
+  // Handle click events to ensure they reach child elements
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    // Don't prevent default or stop propagation - let clicks pass through to children
+    // This ensures buttons and other clickable elements inside HoverCard work properly
+  }, []);
+
   // Calculate transform values based on mouse position and force - only rotation
   let rotateX, rotateY;
   
@@ -256,6 +262,7 @@ export const HoverCard: React.FC<HoverCardProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
+      onClick={handleClick}
     >
       {children}
     </div>

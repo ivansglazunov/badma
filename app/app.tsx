@@ -32,6 +32,9 @@ import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 import { HoverCard } from "@/components/hover-card";
 import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/hooks/device-permissions";
 import { ClubTab } from "./club";
+import { ClubsList } from "./clubs";
+import { CheckClub } from "./check-club";
+import { useClubStore } from "@/lib/stores/club-store";
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -536,6 +539,7 @@ export default function App() {
       returning: [
         'id',
         'user_id',
+        'title',
         'created_at',
         'updated_at',
         {
@@ -562,18 +566,35 @@ export default function App() {
     { skip: !hasyx.userId }
   );
 
-  // Format clubs data for display
+  // Zustand store for clubs
+  const { setUserClubs, setLoading, setError } = useClubStore();
+
+  // Format clubs data for display and save to Zustand
   const clubsDataFormatted = React.useMemo(() => {
     if (!clubsData) return null;
     
+    let formattedData;
     if (Array.isArray(clubsData)) {
-      return clubsData;
+      formattedData = clubsData;
+    } else if (clubsData && (clubsData as any).badma_clubs) {
+      formattedData = (clubsData as any).badma_clubs;
+    } else {
+      formattedData = clubsData;
     }
-    if (clubsData && (clubsData as any).badma_clubs) {
-      return (clubsData as any).badma_clubs;
+
+    // Save to Zustand store
+    if (formattedData && Array.isArray(formattedData)) {
+      setUserClubs(formattedData);
     }
-    return clubsData;
-  }, [clubsData]);
+
+    return formattedData;
+  }, [clubsData, setUserClubs]);
+
+  // Update loading and error states in Zustand
+  React.useEffect(() => {
+    setLoading(clubsLoading);
+    setError(clubsError ? (clubsError as any)?.message || "Unknown error" : null);
+  }, [clubsLoading, clubsError, setLoading, setError]);
 
   const currentUserId = React.useMemo(() => {
     if (Array.isArray(currentUserData)) {
@@ -597,6 +618,7 @@ export default function App() {
   const [isAddingAiPlayers, setIsAddingAiPlayers] = useState(false);
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [showPermissionToast, setShowPermissionToast] = useState(false);
+  const [isCheckClubOpen, setIsCheckClubOpen] = useState(false);
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
@@ -849,7 +871,7 @@ export default function App() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <Trophy className="h-10 w-10 mr-3 text-purple-500" />
-                  <h2 className="text-3xl font-semibold">Tournaments</h2>
+                  <h2 className="text-3xl font-semibold">Rating</h2>
                   <Button 
                     size="icon" 
                     className="bg-purple-600 hover:bg-purple-700 text-white ml-3"
@@ -859,13 +881,24 @@ export default function App() {
                   </Button>
                 </div>
               </div>
-              {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
-              {tournamentsError && (
-                <p className="text-red-500">
-                  Error loading tournaments: {(tournamentsError as any)?.message || "Unknown error"}
-                </p>
-              )}
-              {!tournamentsLoading && !tournamentsError && actualTournaments.length > 0 ? (
+              
+              <div className="w-full max-w-2xl">
+                <Tabs defaultValue="clubs" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="clubs" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Clubs</TabsTrigger>
+                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="clubs" className="pt-4">
+                    <ClubsList />
+                  </TabsContent>
+                  <TabsContent value="tournaments" className="pt-4">
+                    {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
+                    {tournamentsError && (
+                      <p className="text-red-500">
+                        Error loading tournaments: {(tournamentsError as any)?.message || "Unknown error"}
+                      </p>
+                    )}
+                    {!tournamentsLoading && !tournamentsError && actualTournaments.length > 0 ? (
                 <div className="w-full max-w-2xl space-y-1">
                   {actualTournaments.map((tournament) => {
                     const allGames = tournament.tournament_games || [];
@@ -904,9 +937,12 @@ export default function App() {
                     );
                   })}
                 </div>
-              ) : (
-                 !tournamentsLoading && !tournamentsError && <p>No tournaments found.</p>
-              )}
+                    ) : (
+                       !tournamentsLoading && !tournamentsError && <p>No tournaments found.</p>
+                    )}
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
           </CarouselItem>
           <CarouselItem key="games" className="h-full">
@@ -1186,7 +1222,12 @@ export default function App() {
         </div>
       </div>
     </div>
-    {!clubsDataFormatted?.length && <NeedClubCard />}
+    {!clubsDataFormatted?.length && (
+      <CheckClub 
+        isOpen={isCheckClubOpen || !clubsDataFormatted?.length} 
+        onClose={() => setIsCheckClubOpen(false)} 
+      />
+    )}
 
     {/* Show manual request button if needed */}
     {((motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') || 
@@ -1215,142 +1256,3 @@ export default function App() {
   </>);
 }
 
-export function NeedClubCard() {
-  const { data: session } = useSession();
-  const hasyx = useHasyx();
-  
-  // Get clubs data for current user
-  const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
-    {
-      table: 'badma_clubs',
-      where: { 
-        _or: [
-          { user_id: { _eq: hasyx.userId } }, 
-          { in_clubs: { user_id: { _eq: hasyx.userId } } }
-        ] 
-      },
-      returning: [
-        'id',
-        'user_id',
-        'created_at',
-        'updated_at',
-        {
-          user: ['id', 'name', 'image']
-        },
-        {
-          in_clubs: [
-            'id',
-            'user_id',
-            'status',
-            'created_by_id',
-            'created_at',
-            'updated_at',
-            {
-              user: ['id', 'name', 'image']
-            },
-            {
-              created_by: ['id', 'name', 'image']
-            }
-          ]
-        }
-      ]
-    },
-    { skip: !hasyx.userId }
-  );
-
-  const [useOrientation, setUseOrientation] = useState(true);
-  const [orientationSensitivity, setOrientationSensitivity] = useState(0.8);
-  const [orientationData, setOrientationData] = useState<{
-    alpha: number | null;
-    beta: number | null;
-    gamma: number | null;
-    timestamp: number;
-    isSupported: boolean;
-    isActive: boolean;
-  } | null>(null);
-  const [isCreatingClub, setIsCreatingClub] = useState(false);
-
-  // Format clubs data for display
-  const clubsDataFormatted = React.useMemo(() => {
-    if (!clubsData) return null;
-    
-    if (Array.isArray(clubsData)) {
-      return clubsData;
-    }
-    if (clubsData && (clubsData as any).badma_clubs) {
-      return (clubsData as any).badma_clubs;
-    }
-    return clubsData;
-  }, [clubsData]);
-
-  return <div className="fixed bottom-0 left-0 right-0 top-0 w-full h-full z-50 flex items-center justify-center"> 
-    <HoverCard
-      force={1.3}
-      maxRotation={25}
-      maxLift={50}
-      useDeviceOrientation={useOrientation}
-      orientationSensitivity={orientationSensitivity}
-      onOrientationData={setOrientationData}
-    >
-      <div 
-        className={`w-[300px] h-[500px] bg-purple-600 rounded-lg shadow-xl flex items-center justify-center`}
-      >
-        <div className="text-white text-center">
-          <div className="space-y-2 text-xs opacity-60">
-            <h1 style={{ fontSize: '4rem' }}>🫶</h1>
-            <p className="text-xl">Omm Many Badma Chess</p>
-            <p>Для игры вам нужно:</p>
-            <div className="flex flex-row items-center justify-center gap-4">
-              <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl disabled opacity-20">
-                <span className="text-2xl mb-1">🤝</span>
-                <span className="text-xs">Вступить в клуб</span>
-              </Button>
-              <Button 
-                className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl"
-                disabled={isCreatingClub || clubsLoading}
-                onClick={async () => {
-                  console.log('CREATING');
-                  if (!hasyx.userId) {
-                    console.error('No user ID available');
-                    return;
-                  }
-                  
-                  setIsCreatingClub(true);
-                  try {
-                    await hasyx.insert({ 
-                      table: 'badma_clubs', 
-                      object: { user_id: hasyx.userId } 
-                    });
-                    console.log('Club created successfully!');
-                  } catch (error) {
-                    console.error('Error creating club:', error);
-                  } finally {
-                    setIsCreatingClub(false);
-                  }
-                }}
-              >
-                {(isCreatingClub || clubsLoading) ? (
-                  <LoaderCircle className="animate-spin h-6 w-6 mb-1" />
-                ) : (
-                  <span className="text-2xl mb-1">➕</span>
-                )}
-                <span className="text-xs">{(isCreatingClub || clubsLoading) ? 'Загрузка...' : 'Создать клуб'}</span>
-              </Button>
-            </div>
-            
-            {/* Clubs Diagnostic Data */}
-            <div className="mt-4 p-2 bg-black/20 rounded text-left text-xs">
-              <p className="font-bold mb-1">Clubs Diagnostic:</p>
-              <p>Loading: {clubsLoading ? 'true' : 'false'}</p>
-              <div className="mt-2 max-h-32 overflow-y-auto">
-                <pre className="text-xs whitespace-pre-wrap">
-                  {JSON.stringify(clubsDataFormatted, null, 2)}
-                </pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </HoverCard>
-  </div>;
-};

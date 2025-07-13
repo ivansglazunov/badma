@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useHasyx, useSubscription } from 'hasyx';
 import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar';
-import { LoaderCircle, Crown } from 'lucide-react';
+import { Input } from 'hasyx/components/ui/input';
+import { Button } from 'hasyx/components/ui/button';
+import { LoaderCircle, Crown, Check } from 'lucide-react';
 
 export const ClubTab: React.FC = () => {
   const { data: session } = useSession();
   const hasyx = useHasyx();
+  
+  // State for club title editing
+  const [titleValue, setTitleValue] = useState('');
+  const [isSavingTitle, setIsSavingTitle] = useState(false);
 
   // Get clubs data for current user
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
@@ -21,6 +27,7 @@ export const ClubTab: React.FC = () => {
       returning: [
         'id',
         'user_id',
+        'title',
         'created_at',
         'updated_at',
         {
@@ -63,6 +70,37 @@ export const ClubTab: React.FC = () => {
   // Get the first club (assuming user is in one club)
   const currentClub = clubsDataFormatted?.[0];
 
+  // Sync title value with database data
+  useEffect(() => {
+    if (currentClub?.title !== undefined) {
+      setTitleValue(currentClub.title);
+    }
+  }, [currentClub?.title]);
+
+  // Check if title has been modified
+  const isTitleModified = titleValue !== (currentClub?.title || '');
+
+  // Function to save club title
+  const handleSaveTitle = async () => {
+    if (!currentClub || !isTitleModified) return;
+    
+    setIsSavingTitle(true);
+    try {
+      await hasyx.update({
+        table: 'badma_clubs',
+        where: { id: { _eq: currentClub.id } },
+        _set: { 
+          title: titleValue,
+          updated_at: Date.now()
+        }
+      });
+    } catch (error) {
+      console.error('Error saving club title:', error);
+    } finally {
+      setIsSavingTitle(false);
+    }
+  };
+
   if (clubsLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -95,6 +133,34 @@ export const ClubTab: React.FC = () => {
 
   return (
     <div className="space-y-4 p-1">
+      {/* Club Title */}
+      <div className="mb-6">
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">Club Title</h3>
+        <div className="flex items-center space-x-2">
+          <Input
+            value={titleValue}
+            onChange={(e) => setTitleValue(e.target.value)}
+            placeholder="Enter club title..."
+            disabled={isSavingTitle}
+            className="flex-1"
+          />
+          {isTitleModified && (
+            <Button
+              onClick={handleSaveTitle}
+              disabled={isSavingTitle}
+              size="sm"
+              className="flex items-center"
+            >
+              {isSavingTitle ? (
+                <LoaderCircle className="animate-spin h-4 w-4" />
+              ) : (
+                <Check className="h-4 w-4" />
+              )}
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Club Owner */}
       <div className="mb-6">
         <h3 className="text-sm font-medium text-muted-foreground mb-3">Club Owner</h3>
