@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useResizeDetector } from 'react-resize-detector';
 import { useDeviceMotion } from '../hooks/device-motion';
+import { Pawn, Rook, Knight, Bishop, Queen, King } from './pieces/badma';
+import { HoverCard } from '@/components/hover-card';
 
 interface BoardProps {
   position?: string;
@@ -77,45 +79,59 @@ const ShockPiece: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 /**
- * Custom chess piece component that displays large bold letters
+ * Custom chess piece component that displays SVG pieces
  */
 const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
-  // Map piece codes to display letters
-  const pieceMap: Record<string, string> = {
-    'wP': '♙', // White pawn
-    'wR': '♖', // White rook
-    'wN': '♘', // White knight
-    'wB': '♗', // White bishop
-    'wQ': '♕', // White queen
-    'wK': '♔', // White king
-    'bP': '♟', // Black pawn
-    'bR': '♜', // Black rook
-    'bN': '♞', // Black knight
-    'bB': '♝', // Black bishop
-    'bQ': '♛', // Black queen
-    'bK': '♚', // Black king
+  const isWhite = piece && piece.startsWith('w');
+  // const pieceColor = isWhite ? '#ffffff' : '#000000';
+  const pieceColor = isWhite ? '#ffffff' : '#000000';
+  const pieceSize = `100%`; // Larger size for better visibility
+  
+  const getPieceComponent = (pieceCode: string) => {
+    const strokeColor = pieceColor === '#ffffff' ? '#000000' : '#ffffff';
+    const strokeWidth = 0;
+    const strokeLinejoin = 'round';
+    const strokeLinecap = 'round';
+    const filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
+    
+    switch (pieceCode) {
+      case 'wP':
+      case 'bP':
+        return <Pawn color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      case 'wR':
+      case 'bR':
+        return <Rook color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      case 'wN':
+      case 'bN':
+        return <Knight color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      case 'wB':
+      case 'bB':
+        return <Bishop color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      case 'wQ':
+      case 'bQ':
+        return <Queen color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      case 'wK':
+      case 'bK':
+        return <King color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+      default:
+        return <div style={{ fontSize: '2rem', color: pieceColor }}>?</div>;
+    }
   };
-
-  const displayChar = pieceMap[piece] || piece;
   
   return (
     <ShockPiece>
       <div 
         style={{
-          fontSize: '2.5rem',
-          fontWeight: 'bold',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
           height: '100%',
-          color: piece && piece.startsWith('w') ? '#000' : '#fff',
-          textShadow: piece && piece.startsWith('w') ? '1px 1px 2px rgba(255,255,255,0.8)' : '1px 1px 2px rgba(0,0,0,0.8)',
           userSelect: 'none',
           pointerEvents: 'none'
         }}
       >
-        {displayChar}
+        {getPieceComponent(piece)}
       </div>
     </ShockPiece>
   );
@@ -152,7 +168,7 @@ export default function Board({
 
   const { width, height, ref } = useResizeDetector();
 
-  // Create custom pieces object with large bold letters
+  // Create custom pieces object with SVG pieces
   const defaultCustomPieces: Record<string, (args: any) => React.JSX.Element> = {
     wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} />,
     wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} />,
@@ -172,22 +188,30 @@ export default function Board({
   const piecesToUse = customPieces || defaultCustomPieces;
 
   return (
-    <div key={bgBlack+bgWhite} ref={ref} style={{ 
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
-      <Chessboard
-        position={position}
-        onPieceDrop={handlePieceDrop}
-        boardWidth={width}
-        customDarkSquareStyle={{ backgroundColor: bgBlack }}
-        customLightSquareStyle={{ backgroundColor: bgWhite }}
-        boardOrientation={orientation === 'w' || orientation === 1 || orientation === 'white' ? 'white' : 'black'}
-        customPieces={piecesToUse}
-      />
-    </div>
+    <HoverCard
+      force={1.3}
+      maxRotation={25}
+      maxLift={50}
+      useDeviceOrientation={true}
+      orientationSensitivity={0.8}
+    >
+      <div key={bgBlack+bgWhite} ref={ref} style={{ 
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Chessboard
+          position={position}
+          onPieceDrop={handlePieceDrop}
+          boardWidth={width}
+          customDarkSquareStyle={{ backgroundColor: bgBlack }}
+          customLightSquareStyle={{ backgroundColor: bgWhite }}
+          boardOrientation={orientation === 'w' || orientation === 1 || orientation === 'white' ? 'white' : 'black'}
+          customPieces={piecesToUse}
+        />
+      </div>
+    </HoverCard>
   );
 }

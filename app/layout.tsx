@@ -79,8 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             
             {/* PWA Components - available on all pages */}
-            <PWAInstallPrompt />
-            <PWAStatus />
+            {/* <PWAInstallPrompt /> */}
+            {/* <PWAStatus /> */}
           </HasyxProvider>
         </body>
       </html>

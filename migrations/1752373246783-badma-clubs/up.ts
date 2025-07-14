@@ -19,6 +19,16 @@ async function createClubsSchema(hasura: Hasura) {
   debug('✅ Badma schema created successfully.');
 }
 
+async function clearInconsistentMetadata(hasura: Hasura) {
+  debug('🧹 Clearing inconsistent metadata...');
+  try {
+    await hasura.dropInconsistentMetadata();
+    debug('✅ Inconsistent metadata cleared.');
+  } catch (error) {
+    debug('⚠️ Could not clear inconsistent metadata (may not exist):', error instanceof Error ? error.message : String(error));
+  }
+}
+
 async function createClubsTable(hasura: Hasura) {
   debug('🔧 Creating badma.clubs table...');
   
@@ -206,109 +216,82 @@ const tablesToTrack = [
   { schema: badmaSchema, name: 'in_clubs' },
 ];
 
+// Define relationships using defineRelationship method
 const relationships = [
   // For clubs
   {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'clubs' },
-      name: 'user',
-      using: { foreign_key_constraint_on: 'user_id' }
-    }
+    name: 'user',
+    type: 'object' as const,
+    using: { foreign_key_constraint_on: 'user_id' }
   },
   {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'clubs' },
-      name: 'in_clubs',
-      using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'in_clubs' }, column: 'club_id' } }
-    }
+    name: 'in_clubs',
+    type: 'array' as const,
+    using: { foreign_key_constraint_on: { table: { schema: badmaSchema, name: 'in_clubs' }, column: 'club_id' } }
   },
   // For in_clubs
   {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'in_clubs' },
-      name: 'club',
-      using: { foreign_key_constraint_on: 'club_id' }
+    name: 'club',
+    type: 'object' as const,
+    using: { foreign_key_constraint_on: 'club_id' }
+  },
+  {
+    name: 'user',
+    type: 'object' as const,
+    using: { foreign_key_constraint_on: 'user_id' }
+  },
+  {
+    name: 'created_by',
+    type: 'object' as const,
+    using: { foreign_key_constraint_on: 'created_by_id' }
+  }
+];
+
+// Define public schema relationships
+const publicRelationships = [
+  {
+    table: 'users',
+    name: 'in_clubs',
+    type: 'array' as const,
+    using: { 
+      foreign_key_constraint_on: { 
+        table: { schema: badmaSchema, name: 'in_clubs' }, 
+        column: 'user_id'
+      } 
     }
   },
   {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'in_clubs' },
-      name: 'user',
-      using: { foreign_key_constraint_on: 'user_id' }
+    table: 'users',
+    name: 'owned_clubs',
+    type: 'array' as const,
+    using: { 
+      foreign_key_constraint_on: { 
+        table: { schema: badmaSchema, name: 'clubs' }, 
+        column: 'user_id'
+      } 
     }
   },
   {
-    type: 'pg_create_object_relationship',
-    args: {
-      source: 'default',
-      table: { schema: badmaSchema, name: 'in_clubs' },
-      name: 'created_by',
-      using: { foreign_key_constraint_on: 'created_by_id' }
-    }
-  },
-  // Relationship from public.users to badma.in_clubs
-  {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: publicSchema, name: 'users' },
-      name: 'in_clubs',
-      using: { 
-        foreign_key_constraint_on: { 
-          table: { schema: badmaSchema, name: 'in_clubs' }, 
-          column: 'user_id'
-        } 
-      }
-    }
-  },
-  // Relationship from public.users to badma.clubs (as owner)
-  {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: publicSchema, name: 'users' },
-      name: 'owned_clubs',
-      using: { 
-        foreign_key_constraint_on: { 
-          table: { schema: badmaSchema, name: 'clubs' }, 
-          column: 'user_id'
-        } 
-      }
-    }
-  },
-  // Relationship from public.users to badma.in_clubs (as created_by)
-  {
-    type: 'pg_create_array_relationship',
-    args: {
-      source: 'default',
-      table: { schema: publicSchema, name: 'users' },
-      name: 'created_in_clubs',
-      using: { 
-        foreign_key_constraint_on: { 
-          table: { schema: badmaSchema, name: 'in_clubs' }, 
-          column: 'created_by_id'
-        } 
-      }
+    table: 'users',
+    name: 'created_in_clubs',
+    type: 'array' as const,
+    using: { 
+      foreign_key_constraint_on: { 
+        table: { schema: badmaSchema, name: 'in_clubs' }, 
+        column: 'created_by_id'
+      } 
     }
   }
 ];
 
 const permissions = [
   // clubs - admin
-  { role: 'admin', table: 'clubs', type: 'select', permission: { columns: '*', filter: {} } },
-  { role: 'admin', table: 'clubs', type: 'insert', permission: { columns: '*', check: {} } },
-  { role: 'admin', table: 'clubs', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'clubs', type: 'select', permission: { columns: true, filter: {} } },
+  { role: 'admin', table: 'clubs', type: 'insert', permission: { columns: true, check: {} } },
+  { role: 'admin', table: 'clubs', type: 'update', permission: { columns: true, filter: {}, check: {} } },
   { role: 'admin', table: 'clubs', type: 'delete', permission: { filter: {} } },
   // clubs - user
-  { role: 'user', table: 'clubs', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'user', table: 'clubs', type: 'select', permission: { columns: true, filter: {} } },
   { role: 'user', table: 'clubs', type: 'insert', permission: { 
     columns: ['user_id'], 
     check: { user_id: { _eq: 'X-Hasura-User-Id' } } 
@@ -319,14 +302,14 @@ const permissions = [
     check: { user_id: { _eq: 'X-Hasura-User-Id' } }
   } },
   // clubs - anonymous
-  { role: 'anonymous', table: 'clubs', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'anonymous', table: 'clubs', type: 'select', permission: { columns: true, filter: {} } },
   // in_clubs - admin
-  { role: 'admin', table: 'in_clubs', type: 'select', permission: { columns: '*', filter: {} } },
-  { role: 'admin', table: 'in_clubs', type: 'insert', permission: { columns: '*', check: {} } },
-  { role: 'admin', table: 'in_clubs', type: 'update', permission: { columns: '*', filter: {}, check: {} } },
+  { role: 'admin', table: 'in_clubs', type: 'select', permission: { columns: true, filter: {} } },
+  { role: 'admin', table: 'in_clubs', type: 'insert', permission: { columns: true, check: {} } },
+  { role: 'admin', table: 'in_clubs', type: 'update', permission: { columns: true, filter: {}, check: {} } },
   { role: 'admin', table: 'in_clubs', type: 'delete', permission: { filter: {} } },
   // in_clubs - user
-  { role: 'user', table: 'in_clubs', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'user', table: 'in_clubs', type: 'select', permission: { columns: true, filter: {} } },
   { role: 'user', table: 'in_clubs', type: 'insert', permission: { 
     columns: ['club_id', 'user_id', 'status', 'created_by_id'], 
     check: { 
@@ -361,13 +344,19 @@ const permissions = [
     filter: { user_id: { _eq: 'X-Hasura-User-Id' } } 
   } },
   // in_clubs - anonymous
-  { role: 'anonymous', table: 'in_clubs', type: 'select', permission: { columns: '*', filter: {} } },
+  { role: 'anonymous', table: 'in_clubs', type: 'select', permission: { columns: true, filter: {} } },
 ];
 
 async function trackTablesFunc() {
   debug('🔍 Tracking club tables...');
   for (const table of tablesToTrack) {
     debug(`  📝 Tracking table ${table.schema}.${table.name}...`);
+    // Сначала untrack, потом track для идемпотентности
+    try {
+      await hasura.untrackTable({ schema: table.schema, table: table.name });
+    } catch (error) {
+      // Игнорируем ошибку, если таблица не tracked
+    }
     await hasura.trackTable({ schema: table.schema, table: table.name });
   }
   debug('✅ Club table tracking complete.');
@@ -375,26 +364,94 @@ async function trackTablesFunc() {
 
 async function createRelationshipsFunc() {
   debug('🔗 Creating club relationships...');
-  for (const relationship of relationships) {
-     debug(`  📝 Creating relationship ${relationship.args.name} for table ${relationship.args.table.schema}.${relationship.args.table.name}...`);
-     await hasura.v1(relationship);
+  
+  // Create relationships for badma schema tables
+  for (const table of tablesToTrack) {
+    const tableRelationships = relationships.filter(rel => 
+      rel.name === 'user' || 
+      rel.name === 'in_clubs' || 
+      (table.name === 'in_clubs' && ['club', 'user', 'created_by'].includes(rel.name))
+    );
+    
+    for (const relationship of tableRelationships) {
+      debug(`  📝 Creating relationship ${relationship.name} for table ${table.schema}.${table.name}...`);
+      
+      // Сначала удаляем relationship, если существует
+      try {
+        await hasura.deleteRelationship({
+          schema: table.schema,
+          table: table.name,
+          name: relationship.name
+        });
+      } catch (error) {
+        // Игнорируем ошибку, если relationship не существует
+      }
+      
+      // Создаём новый relationship
+      await hasura.defineRelationship({
+        schema: table.schema,
+        table: table.name,
+        name: relationship.name,
+        type: relationship.type,
+        using: relationship.using
+      });
+    }
   }
+  
+  // Create relationships for public schema tables
+  for (const relationship of publicRelationships) {
+    debug(`  📝 Creating relationship ${relationship.name} for table ${publicSchema}.${relationship.table}...`);
+    
+    // Сначала удаляем relationship, если существует
+    try {
+      await hasura.deleteRelationship({
+        schema: publicSchema,
+        table: relationship.table,
+        name: relationship.name
+      });
+    } catch (error) {
+      // Игнорируем ошибку, если relationship не существует
+    }
+    
+    // Создаём новый relationship
+    await hasura.defineRelationship({
+      schema: publicSchema,
+      table: relationship.table,
+      name: relationship.name,
+      type: relationship.type,
+      using: relationship.using
+    });
+  }
+  
   debug('✅ Club relationships created.');
 }
 
 async function applyPermissionsFunc() {
   debug('🔧 Applying club permissions...');
   for (const p of permissions) {
-    const action = `pg_create_${p.type}_permission`;
     debug(`     Applying ${p.type} for ${p.role}.${p.table}...`);
-    await hasura.v1({
-      type: action,
-      args: {
-        source: 'default',
-        table: { schema: badmaSchema, name: p.table },
-        role: p.role,
-        permission: p.permission,
-      }
+    
+    // Сначала удаляем permission, если существует
+    try {
+      await hasura.deletePermission({
+        schema: badmaSchema,
+        table: p.table,
+        operation: p.type as 'select' | 'insert' | 'update' | 'delete',
+        role: p.role
+      });
+    } catch (error) {
+      // Игнорируем ошибку, если permission не существует
+    }
+    
+    // Создаём новый permission
+    await hasura.definePermission({
+      schema: badmaSchema,
+      table: p.table,
+      operation: p.type as 'select' | 'insert' | 'update' | 'delete',
+      role: p.role,
+      filter: p.permission.filter || {},
+      columns: (Array.isArray(p.permission.columns) ? p.permission.columns : true),
+      aggregate: false
     });
   }
   debug('✅ Club permissions successfully applied.');
@@ -412,88 +469,70 @@ async function applyAggregationPermissionsFunc() {
   for (const tableName of clubTablesForAggregation) {
     // For user role - update existing permission to include aggregations
     try {
-      await hasura.v1({
-        type: 'pg_drop_select_permission',
-        args: {
-          source: 'default',
-          table: { schema: badmaSchema, name: tableName },
-          role: 'user'
-        }
+      await hasura.deletePermission({
+        schema: badmaSchema,
+        table: tableName,
+        operation: 'select',
+        role: 'user'
       });
     } catch (error) {
       // Permission might not exist, that's ok
     }
 
-    await hasura.v1({
-      type: 'pg_create_select_permission',
-      args: {
-        source: 'default',
-        table: { schema: badmaSchema, name: tableName },
-        role: 'user',
-        permission: {
-          columns: '*',
-          filter: {},
-          allow_aggregations: true
-        }
-      }
+    await hasura.definePermission({
+      schema: badmaSchema,
+      table: tableName,
+      operation: 'select',
+      role: 'user',
+      filter: {},
+      columns: true,
+      aggregate: true
     });
     debug(`     Applied aggregation permission for user.${tableName}`);
 
     // For anonymous role - update existing permission to include aggregations
     try {
-      await hasura.v1({
-        type: 'pg_drop_select_permission',
-        args: {
-          source: 'default',
-          table: { schema: badmaSchema, name: tableName },
-          role: 'anonymous'
-        }
+      await hasura.deletePermission({
+        schema: badmaSchema,
+        table: tableName,
+        operation: 'select',
+        role: 'anonymous'
       });
     } catch (error) {
       // Permission might not exist, that's ok
     }
 
-    await hasura.v1({
-      type: 'pg_create_select_permission',
-      args: {
-        source: 'default',
-        table: { schema: badmaSchema, name: tableName },
-        role: 'anonymous',
-        permission: {
-          columns: '*',
-          filter: {},
-          allow_aggregations: true
-        }
-      }
+    await hasura.definePermission({
+      schema: badmaSchema,
+      table: tableName,
+      operation: 'select',
+      role: 'anonymous',
+      filter: {},
+      columns: true,
+      aggregate: true
     });
     debug(`     Applied aggregation permission for anonymous.${tableName}`);
 
     // For admin role - create full permission with aggregations
     try {
-      await hasura.v1({
-        type: 'pg_drop_select_permission',
-        args: {
-          source: 'default',
-          table: { schema: badmaSchema, name: tableName },
-          role: 'admin'
-        }
+      await hasura.deletePermission({
+        schema: badmaSchema,
+        table: tableName,
+        operation: 'select',
+        role: 'admin'
       });
     } catch (error) {
       // Permission might not exist, that's ok
     }
 
-    await hasura.v1({
-      type: 'pg_create_select_permission',
-      args: {
-        source: 'default',
-        table: { schema: badmaSchema, name: tableName },
-        role: 'admin',
-        permission: {
-          columns: '*',
-          filter: {},
-          allow_aggregations: true
-        }
-      }
+    await hasura.definePermission({
+      schema: badmaSchema,
+      table: tableName,
+      operation: 'select',
+      role: 'admin',
+      filter: {},
+      columns: true,
+      aggregate: true
     });
     debug(`     Applied aggregation permission for admin.${tableName}`);
   }
@@ -504,13 +543,23 @@ async function applyAggregationPermissionsFunc() {
 async function up() {
   debug('🚀 Starting Clubs schema migration UP...');
   try {
+    // Очищаем metadata в самом начале
+    await clearInconsistentMetadata(hasura);
+    
     await createClubsSchema(hasura);
+    await clearInconsistentMetadata(hasura);
     await createClubsTable(hasura);
+    await clearInconsistentMetadata(hasura);
     await createInClubsTable(hasura);
+    await clearInconsistentMetadata(hasura);
     await createStatusValidationTrigger(hasura);
+    await clearInconsistentMetadata(hasura);
     await trackTablesFunc();
+    await clearInconsistentMetadata(hasura);
     await createRelationshipsFunc();
+    await clearInconsistentMetadata(hasura);
     await applyPermissionsFunc();
+    await clearInconsistentMetadata(hasura);
     await applyAggregationPermissionsFunc();
     debug('✨ Clubs schema migration UP completed successfully!');
   } catch (error) {

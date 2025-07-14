@@ -872,13 +872,6 @@ export default function App() {
                 <div className="flex items-center">
                   <Trophy className="h-10 w-10 mr-3 text-purple-500" />
                   <h2 className="text-3xl font-semibold">Rating</h2>
-                  <Button 
-                    size="icon" 
-                    className="bg-purple-600 hover:bg-purple-700 text-white ml-3"
-                    onClick={() => setIsCreateTournamentModalOpen(true)}
-                  >
-                    <PlusCircle className="h-5 w-5" />
-                  </Button>
                 </div>
               </div>
               
@@ -889,9 +882,25 @@ export default function App() {
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
                   </TabsList>
                   <TabsContent value="clubs" className="pt-4">
+                    <Button 
+                      variant="outline"
+                      className="w-full mb-4 border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                      onClick={() => setIsCheckClubOpen(true)}
+                    >
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Создать клуб
+                    </Button>
                     <ClubsList />
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
+                    <Button 
+                      variant="outline"
+                      className="w-full mb-4 border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                      onClick={() => setIsCreateTournamentModalOpen(true)}
+                    >
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Создать турнир
+                    </Button>
                     {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
                     {tournamentsError && (
                       <p className="text-red-500">
