@@ -127,6 +127,7 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
   }, [userJoins, currentUserId, gameData, axiosInstance]);
 
   const handleMove = (move: ChessClientMove) => {
+    console.log('🎯 [MOVE] Move attempted:', move);
     debug('handleMove attempted:', move);
     
     try {
@@ -134,22 +135,41 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
       const chess = new Chess(gameData.fen);
       const currentTurn = chess.turn; // 1 for white, 2 for black
       
+      console.log('🎯 [MOVE] Turn analysis:', {
+        currentTurn,
+        availableClients: Object.keys(chessClients),
+        hasActiveClient: !!chessClients[currentTurn],
+        gameStatus: gameData.status,
+        isWaitingForOpponent
+      });
+      
       const activeClient = chessClients[currentTurn];
       if (!activeClient) {
+        console.log('❌ [MOVE] No active client for current turn', currentTurn, 'available clients:', Object.keys(chessClients));
         debug('No active client for current turn', currentTurn, 'available clients:', Object.keys(chessClients));
         return false;
       }
 
+      console.log('🎯 [MOVE] Making move through client:', {
+        clientId: activeClient.clientId,
+        userId: activeClient.userId,
+        side: activeClient.side,
+        gameId: activeClient.gameId
+      });
+
       // Make move through the client
       const result = activeClient.syncMove(move);
       if (result.error) {
+        console.log('❌ [MOVE] Move error:', result.error);
         debug('Move error:', result.error);
         return false;
       }
 
+      console.log('✅ [MOVE] Move successful:', result);
       debug('Move successful:', result);
       return true;
     } catch (error) {
+      console.log('❌ [MOVE] Error in handleMove:', error);
       debug('Error in handleMove:', error);
       return false;
     }
@@ -166,11 +186,24 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
 
   // Determine if waiting for opponent
   const isWaitingForOpponent = useMemo(() => {
-    if (userJoins.length === 0) return false; // spectator
+    if (userJoins.length === 0) {
+      console.log('🔍 [WAITING] Spectator mode - not waiting');
+      return false; // spectator
+    }
     
     // Check if game status is 'await' or if there's only one player joined
     const playerJoins = gameData.joins.filter(join => join.role === 1); // only players
-    return gameData.status === 'await' || playerJoins.length === 1;
+    const isWaiting = gameData.status === 'await' || playerJoins.length === 1;
+    
+    console.log('🔍 [WAITING] Analysis:', {
+      gameStatus: gameData.status,
+      playerJoinsCount: playerJoins.length,
+      userJoinsCount: userJoins.length,
+      isWaiting,
+      allJoins: gameData.joins.map(j => ({ user_id: j.user_id, side: j.side, role: j.role }))
+    });
+    
+    return isWaiting;
   }, [userJoins.length, gameData.status, gameData.joins]);
 
   debug('Rendering game:', {
@@ -198,7 +231,6 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     <div className="flex flex-col items-center w-full h-full min-h-screen relative">
       {/* Game Invite HoverCard */}
       {gameInvite && (() => {
-        console.log('🎨 [HOVERCARD] Rendering HoverCard for invite:', gameInvite);
         return (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <HoverCard
@@ -292,22 +324,22 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
       </div>
       <div className="flex-1 w-full flex items-center justify-center p-4">
         <div className="w-full h-full max-w-[min(80vw,80vh)] max-h-[min(80vw,80vh)] aspect-square">
-          <HoverCard
+          {/* <HoverCard
             force={1.3}
             maxRotation={10}
             maxLift={50}
             useDeviceOrientation={useOrientation}
             orientationSensitivity={orientationSensitivity}
             onOrientationData={setOrientationData}
-          >
+          > */}
             <Board 
               position={gameData.fen}
-              onMove={userJoins.length > 0 ? handleMove : undefined}
+              onMove={userJoins.length > 0 && !isWaitingForOpponent ? handleMove : undefined}
               orientation={boardOrientation}
               bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
               bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
             />
-          </HoverCard>
+          {/* </HoverCard> */}
         </div>
       </div>
     </div>

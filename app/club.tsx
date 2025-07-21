@@ -4,7 +4,8 @@ import { useHasyx, useSubscription } from 'hasyx';
 import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar';
 import { Input } from 'hasyx/components/ui/input';
 import { Button } from 'hasyx/components/ui/button';
-import { LoaderCircle, Crown, Check } from 'lucide-react';
+import { LoaderCircle, Crown, Check, X, Plus } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from 'hasyx/components/ui/dialog';
 
 export const ClubTab: React.FC = () => {
   const { data: session } = useSession();
@@ -13,6 +14,13 @@ export const ClubTab: React.FC = () => {
   // State for club title editing
   const [titleValue, setTitleValue] = useState('');
   const [isSavingTitle, setIsSavingTitle] = useState(false);
+  
+  // State for member management
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isRemovalDialogOpen, setIsRemovalDialogOpen] = useState(false);
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [isProcessingMember, setIsProcessingMember] = useState(false);
 
   // Get clubs data for current user
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
@@ -101,6 +109,125 @@ export const ClubTab: React.FC = () => {
     }
   };
 
+  // Function to reject member application
+  const handleRejectMember = async (member: any) => {
+    if (!member) return;
+    
+    setIsProcessingMember(true);
+    try {
+      await hasyx.update({
+        table: 'badma_in_clubs',
+        where: { id: { _eq: member.id } },
+        _set: { 
+          status: 'denied',
+          updated_at: Date.now()
+        }
+      });
+      console.log('Member application rejected');
+    } catch (error) {
+      console.error('Error rejecting member:', error);
+    } finally {
+      setIsProcessingMember(false);
+    }
+  };
+
+  // Function to show approval confirmation
+  const handleShowApprovalConfirmation = (member: any) => {
+    setSelectedMember(member);
+    setIsConfirmDialogOpen(true);
+  };
+
+  // Function to approve member application
+  const handleApproveMember = async () => {
+    if (!selectedMember) return;
+    
+    setIsProcessingMember(true);
+    try {
+      await hasyx.update({
+        table: 'badma_in_clubs',
+        where: { id: { _eq: selectedMember.id } },
+        _set: { 
+          status: 'approved',
+          updated_at: Date.now()
+        }
+      });
+      console.log('Member application approved');
+    } catch (error) {
+      console.error('Error approving member:', error);
+    } finally {
+      setIsProcessingMember(false);
+      setIsConfirmDialogOpen(false);
+      setSelectedMember(null);
+    }
+  };
+
+  // Function to show removal confirmation
+  const handleShowRemovalConfirmation = (member: any) => {
+    setSelectedMember(member);
+    setIsRemovalDialogOpen(true);
+  };
+
+  // Function to remove member from club
+  const handleRemoveMember = async () => {
+    if (!selectedMember) return;
+    
+    setIsProcessingMember(true);
+    try {
+      await hasyx.delete({
+        table: 'badma_in_clubs',
+        where: { id: { _eq: selectedMember.id } }
+      });
+      console.log('Member removed from club');
+    } catch (error) {
+      console.error('Error removing member:', error);
+    } finally {
+      setIsProcessingMember(false);
+      setIsRemovalDialogOpen(false);
+      setSelectedMember(null);
+    }
+  };
+
+  // Function to show leave club confirmation
+  const handleShowLeaveConfirmation = () => {
+    setIsLeaveDialogOpen(true);
+  };
+
+  // Function to leave club
+  const handleLeaveClub = async () => {
+    if (!currentClub || !hasyx.userId) return;
+    
+    setIsProcessingMember(true);
+    try {
+      if (currentClub.user_id === hasyx.userId) {
+        // If user is club owner, remove user_id from club (make club ownerless)
+        await hasyx.update({
+          table: 'badma_clubs',
+          where: { id: { _eq: currentClub.id } },
+          _set: { 
+            user_id: null,
+            updated_at: Date.now()
+          }
+        });
+        console.log('Left club as owner - club is now ownerless');
+      } else {
+        // If user is regular member, delete their membership record
+        const userMembership = members.find(m => m.user_id === hasyx.userId);
+        if (userMembership) {
+          await hasyx.delete({
+            table: 'badma_in_clubs',
+            where: { id: { _eq: userMembership.id } }
+          });
+          console.log('Left club as member');
+        }
+      }
+    } catch (error) {
+      console.error('Error leaving club:', error);
+    } finally {
+      setIsProcessingMember(false);
+      setIsLeaveDialogOpen(false);
+    }
+  };
+
   if (clubsLoading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -178,6 +305,21 @@ export const ClubTab: React.FC = () => {
               Club ID: {currentClub.id.substring(0, 8)}...
             </div>
           </div>
+          
+          {/* Leave club button for current user */}
+          {isOwner && (
+            <div className="flex items-center">
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 w-8 p-0 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                onClick={handleShowLeaveConfirmation}
+                disabled={isProcessingMember}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -222,6 +364,59 @@ export const ClubTab: React.FC = () => {
                       </span>
                     </div>
                   </div>
+                  
+                  {/* Action buttons for owner */}
+                  {isOwner && member.status === 'request' && (
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        onClick={() => handleRejectMember(member)}
+                        disabled={isProcessingMember}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="h-8 w-8 p-0 bg-yellow-500 hover:bg-yellow-600 text-white"
+                        onClick={() => handleShowApprovalConfirmation(member)}
+                        disabled={isProcessingMember}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {/* Remove button for approved members - only for club owner */}
+                  {currentClub.user_id === hasyx.userId && member.status === 'approved' && !isMemberOwner && (
+                    <div className="flex items-center">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        onClick={() => handleShowRemovalConfirmation(member)}
+                        disabled={isProcessingMember}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {/* Leave club button for current user */}
+                  {member.user_id === hasyx.userId && member.status === 'approved' && (
+                    <div className="flex items-center">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        onClick={handleShowLeaveConfirmation}
+                        disabled={isProcessingMember}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               );
             })
@@ -251,6 +446,114 @@ export const ClubTab: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Confirmation Dialog */}
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Вы точно хотите принять {selectedMember?.user?.name || 'этого пользователя'} в клуб?</DialogTitle>
+            <DialogDescription>
+              После принятия пользователь станет полноправным членом клуба.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsConfirmDialogOpen(false)}
+              disabled={isProcessingMember}
+            >
+              Отмена
+            </Button>
+            <Button 
+              onClick={handleApproveMember}
+              disabled={isProcessingMember}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white"
+            >
+              {isProcessingMember ? (
+                <>
+                  <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                  Принятие...
+                </>
+              ) : (
+                'Принять в клуб'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Removal Confirmation Dialog */}
+      <Dialog open={isRemovalDialogOpen} onOpenChange={setIsRemovalDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Вы точно хотите удалить {selectedMember?.user?.name || 'этого пользователя'} из клуба?</DialogTitle>
+            <DialogDescription>
+              После удаления пользователь перестанет быть членом клуба.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsRemovalDialogOpen(false)}
+              disabled={isProcessingMember}
+            >
+              Отмена
+            </Button>
+            <Button 
+              onClick={handleRemoveMember}
+              disabled={isProcessingMember}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {isProcessingMember ? (
+                <>
+                  <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                  Удаление...
+                </>
+              ) : (
+                'Удалить из клуба'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Leave Club Confirmation Dialog */}
+      <Dialog open={isLeaveDialogOpen} onOpenChange={setIsLeaveDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Вы уверены, что хотите покинуть клуб?</DialogTitle>
+            <DialogDescription>
+              {currentClub?.user_id === hasyx.userId 
+                ? 'Как владелец клуба, вы передадите управление клубом. Клуб станет бесхозным.' 
+                : 'Вы перестанете быть членом этого клуба.'
+              }
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsLeaveDialogOpen(false)}
+              disabled={isProcessingMember}
+            >
+              Отмена
+            </Button>
+            <Button 
+              onClick={handleLeaveClub}
+              disabled={isProcessingMember}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {isProcessingMember ? (
+                <>
+                  <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                  Выход...
+                </>
+              ) : (
+                'Покинуть клуб'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }; 

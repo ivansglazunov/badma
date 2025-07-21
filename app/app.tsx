@@ -1,7 +1,7 @@
 "use client";
 
 import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User, Loader2 } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession, getSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
 
 import { useClient, useHasyx, useSubscription } from "hasyx";
@@ -625,7 +625,14 @@ export default function App() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
   const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
+  const [profileTab, setProfileTab] = useState('games');
   const [profile, setProfile] = useState(false);
+
+  // Function to navigate to club hall
+  const navigateToClubHall = () => {
+    setMainViewTab('profile');
+    setProfileTab('club');
+  };
   const [selectedTournament, setSelectedTournament] = useState<Badma_Tournaments | null>(null);
   const [isTournamentModalOpen, setIsTournamentModalOpen] = useState(false);
   const [isCreateTournamentModalOpen, setIsCreateTournamentModalOpen] = useState(false);
@@ -734,26 +741,52 @@ export default function App() {
   };
 
   const handleJoinGameFromInvite = async () => {
-    if (!gameInvite || !currentUserId) return;
+    console.log('🎮 handleJoinGameFromInvite called with:', { gameInvite, currentUserId, session });
+    if (!gameInvite || !currentUserId || !session) {
+      console.log('❌ Missing gameInvite, currentUserId, or session');
+      return;
+    }
     
     try {
       setIsCreatingGame(true);
       
-      // Create axios instance with session credentials
+      // Get fresh session for verification
+      const freshSession = await getSession();
+      console.log('🔑 Fresh session exists:', !!freshSession);
+      
+      // Create axios instance with session credentials (same as handleCreateGame)
       const axiosInstance = axios.create({
         baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Include session cookies
       });
+      
+      console.log('🍪 Using cookie-based authentication like handleCreateGame');
       
       // Create chess client
       const clientId = uuidv4();
       const chessClient = new AxiosChessClient(axiosInstance);
+      chessClient.clientId = clientId;
+      chessClient.userId = currentUserId;
       chessClient.gameId = gameInvite.gameId;
       
       // Join the game
+      console.log('🚀 Attempting to join game with:', {
+        gameId: gameInvite.gameId,
+        side: gameInvite.side,
+        role: gameInvite.role,
+        clientId: chessClient.clientId,
+        userId: chessClient.userId
+      });
+      
       const joinResponse = await chessClient.asyncJoin(gameInvite.side as ChessClientSide, gameInvite.role as ChessClientRole);
       
+      console.log('🎯 Join response:', joinResponse);
+      
       if (joinResponse.error) {
+        console.error('❌ Join failed:', joinResponse.error);
         toast.error(`Failed to join game: ${joinResponse.error}`);
         return;
       }
@@ -1059,7 +1092,7 @@ export default function App() {
               </div>
               
               <div className="w-full max-w-2xl">
-                <Tabs defaultValue="games" className="w-full">
+                <Tabs value={profileTab} onValueChange={setProfileTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="games" className="flex items-center"><Gamepad2 className="h-4 w-4 mr-2" />Games</TabsTrigger>
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
@@ -1102,7 +1135,7 @@ export default function App() {
                       <PlusCircle className="h-4 w-4 mr-2" />
                       Создать клуб
                     </Button>
-                    <ClubsList />
+                    <ClubsList onNavigateToClubHall={navigateToClubHall} />
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
                     <Button 
@@ -1407,7 +1440,7 @@ export default function App() {
         selectedGameId ? "translate-y-full" : "translate-y-0"
       )}>
         <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
-          <div className="flex-1 flex justify-start items-center">
+          <div className="flex-1 flex justify-end items-center">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
               <User className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Profile</span>
@@ -1430,7 +1463,7 @@ export default function App() {
             </Avatar>
           </div>
           
-          <div className="flex-1 flex justify-end items-center space-x-1">
+          <div className="flex-1 flex justify-start items-center space-x-1">
             {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Shirt className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Skins</span>

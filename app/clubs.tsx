@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useSubscription } from 'hasyx';
+import { useSubscription, useHasyx } from 'hasyx';
 import { Button } from 'hasyx/components/ui/button';
-import { Dialog, DialogContent } from 'hasyx/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from 'hasyx/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar';
-import { LoaderCircle, PlusCircle, Trophy, Sword, UserPlus } from 'lucide-react';
+import { LoaderCircle, PlusCircle, Trophy, Sword, UserPlus, Crown } from 'lucide-react';
 import { HoverCard } from '@/components/hover-card';
 import { useClubStore } from '@/lib/stores/club-store';
 
@@ -20,13 +20,20 @@ interface Club {
   };
 }
 
-export function ClubsList() {
+interface ClubsListProps {
+  onNavigateToClubHall?: () => void;
+}
+
+export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isJoiningClub, setIsJoiningClub] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isSubmittingApplication, setIsSubmittingApplication] = useState(false);
 
   // Get user clubs from Zustand
   const { getUserClubById } = useClubStore();
+  const hasyx = useHasyx();
 
   // Get all clubs
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
@@ -71,6 +78,34 @@ export function ClubsList() {
     } finally {
       setIsJoiningClub(false);
       setIsDialogOpen(false);
+    }
+  };
+
+  const handleApplicationClick = () => {
+    setIsDialogOpen(false);
+    setIsConfirmDialogOpen(true);
+  };
+
+  const handleSubmitApplication = async () => {
+    if (!selectedClub || !hasyx.userId) return;
+    
+    setIsSubmittingApplication(true);
+    try {
+      await hasyx.insert({
+        table: 'badma_in_clubs',
+        object: {
+          club_id: selectedClub.id,
+          user_id: hasyx.userId,
+          created_by_id: hasyx.userId,
+          status: 'request'
+        }
+      });
+      console.log('Application submitted successfully');
+    } catch (error) {
+      console.error('Error submitting application:', error);
+    } finally {
+      setIsSubmittingApplication(false);
+      setIsConfirmDialogOpen(false);
     }
   };
 
@@ -147,6 +182,18 @@ export function ClubsList() {
                         <span className="text-lg font-semibold text-purple-600">
                           Это наш клуб!
                         </span>
+                        <Button 
+                          className="h-[60px] w-[200px] bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center shadow-xl mt-4"
+                          onClick={() => {
+                            setIsDialogOpen(false);
+                            onNavigateToClubHall?.();
+                          }}
+                        >
+                          <Crown className="h-5 w-5 mb-1" />
+                          <span className="text-sm font-medium">
+                            Перейти в клуб-холл
+                          </span>
+                        </Button>
                       </div>
                     );
                   }
@@ -170,6 +217,7 @@ export function ClubsList() {
                       <Button 
                         variant="outline"
                         className="h-[60px] w-[200px] border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 flex flex-col items-center justify-center"
+                        onClick={handleApplicationClick}
                       >
                         <UserPlus className="h-4 w-4 mb-1" />
                         <span className="text-xs">Подать заявку</span>
@@ -180,6 +228,41 @@ export function ClubsList() {
               </div>
             </div>
           </HoverCard>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Подать заявку на вступление в клуб?</DialogTitle>
+            <DialogDescription>
+              Если заявку примут - вы покинете клуб в котором находитесь.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsConfirmDialogOpen(false)}
+              disabled={isSubmittingApplication}
+            >
+              Отмена
+            </Button>
+            <Button 
+              onClick={handleSubmitApplication}
+              disabled={isSubmittingApplication}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {isSubmittingApplication ? (
+                <>
+                  <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                  Отправка...
+                </>
+              ) : (
+                'Подать заявку'
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

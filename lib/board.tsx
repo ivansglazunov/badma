@@ -82,8 +82,7 @@ const ShockPiece: React.FC<{ children: React.ReactNode }> = ({ children }) => {
  * Custom chess piece component that displays SVG pieces with interactive effects
  */
 const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  // Убрали состояния hover и dragging чтобы не влиять на drag & drop
   
   const isWhite = piece && piece.startsWith('w');
   const pieceColor = isWhite ? '#ffffff' : '#000000';
@@ -95,13 +94,8 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
     const strokeLinejoin = 'round';
     const strokeLinecap = 'round';
     
-    // Dynamic filter based on interaction state
-    let filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
-    if (isDragging) {
-      filter = 'drop-shadow(0px 8px 16px rgba(0,0,0,0.8))';
-    } else if (isHovered) {
-      filter = 'drop-shadow(0px 4px 8px rgba(0,0,0,0.7))';
-    }
+    // Статичный фильтр тени
+    const filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
     
     switch (pieceCode) {
       case 'wP':
@@ -137,33 +131,9 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
           width: '100%',
           height: '100%',
           userSelect: 'none',
-          pointerEvents: 'auto', // Enable pointer events for interactions
-          cursor: 'pointer',
-          transform: isDragging ? 'translateY(-4px) scale(1.05)' : isHovered ? 'translateY(-2px) scale(1.02)' : 'translateY(0px) scale(1)',
-          transition: 'all 0.2s ease-out',
-          zIndex: isDragging ? 1000 : isHovered ? 100 : 1
+          pointerEvents: 'none', // Отключаем перехват событий
+          // Убираем transform чтобы не влиять на drag & drop
         }}
-        onMouseEnter={() => {
-          console.log('onMouseEnter');
-          setIsHovered(true);
-        }}
-        onMouseLeave={() => {
-          console.log('onMouseLeave');
-          setIsHovered(false);
-          setIsDragging(false); // Reset dragging state on mouse leave
-        }}
-        onMouseDown={() => setIsDragging(true)}
-        onMouseUp={() => setIsDragging(false)}
-        // onTouchStart={() => {
-        //   setIsHovered(true);
-        //   setIsDragging(true);
-        // }}
-        // onTouchEnd={() => {
-        //   setIsHovered(false);
-        //   setIsDragging(false);
-        // }}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => setIsDragging(false)}
       >
         {getPieceComponent(piece)}
       </div>
@@ -192,11 +162,21 @@ export default function Board({
       promotion: piece[1].toLowerCase() === 'p' ? 'q' : undefined // Default promotion to queen
     };
     
+    console.log('📝 [BOARD] Piece drop attempted:', {
+      move,
+      piece,
+      hasOnMoveProp: !!onMove
+    });
+    
     // If onMove prop is provided, call it and return the result
     if (onMove) {
-      return onMove(move);
+      console.log('📝 [BOARD] Calling onMove with:', move);
+      const result = onMove(move);
+      console.log('📝 [BOARD] onMove returned:', result);
+      return result;
     }
     
+    console.log('📝 [BOARD] No onMove prop - allowing move by default');
     return true;
   };
 
@@ -222,30 +202,22 @@ export default function Board({
   const piecesToUse = customPieces || defaultCustomPieces;
 
   return (
-    <HoverCard
-      force={1.3}
-      maxRotation={25}
-      maxLift={50}
-      useDeviceOrientation={true}
-      orientationSensitivity={0.8}
-    >
-      <div key={bgBlack+bgWhite} ref={ref} style={{ 
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        <Chessboard
-          position={position}
-          onPieceDrop={handlePieceDrop}
-          boardWidth={width}
-          customDarkSquareStyle={{ backgroundColor: bgBlack }}
-          customLightSquareStyle={{ backgroundColor: bgWhite }}
-          boardOrientation={orientation === 'w' || orientation === 1 || orientation === 'white' ? 'white' : 'black'}
-          customPieces={piecesToUse}
-        />
-      </div>
-    </HoverCard>
+    <div key={bgBlack+bgWhite} ref={ref} style={{ 
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+      <Chessboard
+        position={position}
+        onPieceDrop={handlePieceDrop}
+        boardWidth={width}
+        customDarkSquareStyle={{ backgroundColor: bgBlack }}
+        customLightSquareStyle={{ backgroundColor: bgWhite }}
+        boardOrientation={orientation === 'w' || orientation === 1 || orientation === 'white' ? 'white' : 'black'}
+        customPieces={piecesToUse}
+      />
+    </div>
   );
 }
