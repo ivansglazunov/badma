@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSession } from "next-auth/react";
 import { useHasyx } from "hasyx";
 import { Button } from "hasyx/components/ui/button";
-import { Dialog, DialogContent } from "hasyx/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "hasyx/components/ui/dialog";
 import { LoaderCircle, PlusCircle } from "lucide-react";
 import { HoverCard } from "@/components/hover-card";
 import { useClubStore } from "@/lib/stores/club-store";
@@ -57,6 +57,7 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
+      <DialogTitle>Проверка причастности к клубу</DialogTitle>
       <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
         <div className="flex items-center justify-center">
           <HoverCard

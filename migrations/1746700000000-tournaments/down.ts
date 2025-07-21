@@ -54,7 +54,7 @@ const relationshipsToDrop = [
 
 // Define relationships on public schema tables to drop
 const publicRelationshipsToDrop = [
-  { schema: 'public', table: 'users', name: 'tournament_participations' },
+  { schema: 'public', table: 'users', name: 'tournament_participants' },
   { schema: 'public', table: 'users', name: 'tournaments' },
 ];
 

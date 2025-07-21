@@ -23,6 +23,7 @@ import { Label } from "hasyx/components/ui/label";
 import { Separator } from "hasyx/components/ui/separator";
 import { Badge } from "hasyx/components/ui/badge";
 import axios from "axios";
+import { toast } from "sonner";
 
 import { cn } from "hasyx/lib/utils"
 import { useMounted } from "@/hooks/mounted";
@@ -616,6 +617,7 @@ export default function App() {
   const [newTournamentType, setNewTournamentType] = useState('round-robin');
   const [isCreatingTournament, setIsCreatingTournament] = useState(false);
   const [isAddingAiPlayers, setIsAddingAiPlayers] = useState(false);
+  const [isStartingTournament, setIsStartingTournament] = useState(false);
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [showPermissionToast, setShowPermissionToast] = useState(false);
   const [isCheckClubOpen, setIsCheckClubOpen] = useState(false);
@@ -758,6 +760,31 @@ export default function App() {
       console.error('Error adding AI players:', error);
     } finally {
       setIsAddingAiPlayers(false);
+    }
+  };
+
+  const handleStartTournament = async () => {
+    if (!selectedTournament) return;
+    
+    setIsStartingTournament(true);
+    try {
+      const response = await axios.post('/api/badma/tournament-start', null, {
+        params: { id: selectedTournament.id }
+      });
+      
+      // Show success toast if tournament started successfully
+      if (response.data.success) {
+        toast.success("Tournament Started");
+      }
+      
+      // The subscription should automatically update the tournament status
+    } catch (error: any) {
+      console.error('Error starting tournament:', error);
+      
+      // Show error toast
+      toast.error("Failed to Start Tournament");
+    } finally {
+      setIsStartingTournament(false);
     }
   };
 
@@ -1046,7 +1073,16 @@ export default function App() {
                           {selectedTournament.status.charAt(0).toUpperCase() + selectedTournament.status.slice(1)}
                         </Badge>
                         {selectedTournament.status === 'await' && (
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={handleStartTournament}
+                            disabled={isStartingTournament}
+                            className="flex items-center"
+                          >
+                            {isStartingTournament ? (
+                              <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
+                            ) : null}
                             Start Tournament
                           </Button>
                         )}

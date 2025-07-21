@@ -1,7 +1,7 @@
 {
   "name": "schedule_processor_cron",
   "webhook_path": "/api/events/schedule-cron",
-  "schedule": "* * * * *",
+  "schedule": "*/10 * * * *",
   "comment": "Process scheduled events every minute",
   "retry_conf": {
     "num_retries": 3,

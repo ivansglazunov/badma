@@ -174,7 +174,7 @@ const relationships = [
     args: {
       source: 'default',
       table: { schema: publicSchema, name: 'users' }, // Relationship is ON the 'users' table
-      name: 'tournament_participations', // Name for the relationship
+      name: 'tournament_participants', // Name for the relationship
       using: { 
         foreign_key_constraint_on: { // How it's linked
           table: { schema: badmaSchema, name: 'tournament_participants' }, 

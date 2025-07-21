@@ -9316,6 +9316,22 @@
               "deprecationReason": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "args": [],
@@ -9349,7 +9365,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -9999,6 +10015,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "String_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10118,6 +10144,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10139,7 +10175,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -10182,6 +10218,18 @@
               "deprecationReason": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "args": [],
@@ -10195,7 +10243,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -10238,6 +10286,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10249,7 +10307,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -10292,6 +10350,18 @@
               "deprecationReason": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "args": [],
@@ -10305,7 +10375,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -10348,6 +10418,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10359,7 +10439,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -10552,6 +10632,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10632,6 +10722,12 @@
               "deprecationReason": null
             },
             {
+              "name": "title",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "updated_at",
               "description": "column name",
               "isDeprecated": false,
@@ -10673,6 +10769,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10684,7 +10790,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -10957,6 +11063,16 @@
               "defaultValue": null
             },
             {
+              "name": "title",
+              "description": "Club title/name",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "updated_at",
               "description": null,
               "type": {
@@ -10968,7 +11084,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User who created and owns the club",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -11063,6 +11179,12 @@
             },
             {
               "name": "id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "title",
               "description": "column name",
               "isDeprecated": false,
               "deprecationReason": null
@@ -18248,7 +18370,7 @@
             },
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -18296,7 +18418,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -18328,7 +18450,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -18376,7 +18498,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -19156,7 +19278,7 @@
             },
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -19186,7 +19308,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -19206,7 +19328,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -19236,7 +19358,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -19256,7 +19378,7 @@
           "fields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19280,7 +19402,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19304,7 +19426,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19328,7 +19450,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19352,7 +19474,7 @@
           "inputFields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19372,7 +19494,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19392,7 +19514,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19412,7 +19534,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19432,7 +19554,7 @@
           "fields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19456,7 +19578,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19480,7 +19602,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19504,7 +19626,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -19528,7 +19650,7 @@
           "inputFields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19548,7 +19670,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19568,7 +19690,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19588,7 +19710,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
@@ -19906,7 +20028,7 @@
           "inputFields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -19926,7 +20048,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -19946,7 +20068,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -19966,7 +20088,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -20220,7 +20342,7 @@
           "inputFields": [
             {
               "name": "club_id",
-              "description": null,
+              "description": "Reference to clubs table",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -20240,7 +20362,7 @@
             },
             {
               "name": "created_by_id",
-              "description": null,
+              "description": "User who created the request",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -20260,7 +20382,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Request status",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -20280,7 +20402,7 @@
             },
             {
               "name": "user_id",
-              "description": null,
+              "description": "User for whom the request was created",
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
@@ -20652,6 +20774,1816 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items",
+          "description": "columns and relationships of \"badma.items\"",
+          "fields": [
+            {
+              "name": "accepted",
+              "description": "Принят ли предмет пользователем",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "bigint",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "uuid",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "bigint",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "uuid",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_aggregate",
+          "description": "aggregated selection of \"badma.items\"",
+          "fields": [
+            {
+              "name": "aggregate",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_aggregate_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nodes",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "badma_items",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_aggregate_fields",
+          "description": "aggregate fields of \"badma.items\"",
+          "fields": [
+            {
+              "name": "avg",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_avg_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "count",
+              "description": null,
+              "args": [
+                {
+                  "name": "columns",
+                  "description": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "badma_items_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinct",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "max",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_max_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "min",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_min_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_stddev_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_pop",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_stddev_pop_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_samp",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_stddev_samp_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "sum",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_sum_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_pop",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_var_pop_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_samp",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_var_samp_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "variance",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_variance_fields",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_avg_fields",
+          "description": "aggregate avg on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_bool_exp",
+          "description": "Boolean expression to filter rows from the table \"badma.items\". All fields are combined with a logical 'AND'.",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_and",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "_not",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "badma_items_bool_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "_or",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "Boolean_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted_at",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "bigint_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "club_id",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "uuid_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "bigint_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "uuid_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "String_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "bigint_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "user_id",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "uuid_comparison_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "badma_items_constraint",
+          "description": "unique or primary key constraints on table \"badma.items\"",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "items_pkey",
+              "description": "unique or primary key constraint on columns \"id\"",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_inc_input",
+          "description": "input type for incrementing numeric columns in table \"badma.items\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_insert_input",
+          "description": "input type for inserting data into table \"badma.items\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accepted",
+              "description": "Принят ли предмет пользователем",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_max_fields",
+          "description": "aggregate max on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_min_fields",
+          "description": "aggregate min on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_mutation_response",
+          "description": "response of any mutation on the table \"badma.items\"",
+          "fields": [
+            {
+              "name": "affected_rows",
+              "description": "number of rows affected by the mutation",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "returning",
+              "description": "data from the rows affected by the mutation",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "badma_items",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_on_conflict",
+          "description": "on_conflict condition type for table \"badma.items\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "constraint",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "badma_items_constraint",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "update_columns",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "badma_items_update_column",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "defaultValue": "[]"
+            },
+            {
+              "name": "where",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "badma_items_bool_exp",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_order_by",
+          "description": "Ordering options when selecting data from \"badma.items\".",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accepted",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted_at",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "club_id",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "user_id",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "order_by",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_pk_columns_input",
+          "description": "primary key columns input for table: badma.items",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "uuid",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "badma_items_select_column",
+          "description": "select columns of table \"badma.items\"",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "accepted",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "club_id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_set_input",
+          "description": "input type for updating data in table \"badma.items\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accepted",
+              "description": "Принят ли предмет пользователем",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_stddev_fields",
+          "description": "aggregate stddev on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_stddev_pop_fields",
+          "description": "aggregate stddev_pop on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_stddev_samp_fields",
+          "description": "aggregate stddev_samp on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_stream_cursor_input",
+          "description": "Streaming cursor of the table \"badma_items\"",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "initial_value",
+              "description": "Stream column input with initial value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "badma_items_stream_cursor_value_input",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ordering",
+              "description": "cursor ordering",
+              "type": {
+                "kind": "ENUM",
+                "name": "cursor_ordering",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_stream_cursor_value_input",
+          "description": "Initial value of the column from where the streaming should start",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "accepted",
+              "description": "Принят ли предмет пользователем",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "club_id",
+              "description": "Владелец может передать права владения клубу",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": "Кодовое уникальное обозначение сущности",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "user_id",
+              "description": "Владелец предмета",
+              "type": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_sum_fields",
+          "description": "aggregate sum on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "bigint",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "badma_items_update_column",
+          "description": "update columns of table \"badma.items\"",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "accepted",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "accepted_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "club_id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "user_id",
+              "description": "column name",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "badma_items_updates",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_inc",
+              "description": "increments the numeric columns with given value of the filtered values",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "badma_items_inc_input",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "_set",
+              "description": "sets the columns of the filtered rows to the given values",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "badma_items_set_input",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "where",
+              "description": "filter the rows which have to be updated",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "badma_items_bool_exp",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_var_pop_fields",
+          "description": "aggregate var_pop on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_var_samp_fields",
+          "description": "aggregate var_samp on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "badma_items_variance_fields",
+          "description": "aggregate variance on columns",
+          "fields": [
+            {
+              "name": "accepted_at",
+              "description": "Timestamp когда предмет был принят",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -48530,6 +50462,60 @@
               "deprecationReason": null
             },
             {
+              "name": "delete_badma_items",
+              "description": "delete data from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "where",
+                  "description": "filter the rows which have to be deleted",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "badma_items_bool_exp",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_mutation_response",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "delete_badma_items_by_pk",
+              "description": "delete single row from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "uuid",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "delete_badma_joins",
               "description": "delete data from the table: \"badma.joins\"",
               "args": [
@@ -50286,6 +52272,88 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "badma_in_clubs",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "insert_badma_items",
+              "description": "insert data into the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "objects",
+                  "description": "the rows to be inserted",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "badma_items_insert_input",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "on_conflict",
+                  "description": "upsert condition",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_on_conflict",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_mutation_response",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "insert_badma_items_one",
+              "description": "insert a single row into the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "object",
+                  "description": "the row to be inserted",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "badma_items_insert_input",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "on_conflict",
+                  "description": "upsert condition",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_on_conflict",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -53320,6 +55388,139 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "badma_in_clubs_mutation_response",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "update_badma_items",
+              "description": "update data of the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "_inc",
+                  "description": "increments the numeric columns with given value of the filtered values",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_inc_input",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "_set",
+                  "description": "sets the columns of the filtered rows to the given values",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_set_input",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows which have to be updated",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "badma_items_bool_exp",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items_mutation_response",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "update_badma_items_by_pk",
+              "description": "update single row of the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "_inc",
+                  "description": "increments the numeric columns with given value of the filtered values",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_inc_input",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "_set",
+                  "description": "sets the columns of the filtered rows to the given values",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_set_input",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "pk_columns",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "badma_items_pk_columns_input",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "update_badma_items_many",
+              "description": "update multiples rows of table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "updates",
+                  "description": "updates to execute, in order",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "badma_items_updates",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "badma_items_mutation_response",
                   "ofType": null
                 }
               },
@@ -92702,6 +94903,207 @@
               "deprecationReason": null
             },
             {
+              "name": "badma_items",
+              "description": "fetch data from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "description": "distinct select on columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "badma_items_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "limit the number of rows returned",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "skip the first n rows. Use only with order_by",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "order_by",
+                  "description": "sort the rows by one or more columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "badma_items_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows returned",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "badma_items",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "badma_items_aggregate",
+              "description": "fetch aggregated fields from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "description": "distinct select on columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "badma_items_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "limit the number of rows returned",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "skip the first n rows. Use only with order_by",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "order_by",
+                  "description": "sort the rows by one or more columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "badma_items_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows returned",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "badma_items_aggregate",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "badma_items_by_pk",
+              "description": "fetch data from the table: \"badma.items\" using primary key columns",
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "uuid",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "badma_joins",
               "description": "fetch data from the table: \"badma.joins\"",
               "args": [
@@ -101346,6 +103748,274 @@
               "deprecationReason": null
             },
             {
+              "name": "badma_items",
+              "description": "fetch data from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "description": "distinct select on columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "badma_items_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "limit the number of rows returned",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "skip the first n rows. Use only with order_by",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "order_by",
+                  "description": "sort the rows by one or more columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "badma_items_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows returned",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "badma_items",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "badma_items_aggregate",
+              "description": "fetch aggregated fields from the table: \"badma.items\"",
+              "args": [
+                {
+                  "name": "distinct_on",
+                  "description": "distinct select on columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "ENUM",
+                        "name": "badma_items_select_column",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "limit the number of rows returned",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "skip the first n rows. Use only with order_by",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "order_by",
+                  "description": "sort the rows by one or more columns",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "badma_items_order_by",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows returned",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "badma_items_aggregate",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "badma_items_by_pk",
+              "description": "fetch data from the table: \"badma.items\" using primary key columns",
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "uuid",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "badma_items",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "badma_items_stream",
+              "description": "fetch data from the table in a streaming manner: \"badma.items\"",
+              "args": [
+                {
+                  "name": "batch_size",
+                  "description": "maximum number of rows returned in a single batch",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "cursor",
+                  "description": "cursor to stream the results returned by the query",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "INPUT_OBJECT",
+                        "name": "badma_items_stream_cursor_input",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "filter the rows returned",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "badma_items_bool_exp",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "badma_items",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "badma_joins",
               "description": "fetch data from the table: \"badma.joins\"",
               "args": [
@@ -109560,7 +112230,7 @@
               "deprecationReason": null
             },
             {
-              "name": "tournament_participations",
+              "name": "tournament_participants",
               "description": "An array relationship",
               "args": [
                 {
@@ -109651,7 +112321,7 @@
               "deprecationReason": null
             },
             {
-              "name": "tournament_participations_aggregate",
+              "name": "tournament_participants_aggregate",
               "description": "An aggregate relationship",
               "args": [
                 {
@@ -110592,7 +113262,7 @@
               "defaultValue": null
             },
             {
-              "name": "tournament_participations",
+              "name": "tournament_participants",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -110602,7 +113272,7 @@
               "defaultValue": null
             },
             {
-              "name": "tournament_participations_aggregate",
+              "name": "tournament_participants_aggregate",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -110927,7 +113597,7 @@
               "defaultValue": null
             },
             {
-              "name": "tournament_participations",
+              "name": "tournament_participants",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -111627,7 +114297,7 @@
               "defaultValue": null
             },
             {
-              "name": "tournament_participations_aggregate",
+              "name": "tournament_participants_aggregate",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -112740,6 +115410,10 @@
         "schema": "public",
         "table": "badma_in_clubs"
       },
+      "badma_items": {
+        "schema": "badma",
+        "table": "items"
+      },
       "badma_joins": {
         "schema": "badma",
         "table": "joins"
@@ -112839,12 +115513,14 @@
           "anonymous": [
             "created_at",
             "id",
+            "title",
             "updated_at",
             "user_id"
           ],
           "user": [
             "created_at",
             "id",
+            "title",
             "updated_at",
             "user_id"
           ]
@@ -112872,6 +115548,30 @@
             "fen",
             "status",
             "created_at"
+          ]
+        }
+      },
+      "badma_items": {
+        "select": {
+          "anonymous": [
+            "accepted",
+            "accepted_at",
+            "club_id",
+            "created_at",
+            "id",
+            "type",
+            "updated_at",
+            "user_id"
+          ],
+          "user": [
+            "accepted",
+            "accepted_at",
+            "club_id",
+            "created_at",
+            "id",
+            "type",
+            "updated_at",
+            "user_id"
           ]
         }
       },
@@ -113325,7 +116025,7 @@
         }
       }
     },
-    "timestamp": 1752374927635,
+    "timestamp": 1753047613679,
     "version": "1.0.0"
   }
 }
