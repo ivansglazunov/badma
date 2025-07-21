@@ -86,7 +86,7 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
   
   const isWhite = piece && piece.startsWith('w');
   const pieceColor = isWhite ? '#ffffff' : '#000000';
-  const pieceSize = `100%`; // Larger size for better visibility
+  const pieceSize = `100px`; // Увеличиваем размер фигур до 100px
   
   const getPieceComponent = (pieceCode: string) => {
     const strokeColor = pieceColor === '#ffffff' ? '#000000' : '#ffffff';
@@ -94,8 +94,8 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
     const strokeLinejoin = 'round';
     const strokeLinecap = 'round';
     
-    // Статичный фильтр тени
-    const filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
+    // Тень теперь применяется к контейнеру, не к SVG
+    const filter = undefined;
     
     switch (pieceCode) {
       case 'wP':
@@ -128,11 +128,11 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '100%',
-          height: '100%',
+          width: '100px', // Увеличиваем размер контейнера до 100px
+          height: '100px',
           userSelect: 'none',
           pointerEvents: 'none', // Отключаем перехват событий
-          // Убираем transform чтобы не влиять на drag & drop
+          filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))', // Возвращаем тень
         }}
       >
         {getPieceComponent(piece)}
