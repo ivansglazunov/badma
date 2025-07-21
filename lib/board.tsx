@@ -81,12 +81,10 @@ const ShockPiece: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 /**
  * Custom chess piece component that displays SVG pieces with interactive effects
  */
-const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
-  // Убрали состояния hover и dragging чтобы не влиять на drag & drop
-  
+const CustomPiece: React.FC<{ piece: string; squareSize: number; pieceSize: number }> = ({ piece, squareSize, pieceSize }) => {
   const isWhite = piece && piece.startsWith('w');
   const pieceColor = isWhite ? '#ffffff' : '#000000';
-  const pieceSize = `100px`; // Увеличиваем размер фигур до 100px
+  const pieceSizeStr = `${pieceSize}px`; // Используем вычисленный размер
   
   const getPieceComponent = (pieceCode: string) => {
     const strokeColor = pieceColor === '#ffffff' ? '#000000' : '#ffffff';
@@ -100,22 +98,22 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
     switch (pieceCode) {
       case 'wP':
       case 'bP':
-        return <Pawn color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <Pawn color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wR':
       case 'bR':
-        return <Rook color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <Rook color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wN':
       case 'bN':
-        return <Knight color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <Knight color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wB':
       case 'bB':
-        return <Bishop color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <Bishop color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wQ':
       case 'bQ':
-        return <Queen color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <Queen color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wK':
       case 'bK':
-        return <King color={pieceColor} size={pieceSize} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <King color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       default:
         return <div style={{ fontSize: '2rem', color: pieceColor }}>?</div>;
     }
@@ -128,8 +126,8 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '100px', // Увеличиваем размер контейнера до 100px
-          height: '100px',
+          width: `${squareSize}px`, // Размер клетки
+          height: `${squareSize}px`,
           userSelect: 'none',
           pointerEvents: 'none', // Отключаем перехват событий
           filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))', // Возвращаем тень
@@ -182,20 +180,24 @@ export default function Board({
 
   const { width, height, ref } = useResizeDetector();
 
+  // Вычисляем размер клетки (доска 8x8)
+  const squareSize = width ? Math.floor(width / 8) : 60; // По умолчанию 60px
+  const pieceSize = Math.floor(squareSize * 0.85); // 85% от размера клетки
+
   // Create custom pieces object with SVG pieces
   const defaultCustomPieces: Record<string, (args: any) => React.JSX.Element> = {
-    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} />,
-    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} />,
-    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} />,
-    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} />,
-    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} />,
-    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} />,
-    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} />,
-    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} />,
-    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} />,
-    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} />,
-    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} />,
-    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} />,
+    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} squareSize={squareSize} pieceSize={pieceSize} />,
+    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} squareSize={squareSize} pieceSize={pieceSize} />,
   };
 
   // Use custom pieces if provided, otherwise use default

@@ -132,8 +132,15 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     
     try {
       // Determine whose turn it is
-      const chess = new Chess(gameData.fen);
+      const chess = new Chess();
+      chess.fen = gameData.fen; // Load the current position
       const currentTurn = chess.turn; // 1 for white, 2 for black
+      
+      console.log('🎯 [MOVE] Position loaded:', {
+        originalFen: gameData.fen,
+        loadedFen: chess.fen,
+        fenMatches: gameData.fen === chess.fen
+      });
       
       console.log('🎯 [MOVE] Turn analysis:', {
         currentTurn,
@@ -205,6 +212,22 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     
     return isWaiting;
   }, [userJoins.length, gameData.status, gameData.joins]);
+
+  // Determine current turn for active games
+  const currentTurn = useMemo(() => {
+    if (gameData.status !== 'react' && gameData.status !== 'continue') {
+      return null;
+    }
+    
+    try {
+      const chess = new Chess();
+      chess.fen = gameData.fen;
+      return chess.turn; // 1 for white, 2 for black
+    } catch (error) {
+      console.log('❌ [TURN] Error determining turn:', error);
+      return null;
+    }
+  }, [gameData.fen, gameData.status]);
 
   debug('Rendering game:', {
     gameId: gameData.id,
@@ -319,6 +342,15 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
             >
               Пригласить
             </Button>
+          </div>
+        )}
+        {currentTurn && (
+          <div className={`px-4 py-2 text-sm rounded-lg border-2 ${
+            currentTurn === 1 
+              ? 'bg-white border-black text-black' 
+              : 'bg-black border-white text-white'
+          }`}>
+            Ход {currentTurn === 1 ? 'белых' : 'черных'}
           </div>
         )}
       </div>
