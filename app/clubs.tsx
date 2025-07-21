@@ -159,6 +159,7 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTitle></DialogTitle>
         <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
           <HoverCard
             force={1.3}
@@ -233,6 +234,7 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
 
       {/* Confirmation Dialog */}
       <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogTitle></DialogTitle>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Подать заявку на вступление в клуб?</DialogTitle>

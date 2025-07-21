@@ -69,6 +69,10 @@ export type ChessClientRequest = {
 
 export abstract class ChessClient {
   _chess: Chess;
+  private _pendingMove: ChessClientMove | null = null; // Track pending moves for optimistic updates
+  private _pendingFen: string | null = null; // Track FEN after pending move
+  private _pendingMoveTimeout: NodeJS.Timeout | null = null; // Timeout for pending moves
+  private readonly PENDING_MOVE_TIMEOUT = 10000; // 10 seconds timeout
   constructor(server: ChessServer<ChessClient>) {
     this._chess = new Chess();
   }
@@ -575,6 +579,7 @@ export abstract class ChessClient {
   }
 
   syncMove(move: ChessClientMove): ChessClientResponse {
+    console.log('🎯 [SYNC_MOVE] Starting syncMove with:', move);
     debug('syncMove', move);
     if (!this.clientId) return { error: '!this.clientId' };
     if (!this.userId) return { error: '!this.userId' };
@@ -594,13 +599,39 @@ export abstract class ChessClient {
     }
     // ---> END ADDED CHECK <---
 
+    console.log('🎯 [SYNC_MOVE] Current FEN before move:', this.fen);
     const moved = this.chess.move(move);
     if (moved.error) {
+      console.log('❌ [SYNC_MOVE] Invalid move:', moved.error);
       debug('syncMove:invalid move:', moved.error);
       // Check if the error was due to the game ending (e.g., stalemate/draw detection during move)
       return { error: moved.error };
     }
     this.updatedAt = Date.now();
+
+    // Store pending move and FEN for optimistic updates
+    this._pendingMove = move;
+    this._pendingFen = this.fen;
+    
+    // Clear any existing timeout
+    if (this._pendingMoveTimeout) {
+      clearTimeout(this._pendingMoveTimeout);
+    }
+    
+    // Set timeout to clear pending state if server doesn't respond
+    this._pendingMoveTimeout = setTimeout(() => {
+      console.log('⏰ [SYNC_MOVE] Pending move timeout, clearing state');
+      this._pendingMove = null;
+      this._pendingFen = null;
+      this._pendingMoveTimeout = null;
+    }, this.PENDING_MOVE_TIMEOUT);
+    
+    console.log('🎯 [SYNC_MOVE] Move successful, storing pending state:', {
+      pendingMove: this._pendingMove,
+      pendingFen: this._pendingFen,
+      newStatus: this.chess.status,
+      timeoutSet: true
+    });
 
     // Update status only if the move was successful and didn't end the game immediately
     this.status = this.chess.status;
@@ -619,14 +650,23 @@ export abstract class ChessClient {
     };
     this._move(request).then(response => {
       if (response.error) {
+        console.log('❌ [SYNC_MOVE] Server error:', response.error);
         debug('syncMove:error', response);
+        // Clear pending state and timeout on error
+        this._clearPendingState();
         this._error(request, response);
       } else if (response.data) {
+        console.log('✅ [SYNC_MOVE] Server confirmed move:', response.data);
         debug('syncMove:success', response.data);
+        // Clear pending state since server confirmed
+        this._clearPendingState();
         this.applySyncResponse(response.data);
       }
     }).catch(error => {
+      console.log('❌ [SYNC_MOVE] Network error:', error);
       debug('syncMove:error', error);
+      // Clear pending state on error
+      this._clearPendingState();
       this._error(request, { ...error, recommend: 'retry' });
     });
     const response: ChessClientResponse = {
@@ -809,6 +849,12 @@ export abstract class ChessClient {
    * @public
    */
   public applySyncResponse(data: ChessServerResponse['data']): void {
+      console.log('🔄 [APPLY_SYNC] Applying sync response:', data);
+      console.log('🔄 [APPLY_SYNC] Current pending state:', {
+        pendingMove: this._pendingMove,
+        pendingFen: this._pendingFen,
+        currentFen: this.fen
+      });
       debug(`Applying sync response:`, data);
       // Add null/undefined check for data
       if (!data) {
@@ -829,12 +875,39 @@ export abstract class ChessClient {
       }
 
       // --- Update core state --- //
-      if (this.fen !== data.fen) {
-          debug(`Sync updating FEN from ${this.fen} to ${data.fen}`);
-          this.fen = data.fen; // This implicitly updates the internal chess instance
+      // OPTIMISTIC UPDATE LOGIC: Don't overwrite FEN if we have a pending move
+      // and the server FEN doesn't match our pending FEN
+      if (this._pendingMove && this._pendingFen) {
+        console.log('🔄 [APPLY_SYNC] Have pending move, checking FEN compatibility');
+        if (data.fen === this._pendingFen) {
+          console.log('✅ [APPLY_SYNC] Server FEN matches pending FEN - move confirmed!');
+          // Server confirmed our move, clear pending state
+          this._clearPendingState();
+          // FEN is already correct, no need to update
+        } else {
+          console.log('⚠️ [APPLY_SYNC] Server FEN differs from pending FEN:', {
+            serverFen: data.fen,
+            pendingFen: this._pendingFen,
+            action: 'keeping_pending_state'
+          });
+          // Keep our optimistic state, don't update FEN
+          // The server might still be processing our move
+        }
       } else {
-          debug(`Sync FEN matches, no update.`);
+        // No pending move, safe to update FEN
+        if (this.fen !== data.fen) {
+            console.log('🔄 [APPLY_SYNC] No pending move, updating FEN:', {
+              from: this.fen,
+              to: data.fen
+            });
+            debug(`Sync updating FEN from ${this.fen} to ${data.fen}`);
+            this.fen = data.fen; // This implicitly updates the internal chess instance
+        } else {
+            console.log('🔄 [APPLY_SYNC] FEN matches, no update needed');
+            debug(`Sync FEN matches, no update.`);
+        }
       }
+      
       this.status = data.status;
       this.side = data.side ?? 0; // Default to spectator if undefined
       this.role = data.role ?? ChessClientRole.Anonymous; // Default to Anonymous if undefined
@@ -842,7 +915,30 @@ export abstract class ChessClient {
       this.updatedAt = data.updatedAt;
       // this.createdAt remains the client's creation time
 
+      console.log('🔄 [APPLY_SYNC] Final state after sync:', {
+        side: this.side,
+        role: this.role,
+        joinId: this.joinId,
+        status: this.status,
+        fen: this.fen,
+        pendingMove: this._pendingMove,
+        pendingFen: this._pendingFen
+      });
       debug(`Client state after applySyncResponse: side=${this.side}, role=${this.role}, joinId=${this.joinId}, status=${this.status}, fen=${this.fen}`);
+  }
+
+  /**
+   * Helper method to clear pending move state and timeout
+   * @private
+   */
+  private _clearPendingState(): void {
+    console.log('🧽 [CLEAR_PENDING] Clearing pending state');
+    if (this._pendingMoveTimeout) {
+      clearTimeout(this._pendingMoveTimeout);
+      this._pendingMoveTimeout = null;
+    }
+    this._pendingMove = null;
+    this._pendingFen = null;
   }
 
   /**

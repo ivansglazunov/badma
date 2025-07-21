@@ -4911,7 +4911,50 @@
       ],
       "content": "",
       "path": "components/hover-card.md"
+    },
+    {
+      "filename": "captured-pieces.md",
+      "title": "Captured Pieces Utility",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Captured Pieces Utility",
+          "id": "captured-pieces-utility"
+        },
+        {
+          "level": 2,
+          "text": "Основные возможности",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Быстрый старт",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Ценности фигур",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Основные функции",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Пример использования в UI",
+          "id": "ui"
+        },
+        {
+          "level": 2,
+          "text": "Интеграция с игровым движком",
+          "id": ""
+        }
+      ],
+      "content": "",
+      "path": "lib/captured-pieces.md"
     }
   ],
-  "lastUpdated": "2025-07-21T18:34:20.685Z"
+  "lastUpdated": "2025-07-21T21:45:18.004Z"
 }

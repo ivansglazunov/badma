@@ -24,7 +24,7 @@ export const Pawn = ({ color = '#060705', size = 100, strokeColor = '#ffffff', s
       <g id="Background">
       <path
          id="Pawn"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_pawn-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}
@@ -50,7 +50,7 @@ export const Rook: React.FC<PieceProps> = ({ color = "#060705", size = 100, stro
       <g id="Background">
       <path
          id="Path 1"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_rook-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}
@@ -76,7 +76,7 @@ export const Knight: React.FC<PieceProps> = ({ color = "#060705", size = 100, st
       <g id="Background">
       <path
          id="Path 1"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_knight-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}
@@ -102,7 +102,7 @@ export const Bishop: React.FC<PieceProps> = ({ color = "#060705", size = 100, st
       <g id="Background">
       <path
          id="Path 1"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_bishop-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}
@@ -128,7 +128,7 @@ export const Queen: React.FC<PieceProps> = ({ color = "#060705", size = 100, str
       <g id="Background">
       <path
          id="Path 1"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_queen-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}
@@ -154,7 +154,7 @@ export const King: React.FC<PieceProps> = ({ color = "#060705", size = 100, stro
       <g id="Background">
       <path
          id="Path 1"
-         fill-rule="evenodd"
+         fillRule="evenodd"
          className={`piece_badma_king-${color.slice(1)}`}
          stroke={strokeColor}
          strokeWidth={strokeWidth}

@@ -65,7 +65,8 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     hasGameInvite: !!gameInvite, 
     gameInvite, 
     hasOnJoinInvite: !!onJoinInvite, 
-    isJoining 
+    isJoining,
+    fen: gameData.fen
   });
   
   const { theme } = useTheme();

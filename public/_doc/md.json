@@ -4391,7 +4391,45 @@
         }
       ],
       "level": 1
+    },
+    {
+      "title": "Captured Pieces Utility",
+      "url": "/hasyx/doc/captured-pieces",
+      "collapse": true,
+      "items": [
+        {
+          "title": "Основные возможности",
+          "url": "/hasyx/doc/captured-pieces#",
+          "level": 2
+        },
+        {
+          "title": "Быстрый старт",
+          "url": "/hasyx/doc/captured-pieces#",
+          "level": 2
+        },
+        {
+          "title": "Ценности фигур",
+          "url": "/hasyx/doc/captured-pieces#",
+          "level": 2
+        },
+        {
+          "title": "Основные функции",
+          "url": "/hasyx/doc/captured-pieces#",
+          "level": 2
+        },
+        {
+          "title": "Пример использования в UI",
+          "url": "/hasyx/doc/captured-pieces#ui",
+          "level": 2
+        },
+        {
+          "title": "Интеграция с игровым движком",
+          "url": "/hasyx/doc/captured-pieces#",
+          "level": 2
+        }
+      ],
+      "level": 1
     }
   ],
-  "lastUpdated": "2025-07-21T18:34:20.694Z"
+  "lastUpdated": "2025-07-21T21:45:18.023Z"
 }

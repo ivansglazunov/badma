@@ -151,6 +151,7 @@ export default function Board({
   bgWhite = '#fff',
   customPieces
 }: BoardProps) {
+  console.log('🏁 [BOARD] Board rendered with position:', position);
 
   // Handle piece drop (move)
   const handlePieceDrop = (sourceSquare: string, targetSquare: string, piece: string) => {
