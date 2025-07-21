@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User } from "lucide-react";
+import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User, Loader2 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
 
@@ -15,13 +15,13 @@ import Board from "@/lib/board";
 import Game from "@/lib/game";
 import { OAuthButtons } from "hasyx/components/auth/oauth-buttons";
 import { useTheme } from "hasyx/components/theme-switcher";
-import { Button } from "hasyx/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "hasyx/components/ui/card";
+import { Button } from "hasyx/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "hasyx/components/ui/card"
+import { Badge } from "hasyx/components/ui/badge"
 import { Input } from "hasyx/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "hasyx/components/ui/select";
 import { Label } from "hasyx/components/ui/label";
 import { Separator } from "hasyx/components/ui/separator";
-import { Badge } from "hasyx/components/ui/badge";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -36,6 +36,9 @@ import { ClubTab } from "./club";
 import { ClubsList } from "./clubs";
 import { CheckClub } from "./check-club";
 import { useClubStore } from "@/lib/stores/club-store";
+import { AxiosChessClient } from "@/lib/axios-chess-client";
+import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
+import { v4 as uuidv4 } from 'uuid';
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -498,6 +501,16 @@ export default function App() {
   const user = session?.user;
   const { theme, setTheme } = useTheme();
   const hasyx = useHasyx();
+  
+  // Debug session changes
+  useEffect(() => {
+    console.log('🔐 [SESSION] Session changed:', { 
+      session, 
+      sessionStatus, 
+      user, 
+      userId: user?.id 
+    });
+  }, [session, sessionStatus, user]);
 
   // Auto-request device permissions on app load
   const motionPermissions = useDeviceMotionPermissions(true);
@@ -520,11 +533,11 @@ export default function App() {
   const { data: currentUserData, loading: userLoading } = useSubscription(
     {
       table: 'users',
-      where: { id: { _eq: user?.id } },
+      where: { id: { _eq: hasyx.userId } },
       returning: ['id', 'name', 'image'],
       limit: 1
     },
-    { skip: !user?.id }
+    { skip: !hasyx.userId }
   );
 
   // Get clubs data for current user
@@ -597,18 +610,20 @@ export default function App() {
     setError(clubsError ? (clubsError as any)?.message || "Unknown error" : null);
   }, [clubsLoading, clubsError, setLoading, setError]);
 
-  const currentUserId = React.useMemo(() => {
-    if (Array.isArray(currentUserData)) {
-      return currentUserData[0]?.id;
-    }
-    if (currentUserData && (currentUserData as any).users) {
-      return (currentUserData as any).users[0]?.id;
-    }
-    return currentUserData?.id;
-  }, [currentUserData]);
+  // Calculate current user ID - use hasyx.userId directly since it's the UUID from our database
+  const currentUserId = hasyx.userId;
+  
+  console.log('🔐 [INVITE] Session and user data:', {
+    isAuthenticated: sessionStatus === "authenticated",
+    sessionUserId: user?.id,
+    hasyxUserId: hasyx.userId,
+    currentUserData: currentUserData?.[0],
+    currentUserId,
+    userLoading
+  });
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
-  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'create'], []);
+  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profile, setProfile] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState<Badma_Tournaments | null>(null);
@@ -621,13 +636,92 @@ export default function App() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [showPermissionToast, setShowPermissionToast] = useState(false);
   const [isCheckClubOpen, setIsCheckClubOpen] = useState(false);
+  const [isCreatingGame, setIsCreatingGame] = useState(false);
+  const [gameInvite, setGameInvite] = useState<{
+    gameId: string;
+    side: number;
+    role: number;
+  } | null>(null);
+  const [pendingInvite, setPendingInvite] = useState<{
+    gameId: string;
+    side: number;
+    role: number;
+  } | null>(null);
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
 
+  // Extract URL parameters on initial load (before authentication)
+  useEffect(() => {
+    console.log('🔍 [INVITE] Checking URL parameters on mount');
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('gameId');
+    const side = urlParams.get('side');
+    const role = urlParams.get('role');
+    
+    console.log('🔍 [INVITE] URL params:', { gameId, side, role, fullUrl: window.location.href });
+    
+    if (gameId && side && role) {
+      console.log('✅ [INVITE] Valid invite parameters found, clearing URL and saving to pendingInvite');
+      
+      // Clear URL parameters immediately
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      // Save invite data for later processing
+      const inviteData = {
+        gameId,
+        side: parseInt(side),
+        role: parseInt(role)
+      };
+      
+      console.log('💾 [INVITE] Saving pending invite:', inviteData);
+      setPendingInvite(inviteData);
+    } else {
+      console.log('❌ [INVITE] No valid invite parameters found');
+    }
+  }, []); // Run only once on mount
+
+  // Process pending invite after authentication
+  useEffect(() => {
+    console.log('🔐 [INVITE] Auth check:', { 
+      isAuthenticated, 
+      currentUserId, 
+      hasPendingInvite: !!pendingInvite,
+      pendingInvite 
+    });
+    
+    if (!isAuthenticated) {
+      console.log('⏳ [INVITE] Waiting for authentication...');
+      return;
+    }
+    
+    if (!currentUserId) {
+      console.log('⏳ [INVITE] Waiting for currentUserId...');
+      return;
+    }
+    
+    if (!pendingInvite) {
+      console.log('🚨 [INVITE] No pending invite to process');
+      return;
+    }
+    
+    console.log('✅ [INVITE] All conditions met, processing pending invite:', pendingInvite);
+    
+    // Move pending invite to active invite
+    console.log('🔄 [INVITE] Moving pending invite to active gameInvite');
+    setGameInvite(pendingInvite);
+    setPendingInvite(null);
+    
+    // Open the game for preview
+    console.log('🎮 [INVITE] Opening game for preview:', pendingInvite.gameId);
+    handleOpenGame(pendingInvite.gameId);
+  }, [isAuthenticated, currentUserId, pendingInvite]);
+
   const handleOpenGame = (gameId: string) => {
+    console.log('🔓 [OPEN_GAME] Opening game:', gameId);
     setSelectedGameId(gameId);
     if (profile) setProfile(false);
+    console.log('🔓 [OPEN_GAME] Game opened, selectedGameId set to:', gameId);
   };
   
   useEffect(() => {
@@ -636,11 +730,102 @@ export default function App() {
 
   const handleCloseGame = () => {
     setSelectedGameId(null);
+    setGameInvite(null); // Clear invite data when closing game
+  };
+
+  const handleJoinGameFromInvite = async () => {
+    if (!gameInvite || !currentUserId) return;
+    
+    try {
+      setIsCreatingGame(true);
+      
+      // Create axios instance with session credentials
+      const axiosInstance = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+        withCredentials: true,
+      });
+      
+      // Create chess client
+      const clientId = uuidv4();
+      const chessClient = new AxiosChessClient(axiosInstance);
+      chessClient.gameId = gameInvite.gameId;
+      
+      // Join the game
+      const joinResponse = await chessClient.asyncJoin(gameInvite.side as ChessClientSide, gameInvite.role as ChessClientRole);
+      
+      if (joinResponse.error) {
+        toast.error(`Failed to join game: ${joinResponse.error}`);
+        return;
+      }
+      
+      // Clear invite data after successful join
+      setGameInvite(null);
+      toast.success("Successfully joined the game!");
+      
+    } catch (error: any) {
+      console.error('Failed to join game from invite:', error);
+      toast.error(`Failed to join game: ${error.message || 'Unknown error'}`);
+    } finally {
+      setIsCreatingGame(false);
+    }
   };
 
   const handleTournamentClick = (tournament: Badma_Tournaments) => {
     setSelectedTournament(tournament);
     setIsTournamentModalOpen(true);
+  };
+
+  const handleCreateGame = async () => {
+    if (!currentUserId) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    setIsCreatingGame(true);
+    try {
+      // Create axios instance with session
+      const axiosInstance = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Include session cookies
+      });
+
+      // Create AxiosChessClient
+      const chessClient = new AxiosChessClient(axiosInstance);
+      chessClient.userId = currentUserId;
+      chessClient.clientId = uuidv4();
+
+      // Create game
+      const createResponse = await chessClient.asyncCreate(1); // White side
+      
+      if (createResponse.error) {
+        toast.error(`Failed to create game: ${createResponse.error}`);
+        return;
+      }
+
+      if (createResponse.data?.gameId) {
+        // Join the created game as a player
+        const joinResponse = await chessClient.asyncJoin(1, ChessClientRole.Player);
+        
+        if (joinResponse.error) {
+          toast.error(`Failed to join game: ${joinResponse.error}`);
+          return;
+        }
+
+        // Open the created game
+        handleOpenGame(createResponse.data.gameId);
+        toast.success("Game created and joined successfully!");
+      } else {
+        toast.error("Failed to create game: No game ID returned");
+      }
+    } catch (error: any) {
+      console.error('Error creating game:', error);
+      toast.error(`Failed to create game: ${error.message || 'Unknown error'}`);
+    } finally {
+      setIsCreatingGame(false);
+    }
   };
 
   const {
@@ -989,13 +1174,6 @@ export default function App() {
               <Button onClick={() => handleOpenGame("default_free_game_id")}>Start Free Play</Button>
             </div>
           </CarouselItem>
-          <CarouselItem key="create" className="h-full">
-            <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-              <PlusCircle className="h-16 w-16 mb-4 text-purple-500" />
-              <h2 className="text-2xl font-semibold mb-2">Create New Game</h2>
-              <p className="text-muted-foreground">Game creation form will be here.</p>
-            </div>
-          </CarouselItem>
         </CarouselContent>
       </Carousel>
 
@@ -1014,7 +1192,13 @@ export default function App() {
               <X/>
             </Button>
             <div className="w-full h-full flex items-center justify-center p-4">
-              <Game gameId={selectedGameId} onClose={handleCloseGame} />
+              <Game 
+                gameId={selectedGameId} 
+                onClose={handleCloseGame}
+                gameInvite={gameInvite}
+                onJoinInvite={handleJoinGameFromInvite}
+                isJoining={isCreatingGame}
+              />
             </div>
           </>
         )}
@@ -1259,9 +1443,19 @@ export default function App() {
               <Gamepad2 className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Games</span>
             </Button>
-            <Button variant="ghost" size="icon" className="text-white flex flex-col items-center justify-center h-12 w-12 aspect-square" onClick={() => setMainViewTab("create")}>
-              <PlusCircle className="h-6 w-6" />
-              <span className="text-xs leading-tight">Create</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white flex flex-col items-center justify-center h-12 w-12 aspect-square"
+              onClick={handleCreateGame}
+              disabled={isCreatingGame}
+            >
+              {isCreatingGame ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <PlusCircle className="h-4 w-4" />
+              )}
+              <span className="text-xs">{isCreatingGame ? "Creating..." : "Create"}</span>
             </Button>
           </div>
         </div>

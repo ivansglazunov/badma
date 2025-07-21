@@ -57,7 +57,7 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
-      <DialogTitle>Проверка причастности к клубу</DialogTitle>
+      <DialogTitle></DialogTitle>
       <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
         <div className="flex items-center justify-center">
           <HoverCard

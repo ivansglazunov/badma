@@ -79,11 +79,13 @@ const ShockPiece: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 /**
- * Custom chess piece component that displays SVG pieces
+ * Custom chess piece component that displays SVG pieces with interactive effects
  */
 const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  
   const isWhite = piece && piece.startsWith('w');
-  // const pieceColor = isWhite ? '#ffffff' : '#000000';
   const pieceColor = isWhite ? '#ffffff' : '#000000';
   const pieceSize = `100%`; // Larger size for better visibility
   
@@ -92,7 +94,14 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
     const strokeWidth = 0;
     const strokeLinejoin = 'round';
     const strokeLinecap = 'round';
-    const filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
+    
+    // Dynamic filter based on interaction state
+    let filter = 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))';
+    if (isDragging) {
+      filter = 'drop-shadow(0px 8px 16px rgba(0,0,0,0.8))';
+    } else if (isHovered) {
+      filter = 'drop-shadow(0px 4px 8px rgba(0,0,0,0.7))';
+    }
     
     switch (pieceCode) {
       case 'wP':
@@ -128,8 +137,33 @@ const CustomPiece: React.FC<{ piece: string }> = ({ piece }) => {
           width: '100%',
           height: '100%',
           userSelect: 'none',
-          pointerEvents: 'none'
+          pointerEvents: 'auto', // Enable pointer events for interactions
+          cursor: 'pointer',
+          transform: isDragging ? 'translateY(-4px) scale(1.05)' : isHovered ? 'translateY(-2px) scale(1.02)' : 'translateY(0px) scale(1)',
+          transition: 'all 0.2s ease-out',
+          zIndex: isDragging ? 1000 : isHovered ? 100 : 1
         }}
+        onMouseEnter={() => {
+          console.log('onMouseEnter');
+          setIsHovered(true);
+        }}
+        onMouseLeave={() => {
+          console.log('onMouseLeave');
+          setIsHovered(false);
+          setIsDragging(false); // Reset dragging state on mouse leave
+        }}
+        onMouseDown={() => setIsDragging(true)}
+        onMouseUp={() => setIsDragging(false)}
+        // onTouchStart={() => {
+        //   setIsHovered(true);
+        //   setIsDragging(true);
+        // }}
+        // onTouchEnd={() => {
+        //   setIsHovered(false);
+        //   setIsDragging(false);
+        // }}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={() => setIsDragging(false)}
       >
         {getPieceComponent(piece)}
       </div>
