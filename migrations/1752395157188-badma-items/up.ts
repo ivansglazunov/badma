@@ -413,7 +413,7 @@ async function applyAggregationPermissionsFunc() {
       operation: 'select',
       role: 'user',
       filter: {},
-      columns: '*',
+      columns: true,
       aggregate: true
     });
     debug(`     Applied aggregation permission for user.${tableName}`);
@@ -436,7 +436,7 @@ async function applyAggregationPermissionsFunc() {
       operation: 'select',
       role: 'anonymous',
       filter: {},
-      columns: '*',
+      columns: true,
       aggregate: true
     });
     debug(`     Applied aggregation permission for anonymous.${tableName}`);
@@ -459,7 +459,7 @@ async function applyAggregationPermissionsFunc() {
       operation: 'select',
       role: 'admin',
       filter: {},
-      columns: '*',
+      columns: true,
       aggregate: true
     });
     debug(`     Applied aggregation permission for admin.${tableName}`);
