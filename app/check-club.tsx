@@ -124,7 +124,7 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
                   </div>
                   
                   {/* Clubs Diagnostic Data */}
-                  <div className="mt-4 p-2 bg-black/20 rounded text-left text-xs">
+                  {/* <div className="mt-4 p-2 bg-black/20 rounded text-left text-xs">
                     <p className="font-bold mb-1">Clubs Diagnostic:</p>
                     <p>Loading: {clubsLoading ? 'true' : 'false'}</p>
                     <div className="mt-2 max-h-32 overflow-y-auto">
@@ -132,7 +132,7 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
                         {JSON.stringify(userClubs, null, 2)}
                       </pre>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

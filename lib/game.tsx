@@ -152,7 +152,6 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
 
   // Get settings for all players
   debug('🔍 [GAME] About to call useMultipleUserSettings with allUserIds:', allUserIds);
-  console.log('🔍 [GAME] About to call useMultipleUserSettings with allUserIds:', allUserIds);
   const { settingsMap, loading: settingsLoading, error: settingsError } = useMultipleUserSettings(allUserIds);
   debug('🔍 [GAME] useMultipleUserSettings result:', { settingsMap, settingsLoading, settingsError });
 

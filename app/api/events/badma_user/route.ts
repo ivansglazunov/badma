@@ -52,6 +52,14 @@ async function grantBasicItemsToUser(hasura: Hasura, userId: string) {
   debug(`🎁 [GRANT_BASIC_ITEMS] Starting to grant basic items to user ${userId}`);
   
   try {
+    // Grant classic pieces
+    await grantItem(hasura, null, 'classic_pieces', userId);
+    debug(`✅ [GRANT_BASIC_ITEMS] Granted classic_pieces to user ${userId}`);
+    
+    // Grant classic board  
+    await grantItem(hasura, null, 'classic_board', userId);
+    debug(`✅ [GRANT_BASIC_ITEMS] Granted classic_board to user ${userId}`);
+
     // Grant badma_pieces
     await grantItem(hasura, null, 'badma_pieces', userId);
     debug(`✅ [GRANT_BASIC_ITEMS] Granted badma_pieces to user ${userId}`);

@@ -729,7 +729,7 @@ export default function App() {
   const [selectedBoardStyle, setSelectedBoardStyle] = useState('classic_board');
   const [isSavingBoardStyle, setIsSavingBoardStyle] = useState(false);
 
-  const [selectedItem, setSelectedItem] = useState<typeof SUPPORTED_ITEMS[0] | null>(null);
+
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
@@ -1285,33 +1285,11 @@ export default function App() {
           </CarouselItem>
           <CarouselItem key="skins" className="h-full">
             {mainViewTab === 'skins' && (
-              <Skins onItemSelect={setSelectedItem} />
+              <Skins />
             )}
           </CarouselItem>
         </CarouselContent>
       </Carousel>
-
-      {/* Item Detail Dialog */}
-      {selectedItem && (
-        <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
-          <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
-            <div className="flex flex-col items-center justify-center">
-              <HoverCard
-                force={1.5}
-                maxRotation={25}
-                maxLift={50}
-                useDeviceOrientation={true}
-                orientationSensitivity={0.8}
-              >
-                <selectedItem.Component size="large" />
-              </HoverCard>
-              <p className="text-sm text-muted-foreground mt-4 text-center max-w-md">
-                {selectedItem.description}
-              </p>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
 
       <div className={cn(
         "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",

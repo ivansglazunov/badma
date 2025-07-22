@@ -15,7 +15,7 @@ export function useUserSettings(userId?: string): {
   loading: boolean;
   error: any;
 } {
-  const { data, loading, error } = useSubscription(
+  const { data, loading, error } = useQuery(
     {
       table: 'badma_settings',
       where: { 
@@ -72,11 +72,9 @@ export function useMultipleUserSettings(userIds: string[]): {
   error: any;
 } {
   debug('🔍 [MULTIPLE_USER_SETTINGS] Hook called with userIds:', userIds);
-  console.log('🔍 [MULTIPLE_USER_SETTINGS] Hook called with userIds:', userIds);
   
   const skipCondition = userIds.length === 0;
   debug('🔍 [MULTIPLE_USER_SETTINGS] Skip condition:', skipCondition);
-  console.log('🔍 [MULTIPLE_USER_SETTINGS] Skip condition:', skipCondition);
   
   const subscriptionConfig = {
     table: 'badma_settings',
@@ -92,30 +90,25 @@ export function useMultipleUserSettings(userIds: string[]): {
   };
   
   debug('🔍 [MULTIPLE_USER_SETTINGS] Subscription config:', subscriptionConfig);
-  console.log('🔍 [MULTIPLE_USER_SETTINGS] Subscription config:', subscriptionConfig);
   
-  // Temporarily use select instead of subscription for debugging
+  // Use query instead of subscription since subscriptions are not enabled for badma_settings
   const { data, loading, error } = useQuery(
     subscriptionConfig,
     { skip: skipCondition }
   );
   
-  debug('🔍 [MULTIPLE_USER_SETTINGS] Raw subscription result:', { data, loading, error, userIds });
-  console.log('🔍 [MULTIPLE_USER_SETTINGS] Raw subscription result:', { data, loading, error, userIds });
+  debug('🔍 [MULTIPLE_USER_SETTINGS] Raw query result:', { data, loading, error, userIds });
   
   // Log data type and structure
   if (data) {
     debug('🔍 [MULTIPLE_USER_SETTINGS] Data type:', typeof data);
     debug('🔍 [MULTIPLE_USER_SETTINGS] Data is array:', Array.isArray(data));
     debug('🔍 [MULTIPLE_USER_SETTINGS] Data length:', data?.length);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Data details:', { type: typeof data, isArray: Array.isArray(data), length: data?.length, data });
   }
 
   const settingsMap = useMemo(() => {
     debug('🔍 [MULTIPLE_USER_SETTINGS] Processing data for users:', userIds);
-    debug('🔍 [MULTIPLE_USER_SETTINGS] Raw data from subscription:', data);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Processing data for users:', userIds);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Raw data from subscription:', data);
+    debug('🔍 [MULTIPLE_USER_SETTINGS] Raw data from query:', data);
     
     const result: Record<string, UserSettings> = {};
     
@@ -123,23 +116,19 @@ export function useMultipleUserSettings(userIds: string[]): {
     userIds.forEach(userId => {
       result[userId] = getUserSettings([]);
       debug('🔍 [MULTIPLE_USER_SETTINGS] Initialized defaults for user:', userId, result[userId]);
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] Initialized defaults for user:', userId, result[userId]);
     });
 
     if (!data || !Array.isArray(data)) {
       debug('🔍 [MULTIPLE_USER_SETTINGS] No data or not array, returning defaults');
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] No data or not array, returning defaults. Data:', data, 'isArray:', Array.isArray(data));
       return result;
     }
 
     debug('🔍 [MULTIPLE_USER_SETTINGS] Data is valid array with length:', data.length);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Data is valid array with length:', data.length);
 
     // Group settings by user_id
     const settingsByUser: Record<string, any[]> = {};
     data.forEach((setting: any, index: number) => {
       debug('🔍 [MULTIPLE_USER_SETTINGS] Processing setting', index, ':', setting);
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] Processing setting', index, ':', setting);
       
       if (!settingsByUser[setting.user_id]) {
         settingsByUser[setting.user_id] = [];
@@ -148,12 +137,10 @@ export function useMultipleUserSettings(userIds: string[]): {
     });
     
     debug('🔍 [MULTIPLE_USER_SETTINGS] Settings grouped by user:', settingsByUser);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Settings grouped by user:', settingsByUser);
 
     // Convert to UserSettings for each user
     Object.entries(settingsByUser).forEach(([userId, settings]) => {
       debug('🔍 [MULTIPLE_USER_SETTINGS] Processing settings for user:', userId, settings);
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] Processing settings for user:', userId, settings);
       
       const settingsArray: UserSetting[] = settings.map((setting: any) => ({
         id: setting.id,
@@ -162,17 +149,14 @@ export function useMultipleUserSettings(userIds: string[]): {
       }));
       
       debug('🔍 [MULTIPLE_USER_SETTINGS] Settings array for user:', userId, settingsArray);
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] Settings array for user:', userId, settingsArray);
       
       const userSettings = getUserSettings(settingsArray);
       debug('🔍 [MULTIPLE_USER_SETTINGS] Final settings for user:', userId, userSettings);
-      console.log('🔍 [MULTIPLE_USER_SETTINGS] Final settings for user:', userId, userSettings);
       
       result[userId] = userSettings;
     });
     
     debug('🔍 [MULTIPLE_USER_SETTINGS] Final result:', result);
-    console.log('🔍 [MULTIPLE_USER_SETTINGS] Final result:', result);
 
     return result;
   }, [data, userIds]);

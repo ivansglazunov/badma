@@ -60202,180 +60202,6 @@
               "deprecationReason": null
             },
             {
-              "name": "notifications",
-              "description": "An array relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notifications_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notifications_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notifications_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "notifications",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "notifications_aggregate",
-              "description": "An aggregate relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notifications_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notifications_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notifications_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "notifications_aggregate",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "title",
               "description": "Notification title",
               "args": [],
@@ -60401,22 +60227,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "bigint",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "user",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "users",
                   "ofType": null
                 }
               },
@@ -60489,90 +60299,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_aggregate_bool_exp",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "count",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_aggregate_bool_exp_count",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_aggregate_bool_exp_count",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "arguments",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "notification_messages_select_column",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "distinct",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "filter",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "predicate",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "Int_comparison_exp",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -60754,127 +60480,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "notification_messages_aggregate_order_by",
-          "description": "order by aggregate values of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "avg",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_avg_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "count",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "max",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_max_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "min",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_min_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_stddev_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev_pop",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_stddev_pop_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev_samp",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_stddev_samp_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "sum",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_sum_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "var_pop",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_var_pop_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "var_samp",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_var_samp_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "variance",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_variance_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "notification_messages_append_input",
           "description": "append existing jsonb value of filtered columns with new jsonb value",
           "fields": null,
@@ -60885,49 +60490,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "jsonb",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_arr_rel_insert_input",
-          "description": "input type for inserting array relation for remote table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "notification_messages_insert_input",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_on_conflict",
                 "ofType": null
               },
               "defaultValue": null
@@ -60969,37 +60531,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_avg_order_by",
-          "description": "order by avg() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -61096,26 +60627,6 @@
               "defaultValue": null
             },
             {
-              "name": "notifications",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notifications_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notifications_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notifications_aggregate_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "title",
               "description": null,
               "type": {
@@ -61131,16 +60642,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "bigint_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -61326,16 +60827,6 @@
               "defaultValue": null
             },
             {
-              "name": "notifications",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notifications_arr_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "title",
               "description": "Notification title",
               "type": {
@@ -61351,16 +60842,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "bigint",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -61464,77 +60945,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_max_order_by",
-          "description": "order by max() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "body",
-              "description": "Notification body",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": "Notification title",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user_id",
-              "description": "Target user for notification",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_min_fields",
           "description": "aggregate min on columns",
@@ -61618,77 +61028,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_min_order_by",
-          "description": "order by min() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "body",
-              "description": "Notification body",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": "Notification title",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user_id",
-              "description": "Target user for notification",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_mutation_response",
           "description": "response of any mutation on the table \"notification_messages\"",
@@ -61736,41 +61075,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_obj_rel_insert_input",
-          "description": "input type for inserting object relation for remote table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "notification_messages_insert_input",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_on_conflict",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -61878,16 +61182,6 @@
               "defaultValue": null
             },
             {
-              "name": "notifications_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notifications_aggregate_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "title",
               "description": null,
               "type": {
@@ -61903,16 +61197,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -62148,37 +61432,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_stddev_order_by",
-          "description": "order by stddev() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_stddev_pop_fields",
           "description": "aggregate stddev_pop on columns",
@@ -62214,37 +61467,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_stddev_pop_order_by",
-          "description": "order by stddev_pop() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_stddev_samp_fields",
           "description": "aggregate stddev_samp on columns",
@@ -62276,37 +61498,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_stddev_samp_order_by",
-          "description": "order by stddev_samp() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -62458,37 +61649,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_sum_order_by",
-          "description": "order by sum() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -62676,37 +61836,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_var_pop_order_by",
-          "description": "order by var_pop() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_var_samp_fields",
           "description": "aggregate var_samp on columns",
@@ -62742,37 +61871,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_var_samp_order_by",
-          "description": "order by var_samp() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_messages_variance_fields",
           "description": "aggregate variance on columns",
@@ -62804,37 +61902,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_messages_variance_order_by",
-          "description": "order by variance() on columns of table \"notification_messages\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -63125,22 +62192,6 @@
               "deprecationReason": null
             },
             {
-              "name": "user",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "users",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "user_id",
               "description": "Reference to users table",
               "args": [],
@@ -63206,90 +62257,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_aggregate_bool_exp",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "count",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_aggregate_bool_exp_count",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_aggregate_bool_exp_count",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "arguments",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "notification_permissions_select_column",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "distinct",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "filter",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "predicate",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "Int_comparison_exp",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -63471,127 +62438,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_aggregate_order_by",
-          "description": "order by aggregate values of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "avg",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_avg_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "count",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "max",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_max_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "min",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_min_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_stddev_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev_pop",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_stddev_pop_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "stddev_samp",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_stddev_samp_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "sum",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_sum_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "var_pop",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_var_pop_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "var_samp",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_var_samp_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "variance",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_variance_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "notification_permissions_append_input",
           "description": "append existing jsonb value of filtered columns with new jsonb value",
           "fields": null,
@@ -63602,49 +62448,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "jsonb",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_arr_rel_insert_input",
-          "description": "input type for inserting array relation for remote table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "data",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "notification_permissions_insert_input",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "on_conflict",
-              "description": "upsert condition",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_on_conflict",
                 "ofType": null
               },
               "defaultValue": null
@@ -63686,37 +62489,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_avg_order_by",
-          "description": "order by avg() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -63848,16 +62620,6 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "bigint_comparison_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_bool_exp",
                 "ofType": null
               },
               "defaultValue": null
@@ -64073,16 +62835,6 @@
               "defaultValue": null
             },
             {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_obj_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "user_id",
               "description": "Reference to users table",
               "type": {
@@ -64181,77 +62933,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_max_order_by",
-          "description": "order by max() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "device_token",
-              "description": "Device token for push notifications",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "provider",
-              "description": "Notification provider (e.g., fcm, apns)",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user_id",
-              "description": "Reference to users table",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_permissions_min_fields",
           "description": "aggregate min on columns",
@@ -64331,77 +63012,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_min_order_by",
-          "description": "order by min() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "device_token",
-              "description": "Device token for push notifications",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "provider",
-              "description": "Notification provider (e.g., fcm, apns)",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user_id",
-              "description": "Reference to users table",
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -64620,16 +63230,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "user",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "users_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -64865,37 +63465,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_stddev_order_by",
-          "description": "order by stddev() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_permissions_stddev_pop_fields",
           "description": "aggregate stddev_pop on columns",
@@ -64931,37 +63500,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_stddev_pop_order_by",
-          "description": "order by stddev_pop() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_permissions_stddev_samp_fields",
           "description": "aggregate stddev_samp on columns",
@@ -64993,37 +63531,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_stddev_samp_order_by",
-          "description": "order by stddev_samp() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -65175,37 +63682,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_sum_order_by",
-          "description": "order by sum() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -65393,37 +63869,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_var_pop_order_by",
-          "description": "order by var_pop() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_permissions_var_samp_fields",
           "description": "aggregate var_samp on columns",
@@ -65459,37 +63904,6 @@
           "possibleTypes": null
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_var_samp_order_by",
-          "description": "order by var_samp() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "OBJECT",
           "name": "notification_permissions_variance_fields",
           "description": "aggregate variance on columns",
@@ -65521,37 +63935,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "notification_permissions_variance_order_by",
-          "description": "order by variance() on columns of table \"notification_permissions\"",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "created_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "updated_at",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -65657,22 +64040,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "uuid",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "message",
-              "description": "An object relationship",
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "notification_messages",
                   "ofType": null
                 }
               },
@@ -66446,16 +64813,6 @@
               "defaultValue": null
             },
             {
-              "name": "message",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "message_id",
               "description": null,
               "type": {
@@ -66681,16 +65038,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "uuid",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "message",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_obj_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -67405,16 +65752,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "message",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -97956,7 +96293,7 @@
             },
             {
               "name": "notification_messages",
-              "description": "An array relationship",
+              "description": "fetch data from the table: \"notification_messages\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -98047,7 +96384,7 @@
             },
             {
               "name": "notification_messages_aggregate",
-              "description": "An aggregate relationship",
+              "description": "fetch aggregated fields from the table: \"notification_messages\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -98157,7 +96494,7 @@
             },
             {
               "name": "notification_permissions",
-              "description": "An array relationship",
+              "description": "fetch data from the table: \"notification_permissions\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -98248,7 +96585,7 @@
             },
             {
               "name": "notification_permissions_aggregate",
-              "description": "An aggregate relationship",
+              "description": "fetch aggregated fields from the table: \"notification_permissions\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -105310,7 +103647,7 @@
             },
             {
               "name": "notification_messages",
-              "description": "An array relationship",
+              "description": "fetch data from the table: \"notification_messages\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -105401,7 +103738,7 @@
             },
             {
               "name": "notification_messages_aggregate",
-              "description": "An aggregate relationship",
+              "description": "fetch aggregated fields from the table: \"notification_messages\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -105578,7 +103915,7 @@
             },
             {
               "name": "notification_permissions",
-              "description": "An array relationship",
+              "description": "fetch data from the table: \"notification_permissions\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -105669,7 +104006,7 @@
             },
             {
               "name": "notification_permissions_aggregate",
-              "description": "An aggregate relationship",
+              "description": "fetch aggregated fields from the table: \"notification_permissions\"",
               "args": [
                 {
                   "name": "distinct_on",
@@ -109706,354 +108043,6 @@
               "deprecationReason": null
             },
             {
-              "name": "notification_messages",
-              "description": "An array relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notification_messages_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notification_messages_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notification_messages_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "notification_messages",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "notification_messages_aggregate",
-              "description": "An aggregate relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notification_messages_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notification_messages_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notification_messages_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "notification_messages_aggregate",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "notification_permissions",
-              "description": "An array relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notification_permissions_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notification_permissions_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notification_permissions_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "notification_permissions",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "notification_permissions_aggregate",
-              "description": "An aggregate relationship",
-              "args": [
-                {
-                  "name": "distinct_on",
-                  "description": "distinct select on columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "notification_permissions_select_column",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "limit",
-                  "description": "limit the number of rows returned",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "offset",
-                  "description": "skip the first n rows. Use only with order_by",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "order_by",
-                  "description": "sort the rows by one or more columns",
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "INPUT_OBJECT",
-                        "name": "notification_permissions_order_by",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "where",
-                  "description": "filter the rows returned",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "notification_permissions_bool_exp",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "notification_permissions_aggregate",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "owned_clubs",
               "description": "An array relationship",
               "args": [
@@ -111396,46 +109385,6 @@
               "defaultValue": null
             },
             {
-              "name": "notification_messages",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_messages_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_aggregate_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_permissions",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_permissions_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_aggregate_bool_exp",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "owned_clubs",
               "description": null,
               "type": {
@@ -111786,26 +109735,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_messages",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_arr_rel_insert_input",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_permissions",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_arr_rel_insert_input",
                 "ofType": null
               },
               "defaultValue": null
@@ -112506,26 +110435,6 @@
               "type": {
                 "kind": "ENUM",
                 "name": "order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_messages_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_messages_aggregate_order_by",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notification_permissions_aggregate",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "notification_permissions_aggregate_order_by",
                 "ofType": null
               },
               "defaultValue": null
@@ -114287,7 +112196,7 @@
         }
       }
     },
-    "timestamp": 1753181485400,
+    "timestamp": 1753195350268,
     "version": "1.0.0"
   }
 }

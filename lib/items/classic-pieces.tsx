@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, CardContent } from "hasyx/components/ui/card";
-import { King, Knight, Rook } from "@/lib/pieces/badma";
+import { King, Knight, Rook } from "@/lib/pieces/classic";
 
 interface ClassicPiecesProps {
   className?: string;
