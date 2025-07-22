@@ -1,6 +1,6 @@
 import * as _jsChessEngine from 'js-chess-engine';
-// @ts-ignore
-const jsChessEngine = _jsChessEngine?.default || _jsChessEngine;
+const __jsChessEngine: any = _jsChessEngine as any;
+const jsChessEngine: any = __jsChessEngine?.default || __jsChessEngine;
 
 import Debug from './debug';
 
@@ -34,7 +34,7 @@ interface ChessMoveResult {
  * Using js-chess-engine internally instead of chess
  */
 export default class Chess {
-  private _chess!: jsChessEngine.Game;
+  private _chess!: any;
   private _gameStatus: ChessStatus = 'continue';
   
   constructor() {

@@ -1,6 +1,6 @@
 import * as _jsChessEngine from 'js-chess-engine';
-// @ts-ignore
-const jsChessEngine = _jsChessEngine?.default || _jsChessEngine;
+const __jsChessEngine: any = _jsChessEngine as any;
+const jsChessEngine: any = __jsChessEngine?.default || __jsChessEngine;
 
 /**
  * Возвращает лучший ход для заданной позиции FEN и уровня сложности.
