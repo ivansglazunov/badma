@@ -8,7 +8,8 @@ import { go } from '../go'; // Import the go function
 const debug = Debug('test:go-local-server-client');
 const goLevel = 1; // AI difficulty level for the test
 
-describe('Go AI vs Go AI via Local Server/Client', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('Go AI vs Go AI via Local Server/Client', () => {
     it('should play a full game between two AI clients until game over', async () => {
         debug(`🚀 Starting Go vs Go test with AI level ${goLevel}`);
 

@@ -72,7 +72,8 @@ async function addUserToTournament(adminHasyx: Hasyx, userId: string, tournament
   });
 }
 
-describe('Tournament Knockout System Test', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('Tournament Knockout System Test', () => {
   let adminHasyx: Hasyx;
   const users: Users[] = [];
   let tournamentId: string;

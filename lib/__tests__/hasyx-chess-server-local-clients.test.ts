@@ -11,7 +11,8 @@ dotenv.config();
 
 const debug = Debug('test:hasyx-chess-client');
 
-describe('HasyxChessClient <-> HasyxChessServer Interaction', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('HasyxChessClient <-> HasyxChessServer Interaction', () => {
 
     it('should handle a full game cycle (Fools Mate)', async () => {
         debug('Starting Fool\'s Mate test');

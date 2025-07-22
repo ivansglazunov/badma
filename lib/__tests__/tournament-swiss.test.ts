@@ -111,7 +111,8 @@ async function processFinishedGames(adminHasyx: Hasyx, tournamentHandler: Tourna
   return processedGames.size;
 }
 
-describe('Tournament Swiss System Test', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('Tournament Swiss System Test', () => {
   let adminHasyx: Hasyx;
   const users: Users[] = [];
   let tournamentId: string;

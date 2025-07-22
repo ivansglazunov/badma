@@ -56,7 +56,8 @@ beforeAll(async () => {
   debug('✅ Assuming games_ai_move event trigger is already set up');
 }, 30000);
 
-describe('AI Move Event Trigger Integration Test', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('AI Move Event Trigger Integration Test', () => {
   it('should automatically make AI moves when game state changes via Hasura event trigger', async () => {
     // 1. Create a game as human player (black)
     debug('Human creating game...');

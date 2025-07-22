@@ -70,9 +70,8 @@ beforeAll(async () => {
 
 }, 120000); // Increased timeout for setup
 
-
-// --- Test Suite --- //
-describe('Go AI vs Go AI via HTTP API', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('Go AI vs Go AI via HTTP API', () => {
   it('should play a full game between two AI clients via HTTP until game over', async () => {
     debug(`🚀 Starting Go vs Go test via HTTP API with AI level ${goLevel}`);
 
