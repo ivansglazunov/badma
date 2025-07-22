@@ -3,6 +3,7 @@
 import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User, Loader2 } from "lucide-react";
 import { signOut, useSession, getSession } from "next-auth/react";
 import React, { useState, useEffect, useRef } from "react";
+import packageJson from '../package.json';
 
 import { useClient, useHasyx, useSubscription } from "hasyx";
 import { createApolloClient, Generator, Hasyx } from "hasyx";
@@ -1116,6 +1117,11 @@ export default function App() {
   }
 
   return (<>
+    {/* Version indicator - fixed top left with very high z-index */}
+    <div className="fixed top-2 left-2 z-[9999] px-2 py-1 bg-black/20 backdrop-blur-sm rounded text-xs text-white/70 font-mono pointer-events-none">
+      v{packageJson.version}
+    </div>
+    
     <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
       <div className="absolute top-3 right-3 z-50 flex flex-col gap-2">
         {/* Device Permissions Status - Only show if supported */}
