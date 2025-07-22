@@ -1479,6 +1479,10 @@ export type Badma_Clubs = {
   in_clubs: Array<Badma_In_Clubs>;
   /** An aggregate relationship */
   in_clubs_aggregate: Badma_In_Clubs_Aggregate;
+  /** An array relationship */
+  items: Array<Badma_Items>;
+  /** An aggregate relationship */
+  items_aggregate: Badma_Items_Aggregate;
   /** Club title/name */
   title: Scalars["String"]["output"];
   updated_at: Scalars["bigint"]["output"];
@@ -1504,6 +1508,24 @@ export type Badma_ClubsIn_Clubs_AggregateArgs = {
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   order_by?: InputMaybe<Array<Badma_In_Clubs_Order_By>>;
   where?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.clubs" */
+export type Badma_ClubsItemsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Items_Order_By>>;
+  where?: InputMaybe<Badma_Items_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.clubs" */
+export type Badma_ClubsItems_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Items_Order_By>>;
+  where?: InputMaybe<Badma_Items_Bool_Exp>;
 };
 
 /** aggregated selection of "badma.clubs" */
@@ -1590,6 +1612,8 @@ export type Badma_Clubs_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   in_clubs?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
   in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp>;
+  items?: InputMaybe<Badma_Items_Bool_Exp>;
+  items_aggregate?: InputMaybe<Badma_Items_Aggregate_Bool_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Bigint_Comparison_Exp>;
   user?: InputMaybe<Users_Bool_Exp>;
@@ -1613,6 +1637,7 @@ export type Badma_Clubs_Insert_Input = {
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
   in_clubs?: InputMaybe<Badma_In_Clubs_Arr_Rel_Insert_Input>;
+  items?: InputMaybe<Badma_Items_Arr_Rel_Insert_Input>;
   /** Club title/name */
   title?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -1695,6 +1720,7 @@ export type Badma_Clubs_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Order_By>;
+  items_aggregate?: InputMaybe<Badma_Items_Aggregate_Order_By>;
   title?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<Users_Order_By>;
@@ -3311,13 +3337,19 @@ export type Badma_Items = {
   accepted: Scalars["Boolean"]["output"];
   /** Timestamp когда предмет был принят */
   accepted_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** An object relationship */
+  club?: Maybe<Badma_Clubs>;
   /** Владелец может передать права владения клубу */
   club_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at: Scalars["bigint"]["output"];
   id: Scalars["uuid"]["output"];
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: Maybe<Scalars["uuid"]["output"]>;
   /** Кодовое уникальное обозначение сущности */
   type: Scalars["String"]["output"];
   updated_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  user: Users;
   /** Владелец предмета */
   user_id: Scalars["uuid"]["output"];
 };
@@ -3327,6 +3359,33 @@ export type Badma_Items_Aggregate = {
   __typename?: "badma_items_aggregate";
   aggregate?: Maybe<Badma_Items_Aggregate_Fields>;
   nodes: Array<Badma_Items>;
+};
+
+export type Badma_Items_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Badma_Items_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Badma_Items_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Badma_Items_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Items_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Badma_Items_Select_Column_Badma_Items_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Items_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Badma_Items_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Badma_Items_Select_Column_Badma_Items_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Items_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Badma_Items_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Items_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Items_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "badma.items" */
@@ -3351,6 +3410,28 @@ export type Badma_Items_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
+/** order by aggregate values of table "badma.items" */
+export type Badma_Items_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Items_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Items_Max_Order_By>;
+  min?: InputMaybe<Badma_Items_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Items_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Items_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Items_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Items_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Items_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Items_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Items_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.items" */
+export type Badma_Items_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Items_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Items_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Badma_Items_Avg_Fields = {
   __typename?: "badma_items_avg_fields";
@@ -3360,6 +3441,14 @@ export type Badma_Items_Avg_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** order by avg() on columns of table "badma.items" */
+export type Badma_Items_Avg_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** Boolean expression to filter rows from the table "badma.items". All fields are combined with a logical 'AND'. */
 export type Badma_Items_Bool_Exp = {
   _and?: InputMaybe<Array<Badma_Items_Bool_Exp>>;
@@ -3367,11 +3456,14 @@ export type Badma_Items_Bool_Exp = {
   _or?: InputMaybe<Array<Badma_Items_Bool_Exp>>;
   accepted?: InputMaybe<Boolean_Comparison_Exp>;
   accepted_at?: InputMaybe<Bigint_Comparison_Exp>;
+  club?: InputMaybe<Badma_Clubs_Bool_Exp>;
   club_id?: InputMaybe<Uuid_Comparison_Exp>;
   created_at?: InputMaybe<Bigint_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  reason_id?: InputMaybe<Uuid_Comparison_Exp>;
   type?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
   user_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
@@ -3395,13 +3487,17 @@ export type Badma_Items_Insert_Input = {
   accepted?: InputMaybe<Scalars["Boolean"]["input"]>;
   /** Timestamp когда предмет был принят */
   accepted_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  club?: InputMaybe<Badma_Clubs_Obj_Rel_Insert_Input>;
   /** Владелец может передать права владения клубу */
   club_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** Кодовое уникальное обозначение сущности */
   type?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   /** Владелец предмета */
   user_id?: InputMaybe<Scalars["uuid"]["input"]>;
 };
@@ -3415,11 +3511,30 @@ export type Badma_Items_Max_Fields = {
   club_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: Maybe<Scalars["uuid"]["output"]>;
   /** Кодовое уникальное обозначение сущности */
   type?: Maybe<Scalars["String"]["output"]>;
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Владелец предмета */
   user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.items" */
+export type Badma_Items_Max_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  /** Владелец может передать права владения клубу */
+  club_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: InputMaybe<Order_By>;
+  /** Кодовое уникальное обозначение сущности */
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** Владелец предмета */
+  user_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -3431,11 +3546,30 @@ export type Badma_Items_Min_Fields = {
   club_id?: Maybe<Scalars["uuid"]["output"]>;
   created_at?: Maybe<Scalars["bigint"]["output"]>;
   id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: Maybe<Scalars["uuid"]["output"]>;
   /** Кодовое уникальное обозначение сущности */
   type?: Maybe<Scalars["String"]["output"]>;
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
   /** Владелец предмета */
   user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.items" */
+export type Badma_Items_Min_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  /** Владелец может передать права владения клубу */
+  club_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: InputMaybe<Order_By>;
+  /** Кодовое уникальное обозначение сущности */
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** Владелец предмета */
+  user_id?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "badma.items" */
@@ -3458,11 +3592,14 @@ export type Badma_Items_On_Conflict = {
 export type Badma_Items_Order_By = {
   accepted?: InputMaybe<Order_By>;
   accepted_at?: InputMaybe<Order_By>;
+  club?: InputMaybe<Badma_Clubs_Order_By>;
   club_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  reason_id?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
   user_id?: InputMaybe<Order_By>;
 };
 
@@ -3484,11 +3621,25 @@ export enum Badma_Items_Select_Column {
   /** column name */
   Id = "id",
   /** column name */
+  ReasonId = "reason_id",
+  /** column name */
   Type = "type",
   /** column name */
   UpdatedAt = "updated_at",
   /** column name */
   UserId = "user_id",
+}
+
+/** select "badma_items_aggregate_bool_exp_bool_and_arguments_columns" columns of table "badma.items" */
+export enum Badma_Items_Select_Column_Badma_Items_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  Accepted = "accepted",
+}
+
+/** select "badma_items_aggregate_bool_exp_bool_or_arguments_columns" columns of table "badma.items" */
+export enum Badma_Items_Select_Column_Badma_Items_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  Accepted = "accepted",
 }
 
 /** input type for updating data in table "badma.items" */
@@ -3501,6 +3652,8 @@ export type Badma_Items_Set_Input = {
   club_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** Кодовое уникальное обозначение сущности */
   type?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -3517,6 +3670,14 @@ export type Badma_Items_Stddev_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** order by stddev() on columns of table "badma.items" */
+export type Badma_Items_Stddev_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Badma_Items_Stddev_Pop_Fields = {
   __typename?: "badma_items_stddev_pop_fields";
@@ -3526,6 +3687,14 @@ export type Badma_Items_Stddev_Pop_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** order by stddev_pop() on columns of table "badma.items" */
+export type Badma_Items_Stddev_Pop_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_samp on columns */
 export type Badma_Items_Stddev_Samp_Fields = {
   __typename?: "badma_items_stddev_samp_fields";
@@ -3533,6 +3702,14 @@ export type Badma_Items_Stddev_Samp_Fields = {
   accepted_at?: Maybe<Scalars["Float"]["output"]>;
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.items" */
+export type Badma_Items_Stddev_Samp_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "badma_items" */
@@ -3553,6 +3730,8 @@ export type Badma_Items_Stream_Cursor_Value_Input = {
   club_id?: InputMaybe<Scalars["uuid"]["input"]>;
   created_at?: InputMaybe<Scalars["bigint"]["input"]>;
   id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Опциональный ID причины предоставления предмета */
+  reason_id?: InputMaybe<Scalars["uuid"]["input"]>;
   /** Кодовое уникальное обозначение сущности */
   type?: InputMaybe<Scalars["String"]["input"]>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -3569,6 +3748,14 @@ export type Badma_Items_Sum_Fields = {
   updated_at?: Maybe<Scalars["bigint"]["output"]>;
 };
 
+/** order by sum() on columns of table "badma.items" */
+export type Badma_Items_Sum_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** update columns of table "badma.items" */
 export enum Badma_Items_Update_Column {
   /** column name */
@@ -3581,6 +3768,8 @@ export enum Badma_Items_Update_Column {
   CreatedAt = "created_at",
   /** column name */
   Id = "id",
+  /** column name */
+  ReasonId = "reason_id",
   /** column name */
   Type = "type",
   /** column name */
@@ -3607,6 +3796,14 @@ export type Badma_Items_Var_Pop_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** order by var_pop() on columns of table "badma.items" */
+export type Badma_Items_Var_Pop_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Badma_Items_Var_Samp_Fields = {
   __typename?: "badma_items_var_samp_fields";
@@ -3616,6 +3813,14 @@ export type Badma_Items_Var_Samp_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** order by var_samp() on columns of table "badma.items" */
+export type Badma_Items_Var_Samp_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Badma_Items_Variance_Fields = {
   __typename?: "badma_items_variance_fields";
@@ -3623,6 +3828,14 @@ export type Badma_Items_Variance_Fields = {
   accepted_at?: Maybe<Scalars["Float"]["output"]>;
   created_at?: Maybe<Scalars["Float"]["output"]>;
   updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.items" */
+export type Badma_Items_Variance_Order_By = {
+  /** Timestamp когда предмет был принят */
+  accepted_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "badma.joins" */
@@ -4665,6 +4878,391 @@ export type Badma_Servers_Variance_Fields = {
   __typename?: "badma_servers_variance_fields";
   active_at?: Maybe<Scalars["Float"]["output"]>;
   created_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** columns and relationships of "badma.settings" */
+export type Badma_Settings = {
+  __typename?: "badma_settings";
+  created_at: Scalars["bigint"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** Ключ настройки (board или pieces) */
+  key: Scalars["String"]["output"];
+  updated_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  user: Users;
+  /** ID пользователя, чья настройка */
+  user_id: Scalars["uuid"]["output"];
+  /** Значение настройки */
+  value: Scalars["String"]["output"];
+};
+
+/** aggregated selection of "badma.settings" */
+export type Badma_Settings_Aggregate = {
+  __typename?: "badma_settings_aggregate";
+  aggregate?: Maybe<Badma_Settings_Aggregate_Fields>;
+  nodes: Array<Badma_Settings>;
+};
+
+export type Badma_Settings_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Settings_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Settings_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Settings_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.settings" */
+export type Badma_Settings_Aggregate_Fields = {
+  __typename?: "badma_settings_aggregate_fields";
+  avg?: Maybe<Badma_Settings_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Settings_Max_Fields>;
+  min?: Maybe<Badma_Settings_Min_Fields>;
+  stddev?: Maybe<Badma_Settings_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_Settings_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_Settings_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_Settings_Sum_Fields>;
+  var_pop?: Maybe<Badma_Settings_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_Settings_Var_Samp_Fields>;
+  variance?: Maybe<Badma_Settings_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.settings" */
+export type Badma_Settings_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.settings" */
+export type Badma_Settings_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Settings_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Settings_Max_Order_By>;
+  min?: InputMaybe<Badma_Settings_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Settings_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Settings_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Settings_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Settings_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Settings_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Settings_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Settings_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "badma.settings" */
+export type Badma_Settings_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Settings_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Settings_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_Settings_Avg_Fields = {
+  __typename?: "badma_settings_avg_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.settings" */
+export type Badma_Settings_Avg_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.settings". All fields are combined with a logical 'AND'. */
+export type Badma_Settings_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Settings_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Settings_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Settings_Bool_Exp>>;
+  created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  key?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+  value?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.settings" */
+export enum Badma_Settings_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  SettingsPkey = "settings_pkey",
+  /** unique or primary key constraint on columns "user_id", "key" */
+  SettingsUserKeyUnique = "settings_user_key_unique",
+}
+
+/** input type for incrementing numeric columns in table "badma.settings" */
+export type Badma_Settings_Inc_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.settings" */
+export type Badma_Settings_Insert_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Ключ настройки (board или pieces) */
+  key?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  /** ID пользователя, чья настройка */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Значение настройки */
+  value?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Settings_Max_Fields = {
+  __typename?: "badma_settings_max_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Ключ настройки (board или pieces) */
+  key?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID пользователя, чья настройка */
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Значение настройки */
+  value?: Maybe<Scalars["String"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.settings" */
+export type Badma_Settings_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Ключ настройки (board или pieces) */
+  key?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** ID пользователя, чья настройка */
+  user_id?: InputMaybe<Order_By>;
+  /** Значение настройки */
+  value?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Settings_Min_Fields = {
+  __typename?: "badma_settings_min_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Ключ настройки (board или pieces) */
+  key?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID пользователя, чья настройка */
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Значение настройки */
+  value?: Maybe<Scalars["String"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.settings" */
+export type Badma_Settings_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Ключ настройки (board или pieces) */
+  key?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** ID пользователя, чья настройка */
+  user_id?: InputMaybe<Order_By>;
+  /** Значение настройки */
+  value?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.settings" */
+export type Badma_Settings_Mutation_Response = {
+  __typename?: "badma_settings_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Settings>;
+};
+
+/** on_conflict condition type for table "badma.settings" */
+export type Badma_Settings_On_Conflict = {
+  constraint: Badma_Settings_Constraint;
+  update_columns?: Array<Badma_Settings_Update_Column>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.settings". */
+export type Badma_Settings_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  key?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+  value?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.settings */
+export type Badma_Settings_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** select columns of table "badma.settings" */
+export enum Badma_Settings_Select_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Key = "key",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+  /** column name */
+  Value = "value",
+}
+
+/** input type for updating data in table "badma.settings" */
+export type Badma_Settings_Set_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Ключ настройки (board или pieces) */
+  key?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** ID пользователя, чья настройка */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Значение настройки */
+  value?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_Settings_Stddev_Fields = {
+  __typename?: "badma_settings_stddev_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.settings" */
+export type Badma_Settings_Stddev_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_Settings_Stddev_Pop_Fields = {
+  __typename?: "badma_settings_stddev_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.settings" */
+export type Badma_Settings_Stddev_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_Settings_Stddev_Samp_Fields = {
+  __typename?: "badma_settings_stddev_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.settings" */
+export type Badma_Settings_Stddev_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_settings" */
+export type Badma_Settings_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Settings_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Settings_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Ключ настройки (board или pieces) */
+  key?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** ID пользователя, чья настройка */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Значение настройки */
+  value?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_Settings_Sum_Fields = {
+  __typename?: "badma_settings_sum_fields";
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.settings" */
+export type Badma_Settings_Sum_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.settings" */
+export enum Badma_Settings_Update_Column {
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Key = "key",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+  /** column name */
+  Value = "value",
+}
+
+export type Badma_Settings_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_Settings_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Settings_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Settings_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_Settings_Var_Pop_Fields = {
+  __typename?: "badma_settings_var_pop_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.settings" */
+export type Badma_Settings_Var_Pop_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_Settings_Var_Samp_Fields = {
+  __typename?: "badma_settings_var_samp_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.settings" */
+export type Badma_Settings_Var_Samp_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_Settings_Variance_Fields = {
+  __typename?: "badma_settings_variance_fields";
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.settings" */
+export type Badma_Settings_Variance_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "badma.tournament_games" */
@@ -6641,481 +7239,6 @@ export type Debug_Variance_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
-/** columns and relationships of "events" */
-export type Events = {
-  __typename?: "events";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at: Scalars["bigint"]["output"];
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["bigint"]["output"]>;
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
-  id: Scalars["uuid"]["output"];
-  /** Message ID reference */
-  message_id: Scalars["uuid"]["output"];
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["bigint"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Reference to schedule table */
-  schedule_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Whether event has been processed by scheduler */
-  scheduled?: Maybe<Scalars["Boolean"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at: Scalars["bigint"]["output"];
-  /** User who created this event */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** aggregated selection of "events" */
-export type Events_Aggregate = {
-  __typename?: "events_aggregate";
-  aggregate?: Maybe<Events_Aggregate_Fields>;
-  nodes: Array<Events>;
-};
-
-/** aggregate fields of "events" */
-export type Events_Aggregate_Fields = {
-  __typename?: "events_aggregate_fields";
-  avg?: Maybe<Events_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Events_Max_Fields>;
-  min?: Maybe<Events_Min_Fields>;
-  stddev?: Maybe<Events_Stddev_Fields>;
-  stddev_pop?: Maybe<Events_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Events_Stddev_Samp_Fields>;
-  sum?: Maybe<Events_Sum_Fields>;
-  var_pop?: Maybe<Events_Var_Pop_Fields>;
-  var_samp?: Maybe<Events_Var_Samp_Fields>;
-  variance?: Maybe<Events_Variance_Fields>;
-};
-
-/** aggregate fields of "events" */
-export type Events_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Events_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Events_Avg_Fields = {
-  __typename?: "events_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "events". All fields are combined with a logical 'AND'. */
-export type Events_Bool_Exp = {
-  _and?: InputMaybe<Array<Events_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
-  _not?: InputMaybe<Events_Bool_Exp>;
-  _or?: InputMaybe<Array<Events_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  end?: InputMaybe<Bigint_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  message_id?: InputMaybe<Uuid_Comparison_Exp>;
-  plan_end?: InputMaybe<Bigint_Comparison_Exp>;
-  plan_start?: InputMaybe<Bigint_Comparison_Exp>;
-  schedule_id?: InputMaybe<Uuid_Comparison_Exp>;
-  scheduled?: InputMaybe<Boolean_Comparison_Exp>;
-  start?: InputMaybe<Bigint_Comparison_Exp>;
-  status?: InputMaybe<String_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  user_id?: InputMaybe<Uuid_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "events" */
-export enum Events_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  EventsPkey = "events_pkey",
-}
-
-/** input type for incrementing numeric columns in table "events" */
-export type Events_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Actual end unix timestamp */
-  end?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Planned end unix timestamp */
-  plan_end?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Planned start unix timestamp */
-  plan_start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Actual start unix timestamp */
-  start?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "events" */
-export type Events_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Actual end unix timestamp */
-  end?: InputMaybe<Scalars["bigint"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Planned end unix timestamp */
-  plan_end?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Planned start unix timestamp */
-  plan_start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Reference to schedule table */
-  schedule_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Whether event has been processed by scheduler */
-  scheduled?: InputMaybe<Scalars["Boolean"]["input"]>;
-  /** Actual start unix timestamp */
-  start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this event */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Events_Max_Fields = {
-  __typename?: "events_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Message ID reference */
-  message_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["bigint"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Reference to schedule table */
-  schedule_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User who created this event */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Events_Min_Fields = {
-  __typename?: "events_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Message ID reference */
-  message_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["bigint"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Reference to schedule table */
-  schedule_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: Maybe<Scalars["String"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User who created this event */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** response of any mutation on the table "events" */
-export type Events_Mutation_Response = {
-  __typename?: "events_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Events>;
-};
-
-/** input type for inserting object relation for remote table "events" */
-export type Events_Obj_Rel_Insert_Input = {
-  data: Events_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Events_On_Conflict>;
-};
-
-/** on_conflict condition type for table "events" */
-export type Events_On_Conflict = {
-  constraint: Events_Constraint;
-  update_columns?: Array<Events_Update_Column>;
-  where?: InputMaybe<Events_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "events". */
-export type Events_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  end?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
-  id?: InputMaybe<Order_By>;
-  message_id?: InputMaybe<Order_By>;
-  plan_end?: InputMaybe<Order_By>;
-  plan_start?: InputMaybe<Order_By>;
-  schedule_id?: InputMaybe<Order_By>;
-  scheduled?: InputMaybe<Order_By>;
-  start?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  user_id?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: events */
-export type Events_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "events" */
-export enum Events_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  End = "end",
-  /** column name */
-  Id = "id",
-  /** column name */
-  MessageId = "message_id",
-  /** column name */
-  PlanEnd = "plan_end",
-  /** column name */
-  PlanStart = "plan_start",
-  /** column name */
-  ScheduleId = "schedule_id",
-  /** column name */
-  Scheduled = "scheduled",
-  /** column name */
-  Start = "start",
-  /** column name */
-  Status = "status",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  UserId = "user_id",
-}
-
-/** input type for updating data in table "events" */
-export type Events_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Actual end unix timestamp */
-  end?: InputMaybe<Scalars["bigint"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Planned end unix timestamp */
-  plan_end?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Planned start unix timestamp */
-  plan_start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Reference to schedule table */
-  schedule_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Whether event has been processed by scheduler */
-  scheduled?: InputMaybe<Scalars["Boolean"]["input"]>;
-  /** Actual start unix timestamp */
-  start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this event */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Events_Stddev_Fields = {
-  __typename?: "events_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Events_Stddev_Pop_Fields = {
-  __typename?: "events_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Events_Stddev_Samp_Fields = {
-  __typename?: "events_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "events" */
-export type Events_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Events_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Events_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Actual end unix timestamp */
-  end?: InputMaybe<Scalars["bigint"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Planned end unix timestamp */
-  plan_end?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Planned start unix timestamp */
-  plan_start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Reference to schedule table */
-  schedule_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Whether event has been processed by scheduler */
-  scheduled?: InputMaybe<Scalars["Boolean"]["input"]>;
-  /** Actual start unix timestamp */
-  start?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Event status: pending, in_progress, completed, cancelled */
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this event */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Events_Sum_Fields = {
-  __typename?: "events_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["bigint"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["bigint"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["bigint"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "events" */
-export enum Events_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  End = "end",
-  /** column name */
-  Id = "id",
-  /** column name */
-  MessageId = "message_id",
-  /** column name */
-  PlanEnd = "plan_end",
-  /** column name */
-  PlanStart = "plan_start",
-  /** column name */
-  ScheduleId = "schedule_id",
-  /** column name */
-  Scheduled = "scheduled",
-  /** column name */
-  Start = "start",
-  /** column name */
-  Status = "status",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  UserId = "user_id",
-}
-
-export type Events_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Events_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Events_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Events_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Events_Var_Pop_Fields = {
-  __typename?: "events_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Events_Var_Samp_Fields = {
-  __typename?: "events_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Events_Variance_Fields = {
-  __typename?: "events_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual end unix timestamp */
-  end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned end unix timestamp */
-  plan_end?: Maybe<Scalars["Float"]["output"]>;
-  /** Planned start unix timestamp */
-  plan_start?: Maybe<Scalars["Float"]["output"]>;
-  /** Actual start unix timestamp */
-  start?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
 /** columns and relationships of "hasyx" */
 export type Hasyx = {
   __typename?: "hasyx";
@@ -7146,11 +7269,7 @@ export type Hasyx = {
   /** An object relationship */
   public_debug?: Maybe<Debug>;
   /** An object relationship */
-  public_events?: Maybe<Events>;
-  /** An object relationship */
   public_notifications?: Maybe<Notifications>;
-  /** An object relationship */
-  public_schedule?: Maybe<Schedule>;
   /** An object relationship */
   public_users?: Maybe<Users>;
   schema?: Maybe<Scalars["String"]["output"]>;
@@ -7198,9 +7317,7 @@ export type Hasyx_Bool_Exp = {
   public_accounts?: InputMaybe<Accounts_Bool_Exp>;
   public_auth_jwt?: InputMaybe<Auth_Jwt_Bool_Exp>;
   public_debug?: InputMaybe<Debug_Bool_Exp>;
-  public_events?: InputMaybe<Events_Bool_Exp>;
   public_notifications?: InputMaybe<Notifications_Bool_Exp>;
-  public_schedule?: InputMaybe<Schedule_Bool_Exp>;
   public_users?: InputMaybe<Users_Bool_Exp>;
   schema?: InputMaybe<String_Comparison_Exp>;
   table?: InputMaybe<String_Comparison_Exp>;
@@ -7223,9 +7340,7 @@ export type Hasyx_Insert_Input = {
   public_accounts?: InputMaybe<Accounts_Obj_Rel_Insert_Input>;
   public_auth_jwt?: InputMaybe<Auth_Jwt_Obj_Rel_Insert_Input>;
   public_debug?: InputMaybe<Debug_Obj_Rel_Insert_Input>;
-  public_events?: InputMaybe<Events_Obj_Rel_Insert_Input>;
   public_notifications?: InputMaybe<Notifications_Obj_Rel_Insert_Input>;
-  public_schedule?: InputMaybe<Schedule_Obj_Rel_Insert_Input>;
   public_users?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   schema?: InputMaybe<Scalars["String"]["input"]>;
   table?: InputMaybe<Scalars["String"]["input"]>;
@@ -7275,9 +7390,7 @@ export type Hasyx_Order_By = {
   public_accounts?: InputMaybe<Accounts_Order_By>;
   public_auth_jwt?: InputMaybe<Auth_Jwt_Order_By>;
   public_debug?: InputMaybe<Debug_Order_By>;
-  public_events?: InputMaybe<Events_Order_By>;
   public_notifications?: InputMaybe<Notifications_Order_By>;
-  public_schedule?: InputMaybe<Schedule_Order_By>;
   public_users?: InputMaybe<Users_Order_By>;
   schema?: InputMaybe<Order_By>;
   table?: InputMaybe<Order_By>;
@@ -8171,6 +8284,10 @@ export type Mutation_Root = {
   delete_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** delete single row from the table: "badma.servers" */
   delete_badma_servers_by_pk?: Maybe<Badma_Servers>;
+  /** delete data from the table: "badma.settings" */
+  delete_badma_settings?: Maybe<Badma_Settings_Mutation_Response>;
+  /** delete single row from the table: "badma.settings" */
+  delete_badma_settings_by_pk?: Maybe<Badma_Settings>;
   /** delete data from the table: "badma.tournament_games" */
   delete_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
   /** delete single row from the table: "badma.tournament_games" */
@@ -8191,10 +8308,6 @@ export type Mutation_Root = {
   delete_debug?: Maybe<Debug_Mutation_Response>;
   /** delete single row from the table: "debug" */
   delete_debug_by_pk?: Maybe<Debug>;
-  /** delete data from the table: "events" */
-  delete_events?: Maybe<Events_Mutation_Response>;
-  /** delete single row from the table: "events" */
-  delete_events_by_pk?: Maybe<Events>;
   /** delete data from the table: "logs.diffs" */
   delete_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** delete single row from the table: "logs.diffs" */
@@ -8239,10 +8352,6 @@ export type Mutation_Root = {
   delete_payments_user_payment_provider_mappings?: Maybe<Payments_User_Payment_Provider_Mappings_Mutation_Response>;
   /** delete single row from the table: "payments.user_payment_provider_mappings" */
   delete_payments_user_payment_provider_mappings_by_pk?: Maybe<Payments_User_Payment_Provider_Mappings>;
-  /** delete data from the table: "schedule" */
-  delete_schedule?: Maybe<Schedule_Mutation_Response>;
-  /** delete single row from the table: "schedule" */
-  delete_schedule_by_pk?: Maybe<Schedule>;
   /** delete data from the table: "users" */
   delete_users?: Maybe<Users_Mutation_Response>;
   /** delete single row from the table: "users" */
@@ -8291,6 +8400,10 @@ export type Mutation_Root = {
   insert_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** insert a single row into the table: "badma.servers" */
   insert_badma_servers_one?: Maybe<Badma_Servers>;
+  /** insert data into the table: "badma.settings" */
+  insert_badma_settings?: Maybe<Badma_Settings_Mutation_Response>;
+  /** insert a single row into the table: "badma.settings" */
+  insert_badma_settings_one?: Maybe<Badma_Settings>;
   /** insert data into the table: "badma.tournament_games" */
   insert_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
   /** insert a single row into the table: "badma.tournament_games" */
@@ -8311,10 +8424,6 @@ export type Mutation_Root = {
   insert_debug?: Maybe<Debug_Mutation_Response>;
   /** insert a single row into the table: "debug" */
   insert_debug_one?: Maybe<Debug>;
-  /** insert data into the table: "events" */
-  insert_events?: Maybe<Events_Mutation_Response>;
-  /** insert a single row into the table: "events" */
-  insert_events_one?: Maybe<Events>;
   /** insert data into the table: "logs.diffs" */
   insert_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** insert a single row into the table: "logs.diffs" */
@@ -8359,10 +8468,6 @@ export type Mutation_Root = {
   insert_payments_user_payment_provider_mappings?: Maybe<Payments_User_Payment_Provider_Mappings_Mutation_Response>;
   /** insert a single row into the table: "payments.user_payment_provider_mappings" */
   insert_payments_user_payment_provider_mappings_one?: Maybe<Payments_User_Payment_Provider_Mappings>;
-  /** insert data into the table: "schedule" */
-  insert_schedule?: Maybe<Schedule_Mutation_Response>;
-  /** insert a single row into the table: "schedule" */
-  insert_schedule_one?: Maybe<Schedule>;
   /** insert data into the table: "users" */
   insert_users?: Maybe<Users_Mutation_Response>;
   /** insert a single row into the table: "users" */
@@ -8439,6 +8544,14 @@ export type Mutation_Root = {
   update_badma_servers_many?: Maybe<
     Array<Maybe<Badma_Servers_Mutation_Response>>
   >;
+  /** update data of the table: "badma.settings" */
+  update_badma_settings?: Maybe<Badma_Settings_Mutation_Response>;
+  /** update single row of the table: "badma.settings" */
+  update_badma_settings_by_pk?: Maybe<Badma_Settings>;
+  /** update multiples rows of table: "badma.settings" */
+  update_badma_settings_many?: Maybe<
+    Array<Maybe<Badma_Settings_Mutation_Response>>
+  >;
   /** update data of the table: "badma.tournament_games" */
   update_badma_tournament_games?: Maybe<Badma_Tournament_Games_Mutation_Response>;
   /** update single row of the table: "badma.tournament_games" */
@@ -8477,12 +8590,6 @@ export type Mutation_Root = {
   update_debug_by_pk?: Maybe<Debug>;
   /** update multiples rows of table: "debug" */
   update_debug_many?: Maybe<Array<Maybe<Debug_Mutation_Response>>>;
-  /** update data of the table: "events" */
-  update_events?: Maybe<Events_Mutation_Response>;
-  /** update single row of the table: "events" */
-  update_events_by_pk?: Maybe<Events>;
-  /** update multiples rows of table: "events" */
-  update_events_many?: Maybe<Array<Maybe<Events_Mutation_Response>>>;
   /** update data of the table: "logs.diffs" */
   update_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** update single row of the table: "logs.diffs" */
@@ -8567,12 +8674,6 @@ export type Mutation_Root = {
   update_payments_user_payment_provider_mappings_many?: Maybe<
     Array<Maybe<Payments_User_Payment_Provider_Mappings_Mutation_Response>>
   >;
-  /** update data of the table: "schedule" */
-  update_schedule?: Maybe<Schedule_Mutation_Response>;
-  /** update single row of the table: "schedule" */
-  update_schedule_by_pk?: Maybe<Schedule>;
-  /** update multiples rows of table: "schedule" */
-  update_schedule_many?: Maybe<Array<Maybe<Schedule_Mutation_Response>>>;
   /** update data of the table: "users" */
   update_users?: Maybe<Users_Mutation_Response>;
   /** update single row of the table: "users" */
@@ -8692,6 +8793,16 @@ export type Mutation_RootDelete_Badma_Servers_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_Badma_SettingsArgs = {
+  where: Badma_Settings_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Settings_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_Badma_Tournament_GamesArgs = {
   where: Badma_Tournament_Games_Bool_Exp;
 };
@@ -8738,16 +8849,6 @@ export type Mutation_RootDelete_DebugArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Debug_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_EventsArgs = {
-  where: Events_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Events_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -8861,16 +8962,6 @@ export type Mutation_RootDelete_Payments_User_Payment_Provider_Mappings_By_PkArg
   {
     id: Scalars["uuid"]["input"];
   };
-
-/** mutation root */
-export type Mutation_RootDelete_ScheduleArgs = {
-  where: Schedule_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_Schedule_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
 
 /** mutation root */
 export type Mutation_RootDelete_UsersArgs = {
@@ -9015,6 +9106,18 @@ export type Mutation_RootInsert_Badma_Servers_OneArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootInsert_Badma_SettingsArgs = {
+  objects: Array<Badma_Settings_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Settings_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Settings_OneArgs = {
+  object: Badma_Settings_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Settings_On_Conflict>;
+};
+
+/** mutation root */
 export type Mutation_RootInsert_Badma_Tournament_GamesArgs = {
   objects: Array<Badma_Tournament_Games_Insert_Input>;
   on_conflict?: InputMaybe<Badma_Tournament_Games_On_Conflict>;
@@ -9072,18 +9175,6 @@ export type Mutation_RootInsert_DebugArgs = {
 export type Mutation_RootInsert_Debug_OneArgs = {
   object: Debug_Insert_Input;
   on_conflict?: InputMaybe<Debug_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_EventsArgs = {
-  objects: Array<Events_Insert_Input>;
-  on_conflict?: InputMaybe<Events_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Events_OneArgs = {
-  object: Events_Insert_Input;
-  on_conflict?: InputMaybe<Events_On_Conflict>;
 };
 
 /** mutation root */
@@ -9218,18 +9309,6 @@ export type Mutation_RootInsert_Payments_User_Payment_Provider_Mappings_OneArgs 
     object: Payments_User_Payment_Provider_Mappings_Insert_Input;
     on_conflict?: InputMaybe<Payments_User_Payment_Provider_Mappings_On_Conflict>;
   };
-
-/** mutation root */
-export type Mutation_RootInsert_ScheduleArgs = {
-  objects: Array<Schedule_Insert_Input>;
-  on_conflict?: InputMaybe<Schedule_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_Schedule_OneArgs = {
-  object: Schedule_Insert_Input;
-  on_conflict?: InputMaybe<Schedule_On_Conflict>;
-};
 
 /** mutation root */
 export type Mutation_RootInsert_UsersArgs = {
@@ -9483,6 +9562,25 @@ export type Mutation_RootUpdate_Badma_Servers_ManyArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_Badma_SettingsArgs = {
+  _inc?: InputMaybe<Badma_Settings_Inc_Input>;
+  _set?: InputMaybe<Badma_Settings_Set_Input>;
+  where: Badma_Settings_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Settings_By_PkArgs = {
+  _inc?: InputMaybe<Badma_Settings_Inc_Input>;
+  _set?: InputMaybe<Badma_Settings_Set_Input>;
+  pk_columns: Badma_Settings_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Settings_ManyArgs = {
+  updates: Array<Badma_Settings_Updates>;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_Badma_Tournament_GamesArgs = {
   _inc?: InputMaybe<Badma_Tournament_Games_Inc_Input>;
   _set?: InputMaybe<Badma_Tournament_Games_Set_Input>;
@@ -9595,25 +9693,6 @@ export type Mutation_RootUpdate_Debug_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Debug_ManyArgs = {
   updates: Array<Debug_Updates>;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_EventsArgs = {
-  _inc?: InputMaybe<Events_Inc_Input>;
-  _set?: InputMaybe<Events_Set_Input>;
-  where: Events_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Events_By_PkArgs = {
-  _inc?: InputMaybe<Events_Inc_Input>;
-  _set?: InputMaybe<Events_Set_Input>;
-  pk_columns: Events_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Events_ManyArgs = {
-  updates: Array<Events_Updates>;
 };
 
 /** mutation root */
@@ -9926,25 +10005,6 @@ export type Mutation_RootUpdate_Payments_User_Payment_Provider_Mappings_ManyArgs
   {
     updates: Array<Payments_User_Payment_Provider_Mappings_Updates>;
   };
-
-/** mutation root */
-export type Mutation_RootUpdate_ScheduleArgs = {
-  _inc?: InputMaybe<Schedule_Inc_Input>;
-  _set?: InputMaybe<Schedule_Set_Input>;
-  where: Schedule_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Schedule_By_PkArgs = {
-  _inc?: InputMaybe<Schedule_Inc_Input>;
-  _set?: InputMaybe<Schedule_Set_Input>;
-  pk_columns: Schedule_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Schedule_ManyArgs = {
-  updates: Array<Schedule_Updates>;
-};
 
 /** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
@@ -15929,6 +15989,12 @@ export type Query_Root = {
   badma_servers_aggregate: Badma_Servers_Aggregate;
   /** fetch data from the table: "badma.servers" using primary key columns */
   badma_servers_by_pk?: Maybe<Badma_Servers>;
+  /** fetch data from the table: "badma.settings" */
+  badma_settings: Array<Badma_Settings>;
+  /** fetch aggregated fields from the table: "badma.settings" */
+  badma_settings_aggregate: Badma_Settings_Aggregate;
+  /** fetch data from the table: "badma.settings" using primary key columns */
+  badma_settings_by_pk?: Maybe<Badma_Settings>;
   /** fetch data from the table: "badma.tournament_games" */
   badma_tournament_games: Array<Badma_Tournament_Games>;
   /** fetch aggregated fields from the table: "badma.tournament_games" */
@@ -15959,12 +16025,6 @@ export type Query_Root = {
   debug_aggregate: Debug_Aggregate;
   /** fetch data from the table: "debug" using primary key columns */
   debug_by_pk?: Maybe<Debug>;
-  /** fetch data from the table: "events" */
-  events: Array<Events>;
-  /** fetch aggregated fields from the table: "events" */
-  events_aggregate: Events_Aggregate;
-  /** fetch data from the table: "events" using primary key columns */
-  events_by_pk?: Maybe<Events>;
   /** fetch data from the table: "hasyx" */
   hasyx: Array<Hasyx>;
   /** fetch aggregated fields from the table: "hasyx" */
@@ -16035,12 +16095,6 @@ export type Query_Root = {
   payments_user_payment_provider_mappings_aggregate: Payments_User_Payment_Provider_Mappings_Aggregate;
   /** fetch data from the table: "payments.user_payment_provider_mappings" using primary key columns */
   payments_user_payment_provider_mappings_by_pk?: Maybe<Payments_User_Payment_Provider_Mappings>;
-  /** fetch data from the table: "schedule" */
-  schedule: Array<Schedule>;
-  /** fetch aggregated fields from the table: "schedule" */
-  schedule_aggregate: Schedule_Aggregate;
-  /** fetch data from the table: "schedule" using primary key columns */
-  schedule_by_pk?: Maybe<Schedule>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -16269,6 +16323,26 @@ export type Query_RootBadma_Servers_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
+export type Query_RootBadma_SettingsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+export type Query_RootBadma_Settings_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+export type Query_RootBadma_Settings_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
 export type Query_RootBadma_Tournament_GamesArgs = {
   distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16366,26 +16440,6 @@ export type Query_RootDebug_AggregateArgs = {
 };
 
 export type Query_RootDebug_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Query_RootEventsArgs = {
-  distinct_on?: InputMaybe<Array<Events_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Events_Order_By>>;
-  where?: InputMaybe<Events_Bool_Exp>;
-};
-
-export type Query_RootEvents_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Events_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Events_Order_By>>;
-  where?: InputMaybe<Events_Bool_Exp>;
-};
-
-export type Query_RootEvents_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -16633,26 +16687,6 @@ export type Query_RootPayments_User_Payment_Provider_Mappings_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
-export type Query_RootScheduleArgs = {
-  distinct_on?: InputMaybe<Array<Schedule_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Schedule_Order_By>>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
-export type Query_RootSchedule_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Schedule_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Schedule_Order_By>>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
-export type Query_RootSchedule_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
 export type Query_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16671,377 +16705,6 @@ export type Query_RootUsers_AggregateArgs = {
 
 export type Query_RootUsers_By_PkArgs = {
   id: Scalars["uuid"]["input"];
-};
-
-/** columns and relationships of "schedule" */
-export type Schedule = {
-  __typename?: "schedule";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at: Scalars["bigint"]["output"];
-  /** Cron expression for scheduling */
-  cron: Scalars["String"]["output"];
-  /** Unix timestamp end time */
-  end_at: Scalars["bigint"]["output"];
-  /** An object relationship */
-  hasyx?: Maybe<Hasyx>;
-  id: Scalars["uuid"]["output"];
-  /** Message ID reference */
-  message_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Unix timestamp start time */
-  start_at: Scalars["bigint"]["output"];
-  updated_at: Scalars["bigint"]["output"];
-  /** User who created this schedule */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** aggregated selection of "schedule" */
-export type Schedule_Aggregate = {
-  __typename?: "schedule_aggregate";
-  aggregate?: Maybe<Schedule_Aggregate_Fields>;
-  nodes: Array<Schedule>;
-};
-
-/** aggregate fields of "schedule" */
-export type Schedule_Aggregate_Fields = {
-  __typename?: "schedule_aggregate_fields";
-  avg?: Maybe<Schedule_Avg_Fields>;
-  count: Scalars["Int"]["output"];
-  max?: Maybe<Schedule_Max_Fields>;
-  min?: Maybe<Schedule_Min_Fields>;
-  stddev?: Maybe<Schedule_Stddev_Fields>;
-  stddev_pop?: Maybe<Schedule_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Schedule_Stddev_Samp_Fields>;
-  sum?: Maybe<Schedule_Sum_Fields>;
-  var_pop?: Maybe<Schedule_Var_Pop_Fields>;
-  var_samp?: Maybe<Schedule_Var_Samp_Fields>;
-  variance?: Maybe<Schedule_Variance_Fields>;
-};
-
-/** aggregate fields of "schedule" */
-export type Schedule_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Schedule_Select_Column>>;
-  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
-};
-
-/** aggregate avg on columns */
-export type Schedule_Avg_Fields = {
-  __typename?: "schedule_avg_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Boolean expression to filter rows from the table "schedule". All fields are combined with a logical 'AND'. */
-export type Schedule_Bool_Exp = {
-  _and?: InputMaybe<Array<Schedule_Bool_Exp>>;
-  _hasyx_schema_name?: InputMaybe<String_Comparison_Exp>;
-  _hasyx_table_name?: InputMaybe<String_Comparison_Exp>;
-  _not?: InputMaybe<Schedule_Bool_Exp>;
-  _or?: InputMaybe<Array<Schedule_Bool_Exp>>;
-  created_at?: InputMaybe<Bigint_Comparison_Exp>;
-  cron?: InputMaybe<String_Comparison_Exp>;
-  end_at?: InputMaybe<Bigint_Comparison_Exp>;
-  hasyx?: InputMaybe<Hasyx_Bool_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  message_id?: InputMaybe<Uuid_Comparison_Exp>;
-  start_at?: InputMaybe<Bigint_Comparison_Exp>;
-  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
-  user_id?: InputMaybe<Uuid_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "schedule" */
-export enum Schedule_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  SchedulePkey = "schedule_pkey",
-}
-
-/** input type for incrementing numeric columns in table "schedule" */
-export type Schedule_Inc_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Unix timestamp end time */
-  end_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Unix timestamp start time */
-  start_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-};
-
-/** input type for inserting data into table "schedule" */
-export type Schedule_Insert_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Cron expression for scheduling */
-  cron?: InputMaybe<Scalars["String"]["input"]>;
-  /** Unix timestamp end time */
-  end_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  hasyx?: InputMaybe<Hasyx_Obj_Rel_Insert_Input>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Unix timestamp start time */
-  start_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this schedule */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate max on columns */
-export type Schedule_Max_Fields = {
-  __typename?: "schedule_max_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Cron expression for scheduling */
-  cron?: Maybe<Scalars["String"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Message ID reference */
-  message_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User who created this schedule */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** aggregate min on columns */
-export type Schedule_Min_Fields = {
-  __typename?: "schedule_min_fields";
-  _hasyx_schema_name?: Maybe<Scalars["String"]["output"]>;
-  _hasyx_table_name?: Maybe<Scalars["String"]["output"]>;
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Cron expression for scheduling */
-  cron?: Maybe<Scalars["String"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["bigint"]["output"]>;
-  id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Message ID reference */
-  message_id?: Maybe<Scalars["uuid"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** User who created this schedule */
-  user_id?: Maybe<Scalars["uuid"]["output"]>;
-};
-
-/** response of any mutation on the table "schedule" */
-export type Schedule_Mutation_Response = {
-  __typename?: "schedule_mutation_response";
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars["Int"]["output"];
-  /** data from the rows affected by the mutation */
-  returning: Array<Schedule>;
-};
-
-/** input type for inserting object relation for remote table "schedule" */
-export type Schedule_Obj_Rel_Insert_Input = {
-  data: Schedule_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Schedule_On_Conflict>;
-};
-
-/** on_conflict condition type for table "schedule" */
-export type Schedule_On_Conflict = {
-  constraint: Schedule_Constraint;
-  update_columns?: Array<Schedule_Update_Column>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "schedule". */
-export type Schedule_Order_By = {
-  _hasyx_schema_name?: InputMaybe<Order_By>;
-  _hasyx_table_name?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  cron?: InputMaybe<Order_By>;
-  end_at?: InputMaybe<Order_By>;
-  hasyx?: InputMaybe<Hasyx_Order_By>;
-  id?: InputMaybe<Order_By>;
-  message_id?: InputMaybe<Order_By>;
-  start_at?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-  user_id?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: schedule */
-export type Schedule_Pk_Columns_Input = {
-  id: Scalars["uuid"]["input"];
-};
-
-/** select columns of table "schedule" */
-export enum Schedule_Select_Column {
-  /** column name */
-  HasyxSchemaName = "_hasyx_schema_name",
-  /** column name */
-  HasyxTableName = "_hasyx_table_name",
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Cron = "cron",
-  /** column name */
-  EndAt = "end_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  MessageId = "message_id",
-  /** column name */
-  StartAt = "start_at",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  UserId = "user_id",
-}
-
-/** input type for updating data in table "schedule" */
-export type Schedule_Set_Input = {
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Cron expression for scheduling */
-  cron?: InputMaybe<Scalars["String"]["input"]>;
-  /** Unix timestamp end time */
-  end_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Unix timestamp start time */
-  start_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this schedule */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate stddev on columns */
-export type Schedule_Stddev_Fields = {
-  __typename?: "schedule_stddev_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Schedule_Stddev_Pop_Fields = {
-  __typename?: "schedule_stddev_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Schedule_Stddev_Samp_Fields = {
-  __typename?: "schedule_stddev_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** Streaming cursor of the table "schedule" */
-export type Schedule_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Schedule_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Schedule_Stream_Cursor_Value_Input = {
-  _hasyx_schema_name?: InputMaybe<Scalars["String"]["input"]>;
-  _hasyx_table_name?: InputMaybe<Scalars["String"]["input"]>;
-  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** Cron expression for scheduling */
-  cron?: InputMaybe<Scalars["String"]["input"]>;
-  /** Unix timestamp end time */
-  end_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Message ID reference */
-  message_id?: InputMaybe<Scalars["uuid"]["input"]>;
-  /** Unix timestamp start time */
-  start_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
-  /** User who created this schedule */
-  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
-};
-
-/** aggregate sum on columns */
-export type Schedule_Sum_Fields = {
-  __typename?: "schedule_sum_fields";
-  created_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["bigint"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["bigint"]["output"]>;
-  updated_at?: Maybe<Scalars["bigint"]["output"]>;
-};
-
-/** update columns of table "schedule" */
-export enum Schedule_Update_Column {
-  /** column name */
-  CreatedAt = "created_at",
-  /** column name */
-  Cron = "cron",
-  /** column name */
-  EndAt = "end_at",
-  /** column name */
-  Id = "id",
-  /** column name */
-  MessageId = "message_id",
-  /** column name */
-  StartAt = "start_at",
-  /** column name */
-  UpdatedAt = "updated_at",
-  /** column name */
-  UserId = "user_id",
-}
-
-export type Schedule_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Schedule_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Schedule_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Schedule_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Schedule_Var_Pop_Fields = {
-  __typename?: "schedule_var_pop_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Schedule_Var_Samp_Fields = {
-  __typename?: "schedule_var_samp_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
-};
-
-/** aggregate variance on columns */
-export type Schedule_Variance_Fields = {
-  __typename?: "schedule_variance_fields";
-  created_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp end time */
-  end_at?: Maybe<Scalars["Float"]["output"]>;
-  /** Unix timestamp start time */
-  start_at?: Maybe<Scalars["Float"]["output"]>;
-  updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type Subscription_Root = {
@@ -17134,6 +16797,14 @@ export type Subscription_Root = {
   badma_servers_by_pk?: Maybe<Badma_Servers>;
   /** fetch data from the table in a streaming manner: "badma.servers" */
   badma_servers_stream: Array<Badma_Servers>;
+  /** fetch data from the table: "badma.settings" */
+  badma_settings: Array<Badma_Settings>;
+  /** fetch aggregated fields from the table: "badma.settings" */
+  badma_settings_aggregate: Badma_Settings_Aggregate;
+  /** fetch data from the table: "badma.settings" using primary key columns */
+  badma_settings_by_pk?: Maybe<Badma_Settings>;
+  /** fetch data from the table in a streaming manner: "badma.settings" */
+  badma_settings_stream: Array<Badma_Settings>;
   /** fetch data from the table: "badma.tournament_games" */
   badma_tournament_games: Array<Badma_Tournament_Games>;
   /** fetch aggregated fields from the table: "badma.tournament_games" */
@@ -17174,14 +16845,6 @@ export type Subscription_Root = {
   debug_by_pk?: Maybe<Debug>;
   /** fetch data from the table in a streaming manner: "debug" */
   debug_stream: Array<Debug>;
-  /** fetch data from the table: "events" */
-  events: Array<Events>;
-  /** fetch aggregated fields from the table: "events" */
-  events_aggregate: Events_Aggregate;
-  /** fetch data from the table: "events" using primary key columns */
-  events_by_pk?: Maybe<Events>;
-  /** fetch data from the table in a streaming manner: "events" */
-  events_stream: Array<Events>;
   /** fetch data from the table: "hasyx" */
   hasyx: Array<Hasyx>;
   /** fetch aggregated fields from the table: "hasyx" */
@@ -17276,14 +16939,6 @@ export type Subscription_Root = {
   payments_user_payment_provider_mappings_by_pk?: Maybe<Payments_User_Payment_Provider_Mappings>;
   /** fetch data from the table in a streaming manner: "payments.user_payment_provider_mappings" */
   payments_user_payment_provider_mappings_stream: Array<Payments_User_Payment_Provider_Mappings>;
-  /** fetch data from the table: "schedule" */
-  schedule: Array<Schedule>;
-  /** fetch aggregated fields from the table: "schedule" */
-  schedule_aggregate: Schedule_Aggregate;
-  /** fetch data from the table: "schedule" using primary key columns */
-  schedule_by_pk?: Maybe<Schedule>;
-  /** fetch data from the table in a streaming manner: "schedule" */
-  schedule_stream: Array<Schedule>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -17580,6 +17235,32 @@ export type Subscription_RootBadma_Servers_StreamArgs = {
   where?: InputMaybe<Badma_Servers_Bool_Exp>;
 };
 
+export type Subscription_RootBadma_SettingsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Settings_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Settings_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Settings_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Settings_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
 export type Subscription_RootBadma_Tournament_GamesArgs = {
   distinct_on?: InputMaybe<Array<Badma_Tournament_Games_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -17708,32 +17389,6 @@ export type Subscription_RootDebug_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Debug_Stream_Cursor_Input>>;
   where?: InputMaybe<Debug_Bool_Exp>;
-};
-
-export type Subscription_RootEventsArgs = {
-  distinct_on?: InputMaybe<Array<Events_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Events_Order_By>>;
-  where?: InputMaybe<Events_Bool_Exp>;
-};
-
-export type Subscription_RootEvents_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Events_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Events_Order_By>>;
-  where?: InputMaybe<Events_Bool_Exp>;
-};
-
-export type Subscription_RootEvents_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootEvents_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Events_Stream_Cursor_Input>>;
-  where?: InputMaybe<Events_Bool_Exp>;
 };
 
 export type Subscription_RootHasyxArgs = {
@@ -18057,32 +17712,6 @@ export type Subscription_RootPayments_User_Payment_Provider_Mappings_StreamArgs 
     where?: InputMaybe<Payments_User_Payment_Provider_Mappings_Bool_Exp>;
   };
 
-export type Subscription_RootScheduleArgs = {
-  distinct_on?: InputMaybe<Array<Schedule_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Schedule_Order_By>>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
-export type Subscription_RootSchedule_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Schedule_Select_Column>>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
-  offset?: InputMaybe<Scalars["Int"]["input"]>;
-  order_by?: InputMaybe<Array<Schedule_Order_By>>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
-export type Subscription_RootSchedule_By_PkArgs = {
-  id: Scalars["uuid"]["input"];
-};
-
-export type Subscription_RootSchedule_StreamArgs = {
-  batch_size: Scalars["Int"]["input"];
-  cursor: Array<InputMaybe<Schedule_Stream_Cursor_Input>>;
-  where?: InputMaybe<Schedule_Bool_Exp>;
-};
-
 export type Subscription_RootUsersArgs = {
   distinct_on?: InputMaybe<Array<Users_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -18153,6 +17782,10 @@ export type Users = {
   /** Admin flag */
   is_admin?: Maybe<Scalars["Boolean"]["output"]>;
   /** An array relationship */
+  items: Array<Badma_Items>;
+  /** An aggregate relationship */
+  items_aggregate: Badma_Items_Aggregate;
+  /** An array relationship */
   joins: Array<Badma_Joins>;
   /** An aggregate relationship */
   joins_aggregate: Badma_Joins_Aggregate;
@@ -18176,6 +17809,10 @@ export type Users = {
   owned_clubs_aggregate: Badma_Clubs_Aggregate;
   /** User password hash */
   password?: Maybe<Scalars["String"]["output"]>;
+  /** An array relationship */
+  settings: Array<Badma_Settings>;
+  /** An aggregate relationship */
+  settings_aggregate: Badma_Settings_Aggregate;
   /** An array relationship */
   tournament_participants: Array<Badma_Tournament_Participants>;
   /** An aggregate relationship */
@@ -18296,6 +17933,24 @@ export type UsersIn_Clubs_AggregateArgs = {
 };
 
 /** columns and relationships of "users" */
+export type UsersItemsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Items_Order_By>>;
+  where?: InputMaybe<Badma_Items_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersItems_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Items_Order_By>>;
+  where?: InputMaybe<Badma_Items_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
 export type UsersJoinsArgs = {
   distinct_on?: InputMaybe<Array<Badma_Joins_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -18383,6 +18038,24 @@ export type UsersOwned_Clubs_AggregateArgs = {
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   order_by?: InputMaybe<Array<Badma_Clubs_Order_By>>;
   where?: InputMaybe<Badma_Clubs_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersSettingsArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersSettings_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Settings_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Settings_Order_By>>;
+  where?: InputMaybe<Badma_Settings_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -18486,6 +18159,8 @@ export type Users_Bool_Exp = {
   in_clubs?: InputMaybe<Badma_In_Clubs_Bool_Exp>;
   in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Bool_Exp>;
   is_admin?: InputMaybe<Boolean_Comparison_Exp>;
+  items?: InputMaybe<Badma_Items_Bool_Exp>;
+  items_aggregate?: InputMaybe<Badma_Items_Aggregate_Bool_Exp>;
   joins?: InputMaybe<Badma_Joins_Bool_Exp>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Bool_Exp>;
   moves?: InputMaybe<Badma_Moves_Bool_Exp>;
@@ -18498,6 +18173,8 @@ export type Users_Bool_Exp = {
   owned_clubs?: InputMaybe<Badma_Clubs_Bool_Exp>;
   owned_clubs_aggregate?: InputMaybe<Badma_Clubs_Aggregate_Bool_Exp>;
   password?: InputMaybe<String_Comparison_Exp>;
+  settings?: InputMaybe<Badma_Settings_Bool_Exp>;
+  settings_aggregate?: InputMaybe<Badma_Settings_Aggregate_Bool_Exp>;
   tournament_participants?: InputMaybe<Badma_Tournament_Participants_Bool_Exp>;
   tournament_participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Bool_Exp>;
   tournaments?: InputMaybe<Badma_Tournaments_Bool_Exp>;
@@ -18542,6 +18219,7 @@ export type Users_Insert_Input = {
   in_clubs?: InputMaybe<Badma_In_Clubs_Arr_Rel_Insert_Input>;
   /** Admin flag */
   is_admin?: InputMaybe<Scalars["Boolean"]["input"]>;
+  items?: InputMaybe<Badma_Items_Arr_Rel_Insert_Input>;
   joins?: InputMaybe<Badma_Joins_Arr_Rel_Insert_Input>;
   moves?: InputMaybe<Badma_Moves_Arr_Rel_Insert_Input>;
   /** User display name */
@@ -18551,6 +18229,7 @@ export type Users_Insert_Input = {
   owned_clubs?: InputMaybe<Badma_Clubs_Arr_Rel_Insert_Input>;
   /** User password hash */
   password?: InputMaybe<Scalars["String"]["input"]>;
+  settings?: InputMaybe<Badma_Settings_Arr_Rel_Insert_Input>;
   tournament_participants?: InputMaybe<Badma_Tournament_Participants_Arr_Rel_Insert_Input>;
   tournaments?: InputMaybe<Badma_Tournaments_Arr_Rel_Insert_Input>;
   updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
@@ -18641,6 +18320,7 @@ export type Users_Order_By = {
   image?: InputMaybe<Order_By>;
   in_clubs_aggregate?: InputMaybe<Badma_In_Clubs_Aggregate_Order_By>;
   is_admin?: InputMaybe<Order_By>;
+  items_aggregate?: InputMaybe<Badma_Items_Aggregate_Order_By>;
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Order_By>;
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
@@ -18648,6 +18328,7 @@ export type Users_Order_By = {
   notification_permissions_aggregate?: InputMaybe<Notification_Permissions_Aggregate_Order_By>;
   owned_clubs_aggregate?: InputMaybe<Badma_Clubs_Aggregate_Order_By>;
   password?: InputMaybe<Order_By>;
+  settings_aggregate?: InputMaybe<Badma_Settings_Aggregate_Order_By>;
   tournament_participants_aggregate?: InputMaybe<Badma_Tournament_Participants_Aggregate_Order_By>;
   tournaments_aggregate?: InputMaybe<Badma_Tournaments_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;

@@ -6,6 +6,7 @@ import { Input } from 'hasyx/components/ui/input';
 import { Button } from 'hasyx/components/ui/button';
 import { LoaderCircle, Crown, Check, X, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from 'hasyx/components/ui/dialog';
+import { useToastHandleClubError } from '@/hooks/toasts';
 
 export const ClubTab: React.FC = () => {
   const { data: session } = useSession();
@@ -61,6 +62,9 @@ export const ClubTab: React.FC = () => {
     },
     { skip: !hasyx.userId }
   );
+
+  // Обрабатываем ошибки через тост
+  useToastHandleClubError(clubsError);
 
   // Format clubs data
   const clubsDataFormatted = React.useMemo(() => {
@@ -233,14 +237,6 @@ export const ClubTab: React.FC = () => {
       <div className="flex items-center justify-center p-4">
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
         Loading club data...
-      </div>
-    );
-  }
-
-  if (clubsError) {
-    return (
-      <div className="p-4 text-red-500">
-        Error loading club data: {clubsError.message}
       </div>
     );
   }

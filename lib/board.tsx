@@ -7,6 +7,25 @@ import { useDeviceMotion } from '../hooks/device-motion';
 import { Pawn, Rook, Knight, Bishop, Queen, King } from './pieces/badma';
 import { HoverCard } from '@/components/hover-card';
 
+// Telegram WebApp haptic feedback utilities
+const isTelegramWebApp = () => {
+  return typeof window !== 'undefined' && 
+         window.Telegram && 
+         window.Telegram.WebApp && 
+         window.Telegram.WebApp.HapticFeedback;
+};
+
+const triggerHapticFeedback = (type: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => {
+  if (typeof window !== 'undefined' && isTelegramWebApp()) {
+    try {
+      window?.Telegram?.WebApp?.HapticFeedback?.impactOccurred(type);
+      console.log('🎯 [HAPTIC] Triggered haptic feedback:', type);
+    } catch (error) {
+      console.warn('⚠️ [HAPTIC] Failed to trigger haptic feedback:', error);
+    }
+  }
+};
+
 interface BoardProps {
   position?: string;
   onMove?: (move: { from: string; to: string; promotion?: string }) => boolean;
@@ -153,6 +172,14 @@ export default function Board({
 }: BoardProps) {
   console.log('🏁 [BOARD] Board rendered with position:', position);
 
+  // Handle piece grab (start of move)
+  const handlePieceGrab = (piece: string, sourceSquare: string): boolean => {
+    console.log('👆 [BOARD] Piece grabbed:', { piece, sourceSquare });
+    // Trigger light haptic feedback when grabbing a piece
+    triggerHapticFeedback('light');
+    return true; // Allow piece to be grabbed
+  };
+
   // Handle piece drop (move)
   const handlePieceDrop = (sourceSquare: string, targetSquare: string, piece: string) => {
     const move = {
@@ -172,10 +199,22 @@ export default function Board({
       console.log('📝 [BOARD] Calling onMove with:', move);
       const result = onMove(move);
       console.log('📝 [BOARD] onMove returned:', result);
+      
+      // Trigger haptic feedback based on move result
+      if (result) {
+        // Successful move - medium haptic feedback
+        triggerHapticFeedback('medium');
+      } else {
+        // Invalid move - rigid haptic feedback
+        triggerHapticFeedback('rigid');
+      }
+      
       return result;
     }
     
     console.log('📝 [BOARD] No onMove prop - allowing move by default');
+    // Default successful move - medium haptic feedback
+    triggerHapticFeedback('medium');
     return true;
   };
 
@@ -214,6 +253,7 @@ export default function Board({
     }}>
       <Chessboard
         position={position}
+        onPieceGrab={handlePieceGrab}
         onPieceDrop={handlePieceDrop}
         boardWidth={width}
         customDarkSquareStyle={{ backgroundColor: bgBlack }}

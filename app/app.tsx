@@ -27,7 +27,9 @@ import { toast } from "sonner";
 
 import { cn } from "hasyx/lib/utils"
 import { useMounted } from "@/hooks/mounted";
+import { useToastHandleParticipantsError, useToastHandleGamesError, useToastHandleTournamentsError } from "@/hooks/toasts";
 import schema from "@/public/hasura-schema.json";
+import { BOARD_STYLES, getBoardStyle, SUPPORTED_ITEMS } from "@/lib/items";
 import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
 import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 import { HoverCard } from "@/components/hover-card";
@@ -37,6 +39,7 @@ import { ClubsList } from "./clubs";
 import { CheckClub } from "./check-club";
 import { useClubStore } from "@/lib/stores/club-store";
 import { AxiosChessClient } from "@/lib/axios-chess-client";
+import Grant from "./grant";
 import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -127,8 +130,10 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
     return grouped;
   }, [gamesData]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleParticipantsError(error);
+
   if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading participants...</div>;
-  if (error) return <p className="p-4 text-red-500">Error loading participants: {error.message}. Ensure the relationship is correctly set up.</p>;
   if (!participants.length) return <p className="p-4 text-muted-foreground">No active participants found for this tournament.</p>;
 
   return (
@@ -215,8 +220,10 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
     return [];
   }, [data]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleGamesError(error);
+
   if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
-  if (error) return <p className="p-4 text-red-500">Error loading games: {error.message}</p>;
   if (!games.length) return <p className="p-4 text-muted-foreground">No games found for this tournament.</p>;
 
   return (
@@ -285,8 +292,10 @@ const UserProfileGamesTab: React.FC<{ userId: string }> = ({ userId }) => {
     return [];
   }, [data]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleGamesError(error);
+
   if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
-  if (error) return <p className="p-4 text-red-500">Error loading games: {error.message}</p>;
   if (!games.length) return <p className="p-4 text-muted-foreground">No games found.</p>;
 
   return (
@@ -395,8 +404,10 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
     return maxScores;
   }, [allScoresData]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleTournamentsError(error);
+
   if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading tournaments...</div>;
-  if (error) return <p className="p-4 text-red-500">Error loading tournaments: {error.message}</p>;
   if (!tournaments.length) return <p className="p-4 text-muted-foreground">No tournaments found.</p>;
 
   return (
@@ -502,6 +513,36 @@ export default function App() {
   const { theme, setTheme } = useTheme();
   const hasyx = useHasyx();
   
+  // Function to save board style settings
+  const saveBoardStyleSetting = async (boardStyleId: string) => {
+    if (!hasyx.userId) return;
+    
+    setIsSavingBoardStyle(true);
+    try {
+      await hasyx.insert({
+        table: 'badma_settings',
+        object: {
+          user_id: hasyx.userId,
+          key: 'board',
+          value: boardStyleId
+        },
+        on_conflict: {
+          constraint: 'settings_user_key_unique',
+          update_columns: ['value']
+        }
+      });
+      
+      toast.success('Настройки доски сохранены');
+    } catch (error) {
+      console.error('Error saving board style setting:', error);
+      toast.error('Ошибка при сохранении настроек доски');
+    } finally {
+      setIsSavingBoardStyle(false);
+    }
+  };
+  
+
+  
   // Debug session changes
   useEffect(() => {
     console.log('🔐 [SESSION] Session changed:', { 
@@ -580,6 +621,33 @@ export default function App() {
     { skip: !hasyx.userId }
   );
 
+  // Get board style settings for current user
+  const { data: boardSettingsData } = useSubscription(
+    {
+      table: 'badma_settings',
+      where: {
+        user_id: { _eq: hasyx.userId },
+        key: { _eq: 'board' }
+      },
+      returning: ['id', 'key', 'value'],
+      limit: 1
+    },
+    { skip: !hasyx.userId }
+  );
+
+  // Update selected board style from subscription data
+  React.useEffect(() => {
+    if (boardSettingsData && boardSettingsData.length > 0) {
+      const boardSetting = boardSettingsData[0];
+      setSelectedBoardStyle(boardSetting.value || 'classic_board');
+    } else {
+      // Set default if no setting found
+      setSelectedBoardStyle('classic_board');
+    }
+  }, [boardSettingsData]);
+
+
+
   // Zustand store for clubs
   const { setUserClubs, setLoading, setError } = useClubStore();
 
@@ -623,9 +691,9 @@ export default function App() {
   });
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
-  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games'], []);
+  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'skins'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
-  const [profileTab, setProfileTab] = useState('games');
+  const [profileTab, setProfileTab] = useState('tournaments');
   const [profile, setProfile] = useState(false);
 
   // Function to navigate to club hall
@@ -654,6 +722,12 @@ export default function App() {
     side: number;
     role: number;
   } | null>(null);
+  
+  // Board style settings
+  const [selectedBoardStyle, setSelectedBoardStyle] = useState('classic_board');
+  const [isSavingBoardStyle, setIsSavingBoardStyle] = useState(false);
+  const [showExplosion, setShowExplosion] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<typeof SUPPORTED_ITEMS[0] | null>(null);
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
@@ -913,6 +987,9 @@ export default function App() {
     return [];
   }, [tournamentsData]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleTournamentsError(tournamentsError);
+
   useEffect(() => {
     if (!carouselApi) return;
 
@@ -1037,6 +1114,12 @@ export default function App() {
   }
 
   return (<>
+    {/* Explosion effect on app start */}
+    <Grant 
+      show={showExplosion} 
+      onComplete={() => setShowExplosion(false)} 
+    />
+    
     <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
       <div className="absolute top-3 right-3 z-50 flex flex-col gap-2">
         {/* Device Permissions Status - Only show if supported */}
@@ -1093,14 +1176,10 @@ export default function App() {
               
               <div className="w-full max-w-2xl">
                 <Tabs value={profileTab} onValueChange={setProfileTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="games" className="flex items-center"><Gamepad2 className="h-4 w-4 mr-2" />Games</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
                     <TabsTrigger value="club" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Club</TabsTrigger>
                   </TabsList>
-                  <TabsContent value="games" className="pt-4">
-                    {currentUserId && <UserProfileGamesTab userId={currentUserId} />}
-                  </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
                     {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
                   </TabsContent>
@@ -1147,12 +1226,7 @@ export default function App() {
                       Создать турнир
                     </Button>
                     {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
-                    {tournamentsError && (
-                      <p className="text-red-500">
-                        Error loading tournaments: {(tournamentsError as any)?.message || "Unknown error"}
-                      </p>
-                    )}
-                    {!tournamentsLoading && !tournamentsError && actualTournaments.length > 0 ? (
+                    {!tournamentsLoading && actualTournaments.length > 0 ? (
                 <div className="w-full max-w-2xl space-y-1">
                   {actualTournaments.map((tournament) => {
                     const allGames = tournament.tournament_games || [];
@@ -1192,7 +1266,7 @@ export default function App() {
                   })}
                 </div>
                     ) : (
-                       !tournamentsLoading && !tournamentsError && <p>No tournaments found.</p>
+                       !tournamentsLoading && <p>No tournaments found.</p>
                     )}
                   </TabsContent>
                 </Tabs>
@@ -1200,15 +1274,90 @@ export default function App() {
             </div>
           </CarouselItem>
           <CarouselItem key="games" className="h-full">
-            <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-              <Gamepad2 className="h-16 w-16 mb-4 text-purple-500" />
-              <h2 className="text-2xl font-semibold mb-2">Play a Game</h2>
-              <p className="text-muted-foreground mb-4">Start a new game or continue an existing one.</p>
-              <Button onClick={() => handleOpenGame("default_free_game_id")}>Start Free Play</Button>
+            <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <Gamepad2 className="h-10 w-10 mr-3 text-purple-500" />
+                  <h2 className="text-3xl font-semibold">Games</h2>
+                </div>
+              </div>
+              
+              <div className="w-full max-w-2xl">
+                {currentUserId && <UserProfileGamesTab userId={currentUserId} />}
+              </div>
+            </div>
+          </CarouselItem>
+          <CarouselItem key="skins" className="h-full">
+            <div className="h-full flex flex-col items-center justify-start p-4 overflow-y-auto">
+              <div className="w-full max-w-4xl space-y-8">
+                {/* Доски */}
+                <div>
+                  <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                    {SUPPORTED_ITEMS.filter(item => item.category === 'board').map(item => {
+                      const ItemComponent = item.Component;
+                      return (
+                        <div key={item.id} className="flex flex-col items-center">
+                          <ItemComponent 
+                            onClick={() => setSelectedItem(item)}
+                            className="mb-2" 
+                          />
+                          <p className="text-xs text-muted-foreground text-center max-w-48">
+                            {item.description}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {/* Наборы */}
+                <div>
+                  <h2 className="text-2xl font-bold mb-4 text-center">Наборы</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                    {SUPPORTED_ITEMS.filter(item => item.category === 'pieces').map(item => {
+                      const ItemComponent = item.Component;
+                      return (
+                        <div key={item.id} className="flex flex-col items-center">
+                          <ItemComponent 
+                            onClick={() => setSelectedItem(item)}
+                            className="mb-2" 
+                          />
+                          <p className="text-xs text-muted-foreground text-center max-w-48">
+                            {item.description}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </div>
           </CarouselItem>
         </CarouselContent>
       </Carousel>
+
+      {/* Item Detail Dialog */}
+      {selectedItem && (
+        <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
+          <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
+            <div className="flex flex-col items-center justify-center">
+              <HoverCard
+                force={1.5}
+                maxRotation={25}
+                maxLift={50}
+                useDeviceOrientation={true}
+                orientationSensitivity={0.8}
+              >
+                <selectedItem.Component size="large" />
+              </HoverCard>
+              <p className="text-sm text-muted-foreground mt-4 text-center max-w-md">
+                {selectedItem.description}
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
       <div className={cn(
         "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
@@ -1415,8 +1564,58 @@ export default function App() {
                   <p>User: {user?.name || 'N/A'}</p>
                   <p>Email: {user?.email || 'N/A'}</p>
                   <div>
-                    <label htmlFor="themeChanger" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Theme</label>
-                    <Input id="themeChanger" value={theme} onChange={(e) => setTheme(e.target.value)} placeholder="Type 'dark' or 'light'" />
+                    <Label htmlFor="themeSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Тема</Label>
+                    <Select value={theme} onValueChange={setTheme}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тему" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="system">Системная</SelectItem>
+                        <SelectItem value="light">Светлая</SelectItem>
+                        <SelectItem value="dark">Темная</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="boardStyleSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Стиль доски</Label>
+                    <Select 
+                      value={selectedBoardStyle} 
+                      onValueChange={saveBoardStyleSetting}
+                      disabled={isSavingBoardStyle}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите стиль доски" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BOARD_STYLES.map((style) => (
+                          <SelectItem key={style.id} value={style.id}>
+                            <div className="flex items-center space-x-2">
+                              <div className="flex space-x-1">
+                                <div 
+                                  className="w-3 h-3 border border-gray-300 rounded-sm" 
+                                  style={{ backgroundColor: style.lightColor }}
+                                />
+                                <div 
+                                  className="w-3 h-3 border border-gray-300 rounded-sm" 
+                                  style={{ backgroundColor: style.darkColor }}
+                                />
+                              </div>
+                              <div>
+                                <div className="font-medium">{style.name}</div>
+                                <div className="text-xs text-gray-500">{style.description}</div>
+                              </div>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {isSavingBoardStyle && (
+                      <div className="flex items-center mt-2 text-sm text-gray-600">
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Сохранение...
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="mt-auto pt-4">
@@ -1464,10 +1663,10 @@ export default function App() {
           </div>
           
           <div className="flex-1 flex justify-start items-center space-x-1">
-            {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
+            <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("skins")}>
               <Shirt className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Skins</span>
-            </Button> */}
+            </Button>
             {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Sparkles className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Perks</span>

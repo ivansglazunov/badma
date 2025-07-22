@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar'
 import { LoaderCircle, PlusCircle, Trophy, Sword, UserPlus, Crown } from 'lucide-react';
 import { HoverCard } from '@/components/hover-card';
 import { useClubStore } from '@/lib/stores/club-store';
+import { useToastHandleClubsError } from '@/hooks/toasts';
 
 interface Club {
   id: string;
@@ -56,6 +57,9 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
     if (clubsData && (clubsData as any).badma_clubs) return (clubsData as any).badma_clubs as Club[];
     return [];
   }, [clubsData]);
+
+  // Обрабатываем ошибки через тост
+  useToastHandleClubsError(clubsError);
 
   const handleClubClick = (club: Club) => {
     setSelectedClub(club);
@@ -115,14 +119,6 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
         Loading clubs...
       </div>
-    );
-  }
-
-  if (clubsError) {
-    return (
-      <p className="p-4 text-red-500">
-        Error loading clubs: {(clubsError as any)?.message || "Unknown error"}
-      </p>
     );
   }
 

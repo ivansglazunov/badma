@@ -16,6 +16,7 @@ import axios from 'axios';
 import Debug from './debug';
 import React from 'react';
 import { HoverCard } from 'badma/components/hover-card';
+import { useToastHandleGameError } from '@/hooks/toasts';
 
 const debug = Debug('game');
 
@@ -426,6 +427,9 @@ export default function Game({ gameId, onClose, gameInvite, onJoinInvite, isJoin
     return result;
   }, [data]);
 
+  // Обрабатываем ошибки через тост
+  useToastHandleGameError(error);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -435,10 +439,10 @@ export default function Game({ gameId, onClose, gameInvite, onJoinInvite, isJoin
     );
   }
 
-  if (error || !gameData) {
+  if (!gameData) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-red-500">Error loading game: {error?.message || 'Game not found'}</p>
+        <p className="text-muted-foreground">Game not found</p>
       </div>
     );
   }
