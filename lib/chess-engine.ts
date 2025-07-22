@@ -1,4 +1,7 @@
-import * as jsChessEngine from 'js-chess-engine';
+import * as _jsChessEngine from 'js-chess-engine';
+// @ts-ignore
+const jsChessEngine = _jsChessEngine?.default || _jsChessEngine;
+
 import Debug from './debug';
 
 const debug = Debug('chess-engine');
