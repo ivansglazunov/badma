@@ -30,6 +30,7 @@ import { useMounted } from "@/hooks/mounted";
 import { useToastHandleParticipantsError, useToastHandleGamesError, useToastHandleTournamentsError } from "@/hooks/toasts";
 import schema from "@/public/hasura-schema.json";
 import { BOARD_STYLES, getBoardStyle, SUPPORTED_ITEMS } from "@/lib/items";
+import Skins from "@/app/skins";
 import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
 import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
 import { HoverCard } from "@/components/hover-card";
@@ -1288,51 +1289,9 @@ export default function App() {
             </div>
           </CarouselItem>
           <CarouselItem key="skins" className="h-full">
-            <div className="h-full flex flex-col items-center justify-start p-4 overflow-y-auto">
-              <div className="w-full max-w-4xl space-y-8">
-                {/* Доски */}
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                    {SUPPORTED_ITEMS.filter(item => item.category === 'board').map(item => {
-                      const ItemComponent = item.Component;
-                      return (
-                        <div key={item.id} className="flex flex-col items-center">
-                          <ItemComponent 
-                            onClick={() => setSelectedItem(item)}
-                            className="mb-2" 
-                          />
-                          <p className="text-xs text-muted-foreground text-center max-w-48">
-                            {item.description}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                
-                {/* Наборы */}
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Наборы</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                    {SUPPORTED_ITEMS.filter(item => item.category === 'pieces').map(item => {
-                      const ItemComponent = item.Component;
-                      return (
-                        <div key={item.id} className="flex flex-col items-center">
-                          <ItemComponent 
-                            onClick={() => setSelectedItem(item)}
-                            className="mb-2" 
-                          />
-                          <p className="text-xs text-muted-foreground text-center max-w-48">
-                            {item.description}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
+            {mainViewTab === 'skins' && (
+              <Skins onItemSelect={setSelectedItem} />
+            )}
           </CarouselItem>
         </CarouselContent>
       </Carousel>

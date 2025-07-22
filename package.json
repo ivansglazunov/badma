@@ -41,7 +41,7 @@
     "chess.js": "^0.12.1",
     "eruda": "^3.4.3",
     "events": "^3.3.0",
-    "hasyx": "^0.1.354",
+    "hasyx": "^0.1.355",
     "js-chess-engine": "^1.0.2",
     "react": "^19",
     "react-chessboard": "^4.7.3",
