@@ -38,9 +38,10 @@ import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/h
 import { ClubTab } from "./club";
 import { ClubsList } from "./clubs";
 import { CheckClub } from "./check-club";
+import CheckAvailableItems from "./check-available-items";
 import { useClubStore } from "@/lib/stores/club-store";
 import { AxiosChessClient } from "@/lib/axios-chess-client";
-import Grant from "./grant";
+
 import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -727,7 +728,7 @@ export default function App() {
   // Board style settings
   const [selectedBoardStyle, setSelectedBoardStyle] = useState('classic_board');
   const [isSavingBoardStyle, setIsSavingBoardStyle] = useState(false);
-  const [showExplosion, setShowExplosion] = useState(true);
+
   const [selectedItem, setSelectedItem] = useState<typeof SUPPORTED_ITEMS[0] | null>(null);
   
   const isAuthenticated = sessionStatus === "authenticated";
@@ -1115,12 +1116,6 @@ export default function App() {
   }
 
   return (<>
-    {/* Explosion effect on app start */}
-    <Grant 
-      show={showExplosion} 
-      onComplete={() => setShowExplosion(false)} 
-    />
-    
     <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
       <div className="absolute top-3 right-3 z-50 flex flex-col gap-2">
         {/* Device Permissions Status - Only show if supported */}
@@ -1658,6 +1653,9 @@ export default function App() {
         onClose={() => setIsCheckClubOpen(false)} 
       />
     )}
+
+    {/* Check for available items to accept */}
+    <CheckAvailableItems />
 
     {/* Show manual request button if needed */}
     {((motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') || 

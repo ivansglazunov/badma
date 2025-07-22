@@ -1,4 +1,7 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
+import Debug from '../lib/debug';
+
+const debug = Debug('device-permissions');
 
 export type DevicePermissionType = 'motion' | 'orientation';
 export type PermissionStatus = 'unknown' | 'granted' | 'denied' | 'requesting';
@@ -77,12 +80,12 @@ export const useDevicePermissions = (
   // Auto-request permission on mount if enabled
   useEffect(() => {
     if (autoRequest && isSupported && typeof window !== 'undefined' && !hasTriedAutoRequest) {
-      console.log(`[DevicePermissions] Auto-requesting ${type} permission...`);
+      debug(`Auto-requesting ${type} permission...`);
       setHasTriedAutoRequest(true);
       
       // On iOS, we need user interaction first
       if (isIOS()) {
-        console.log(`[DevicePermissions] iOS detected, setting needsUserInteraction for ${type}`);
+        debug(`iOS detected, setting needsUserInteraction for ${type}`);
         setNeedsUserInteraction(true);
         return;
       }
@@ -91,16 +94,16 @@ export const useDevicePermissions = (
       const timer = setTimeout(async () => {
         try {
           const granted = await requestPermission();
-          console.log(`[DevicePermissions] Auto-request result for ${type}:`, granted);
+          debug(`Auto-request result for ${type}:`, granted);
         } catch (error) {
-          console.error(`[DevicePermissions] Auto-request failed for ${type}:`, error);
+          debug(`Auto-request failed for ${type}:`, error);
           setNeedsUserInteraction(true);
         }
       }, 100);
       
       return () => clearTimeout(timer);
     } else {
-      console.log(`[DevicePermissions] Auto-request skipped for ${type}:`, {
+      debug(`Auto-request skipped for ${type}:`, {
         autoRequest,
         isSupported,
         hasWindow: typeof window !== 'undefined',

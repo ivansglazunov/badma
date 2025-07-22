@@ -75,7 +75,7 @@ export const PIECES_STYLES: PiecesStyle[] = [
 ];
 
 // Component mapping
-const COMPONENT_MAP: Record<string, React.ComponentType<{ 
+export const COMPONENT_MAP: Record<string, React.ComponentType<{ 
   className?: string;
   onClick?: () => void;
   size?: 'small' | 'large';

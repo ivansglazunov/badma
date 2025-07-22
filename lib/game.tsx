@@ -17,6 +17,8 @@ import Debug from './debug';
 import React from 'react';
 import { HoverCard } from 'badma/components/hover-card';
 import { useToastHandleGameError } from '@/hooks/toasts';
+import { useMultipleUserSettings } from '../hooks/user-settings';
+import { getPiecesStyle } from './items';
 
 const debug = Debug('game');
 
@@ -127,6 +129,96 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     debug('Created chess clients for sides:', Object.keys(clients));
     return clients;
   }, [userJoins, currentUserId, gameData, axiosInstance]);
+
+  // Get all unique user IDs from game joins
+  const allUserIds = useMemo(() => {
+    const userIds = gameData.joins
+      .filter(join => join.role === 1) // only players
+      .map(join => join.user_id)
+      .filter((userId, index, array) => array.indexOf(userId) === index); // unique
+    debug('All player user IDs:', userIds);
+    return userIds;
+  }, [gameData.joins]);
+
+  // Get players with their colors from game joins
+  const players = useMemo(() => {
+    return gameData.joins
+      .filter(join => join.role === 1) // only players
+      .map(join => ({
+        id: join.user_id,
+        color: join.side === 1 ? 'white' : 'black'
+      }));
+  }, [gameData.joins]);
+
+  // Get settings for all players
+  debug('🔍 [GAME] About to call useMultipleUserSettings with allUserIds:', allUserIds);
+  console.log('🔍 [GAME] About to call useMultipleUserSettings with allUserIds:', allUserIds);
+  const { settingsMap, loading: settingsLoading, error: settingsError } = useMultipleUserSettings(allUserIds);
+  debug('🔍 [GAME] useMultipleUserSettings result:', { settingsMap, settingsLoading, settingsError });
+
+  // Determine pieces styles for white and black pieces separately
+  const { whitePiecesStyle, blackPiecesStyle } = useMemo(() => {
+    debug('🎨 [PIECES_STYLE] Determining pieces styles for both players:', {
+      currentUserId,
+      settingsLoading,
+      hasSettingsMap: !!settingsMap,
+      settingsMapKeys: Object.keys(settingsMap || {}),
+      players: players?.map(p => ({ id: p.id, color: p.color }))
+    });
+    
+    const defaultStyle = getPiecesStyle('classic_pieces');
+    
+    if (!players || players.length < 2 || settingsLoading) {
+      debug('🎨 [PIECES_STYLE] Using default styles (no players or loading)');
+      return {
+        whitePiecesStyle: defaultStyle,
+        blackPiecesStyle: defaultStyle
+      };
+    }
+    
+    // Find white and black players
+    const whitePlayer = players.find(p => p.color === 'white');
+    const blackPlayer = players.find(p => p.color === 'black');
+    
+    // Get white player's style
+    const whitePlayerSettings = whitePlayer ? settingsMap[whitePlayer.id] : null;
+    const whiteStyleId = whitePlayerSettings?.pieces ? `${whitePlayerSettings.pieces}_pieces` : 'classic_pieces';
+    const whiteStyle = getPiecesStyle(whiteStyleId);
+    
+    // Get black player's style
+    const blackPlayerSettings = blackPlayer ? settingsMap[blackPlayer.id] : null;
+    const blackStyleId = blackPlayerSettings?.pieces ? `${blackPlayerSettings.pieces}_pieces` : 'classic_pieces';
+    const blackStyle = getPiecesStyle(blackStyleId);
+    
+    debug('🎨 [PIECES_STYLE] Player styles determined:', {
+      whitePlayer: whitePlayer?.id,
+      whitePlayerSettings,
+      whiteStyleId,
+      whiteStyleName: whiteStyle?.name,
+      blackPlayer: blackPlayer?.id,
+      blackPlayerSettings,
+      blackStyleId,
+      blackStyleName: blackStyle?.name
+    });
+    
+    console.log('🎨 [PIECES_STYLE] DETAILED DEBUG:', {
+      allPlayers: players,
+      whitePlayer,
+      blackPlayer,
+      settingsMap,
+      whitePlayerSettings,
+      blackPlayerSettings,
+      whiteStyleId,
+      blackStyleId,
+      whiteStyleResult: whiteStyle,
+      blackStyleResult: blackStyle
+    });
+    
+    return {
+      whitePiecesStyle: whiteStyle || defaultStyle,
+      blackPiecesStyle: blackStyle || defaultStyle
+    };
+  }, [players, settingsMap, settingsLoading]);
 
   const handleMove = (move: ChessClientMove) => {
     console.log('🎯 [MOVE] Move attempted:', move);
@@ -372,6 +464,8 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
               orientation={boardOrientation}
               bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
               bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+              whitePiecesStyle={whitePiecesStyle}
+              blackPiecesStyle={blackPiecesStyle}
             />
           {/* </HoverCard> */}
         </div>

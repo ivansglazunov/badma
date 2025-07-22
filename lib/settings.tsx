@@ -28,10 +28,4 @@ export function getUserSettings(settingsArray: UserSetting[] = []): UserSettings
   return settings;
 }
 
-/**
- * Gets a specific setting value with fallback to default
- */
-export function getSetting(settingsArray: UserSetting[] = [], key: keyof UserSettings): string {
-  const setting = settingsArray.find(s => s.key === key);
-  return setting?.value || DEFAULT_SETTINGS[key];
-}
+

@@ -4,7 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useResizeDetector } from 'react-resize-detector';
 import { useDeviceMotion } from '../hooks/device-motion';
-import { Pawn, Rook, Knight, Bishop, Queen, King } from './pieces/badma';
+import { Pawn as ClassicPawn, Rook as ClassicRook, Knight as ClassicKnight, Bishop as ClassicBishop, Queen as ClassicQueen, King as ClassicKing } from './pieces/classic';
+import { Pawn as BadmaPawn, Rook as BadmaRook, Knight as BadmaKnight, Bishop as BadmaBishop, Queen as BadmaQueen, King as BadmaKing } from './pieces/badma';
+import { PiecesStyle } from './items';
 import { HoverCard } from '@/components/hover-card';
 
 // Telegram WebApp haptic feedback utilities
@@ -33,6 +35,9 @@ interface BoardProps {
   bgBlack?: string;
   bgWhite?: string;
   customPieces?: Record<string, (args: any) => React.JSX.Element>;
+  piecesStyle?: PiecesStyle; // deprecated, use whitePiecesStyle and blackPiecesStyle
+  whitePiecesStyle?: PiecesStyle;
+  blackPiecesStyle?: PiecesStyle;
 }
 
 /**
@@ -100,9 +105,24 @@ const ShockPiece: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 /**
  * Custom chess piece component that displays SVG pieces with interactive effects
  */
-const CustomPiece: React.FC<{ piece: string; squareSize: number; pieceSize: number }> = ({ piece, squareSize, pieceSize }) => {
+const CustomPiece: React.FC<{ 
+  piece: string; 
+  squareSize: number; 
+  pieceSize: number; 
+  piecesStyle?: PiecesStyle; // deprecated
+  whitePiecesStyle?: PiecesStyle;
+  blackPiecesStyle?: PiecesStyle;
+}> = ({ piece, squareSize, pieceSize, piecesStyle, whitePiecesStyle, blackPiecesStyle }) => {
   const isWhite = piece && piece.startsWith('w');
-  const pieceColor = isWhite ? '#ffffff' : '#000000';
+  
+  // Determine which style to use for this piece
+  const currentPiecesStyle = isWhite 
+    ? (whitePiecesStyle || piecesStyle) 
+    : (blackPiecesStyle || piecesStyle);
+  
+  const pieceColor = currentPiecesStyle 
+    ? (isWhite ? currentPiecesStyle.colors.white : currentPiecesStyle.colors.black) 
+    : (isWhite ? '#ffffff' : '#000000');
   const pieceSizeStr = `${pieceSize}px`; // Используем вычисленный размер
   
   const getPieceComponent = (pieceCode: string) => {
@@ -114,25 +134,42 @@ const CustomPiece: React.FC<{ piece: string; squareSize: number; pieceSize: numb
     // Тень теперь применяется к контейнеру, не к SVG
     const filter = undefined;
     
+    // Choose pieces set based on current piece style
+    const PieceComponents = currentPiecesStyle?.id === 'badma_pieces' ? {
+      Pawn: BadmaPawn,
+      Rook: BadmaRook,
+      Knight: BadmaKnight,
+      Bishop: BadmaBishop,
+      Queen: BadmaQueen,
+      King: BadmaKing
+    } : {
+      Pawn: ClassicPawn,
+      Rook: ClassicRook,
+      Knight: ClassicKnight,
+      Bishop: ClassicBishop,
+      Queen: ClassicQueen,
+      King: ClassicKing
+    };
+    
     switch (pieceCode) {
       case 'wP':
       case 'bP':
-        return <Pawn color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.Pawn color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wR':
       case 'bR':
-        return <Rook color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.Rook color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wN':
       case 'bN':
-        return <Knight color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.Knight color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wB':
       case 'bB':
-        return <Bishop color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.Bishop color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wQ':
       case 'bQ':
-        return <Queen color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.Queen color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       case 'wK':
       case 'bK':
-        return <King color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
+        return <PieceComponents.King color={pieceColor} size={pieceSizeStr} strokeColor={strokeColor} strokeWidth={strokeWidth} strokeLinejoin={strokeLinejoin} strokeLinecap={strokeLinecap} filter={filter}/>;
       default:
         return <div style={{ fontSize: '2rem', color: pieceColor }}>?</div>;
     }
@@ -168,20 +205,18 @@ export default function Board({
   orientation = 'white',
   bgBlack = '#cacaca',
   bgWhite = '#fff',
-  customPieces
+  customPieces,
+  piecesStyle, // deprecated
+  whitePiecesStyle,
+  blackPiecesStyle
 }: BoardProps) {
   console.log('🏁 [BOARD] Board rendered with position:', position);
 
-  // Handle piece grab (start of move)
-  const handlePieceGrab = (piece: string, sourceSquare: string): boolean => {
-    console.log('👆 [BOARD] Piece grabbed:', { piece, sourceSquare });
-    // Trigger light haptic feedback when grabbing a piece
-    triggerHapticFeedback('light');
-    return true; // Allow piece to be grabbed
-  };
-
   // Handle piece drop (move)
   const handlePieceDrop = (sourceSquare: string, targetSquare: string, piece: string) => {
+    // Trigger light haptic feedback when piece is grabbed/moved
+    triggerHapticFeedback('light');
+    
     const move = {
       from: sourceSquare,
       to: targetSquare,
@@ -226,18 +261,18 @@ export default function Board({
 
   // Create custom pieces object with SVG pieces
   const defaultCustomPieces: Record<string, (args: any) => React.JSX.Element> = {
-    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} squareSize={squareSize} pieceSize={pieceSize} />,
-    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} squareSize={squareSize} pieceSize={pieceSize} />,
-    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} squareSize={squareSize} pieceSize={pieceSize} />,
-    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} squareSize={squareSize} pieceSize={pieceSize} />,
-    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} squareSize={squareSize} pieceSize={pieceSize} />,
-    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} squareSize={squareSize} pieceSize={pieceSize} />,
-    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} squareSize={squareSize} pieceSize={pieceSize} />,
+    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
   };
 
   // Use custom pieces if provided, otherwise use default
@@ -253,7 +288,6 @@ export default function Board({
     }}>
       <Chessboard
         position={position}
-        onPieceGrab={handlePieceGrab}
         onPieceDrop={handlePieceDrop}
         boardWidth={width}
         customDarkSquareStyle={{ backgroundColor: bgBlack }}

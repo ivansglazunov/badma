@@ -5,6 +5,7 @@ import { Badge } from 'hasyx/components/ui/badge';
 import { SUPPORTED_ITEMS } from '../lib/items';
 import { getUserSettings, UserSetting } from '../lib/settings';
 import { Check, Lock, Gift } from 'lucide-react';
+import Grant from './grant';
 
 interface SkinsProps {
   onItemSelect?: (item: any) => void;
@@ -12,6 +13,7 @@ interface SkinsProps {
 
 export default function Skins({ onItemSelect }: SkinsProps) {
   const hasyx = useHasyx();
+  const [showExplosion, setShowExplosion] = React.useState(true);
 
   // Subscribe to user settings
   const { data: settingsData } = useSubscription(
@@ -103,7 +105,14 @@ export default function Skins({ onItemSelect }: SkinsProps) {
   };
 
   return (
-    <div className="h-full flex flex-col items-center justify-start p-4 overflow-y-auto">
+    <>
+      {/* Explosion effect on skins load */}
+      <Grant 
+        show={showExplosion} 
+        onComplete={() => setShowExplosion(false)} 
+      />
+      
+      <div className="h-full flex flex-col items-center justify-start p-4 overflow-y-auto">
       <div className="w-full max-w-4xl space-y-8">
         {/* Доски */}
         <div>
@@ -153,6 +162,7 @@ export default function Skins({ onItemSelect }: SkinsProps) {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
