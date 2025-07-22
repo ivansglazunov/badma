@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { hasyxEvent, HasuraEventPayload } from 'hasyx/lib/events';
-import { Hasura } from 'hasyx/lib/hasura';
+import { Hasyx, createApolloClient, Generator } from 'hasyx';
 import Debug from 'hasyx/lib/debug';
 import { grantItem } from '@/lib/items';
+import schema from '@/public/hasura-schema.json';
 
 const debug = Debug('api:events:badma_user');
 
@@ -17,11 +18,11 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
     operation: payload.event.op 
   });
   
-  // Create Hasura client for backend operations with admin privileges
-  const hasura = new Hasura({
-    url: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_URL!, 
-    secret: process.env.HASURA_ADMIN_SECRET!,
-  });
+  // Create Hasyx client for backend operations with admin privileges
+  const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET!;
+  const apolloClient = createApolloClient({ secret: hasuraAdminSecret });
+  const generate = Generator(schema as any);
+  const hasyx = new Hasyx(apolloClient, generate);
   
   // Process the event
   try {
@@ -31,7 +32,7 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
     debug(`Processing new user creation for user ID: ${userId}`);
     
     // Grant basic items to the new user
-    await grantBasicItemsToUser(hasura, userId);
+    await grantBasicItemsToUser(hasyx, userId);
     
     debug(`Successfully processed new user creation for user ID: ${userId}`);
     return NextResponse.json({ success: true });
@@ -48,24 +49,24 @@ export const POST = hasyxEvent(async (payload: HasuraEventPayload) => {
 /**
  * Grant basic items to a new user
  */
-async function grantBasicItemsToUser(hasura: Hasura, userId: string) {
+async function grantBasicItemsToUser(hasyx: Hasyx, userId: string) {
   debug(`🎁 [GRANT_BASIC_ITEMS] Starting to grant basic items to user ${userId}`);
   
   try {
     // Grant classic pieces
-    await grantItem(hasura, null, 'classic_pieces', userId);
+    await grantItem(hasyx, null, 'classic_pieces', userId);
     debug(`✅ [GRANT_BASIC_ITEMS] Granted classic_pieces to user ${userId}`);
     
     // Grant classic board  
-    await grantItem(hasura, null, 'classic_board', userId);
+    await grantItem(hasyx, null, 'classic_board', userId);
     debug(`✅ [GRANT_BASIC_ITEMS] Granted classic_board to user ${userId}`);
 
     // Grant badma_pieces
-    await grantItem(hasura, null, 'badma_pieces', userId);
+    await grantItem(hasyx, null, 'badma_pieces', userId);
     debug(`✅ [GRANT_BASIC_ITEMS] Granted badma_pieces to user ${userId}`);
     
     // Grant badma_board  
-    await grantItem(hasura, null, 'badma_board', userId);
+    await grantItem(hasyx, null, 'badma_board', userId);
     debug(`✅ [GRANT_BASIC_ITEMS] Granted badma_board to user ${userId}`);
     
     debug(`🎉 [GRANT_BASIC_ITEMS] Successfully granted all basic items to user ${userId}`);
