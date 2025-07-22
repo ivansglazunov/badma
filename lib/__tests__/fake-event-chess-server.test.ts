@@ -106,7 +106,8 @@ beforeAll(async () => {
   debug(`AI client configured: userId=${aiClient.userId}`);
 }, 30000);
 
-describe('AI Move Event Handler Test', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('AI Move Event Handler Test', () => {
   it('should properly handle a Hasura event and make an AI move', async () => {
     // 1. AI player creates and joins a game (white - side 1)
     debug('AI creating game...');

@@ -77,7 +77,8 @@ beforeAll(async () => {
 }, 60000); // Keep increased timeout for setup
 
 // --- Тесты ---
-describe('HTTP API (/api/badma) Interaction', () => {
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('HTTP API (/api/badma) Interaction', () => {
   it('should handle a full game cycle via HTTP API (Fools Mate)', async () => {
     debug(`Starting HTTP API Fool's Mate test`);
 
