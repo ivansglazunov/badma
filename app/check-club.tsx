@@ -9,6 +9,7 @@ import { Input } from "hasyx/components/ui/input";
 import { LoaderCircle, PlusCircle } from "lucide-react";
 import { HoverCard } from "@/components/hover-card";
 import { useClubStore } from "@/lib/stores/club-store";
+import { CreateClubDialog } from "./create-club-dialog";
 
 interface CheckClubProps {
   isOpen: boolean;
@@ -20,49 +21,11 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
   const { data: session } = useSession();
   const hasyx = useHasyx();
   const { userClubs, isLoading: clubsLoading } = useClubStore();
-  const [isCreatingClub, setIsCreatingClub] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(isOpen);
   const [isCreateClubDialogOpen, setIsCreateClubDialogOpen] = useState(false);
-  const [clubName, setClubName] = useState('');
 
   const handleShowCreateClubDialog = () => {
     setIsCreateClubDialogOpen(true);
-  };
-
-  const handleCreateClub = async () => {
-    if (!hasyx.userId) {
-      console.error('No user ID available');
-      return;
-    }
-    
-    if (!clubName.trim()) {
-      console.error('Club name is required');
-      return;
-    }
-    
-    setIsCreatingClub(true);
-    try {
-      await hasyx.insert({ 
-        table: 'badma_clubs', 
-        object: { 
-          user_id: hasyx.userId,
-          title: clubName.trim()
-        } 
-      });
-      setIsCreateClubDialogOpen(false);
-      setClubName('');
-      setIsDialogOpen(false);
-      onClose(); // Close dialog after successful creation
-    } catch (error) {
-      console.error('Error creating club:', error);
-    } finally {
-      setIsCreatingClub(false);
-    }
-  };
-
-  const handleCancelCreateClub = () => {
-    setIsCreateClubDialogOpen(false);
-    setClubName('');
   };
 
   // Sync dialog state with props
@@ -108,18 +71,18 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
                     </Button>
                     <Button 
                       className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl"
-                      disabled={isCreatingClub || clubsLoading}
+                      disabled={clubsLoading}
                       onClick={() => {
                         console.log('Create club button clicked!');
                         handleShowCreateClubDialog();
                       }}
                     >
-                      {(isCreatingClub || clubsLoading) ? (
+                      {clubsLoading ? (
                         <LoaderCircle className="animate-spin h-6 w-6 mb-1" />
                       ) : (
                         <span className="text-2xl mb-1">➕</span>
                       )}
-                      <span className="text-xs">{(isCreatingClub || clubsLoading) ? 'Загрузка...' : 'Создать клуб'}</span>
+                      <span className="text-xs">{clubsLoading ? 'Загрузка...' : 'Создать клуб'}</span>
                     </Button>
                   </div>
                   
@@ -140,55 +103,15 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
       </DialogContent>
     </Dialog>
 
-    {/* Dialog for creating club */}
-    <Dialog open={isCreateClubDialogOpen} onOpenChange={setIsCreateClubDialogOpen}>
-      <DialogTitle></DialogTitle>
-      <DialogContent className="max-w-sm">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Создать новый клуб</h3>
-            <p className="text-sm text-gray-600">
-              Введите название для вашего клуба
-            </p>
-          </div>
-          
-          <div className="space-y-2">
-            <Input
-              placeholder="Название клуба"
-              value={clubName}
-              onChange={(e) => setClubName(e.target.value)}
-              disabled={isCreatingClub}
-              className="w-full"
-              maxLength={50}
-            />
-          </div>
-          
-          <div className="flex gap-2 justify-end">
-            <Button
-              variant="outline"
-              onClick={handleCancelCreateClub}
-              disabled={isCreatingClub}
-            >
-              Отмена
-            </Button>
-            <Button
-              onClick={handleCreateClub}
-              disabled={isCreatingClub || !clubName.trim()}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white"
-            >
-              {isCreatingClub ? (
-                <>
-                  <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Создание...
-                </>
-              ) : (
-                'Создать'
-              )}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    {/* Create Club Dialog */}
+    <CreateClubDialog 
+      isOpen={isCreateClubDialogOpen}
+      onClose={() => {
+        setIsCreateClubDialogOpen(false);
+        setIsDialogOpen(false);
+        onClose();
+      }}
+    />
     </>
   );
 } 

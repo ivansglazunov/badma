@@ -84,10 +84,10 @@ function ItemAcceptCard({ item, onAccept }: ItemAcceptCardProps) {
 }
 
 interface CheckAvailableItemsProps {
-  // No props needed - component manages its own state
+  children?: React.ReactNode;
 }
 
-export default function CheckAvailableItems({}: CheckAvailableItemsProps) {
+export default function CheckAvailableItems({ children }: CheckAvailableItemsProps) {
   const hasyx = useHasyx();
   const [processedItemIds, setProcessedItemIds] = React.useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = React.useState(true);
@@ -170,22 +170,27 @@ export default function CheckAvailableItems({}: CheckAvailableItemsProps) {
     }
   };
 
-  // Не показываем диалог, если он закрыт или нет айтемов
-  if (!isDialogOpen || !currentItem) return null;
-
   // Используем ключ для полного перемонтирования компонента при смене айтема
-  const itemKey = currentItem.id;
+  const itemKey = currentItem?.id;
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
-      <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
-        {/* Используем key для принудительного перемонтирования компонента */}
-        <ItemAcceptCard 
-          key={itemKey}
-          item={currentItem}
-          onAccept={handleAcceptItem}
-        />
-      </DialogContent>
-    </Dialog>
+    <>
+      {/* Показываем диалог айтемов только если есть текущий айтем и диалог открыт */}
+      {isDialogOpen && currentItem && (
+        <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
+          <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
+            {/* Используем key для принудительного перемонтирования компонента */}
+            <ItemAcceptCard 
+              key={itemKey}
+              item={currentItem}
+              onAccept={handleAcceptItem}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+      
+      {/* Рендерим children когда нет айтемов для принятия или диалог закрыт */}
+      {(!isDialogOpen || !currentItem) && children}
+    </>
   );
 }

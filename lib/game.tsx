@@ -167,26 +167,18 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
     
     const defaultStyle = getPiecesStyle('classic_pieces');
     
-    if (!players || players.length < 2 || settingsLoading) {
-      debug('🎨 [PIECES_STYLE] Using default styles (no players or loading)');
-      return {
-        whitePiecesStyle: defaultStyle,
-        blackPiecesStyle: defaultStyle
-      };
-    }
-    
     // Find white and black players
     const whitePlayer = players.find(p => p.color === 'white');
     const blackPlayer = players.find(p => p.color === 'black');
     
     // Get white player's style
     const whitePlayerSettings = whitePlayer ? settingsMap[whitePlayer.id] : null;
-    const whiteStyleId = whitePlayerSettings?.pieces ? `${whitePlayerSettings.pieces}_pieces` : 'classic_pieces';
+    const whiteStyleId = whitePlayerSettings?.pieces ? whitePlayerSettings.pieces : 'classic_pieces';
     const whiteStyle = getPiecesStyle(whiteStyleId);
     
     // Get black player's style
     const blackPlayerSettings = blackPlayer ? settingsMap[blackPlayer.id] : null;
-    const blackStyleId = blackPlayerSettings?.pieces ? `${blackPlayerSettings.pieces}_pieces` : 'classic_pieces';
+    const blackStyleId = blackPlayerSettings?.pieces ? blackPlayerSettings.pieces : 'classic_pieces';
     const blackStyle = getPiecesStyle(blackStyleId);
     
     debug('🎨 [PIECES_STYLE] Player styles determined:', {
@@ -465,6 +457,7 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
               bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
               whitePiecesStyle={whitePiecesStyle}
               blackPiecesStyle={blackPiecesStyle}
+              animation={true}
             />
           {/* </HoverCard> */}
         </div>

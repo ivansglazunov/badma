@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 
 import Board from "@/lib/board";
 import Game from "@/lib/game";
+import Games from "@/lib/games";
 import { OAuthButtons } from "hasyx/components/auth/oauth-buttons";
 import { useTheme } from "hasyx/components/theme-switcher";
 import { Button } from "hasyx/components/ui/button"
@@ -40,6 +41,7 @@ import { ClubTab } from "./club";
 import { ClubsList } from "./clubs";
 import { CheckClub } from "./check-club";
 import CheckAvailableItems from "./check-available-items";
+import { CreateClubDialog } from "./create-club-dialog";
 import { useClubStore } from "@/lib/stores/club-store";
 import { useUserSettingsStore } from "@/lib/stores/user-settings-store";
 import { AxiosChessClient } from "@/lib/axios-chess-client";
@@ -262,88 +264,6 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
 };
 
 // User Profile Components
-const UserProfileGamesTab: React.FC<{ userId: string }> = ({ userId }) => {
-  const { data, loading, error } = useSubscription(
-    {
-      table: 'badma_joins',
-      where: { 
-        user_id: { _eq: userId },
-        role: { _eq: 1 } // Only player joins
-      },
-      returning: [
-        'id',
-        'side',
-        {
-          game: [
-            'id',
-            'status',
-            'created_at',
-            'updated_at',
-            {
-              moves: ['id']
-            }
-          ]
-        }
-      ],
-      order_by: { created_at: 'desc' }
-    },
-    { skip: !userId }
-  );
-
-  const games = React.useMemo(() => {
-    if (Array.isArray(data)) return data;
-    if (data && (data as any).badma_joins) return (data as any).badma_joins;
-    return [];
-  }, [data]);
-
-  // Обрабатываем ошибки через тост
-  useToastHandleGamesError(error);
-
-  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
-  if (!games.length) return <p className="p-4 text-muted-foreground">No games found.</p>;
-
-  return (
-    <div className="space-y-2 p-1">
-      {games.map((join: any) => {
-        const game = join.game;
-        const moveCount = game.moves?.length || 0;
-        const isFinished = ['finished', 'checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender'].includes(game.status);
-        const sideText = join.side === 1 ? 'White' : 'Black';
-        
-        return (
-          <div 
-            key={join.id} 
-            className="flex items-center justify-between p-3 hover:bg-muted/30 rounded-md cursor-pointer border border-muted/20"
-            onClick={() => handleOpenGameGlobal(game.id)}
-          >
-            <div className="flex flex-col flex-1">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-foreground">Game ID: {game.id.substring(0, 8)}...</span>
-                <span className="text-xs px-1.5 py-0.5 bg-muted rounded">{sideText}</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                <span>{moveCount} moves</span>
-                {game.created_at && (
-                  <span className="ml-3">Created: {new Date(game.created_at).toLocaleDateString()}</span>
-                )}
-                {game.updated_at && game.updated_at !== game.created_at && (
-                  <span className="ml-3">Updated: {new Date(game.updated_at).toLocaleDateString()}</span>
-                )}
-              </div>
-            </div>
-            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-              isFinished
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-            }`}>
-              {game.status ?? 'Unknown'}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
 
 const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => {
   const { data, loading, error } = useSubscription(
@@ -656,7 +576,7 @@ export default function App() {
   const currentUserId = hasyx.userId;
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
-  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'skins'], []);
+  const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'skins', 'games'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profileTab, setProfileTab] = useState('tournaments');
   const [profile, setProfile] = useState(false);
@@ -676,6 +596,7 @@ export default function App() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [showPermissionToast, setShowPermissionToast] = useState(false);
   const [isCheckClubOpen, setIsCheckClubOpen] = useState(false);
+  const [isCreateClubDialogOpen, setIsCreateClubDialogOpen] = useState(false);
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [gameInvite, setGameInvite] = useState<{
     gameId: string;
@@ -1110,10 +1031,10 @@ export default function App() {
       <Carousel 
         setApi={setCarouselApi} 
         opts={{ align: "start", loop: false }} 
-        className="flex-grow flex flex-col pt-12 pb-20"
+        className="flex-grow flex flex-col pt-12 pb-20 h-full"
       >
         <CarouselContent className="h-full">
-          <CarouselItem key="profile" className="h-full">
+          <CarouselItem key="profile" className="h-full overflow-y-auto">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex flex-col items-center mb-6">
                 <Avatar className="h-24 w-24 mb-4">
@@ -1146,7 +1067,7 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="tournaments" className="h-full">
+          <CarouselItem key="tournaments" className="h-full overflow-y-auto">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
@@ -1165,7 +1086,10 @@ export default function App() {
                     <Button 
                       variant="outline"
                       className="w-full mb-4 border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                      onClick={() => setIsCheckClubOpen(true)}
+                      onClick={() => {
+                        console.log('🔘 [CREATE_CLUB] Button clicked');
+                        setIsCreateClubDialogOpen(true);
+                      }}
                     >
                       <PlusCircle className="h-4 w-4 mr-2" />
                       Создать клуб
@@ -1229,29 +1153,14 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="games" className="h-full">
-            <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <Gamepad2 className="h-10 w-10 mr-3 text-purple-500" />
-                  <h2 className="text-3xl font-semibold">Games</h2>
-                </div>
-              </div>
-              
-              <div className="w-full max-w-2xl">
-                {currentUserId && <UserProfileGamesTab userId={currentUserId} />}
-              </div>
-            </div>
+          <CarouselItem key="skins" className="h-full overflow-y-auto">
+            {mainViewTab === 'skins' && <Skins />}
           </CarouselItem>
-          <CarouselItem key="skins" className="h-full">
-            {mainViewTab === 'skins' && (
-              <Skins>
-                <CheckClub 
-                  isOpen={isCheckClubOpen || !clubsDataFormatted?.length} 
-                  onClose={() => setIsCheckClubOpen(false)} 
-                />
-              </Skins>
-            )}
+          <CarouselItem key="games" className="h-full overflow-y-auto">
+            {mainViewTab === 'games' && currentUserId && <Games 
+              currentUserId={currentUserId} 
+              onGameClick={handleOpenGameGlobal}
+            />}
           </CarouselItem>
         </CarouselContent>
       </Carousel>
@@ -1592,13 +1501,18 @@ export default function App() {
     </div>
 
     {/* Check for available items to accept */}
-    <CheckAvailableItems />
+    <CheckAvailableItems>
+      <CheckClub 
+        isOpen={isCheckClubOpen || !clubsDataFormatted?.length} 
+        onClose={() => setIsCheckClubOpen(false)}
+      />
+    </CheckAvailableItems>
 
     {/* Show manual request button if needed */}
     {((motionPermissions.needsUserInteraction && motionPermissions.permissionStatus !== 'granted') || 
       (orientationPermissions.needsUserInteraction && orientationPermissions.permissionStatus !== 'granted')) && (
         <Dialog open>
-          <DialogContent>
+          <DialogContent className="z-[9999]" style={{ zIndex: 9999 }}>
             <DialogHeader>
               <DialogTitle>Allow Device Access</DialogTitle>
             </DialogHeader>
@@ -1618,6 +1532,12 @@ export default function App() {
           </DialogContent>
         </Dialog>
     )}
+    
+    {/* Create Club Dialog */}
+    <CreateClubDialog 
+      isOpen={isCreateClubDialogOpen}
+      onClose={() => setIsCreateClubDialogOpen(false)}
+    />
   </>);
 }
 

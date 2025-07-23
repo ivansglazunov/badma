@@ -38,6 +38,7 @@ interface BoardProps {
   piecesStyle?: PiecesStyle; // deprecated, use whitePiecesStyle and blackPiecesStyle
   whitePiecesStyle?: PiecesStyle;
   blackPiecesStyle?: PiecesStyle;
+  animation?: boolean; // Включает анимации, тактильный отклик и тени
 }
 
 /**
@@ -112,7 +113,8 @@ const CustomPiece: React.FC<{
   piecesStyle?: PiecesStyle; // deprecated
   whitePiecesStyle?: PiecesStyle;
   blackPiecesStyle?: PiecesStyle;
-}> = ({ piece, squareSize, pieceSize, piecesStyle, whitePiecesStyle, blackPiecesStyle }) => {
+  animation?: boolean;
+}> = ({ piece, squareSize, pieceSize, piecesStyle, whitePiecesStyle, blackPiecesStyle, animation = false }) => {
   const isWhite = piece && piece.startsWith('w');
   
   // Determine which style to use for this piece
@@ -175,8 +177,26 @@ const CustomPiece: React.FC<{
     }
   };
   
+  // Обработчики событий наведения (только если animation включен)
+  const handleMouseEnter = () => {
+    if (animation) {
+      console.log('🎯 [BOARD] Mouse entered piece:', piece);
+      triggerHapticFeedback('light');
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (animation) {
+      console.log('🎯 [BOARD] Mouse left piece:', piece);
+    }
+  };
+
+  // Условная логика для компонента-обертки
+  const WrapperComponent = animation ? ShockPiece : React.Fragment;
+  const wrapperProps = animation ? {} : {};
+
   return (
-    <ShockPiece>
+    <WrapperComponent {...wrapperProps}>
       <div 
         style={{
           display: 'flex',
@@ -185,13 +205,15 @@ const CustomPiece: React.FC<{
           width: `${squareSize}px`, // Размер клетки
           height: `${squareSize}px`,
           userSelect: 'none',
-          pointerEvents: 'none', // Отключаем перехват событий
-          filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))', // Возвращаем тень
+          pointerEvents: animation ? 'auto' : 'none', // Включаем события только при animation
+          filter: animation ? 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))' : undefined, // Тени только при animation
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {getPieceComponent(piece)}
       </div>
-    </ShockPiece>
+    </WrapperComponent>
   );
 };
 
@@ -208,14 +230,17 @@ export default function Board({
   customPieces,
   piecesStyle, // deprecated
   whitePiecesStyle,
-  blackPiecesStyle
+  blackPiecesStyle,
+  animation = false
 }: BoardProps) {
   console.log('🏁 [BOARD] Board rendered with position:', position);
 
   // Handle piece drop (move)
   const handlePieceDrop = (sourceSquare: string, targetSquare: string, piece: string) => {
-    // Trigger light haptic feedback when piece is grabbed/moved
-    triggerHapticFeedback('light');
+    // Trigger light haptic feedback when piece is grabbed/moved (only if animation enabled)
+    if (animation) {
+      triggerHapticFeedback('light');
+    }
     
     const move = {
       from: sourceSquare,
@@ -235,21 +260,25 @@ export default function Board({
       const result = onMove(move);
       console.log('📝 [BOARD] onMove returned:', result);
       
-      // Trigger haptic feedback based on move result
-      if (result) {
-        // Successful move - medium haptic feedback
-        triggerHapticFeedback('medium');
-      } else {
-        // Invalid move - rigid haptic feedback
-        triggerHapticFeedback('rigid');
+      // Trigger haptic feedback based on move result (only if animation enabled)
+      if (animation) {
+        if (result) {
+          // Successful move - medium haptic feedback
+          triggerHapticFeedback('medium');
+        } else {
+          // Invalid move - rigid haptic feedback
+          triggerHapticFeedback('rigid');
+        }
       }
       
       return result;
     }
     
     console.log('📝 [BOARD] No onMove prop - allowing move by default');
-    // Default successful move - medium haptic feedback
-    triggerHapticFeedback('medium');
+    // Default successful move - medium haptic feedback (only if animation enabled)
+    if (animation) {
+      triggerHapticFeedback('medium');
+    }
     return true;
   };
 
@@ -261,18 +290,18 @@ export default function Board({
 
   // Create custom pieces object with SVG pieces
   const defaultCustomPieces: Record<string, (args: any) => React.JSX.Element> = {
-    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
-    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} />,
+    wP: ({ piece }) => <CustomPiece piece={piece || 'wP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    wR: ({ piece }) => <CustomPiece piece={piece || 'wR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    wN: ({ piece }) => <CustomPiece piece={piece || 'wN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    wB: ({ piece }) => <CustomPiece piece={piece || 'wB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    wQ: ({ piece }) => <CustomPiece piece={piece || 'wQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    wK: ({ piece }) => <CustomPiece piece={piece || 'wK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bP: ({ piece }) => <CustomPiece piece={piece || 'bP'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bR: ({ piece }) => <CustomPiece piece={piece || 'bR'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bN: ({ piece }) => <CustomPiece piece={piece || 'bN'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bB: ({ piece }) => <CustomPiece piece={piece || 'bB'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bQ: ({ piece }) => <CustomPiece piece={piece || 'bQ'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
+    bK: ({ piece }) => <CustomPiece piece={piece || 'bK'} squareSize={squareSize} pieceSize={pieceSize} piecesStyle={piecesStyle} whitePiecesStyle={whitePiecesStyle} blackPiecesStyle={blackPiecesStyle} animation={animation} />,
   };
 
   // Use custom pieces if provided, otherwise use default

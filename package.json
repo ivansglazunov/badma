@@ -1,6 +1,6 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.27",
+  "version": "0.1.0-alpha.28",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

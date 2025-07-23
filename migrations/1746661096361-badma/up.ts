@@ -277,9 +277,9 @@ const relationships = [
 // We only need select permissions for 'user' role on most tables
 const userPermissions = [
   { table: 'servers', columns: ['id', 'local_address', 'global_address', 'created_at', 'active_at'] },
-  { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at'] },
+  { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at', 'updated_at'] },
   { table: 'moves', columns: ['id', 'from', 'to', 'promotion', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
-  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'created_at'] },
+  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'client_id', 'side', 'role', 'created_at'] },
 ].map(p => ({
   type: 'pg_create_select_permission',
   args: {
@@ -296,8 +296,8 @@ const userPermissions = [
 // Anonymous permissions - allow reading all games, moves, and joins
 const anonymousPermissions = [
   { table: 'games', columns: ['id', 'user_id', 'sides', 'mode', 'side', 'fen', 'status', 'created_at', 'updated_at'] },
-  { table: 'moves', columns: ['id', 'from', 'to', 'promotion', 'type', 'side', 'user_id', 'game_id', 'created_at'] },
-  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'side', 'role', 'client_id', 'created_at'] },
+  { table: 'moves', columns: ['id', 'from', 'to', 'promotion', 'type', 'side', 'user_id', 'game_id', 'created_at', 'updated_at'] },
+  { table: 'joins', columns: ['id', 'user_id', 'game_id', 'client_id', 'side', 'role', 'created_at'] },
 ].map(p => ({
   type: 'pg_create_select_permission',
   args: {

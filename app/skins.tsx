@@ -82,7 +82,7 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
   const ItemComponent = item.Component;
   
   return (
-    <CarouselItem className="pl-2 md:pl-4 basis-1/2 md:basis-1/2 lg:basis-1/3">
+    <CarouselItem className="pl-2 md:pl-4 basis-1/1 sm:basis-1/2 md:basis-1/3">
       <div 
         className="flex flex-col items-center relative p-4"
         onMouseDown={(e) => e.stopPropagation()}
@@ -111,10 +111,10 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
 }
 
 interface SkinsProps {
-  // No longer need onItemSelect since we handle dialog internally
+  children?: React.ReactNode;
 }
 
-export default function Skins({}: SkinsProps) {
+export default function Skins({ children }: SkinsProps) {
   const hasyx = useHasyx();
   const [showExplosion, setShowExplosion] = React.useState(true);
   const [selectedItem, setSelectedItem] = React.useState<typeof SUPPORTED_ITEMS[0] | null>(null);
@@ -197,16 +197,22 @@ export default function Skins({}: SkinsProps) {
         onComplete={() => setShowExplosion(false)} 
       />
       
-      <div className="h-full flex flex-col items-center justify-start p-4 overflow-y-auto">
-      <div className="w-full max-w-4xl space-y-8">
-        {/* Доски */}
-        <div className="px-12">
-          <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
-          <Carousel 
-            className="w-full max-w-5xl mx-auto"
+      <div className="flex flex-col items-center justify-start p-4 overflow-y-auto">
+        <div className="w-full max-w-4xl space-y-8">
+          {/* Доски */}
+          <div className="px-12">
+            <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
+            <div className="h-[300px] w-full">
+              <Carousel 
+                className="w-full max-w-5xl mx-auto"
             opts={{
               dragFree: false,
-              containScroll: "trimSnaps"
+              containScroll: "trimSnaps",
+              watchDrag: (emblaApi, event) => {
+                // Предотвращаем всплытие события к родительскому слайдеру
+                event.stopPropagation();
+                return true; // Разрешаем перетаскивание для этого слайдера
+              }
             }}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
@@ -222,17 +228,24 @@ export default function Skins({}: SkinsProps) {
             </CarouselContent>
             <CarouselPrevious className="left-2" />
             <CarouselNext className="right-2" />
-          </Carousel>
-        </div>
-        
-        {/* Наборы */}
-        <div className="px-12">
-          <h2 className="text-2xl font-bold mb-4 text-center">Наборы</h2>
-          <Carousel 
-            className="w-full max-w-5xl mx-auto"
+              </Carousel>
+            </div>
+          </div>
+          
+          {/* Наборы */}
+          <div className="px-12">
+            <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>
+            <div className="h-[300px] w-full">
+              <Carousel 
+                className="w-full max-w-5xl mx-auto"
             opts={{
               dragFree: false,
-              containScroll: "trimSnaps"
+              containScroll: "trimSnaps",
+              watchDrag: (emblaApi, event) => {
+                // Предотвращаем всплытие события к родительскому слайдеру
+                event.stopPropagation();
+                return true; // Разрешаем перетаскивание для этого слайдера
+              }
             }}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
@@ -248,9 +261,10 @@ export default function Skins({}: SkinsProps) {
             </CarouselContent>
             <CarouselPrevious className="left-2" />
             <CarouselNext className="right-2" />
-          </Carousel>
+              </Carousel>
+            </div>
+          </div>
         </div>
-      </div>
       </div>
       
       {/* Item Selection Dialog */}
@@ -367,6 +381,9 @@ export default function Skins({}: SkinsProps) {
           </DialogContent>
         </Dialog>
       )}
+      
+      {/* Render children components */}
+      {children}
     </>
   );
 }
