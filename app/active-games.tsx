@@ -110,10 +110,10 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
             return (
               <CarouselItem 
                 key={game.id}
-                className="basis-[250px] flex-shrink-0"
+                className="basis-[220px] flex-shrink-0"
               >
                 <div 
-                  className="flex flex-col items-center relative p-4 cursor-pointer hover:bg-muted/30 rounded-lg transition-colors w-[250px] h-full"
+                  className="flex flex-col items-center relative p-1 cursor-pointer hover:bg-muted/30 rounded-lg transition-colors w-[220px] h-full"
                   onClick={() => onGameClick?.(game.id)}
                   onMouseDown={(e) => e.stopPropagation()}
                   onTouchStart={(e) => e.stopPropagation()}

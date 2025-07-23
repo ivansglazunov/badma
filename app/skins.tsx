@@ -82,9 +82,9 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
   const ItemComponent = item.Component;
   
   return (
-    <CarouselItem className="pl-2 md:pl-4 basis-1/1 sm:basis-1/2 md:basis-1/3">
+    <CarouselItem className="basis-[250px] flex-shrink-0">
       <div 
-        className="flex flex-col items-center relative p-4"
+        className="flex flex-col items-center relative p-4 w-[250px]"
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
@@ -200,7 +200,7 @@ export default function Skins({ children }: SkinsProps) {
       <div className="flex flex-col items-center justify-start p-4 overflow-y-auto">
         <div className="w-full max-w-4xl space-y-8">
           {/* Доски */}
-          <div className="px-12">
+          <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
             <div className="h-[300px] w-full">
               <Carousel 
@@ -233,7 +233,7 @@ export default function Skins({ children }: SkinsProps) {
           </div>
           
           {/* Наборы */}
-          <div className="px-12">
+          <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>
             <div className="h-[300px] w-full">
               <Carousel 

@@ -180,25 +180,25 @@ const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="all" className="flex items-center">
               <GamepadIcon className="h-4 w-4 mr-1" />
-              Все
+              {/* Все */}
             </TabsTrigger>
             <TabsTrigger value="completed" className="flex items-center">
               <CheckCircle className="h-4 w-4 mr-1" />
-              Завершенные
+              {/* Завершенные */}
             </TabsTrigger>
             <TabsTrigger value="active" className="flex items-center">
               <Clock className="h-4 w-4 mr-1" />
-              Активные
+              {/* Активные */}
             </TabsTrigger>
             <TabsTrigger value="invitations" className="flex items-center">
               <Mail className="h-4 w-4 mr-1" />
-              Приглашения
+              {/* Приглашения */}
             </TabsTrigger>
           </TabsList>
         </div>
         
         {/* Скроллируемый контент табов */}
-        <div className="flex-1 overflow-y-auto max-h-[400px]">
+        <div className="flex-1 max-h-[400px]">
           <TabsContent value="all" className="pt-4">
             {renderGamesList()}
           </TabsContent>

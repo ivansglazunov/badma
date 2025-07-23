@@ -389,19 +389,10 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
         </div>
         );
       })()}
-      <div className="py-16 flex flex-col items-center space-y-4">
-        {userJoins.length === 0 && (
-          <Badge variant="outline" className="px-4 py-2 text-sm border-2">
-            Режим наблюдателя
-            {process.env.NODE_ENV === 'development' && (
-              <div className="text-xs mt-1 opacity-60">
-                Debug: currentUserId="{currentUserId}", joins={gameData.joins.length}
-              </div>
-            )}
-          </Badge>
-        )}
-        {isWaitingForOpponent && (
-          <div className="flex items-center gap-3">
+      {/* pt-6 flex flex-col items-center space-y-4 w-full */}
+      <div className="absolute top-6 w-full flex flex-col items-center">
+        <div className="flex items-center gap-3">
+          {isWaitingForOpponent && (<>
             <Badge className="bg-purple-900/90 text-white px-4 py-2 text-sm backdrop-blur-md shadow-lg">
               Ожидание противника
             </Badge>
@@ -427,17 +418,26 @@ export function GameCore({ gameData, currentUserId, gameInvite, onJoinInvite, is
             >
               Пригласить
             </Button>
-          </div>
-        )}
-        {currentTurn && (
-          <div className={`px-4 py-2 text-sm rounded-lg border-2 ${
-            currentTurn === 1 
-              ? 'bg-white border-black text-black' 
-              : 'bg-black border-white text-white'
-          }`}>
-            Ход {currentTurn === 1 ? 'белых' : 'черных'}
-          </div>
-        )}
+          </>)}
+          {currentTurn && (
+            <div className={`px-4 py-2 text-sm rounded-lg border-2 ${
+              currentTurn === 1 
+                ? 'bg-white border-black text-black' 
+                : 'bg-black border-white text-white'
+            }`}>
+              Ход {currentTurn === 1 ? 'белых' : 'черных'}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="absolute bottom-6 w-full flex flex-col items-center">
+        <div className="flex items-center gap-3">
+          {userJoins.length === 0 && (
+            <Badge variant="outline" className="px-4 py-2 text-sm border-2">
+              Режим наблюдателя
+            </Badge>
+          )}
+        </div>
       </div>
       <div className="flex-1 w-full flex items-center justify-center p-4">
         <div className="w-full h-full max-w-[min(80vw,80vh)] max-h-[min(80vw,80vh)] aspect-square">

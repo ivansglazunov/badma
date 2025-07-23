@@ -21,23 +21,21 @@ export default function Games({ currentUserId, onGameClick, children }: GamesPro
             <Gamepad2 className="h-6 w-6 text-purple-500" />
             <h2 className="text-2xl font-bold">Games</h2>
           </div>
-          
+
           {/* Активные игры с фиксированной высотой */}
-          <div className="px-12">
-            <div className="h-[300px] w-full">
-              <ActiveGames onGameClick={onGameClick} />
-            </div>
+          <div className="h-[300px] w-full">
+            <ActiveGames onGameClick={onGameClick} />
           </div>
-          
+
           {/* Мои игры с табами */}
-          <div className="px-12  max-w-4xl">
+          <div className="max-w-4xl">
             <h2 className="text-2xl font-bold mb-4 text-center">Мои игры</h2>
             <div className="w-full">
               {/* UserGames компонент с табами, содержимое табов будет скроллиться */}
               <div className="flex flex-col">
                 {/* Компонент UserGames с фиксированными табами и скроллируемым контентом */}
-                <UserGames 
-                  userId={currentUserId} 
+                <UserGames
+                  userId={currentUserId}
                   onGameClick={onGameClick}
                 />
               </div>
@@ -45,7 +43,7 @@ export default function Games({ currentUserId, onGameClick, children }: GamesPro
           </div>
         </div>
       </div>
-      
+
       {/* Рендер дочерних компонентов */}
       {children}
     </>
