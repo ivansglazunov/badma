@@ -6,17 +6,29 @@ import { Card, CardContent } from "hasyx/components/ui/card";
 interface ClassicBoardProps {
   className?: string;
   onClick?: () => void;
-  size?: 'small' | 'large';
+  size?: 'small' | 'medium' | 'large';
 }
 
 export default function ClassicBoard({ className, onClick, size = 'small' }: ClassicBoardProps) {
   const lightColor = '#ECCCA9';
   const darkColor = '#BD9375';
   
-  const isLarge = size === 'large';
-  const cardSize = isLarge ? 'w-80 h-96' : 'w-48 h-64';
-  const boardSize = isLarge ? 'w-64 h-64' : 'w-32 h-32';
-  const titleSize = isLarge ? 'text-xl' : 'text-sm';
+  // Определяем размеры в зависимости от размера карточки
+  let cardSize, boardSize, titleSize;
+  
+  if (size === 'large') {
+    cardSize = 'w-80 h-96';
+    boardSize = 'w-64 h-64';
+    titleSize = 'text-xl';
+  } else if (size === 'medium') {
+    cardSize = 'w-64 h-80'; // Средний размер между маленьким и большим
+    boardSize = 'w-48 h-48';
+    titleSize = 'text-lg';
+  } else { // small
+    cardSize = 'w-48 h-64';
+    boardSize = 'w-32 h-32';
+    titleSize = 'text-sm';
+  }
 
   return (
     <Card className={`${cardSize} cursor-pointer ${className}`} onClick={onClick}>

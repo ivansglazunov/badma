@@ -7,15 +7,29 @@ import { King, Knight, Rook } from "@/lib/pieces/classic";
 interface ClassicPiecesProps {
   className?: string;
   onClick?: () => void;
-  size?: 'small' | 'large';
+  size?: 'small' | 'medium' | 'large';
 }
 
 export default function ClassicPieces({ className, onClick, size = 'small' }: ClassicPiecesProps) {
-  const isLarge = size === 'large';
-  const cardSize = isLarge ? 'w-80 h-96' : 'w-48 h-64';
-  const titleSize = isLarge ? 'text-xl' : 'text-sm';
-  const kingSize = isLarge ? 60 : 40;
-  const otherSize = isLarge ? 48 : 32;
+  // Определяем размеры в зависимости от размера карточки
+  let cardSize, titleSize, kingSize, otherSize;
+  
+  if (size === 'large') {
+    cardSize = 'w-80 h-96';
+    titleSize = 'text-xl';
+    kingSize = 60;
+    otherSize = 48;
+  } else if (size === 'medium') {
+    cardSize = 'w-64 h-80'; // Средний размер между маленьким и большим
+    titleSize = 'text-lg';
+    kingSize = 50;
+    otherSize = 40;
+  } else { // small
+    cardSize = 'w-48 h-64';
+    titleSize = 'text-sm';
+    kingSize = 40;
+    otherSize = 32;
+  }
   
   return (
     <Card className={`${cardSize} cursor-pointer ${className}`} onClick={onClick}>

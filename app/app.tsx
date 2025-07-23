@@ -41,6 +41,7 @@ import { ClubsList } from "./clubs";
 import { CheckClub } from "./check-club";
 import CheckAvailableItems from "./check-available-items";
 import { useClubStore } from "@/lib/stores/club-store";
+import { useUserSettingsStore } from "@/lib/stores/user-settings-store";
 import { AxiosChessClient } from "@/lib/axios-chess-client";
 
 import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
@@ -543,36 +544,10 @@ export default function App() {
       setIsSavingBoardStyle(false);
     }
   };
-  
-
-  
-  // Debug session changes
-  useEffect(() => {
-    console.log('🔐 [SESSION] Session changed:', { 
-      session, 
-      sessionStatus, 
-      user, 
-      userId: user?.id 
-    });
-  }, [session, sessionStatus, user]);
 
   // Auto-request device permissions on app load
   const motionPermissions = useDeviceMotionPermissions(true);
   const orientationPermissions = useDeviceOrientationPermissions(true);
-
-  // Debug: Log permission changes
-  useEffect(() => {
-    console.log('Motion permission status:', motionPermissions.permissionStatus);
-    console.log('Motion needsUserInteraction:', motionPermissions.needsUserInteraction);
-    console.log('Motion hasTriedAutoRequest:', motionPermissions.hasTriedAutoRequest);
-  }, [motionPermissions.permissionStatus, motionPermissions.needsUserInteraction, motionPermissions.hasTriedAutoRequest]);
-
-  useEffect(() => {
-    console.log('Orientation permission status:', orientationPermissions.permissionStatus);
-    console.log('Orientation needsUserInteraction:', orientationPermissions.needsUserInteraction);
-    console.log('Orientation hasTriedAutoRequest:', orientationPermissions.hasTriedAutoRequest);
-  }, [orientationPermissions.permissionStatus, orientationPermissions.needsUserInteraction, orientationPermissions.hasTriedAutoRequest]);
-
   // Get current user's full data including ID
   const { data: currentUserData, loading: userLoading } = useSubscription(
     {
@@ -624,35 +599,31 @@ export default function App() {
     { skip: !hasyx.userId }
   );
 
-  // Get board style settings for current user
-  const { data: boardSettingsData } = useSubscription(
+  // Get all user settings
+  const { data: settingsData } = useSubscription(
     {
       table: 'badma_settings',
       where: {
-        user_id: { _eq: hasyx.userId },
-        key: { _eq: 'board' }
+        user_id: { _eq: hasyx.userId }
       },
-      returning: ['id', 'key', 'value'],
-      limit: 1
+      returning: ['id', 'key', 'value']
     },
     { skip: !hasyx.userId }
   );
 
-  // Update selected board style from subscription data
-  React.useEffect(() => {
-    if (boardSettingsData && boardSettingsData.length > 0) {
-      const boardSetting = boardSettingsData[0];
-      setSelectedBoardStyle(boardSetting.value || 'classic_board');
-    } else {
-      // Set default if no setting found
-      setSelectedBoardStyle('classic_board');
-    }
-  }, [boardSettingsData]);
-
-
-
-  // Zustand store for clubs
+  // Zustand stores
   const { setUserClubs, setLoading, setError } = useClubStore();
+  const { setSettings, getSetting, setLoading: setSettingsLoading, setError: setSettingsError } = useUserSettingsStore();
+
+  // Update user settings in store when data changes
+  React.useEffect(() => {
+    if (settingsData) {
+      setSettings(settingsData);
+      // Update selected board style from store
+      const boardStyle = getSetting('board');
+      setSelectedBoardStyle(boardStyle);
+    }
+  }, [settingsData, setSettings, getSetting]);
 
   // Format clubs data for display and save to Zustand
   const clubsDataFormatted = React.useMemo(() => {
@@ -683,15 +654,6 @@ export default function App() {
 
   // Calculate current user ID - use hasyx.userId directly since it's the UUID from our database
   const currentUserId = hasyx.userId;
-  
-  console.log('🔐 [INVITE] Session and user data:', {
-    isAuthenticated: sessionStatus === "authenticated",
-    sessionUserId: user?.id,
-    hasyxUserId: hasyx.userId,
-    currentUserData: currentUserData?.[0],
-    currentUserId,
-    userLoading
-  });
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
   const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'games', 'skins'], []);
@@ -737,7 +699,6 @@ export default function App() {
 
   // Extract URL parameters on initial load (before authentication)
   useEffect(() => {
-    console.log('🔍 [INVITE] Checking URL parameters on mount');
     const urlParams = new URLSearchParams(window.location.search);
     const gameId = urlParams.get('gameId');
     const side = urlParams.get('side');
@@ -767,13 +728,6 @@ export default function App() {
 
   // Process pending invite after authentication
   useEffect(() => {
-    console.log('🔐 [INVITE] Auth check:', { 
-      isAuthenticated, 
-      currentUserId, 
-      hasPendingInvite: !!pendingInvite,
-      pendingInvite 
-    });
-    
     if (!isAuthenticated) {
       console.log('⏳ [INVITE] Waiting for authentication...');
       return;
@@ -1291,7 +1245,12 @@ export default function App() {
           </CarouselItem>
           <CarouselItem key="skins" className="h-full">
             {mainViewTab === 'skins' && (
-              <Skins />
+              <Skins>
+                <CheckClub 
+                  isOpen={isCheckClubOpen || !clubsDataFormatted?.length} 
+                  onClose={() => setIsCheckClubOpen(false)} 
+                />
+              </Skins>
             )}
           </CarouselItem>
         </CarouselContent>
@@ -1631,12 +1590,6 @@ export default function App() {
         </div>
       </div>
     </div>
-    {!clubsDataFormatted?.length && (
-      <CheckClub 
-        isOpen={isCheckClubOpen || !clubsDataFormatted?.length} 
-        onClose={() => setIsCheckClubOpen(false)} 
-      />
-    )}
 
     {/* Check for available items to accept */}
     <CheckAvailableItems />

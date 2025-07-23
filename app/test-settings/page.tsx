@@ -9,7 +9,7 @@ export default function TestSettingsPage() {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
   
-  const { settings, loading, error } = useUserSettings(currentUserId);
+  const { settings, loading, error } = useUserSettings();
   
   if (!currentUserId) {
     return (

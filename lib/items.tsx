@@ -12,7 +12,7 @@ export interface ItemType {
   Component: React.ComponentType<{ 
     className?: string;
     onClick?: () => void;
-    size?: 'small' | 'large';
+    size?: 'small' | 'medium' | 'large';
   }>;
 }
 
@@ -78,7 +78,7 @@ export const PIECES_STYLES: PiecesStyle[] = [
 export const COMPONENT_MAP: Record<string, React.ComponentType<{ 
   className?: string;
   onClick?: () => void;
-  size?: 'small' | 'large';
+  size?: 'small' | 'medium' | 'large';
 }>> = {
   'classic_board': ClassicBoard,
   'badma_board': BadmaBoard,

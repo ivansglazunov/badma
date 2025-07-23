@@ -1,21 +1,43 @@
 'use client'
 
 import { useMemo } from 'react';
-import { useSubscription, useQuery, useSelect } from 'hasyx';
+import { useSubscription, useQuery, useSelect, useHasyx } from 'hasyx';
 import { getUserSettings, UserSetting, UserSettings } from '../lib/settings';
+import { useUserSettingsStore } from '../lib/stores/user-settings-store';
 import Debug from '../lib/debug';
 
 const debug = Debug('user-settings');
 
 /**
- * Hook to get user settings by user ID
+ * Hook to get user settings from zustand store
  */
-export function useUserSettings(userId?: string): {
+export function useUserSettings(): {
+  settings: UserSettings;
+  loading: boolean;
+  error: any;
+  getSetting: (key: keyof UserSettings) => string;
+  updateSetting: (key: keyof UserSettings, value: string) => void;
+} {
+  const { settings, isLoading, error, getSetting, updateSetting } = useUserSettingsStore();
+  
+  return {
+    settings,
+    loading: isLoading,
+    error,
+    getSetting,
+    updateSetting
+  };
+}
+
+/**
+ * Hook to get user settings by user ID (legacy version for backward compatibility)
+ */
+export function useUserSettingsByUserId(userId?: string): {
   settings: UserSettings;
   loading: boolean;
   error: any;
 } {
-  const { data, loading, error } = useQuery(
+  const { data, loading, error } = useSubscription(
     {
       table: 'badma_settings',
       where: { 
@@ -27,8 +49,7 @@ export function useUserSettings(userId?: string): {
         'value',
         'user_id'
       ]
-    },
-    { skip: !userId }
+    }
   );
 
   const settings = useMemo(() => {

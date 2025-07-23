@@ -10,7 +10,7 @@ export interface UserSettings {
   [key: string]: string;
 }
 
-const DEFAULT_SETTINGS: UserSettings = {
+export const DEFAULT_SETTINGS: UserSettings = {
   board: 'classic',
   pieces: 'classic'
 };
