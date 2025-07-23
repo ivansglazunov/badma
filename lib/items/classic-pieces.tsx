@@ -34,31 +34,31 @@ export default function ClassicPieces({ className, onClick, size = 'small' }: Cl
   return (
     <Card className={`${cardSize} cursor-pointer ${className}`} onClick={onClick}>
       <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-        <h3 className={`${titleSize} font-semibold mb-3 text-center`}>Классические фигуры</h3>
-        
         {/* Chess pieces preview */}
-        <div className="flex items-center justify-center space-x-2 mb-4">
+        <div className="flex items-center justify-center space-x-2 my-6">
           {/* Left knight - rotated slightly left */}
           <div 
-            className="transform -rotate-12 opacity-80"
+            className="transform -rotate-12 opacity-80 scale-200 relative right-2"
             style={{ transform: 'rotate(-12deg) scale(0.8)' }}
           >
             <Knight color="#ffffff" size={otherSize} />
           </div>
           
           {/* Center king - main piece */}
-          <div className="z-10">
+          <div className="z-10 scale-240">
             <King color="#ffffff" size={kingSize} />
           </div>
           
           {/* Right rook - rotated slightly right */}
           <div 
-            className="transform rotate-12 opacity-80"
+            className="transform rotate-12 opacity-80 scale-200 relative left-2"
             style={{ transform: 'rotate(12deg) scale(0.8)' }}
           >
             <Rook color="#ffffff" size={otherSize} />
           </div>
         </div>
+
+        <h3 className={`${titleSize} font-semibold mt-3 text-center`}>Классика</h3>
       </CardContent>
     </Card>
   );
