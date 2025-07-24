@@ -33,11 +33,13 @@ class TestMinefieldPerk extends ChessPerk {
     this.log(logMessage);
 
     if (this.side === 'server') {
-      // Server generates mine positions (or uses fixed ones for testing)
+      // Server uses fixed mine positions for testing and stores them in data
+      data.squares = this.minePositions;
       debug('Server: Mine positions set to:', this.minePositions);
     } else {
-      // Client just logs the application
-      debug('Client: Minefield perk received');
+      // Client receives mine positions from server
+      this.minePositions = data.squares || this.minePositions;
+      debug('Client: Minefield perk received with squares:', this.minePositions);
     }
   }
 
@@ -250,13 +252,13 @@ describe('HasyxChessServer Perks Integration', () => {
 
     // 7. Apply Minefield Perk
     debug('Applying minefield perk...');
-    const perkResponse = await whiteClient.asyncPerk('minefield', { minePositions: ['e4', 'f5', 'g3'] });
+    const perkResponse = await whiteClient.asyncPerk('minefield', {});
     expect(perkResponse.error).toBeUndefined();
     expect(perkResponse.data).toBeDefined();
     debug('Minefield perk applied successfully');
 
     // 8. Verify perk logs on server side
-    expect(serverPerk._logs).toContain('Minefield perk applied on server with data: {"minePositions":["e4","f5","g3"]}');
+    expect(serverPerk._logs).toContain('Minefield perk applied on server with data: {}');
     debug('Server perk logs:', serverPerk._logs);
 
     // 8.5. Wait for game to be ready
@@ -386,7 +388,7 @@ describe('HasyxChessServer Perks Integration', () => {
     expect(dbPerks[0].type).toBe('minefield');
     expect(dbPerks[0].game_id).toBe(gameId);
     expect(dbPerks[0].user_id).toBe(whiteUserId1);
-    expect(dbPerks[0].data).toEqual({ minePositions: ['e4', 'f5', 'g3'] });
+    expect(dbPerks[0].data).toEqual({ squares: ['e4', 'f5', 'g3'] });
     expect(dbPerks[0].created_at).toBeGreaterThan(0);
     
     debug('✅ Database verification passed - perk was correctly saved to badma_perks table');

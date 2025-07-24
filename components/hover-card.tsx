@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 import './hover-card.css';

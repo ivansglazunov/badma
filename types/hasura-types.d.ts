@@ -28,6 +28,7 @@ export type Scalars = {
   bigint: { input: number; output: number };
   jsonb: { input: any; output: any };
   numeric: { input: number; output: number };
+  timestamptz: { input: number; output: number };
   uuid: { input: string; output: string };
 };
 
@@ -8063,6 +8064,796 @@ export type Debug_Variance_Fields = {
   updated_at?: Maybe<Scalars["Float"]["output"]>;
 };
 
+/** columns and relationships of "github_issues" */
+export type Github_Issues = {
+  __typename?: "github_issues";
+  /** Reason for locking the issue */
+  active_lock_reason?: Maybe<Scalars["String"]["output"]>;
+  /** GitHub user assigned to the issue */
+  assignee_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** Author association with repository */
+  author_association?: Maybe<Scalars["String"]["output"]>;
+  /** Issue body/description */
+  body?: Maybe<Scalars["String"]["output"]>;
+  /** When the issue was closed */
+  closed_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** Number of comments on the issue */
+  comments_count: Scalars["Int"]["output"];
+  created_at: Scalars["bigint"]["output"];
+  /** GitHub issue ID from API */
+  github_id: Scalars["bigint"]["output"];
+  /** GitHub web URL for the issue */
+  html_url: Scalars["String"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** Array of labels attached to the issue */
+  labels_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** Whether issue is locked */
+  locked: Scalars["Boolean"]["output"];
+  /** Milestone data if assigned */
+  milestone_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** GitHub GraphQL node ID */
+  node_id: Scalars["String"]["output"];
+  /** Issue number in repository */
+  number: Scalars["Int"]["output"];
+  /** Pull request data if issue is a PR */
+  pull_request_data?: Maybe<Scalars["jsonb"]["output"]>;
+  /** Repository name */
+  repository_name: Scalars["String"]["output"];
+  /** Repository owner name */
+  repository_owner: Scalars["String"]["output"];
+  /** Issue state: open, closed */
+  state: Scalars["String"]["output"];
+  /** Reason for state change */
+  state_reason?: Maybe<Scalars["String"]["output"]>;
+  /** Issue title */
+  title: Scalars["String"]["output"];
+  updated_at: Scalars["bigint"]["output"];
+  /** GitHub API URL for the issue */
+  url: Scalars["String"]["output"];
+  /** GitHub user who created the issue */
+  user_data?: Maybe<Scalars["jsonb"]["output"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesAssignee_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesAssignees_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesClosed_By_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesLabels_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesMilestone_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesPull_Request_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** columns and relationships of "github_issues" */
+export type Github_IssuesUser_DataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** aggregated selection of "github_issues" */
+export type Github_Issues_Aggregate = {
+  __typename?: "github_issues_aggregate";
+  aggregate?: Maybe<Github_Issues_Aggregate_Fields>;
+  nodes: Array<Github_Issues>;
+};
+
+/** aggregate fields of "github_issues" */
+export type Github_Issues_Aggregate_Fields = {
+  __typename?: "github_issues_aggregate_fields";
+  avg?: Maybe<Github_Issues_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Github_Issues_Max_Fields>;
+  min?: Maybe<Github_Issues_Min_Fields>;
+  stddev?: Maybe<Github_Issues_Stddev_Fields>;
+  stddev_pop?: Maybe<Github_Issues_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Github_Issues_Stddev_Samp_Fields>;
+  sum?: Maybe<Github_Issues_Sum_Fields>;
+  var_pop?: Maybe<Github_Issues_Var_Pop_Fields>;
+  var_samp?: Maybe<Github_Issues_Var_Samp_Fields>;
+  variance?: Maybe<Github_Issues_Variance_Fields>;
+};
+
+/** aggregate fields of "github_issues" */
+export type Github_Issues_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Github_Issues_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Github_Issues_Append_Input = {
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** aggregate avg on columns */
+export type Github_Issues_Avg_Fields = {
+  __typename?: "github_issues_avg_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** Boolean expression to filter rows from the table "github_issues". All fields are combined with a logical 'AND'. */
+export type Github_Issues_Bool_Exp = {
+  _and?: InputMaybe<Array<Github_Issues_Bool_Exp>>;
+  _not?: InputMaybe<Github_Issues_Bool_Exp>;
+  _or?: InputMaybe<Array<Github_Issues_Bool_Exp>>;
+  active_lock_reason?: InputMaybe<String_Comparison_Exp>;
+  assignee_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  assignees_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  author_association?: InputMaybe<String_Comparison_Exp>;
+  body?: InputMaybe<String_Comparison_Exp>;
+  closed_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  closed_by_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  comments_count?: InputMaybe<Int_Comparison_Exp>;
+  created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  github_id?: InputMaybe<Bigint_Comparison_Exp>;
+  html_url?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  labels_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  locked?: InputMaybe<Boolean_Comparison_Exp>;
+  milestone_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  node_id?: InputMaybe<String_Comparison_Exp>;
+  number?: InputMaybe<Int_Comparison_Exp>;
+  pull_request_data?: InputMaybe<Jsonb_Comparison_Exp>;
+  repository_name?: InputMaybe<String_Comparison_Exp>;
+  repository_owner?: InputMaybe<String_Comparison_Exp>;
+  state?: InputMaybe<String_Comparison_Exp>;
+  state_reason?: InputMaybe<String_Comparison_Exp>;
+  title?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  url?: InputMaybe<String_Comparison_Exp>;
+  user_data?: InputMaybe<Jsonb_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "github_issues" */
+export enum Github_Issues_Constraint {
+  /** unique or primary key constraint on columns "github_id" */
+  GithubIssuesGithubIdKey = "github_issues_github_id_key",
+  /** unique or primary key constraint on columns "id" */
+  GithubIssuesPkey = "github_issues_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Github_Issues_Delete_At_Path_Input = {
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Github_Issues_Delete_Elem_Input = {
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["Int"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Github_Issues_Delete_Key_Input = {
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** input type for incrementing numeric columns in table "github_issues" */
+export type Github_Issues_Inc_Input = {
+  /** Number of comments on the issue */
+  comments_count?: InputMaybe<Scalars["Int"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub issue ID from API */
+  github_id?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** Issue number in repository */
+  number?: InputMaybe<Scalars["Int"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+};
+
+/** input type for inserting data into table "github_issues" */
+export type Github_Issues_Insert_Input = {
+  /** Reason for locking the issue */
+  active_lock_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Author association with repository */
+  author_association?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue body/description */
+  body?: InputMaybe<Scalars["String"]["input"]>;
+  /** When the issue was closed */
+  closed_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Number of comments on the issue */
+  comments_count?: InputMaybe<Scalars["Int"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub issue ID from API */
+  github_id?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub web URL for the issue */
+  html_url?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Whether issue is locked */
+  locked?: InputMaybe<Scalars["Boolean"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub GraphQL node ID */
+  node_id?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue number in repository */
+  number?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Repository name */
+  repository_name?: InputMaybe<Scalars["String"]["input"]>;
+  /** Repository owner name */
+  repository_owner?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue state: open, closed */
+  state?: InputMaybe<Scalars["String"]["input"]>;
+  /** Reason for state change */
+  state_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue title */
+  title?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub API URL for the issue */
+  url?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Github_Issues_Max_Fields = {
+  __typename?: "github_issues_max_fields";
+  /** Reason for locking the issue */
+  active_lock_reason?: Maybe<Scalars["String"]["output"]>;
+  /** Author association with repository */
+  author_association?: Maybe<Scalars["String"]["output"]>;
+  /** Issue body/description */
+  body?: Maybe<Scalars["String"]["output"]>;
+  /** When the issue was closed */
+  closed_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Int"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub web URL for the issue */
+  html_url?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** GitHub GraphQL node ID */
+  node_id?: Maybe<Scalars["String"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Int"]["output"]>;
+  /** Repository name */
+  repository_name?: Maybe<Scalars["String"]["output"]>;
+  /** Repository owner name */
+  repository_owner?: Maybe<Scalars["String"]["output"]>;
+  /** Issue state: open, closed */
+  state?: Maybe<Scalars["String"]["output"]>;
+  /** Reason for state change */
+  state_reason?: Maybe<Scalars["String"]["output"]>;
+  /** Issue title */
+  title?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub API URL for the issue */
+  url?: Maybe<Scalars["String"]["output"]>;
+};
+
+/** aggregate min on columns */
+export type Github_Issues_Min_Fields = {
+  __typename?: "github_issues_min_fields";
+  /** Reason for locking the issue */
+  active_lock_reason?: Maybe<Scalars["String"]["output"]>;
+  /** Author association with repository */
+  author_association?: Maybe<Scalars["String"]["output"]>;
+  /** Issue body/description */
+  body?: Maybe<Scalars["String"]["output"]>;
+  /** When the issue was closed */
+  closed_at?: Maybe<Scalars["timestamptz"]["output"]>;
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Int"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub web URL for the issue */
+  html_url?: Maybe<Scalars["String"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** GitHub GraphQL node ID */
+  node_id?: Maybe<Scalars["String"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Int"]["output"]>;
+  /** Repository name */
+  repository_name?: Maybe<Scalars["String"]["output"]>;
+  /** Repository owner name */
+  repository_owner?: Maybe<Scalars["String"]["output"]>;
+  /** Issue state: open, closed */
+  state?: Maybe<Scalars["String"]["output"]>;
+  /** Reason for state change */
+  state_reason?: Maybe<Scalars["String"]["output"]>;
+  /** Issue title */
+  title?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub API URL for the issue */
+  url?: Maybe<Scalars["String"]["output"]>;
+};
+
+/** response of any mutation on the table "github_issues" */
+export type Github_Issues_Mutation_Response = {
+  __typename?: "github_issues_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Github_Issues>;
+};
+
+/** on_conflict condition type for table "github_issues" */
+export type Github_Issues_On_Conflict = {
+  constraint: Github_Issues_Constraint;
+  update_columns?: Array<Github_Issues_Update_Column>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "github_issues". */
+export type Github_Issues_Order_By = {
+  active_lock_reason?: InputMaybe<Order_By>;
+  assignee_data?: InputMaybe<Order_By>;
+  assignees_data?: InputMaybe<Order_By>;
+  author_association?: InputMaybe<Order_By>;
+  body?: InputMaybe<Order_By>;
+  closed_at?: InputMaybe<Order_By>;
+  closed_by_data?: InputMaybe<Order_By>;
+  comments_count?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  github_id?: InputMaybe<Order_By>;
+  html_url?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  labels_data?: InputMaybe<Order_By>;
+  locked?: InputMaybe<Order_By>;
+  milestone_data?: InputMaybe<Order_By>;
+  node_id?: InputMaybe<Order_By>;
+  number?: InputMaybe<Order_By>;
+  pull_request_data?: InputMaybe<Order_By>;
+  repository_name?: InputMaybe<Order_By>;
+  repository_owner?: InputMaybe<Order_By>;
+  state?: InputMaybe<Order_By>;
+  state_reason?: InputMaybe<Order_By>;
+  title?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  url?: InputMaybe<Order_By>;
+  user_data?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: github_issues */
+export type Github_Issues_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Github_Issues_Prepend_Input = {
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** select columns of table "github_issues" */
+export enum Github_Issues_Select_Column {
+  /** column name */
+  ActiveLockReason = "active_lock_reason",
+  /** column name */
+  AssigneeData = "assignee_data",
+  /** column name */
+  AssigneesData = "assignees_data",
+  /** column name */
+  AuthorAssociation = "author_association",
+  /** column name */
+  Body = "body",
+  /** column name */
+  ClosedAt = "closed_at",
+  /** column name */
+  ClosedByData = "closed_by_data",
+  /** column name */
+  CommentsCount = "comments_count",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GithubId = "github_id",
+  /** column name */
+  HtmlUrl = "html_url",
+  /** column name */
+  Id = "id",
+  /** column name */
+  LabelsData = "labels_data",
+  /** column name */
+  Locked = "locked",
+  /** column name */
+  MilestoneData = "milestone_data",
+  /** column name */
+  NodeId = "node_id",
+  /** column name */
+  Number = "number",
+  /** column name */
+  PullRequestData = "pull_request_data",
+  /** column name */
+  RepositoryName = "repository_name",
+  /** column name */
+  RepositoryOwner = "repository_owner",
+  /** column name */
+  State = "state",
+  /** column name */
+  StateReason = "state_reason",
+  /** column name */
+  Title = "title",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  Url = "url",
+  /** column name */
+  UserData = "user_data",
+}
+
+/** input type for updating data in table "github_issues" */
+export type Github_Issues_Set_Input = {
+  /** Reason for locking the issue */
+  active_lock_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Author association with repository */
+  author_association?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue body/description */
+  body?: InputMaybe<Scalars["String"]["input"]>;
+  /** When the issue was closed */
+  closed_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Number of comments on the issue */
+  comments_count?: InputMaybe<Scalars["Int"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub issue ID from API */
+  github_id?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub web URL for the issue */
+  html_url?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Whether issue is locked */
+  locked?: InputMaybe<Scalars["Boolean"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub GraphQL node ID */
+  node_id?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue number in repository */
+  number?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Repository name */
+  repository_name?: InputMaybe<Scalars["String"]["input"]>;
+  /** Repository owner name */
+  repository_owner?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue state: open, closed */
+  state?: InputMaybe<Scalars["String"]["input"]>;
+  /** Reason for state change */
+  state_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue title */
+  title?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub API URL for the issue */
+  url?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Github_Issues_Stddev_Fields = {
+  __typename?: "github_issues_stddev_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Github_Issues_Stddev_Pop_Fields = {
+  __typename?: "github_issues_stddev_pop_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Github_Issues_Stddev_Samp_Fields = {
+  __typename?: "github_issues_stddev_samp_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** Streaming cursor of the table "github_issues" */
+export type Github_Issues_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Github_Issues_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Github_Issues_Stream_Cursor_Value_Input = {
+  /** Reason for locking the issue */
+  active_lock_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user assigned to the issue */
+  assignee_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Array of GitHub users assigned to the issue */
+  assignees_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Author association with repository */
+  author_association?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue body/description */
+  body?: InputMaybe<Scalars["String"]["input"]>;
+  /** When the issue was closed */
+  closed_at?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  /** GitHub user who closed the issue */
+  closed_by_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Number of comments on the issue */
+  comments_count?: InputMaybe<Scalars["Int"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub issue ID from API */
+  github_id?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub web URL for the issue */
+  html_url?: InputMaybe<Scalars["String"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Array of labels attached to the issue */
+  labels_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Whether issue is locked */
+  locked?: InputMaybe<Scalars["Boolean"]["input"]>;
+  /** Milestone data if assigned */
+  milestone_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** GitHub GraphQL node ID */
+  node_id?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue number in repository */
+  number?: InputMaybe<Scalars["Int"]["input"]>;
+  /** Pull request data if issue is a PR */
+  pull_request_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** Repository name */
+  repository_name?: InputMaybe<Scalars["String"]["input"]>;
+  /** Repository owner name */
+  repository_owner?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue state: open, closed */
+  state?: InputMaybe<Scalars["String"]["input"]>;
+  /** Reason for state change */
+  state_reason?: InputMaybe<Scalars["String"]["input"]>;
+  /** Issue title */
+  title?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** GitHub API URL for the issue */
+  url?: InputMaybe<Scalars["String"]["input"]>;
+  /** GitHub user who created the issue */
+  user_data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Github_Issues_Sum_Fields = {
+  __typename?: "github_issues_sum_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Int"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["bigint"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Int"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+};
+
+/** update columns of table "github_issues" */
+export enum Github_Issues_Update_Column {
+  /** column name */
+  ActiveLockReason = "active_lock_reason",
+  /** column name */
+  AssigneeData = "assignee_data",
+  /** column name */
+  AssigneesData = "assignees_data",
+  /** column name */
+  AuthorAssociation = "author_association",
+  /** column name */
+  Body = "body",
+  /** column name */
+  ClosedAt = "closed_at",
+  /** column name */
+  ClosedByData = "closed_by_data",
+  /** column name */
+  CommentsCount = "comments_count",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GithubId = "github_id",
+  /** column name */
+  HtmlUrl = "html_url",
+  /** column name */
+  Id = "id",
+  /** column name */
+  LabelsData = "labels_data",
+  /** column name */
+  Locked = "locked",
+  /** column name */
+  MilestoneData = "milestone_data",
+  /** column name */
+  NodeId = "node_id",
+  /** column name */
+  Number = "number",
+  /** column name */
+  PullRequestData = "pull_request_data",
+  /** column name */
+  RepositoryName = "repository_name",
+  /** column name */
+  RepositoryOwner = "repository_owner",
+  /** column name */
+  State = "state",
+  /** column name */
+  StateReason = "state_reason",
+  /** column name */
+  Title = "title",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  Url = "url",
+  /** column name */
+  UserData = "user_data",
+}
+
+export type Github_Issues_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Github_Issues_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Github_Issues_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Github_Issues_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Github_Issues_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Github_Issues_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Github_Issues_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Github_Issues_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Github_Issues_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Github_Issues_Var_Pop_Fields = {
+  __typename?: "github_issues_var_pop_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** aggregate var_samp on columns */
+export type Github_Issues_Var_Samp_Fields = {
+  __typename?: "github_issues_var_samp_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** aggregate variance on columns */
+export type Github_Issues_Variance_Fields = {
+  __typename?: "github_issues_variance_fields";
+  /** Number of comments on the issue */
+  comments_count?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  /** GitHub issue ID from API */
+  github_id?: Maybe<Scalars["Float"]["output"]>;
+  /** Issue number in repository */
+  number?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
 /** columns and relationships of "hasyx" */
 export type Hasyx = {
   __typename?: "hasyx";
@@ -9186,6 +9977,10 @@ export type Mutation_Root = {
   delete_debug?: Maybe<Debug_Mutation_Response>;
   /** delete single row from the table: "debug" */
   delete_debug_by_pk?: Maybe<Debug>;
+  /** delete data from the table: "github_issues" */
+  delete_github_issues?: Maybe<Github_Issues_Mutation_Response>;
+  /** delete single row from the table: "github_issues" */
+  delete_github_issues_by_pk?: Maybe<Github_Issues>;
   /** delete data from the table: "logs.diffs" */
   delete_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** delete single row from the table: "logs.diffs" */
@@ -9306,6 +10101,10 @@ export type Mutation_Root = {
   insert_debug?: Maybe<Debug_Mutation_Response>;
   /** insert a single row into the table: "debug" */
   insert_debug_one?: Maybe<Debug>;
+  /** insert data into the table: "github_issues" */
+  insert_github_issues?: Maybe<Github_Issues_Mutation_Response>;
+  /** insert a single row into the table: "github_issues" */
+  insert_github_issues_one?: Maybe<Github_Issues>;
   /** insert data into the table: "logs.diffs" */
   insert_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** insert a single row into the table: "logs.diffs" */
@@ -9478,6 +10277,14 @@ export type Mutation_Root = {
   update_debug_by_pk?: Maybe<Debug>;
   /** update multiples rows of table: "debug" */
   update_debug_many?: Maybe<Array<Maybe<Debug_Mutation_Response>>>;
+  /** update data of the table: "github_issues" */
+  update_github_issues?: Maybe<Github_Issues_Mutation_Response>;
+  /** update single row of the table: "github_issues" */
+  update_github_issues_by_pk?: Maybe<Github_Issues>;
+  /** update multiples rows of table: "github_issues" */
+  update_github_issues_many?: Maybe<
+    Array<Maybe<Github_Issues_Mutation_Response>>
+  >;
   /** update data of the table: "logs.diffs" */
   update_logs_diffs?: Maybe<Logs_Diffs_Mutation_Response>;
   /** update single row of the table: "logs.diffs" */
@@ -9747,6 +10554,16 @@ export type Mutation_RootDelete_DebugArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Debug_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Github_IssuesArgs = {
+  where: Github_Issues_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Github_Issues_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -10085,6 +10902,18 @@ export type Mutation_RootInsert_DebugArgs = {
 export type Mutation_RootInsert_Debug_OneArgs = {
   object: Debug_Insert_Input;
   on_conflict?: InputMaybe<Debug_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Github_IssuesArgs = {
+  objects: Array<Github_Issues_Insert_Input>;
+  on_conflict?: InputMaybe<Github_Issues_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Github_Issues_OneArgs = {
+  object: Github_Issues_Insert_Input;
+  on_conflict?: InputMaybe<Github_Issues_On_Conflict>;
 };
 
 /** mutation root */
@@ -10632,6 +11461,35 @@ export type Mutation_RootUpdate_Debug_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Debug_ManyArgs = {
   updates: Array<Debug_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Github_IssuesArgs = {
+  _append?: InputMaybe<Github_Issues_Append_Input>;
+  _delete_at_path?: InputMaybe<Github_Issues_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Github_Issues_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Github_Issues_Delete_Key_Input>;
+  _inc?: InputMaybe<Github_Issues_Inc_Input>;
+  _prepend?: InputMaybe<Github_Issues_Prepend_Input>;
+  _set?: InputMaybe<Github_Issues_Set_Input>;
+  where: Github_Issues_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Github_Issues_By_PkArgs = {
+  _append?: InputMaybe<Github_Issues_Append_Input>;
+  _delete_at_path?: InputMaybe<Github_Issues_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Github_Issues_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Github_Issues_Delete_Key_Input>;
+  _inc?: InputMaybe<Github_Issues_Inc_Input>;
+  _prepend?: InputMaybe<Github_Issues_Prepend_Input>;
+  _set?: InputMaybe<Github_Issues_Set_Input>;
+  pk_columns: Github_Issues_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Github_Issues_ManyArgs = {
+  updates: Array<Github_Issues_Updates>;
 };
 
 /** mutation root */
@@ -16970,6 +17828,12 @@ export type Query_Root = {
   debug_aggregate: Debug_Aggregate;
   /** fetch data from the table: "debug" using primary key columns */
   debug_by_pk?: Maybe<Debug>;
+  /** fetch data from the table: "github_issues" */
+  github_issues: Array<Github_Issues>;
+  /** fetch aggregated fields from the table: "github_issues" */
+  github_issues_aggregate: Github_Issues_Aggregate;
+  /** fetch data from the table: "github_issues" using primary key columns */
+  github_issues_by_pk?: Maybe<Github_Issues>;
   /** fetch data from the table: "hasyx" */
   hasyx: Array<Hasyx>;
   /** fetch aggregated fields from the table: "hasyx" */
@@ -17408,6 +18272,26 @@ export type Query_RootDebug_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
+export type Query_RootGithub_IssuesArgs = {
+  distinct_on?: InputMaybe<Array<Github_Issues_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Github_Issues_Order_By>>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
+export type Query_RootGithub_Issues_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Github_Issues_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Github_Issues_Order_By>>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
+export type Query_RootGithub_Issues_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
 export type Query_RootHasyxArgs = {
   distinct_on?: InputMaybe<Array<Hasyx_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -17818,6 +18702,14 @@ export type Subscription_Root = {
   debug_by_pk?: Maybe<Debug>;
   /** fetch data from the table in a streaming manner: "debug" */
   debug_stream: Array<Debug>;
+  /** fetch data from the table: "github_issues" */
+  github_issues: Array<Github_Issues>;
+  /** fetch aggregated fields from the table: "github_issues" */
+  github_issues_aggregate: Github_Issues_Aggregate;
+  /** fetch data from the table: "github_issues" using primary key columns */
+  github_issues_by_pk?: Maybe<Github_Issues>;
+  /** fetch data from the table in a streaming manner: "github_issues" */
+  github_issues_stream: Array<Github_Issues>;
   /** fetch data from the table: "hasyx" */
   hasyx: Array<Hasyx>;
   /** fetch aggregated fields from the table: "hasyx" */
@@ -18390,6 +19282,32 @@ export type Subscription_RootDebug_StreamArgs = {
   where?: InputMaybe<Debug_Bool_Exp>;
 };
 
+export type Subscription_RootGithub_IssuesArgs = {
+  distinct_on?: InputMaybe<Array<Github_Issues_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Github_Issues_Order_By>>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
+export type Subscription_RootGithub_Issues_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Github_Issues_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Github_Issues_Order_By>>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
+export type Subscription_RootGithub_Issues_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootGithub_Issues_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Github_Issues_Stream_Cursor_Input>>;
+  where?: InputMaybe<Github_Issues_Bool_Exp>;
+};
+
 export type Subscription_RootHasyxArgs = {
   distinct_on?: InputMaybe<Array<Hasyx_Select_Column>>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
@@ -18735,6 +19653,19 @@ export type Subscription_RootUsers_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Users_Stream_Cursor_Input>>;
   where?: InputMaybe<Users_Bool_Exp>;
+};
+
+/** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
+export type Timestamptz_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _gt?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _gte?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _in?: InputMaybe<Array<Scalars["timestamptz"]["input"]>>;
+  _is_null?: InputMaybe<Scalars["Boolean"]["input"]>;
+  _lt?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _lte?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _neq?: InputMaybe<Scalars["timestamptz"]["input"]>;
+  _nin?: InputMaybe<Array<Scalars["timestamptz"]["input"]>>;
 };
 
 /** columns and relationships of "users" */

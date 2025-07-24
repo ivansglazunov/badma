@@ -4984,7 +4984,25 @@
         }
       ],
       "level": 1
+    },
+    {
+      "title": "Perks System Implementation Tasks",
+      "url": "/hasyx/doc/perks.tasks",
+      "collapse": true,
+      "items": [
+        {
+          "title": "Phase 1: Core Infrastructure + Testing",
+          "url": "/hasyx/doc/perks.tasks#phase-1-core-infrastructure-testing",
+          "level": 2
+        },
+        {
+          "title": "Phase 2: Implementation + Database Integration",
+          "url": "/hasyx/doc/perks.tasks#phase-2-implementation-database-integration",
+          "level": 2
+        }
+      ],
+      "level": 1
     }
   ],
-  "lastUpdated": "2025-07-24T12:28:45.981Z"
+  "lastUpdated": "2025-07-24T23:32:53.075Z"
 }

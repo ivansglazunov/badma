@@ -31,6 +31,6 @@
 - [x] Add axios-based chess client support for perk operations
 - [x] Update API route handlers for perk operations
 - [ ] Add perk support to WebSocket communication
-- [ ] Update database schemas and permissions for perks table
+- [x] Update database schemas and permissions for perks table
 - [x] Create comprehensive integration test `hasyx-chess-perks.test.ts`
 - [x] Integrate perks processing into HasyxChessServer._move() method

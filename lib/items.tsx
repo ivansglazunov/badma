@@ -3,12 +3,13 @@ import ClassicBoard from './items/classic-board';
 import BadmaBoard from './items/badma-board';
 import ClassicPieces from './items/classic-pieces';
 import BadmaPieces from './items/badma-pieces';
+import MinefieldPerkCard, { MinefieldPerk, MinefieldEffect } from './items/minefield-perk';
 
 export interface ItemType {
   id: string;
   name: string;
   description: string;
-  category: 'pieces' | 'board';
+  category: 'pieces' | 'board' | 'perk';
   Component: React.ComponentType<{ 
     className?: string;
     onClick?: () => void;
@@ -32,6 +33,16 @@ export interface PiecesStyle {
     white: string;
     black: string;
   };
+}
+
+export interface PerkType {
+  id: string;
+  name: string;
+  description: string;
+  perkClass: typeof MinefieldPerk;
+  EffectComponent?: React.ComponentType<{
+    gameData: any;
+  }>;
 }
 
 // Supported board styles
@@ -74,6 +85,17 @@ export const PIECES_STYLES: PiecesStyle[] = [
   }
 ];
 
+// Supported perks
+export const PERK_TYPES: PerkType[] = [
+  {
+    id: 'minefield',
+    name: 'Минное поле',
+    description: 'Расставляет 4 случайные мины на пустых клетках доски. При попадании фигуры на мину она уничтожается.',
+    perkClass: MinefieldPerk,
+    EffectComponent: MinefieldEffect
+  }
+];
+
 // Component mapping
 export const COMPONENT_MAP: Record<string, React.ComponentType<{ 
   className?: string;
@@ -83,7 +105,8 @@ export const COMPONENT_MAP: Record<string, React.ComponentType<{
   'classic_board': ClassicBoard,
   'badma_board': BadmaBoard,
   'classic_pieces': ClassicPieces,
-  'badma_pieces': BadmaPieces
+  'badma_pieces': BadmaPieces,
+  'minefield': MinefieldPerkCard
 };
 
 // All supported items
@@ -101,6 +124,13 @@ export const SUPPORTED_ITEMS: ItemType[] = [
     description: style.description,
     category: 'pieces' as const,
     Component: COMPONENT_MAP[style.id]
+  })),
+  ...PERK_TYPES.map(perk => ({
+    id: perk.id,
+    name: perk.name,
+    description: perk.description,
+    category: 'perk' as const,
+    Component: COMPONENT_MAP[perk.id]
   }))
 ];
 
@@ -115,6 +145,10 @@ export function getPiecesStyle(id: string): PiecesStyle | undefined {
 
 export function getItemType(id: string): ItemType | undefined {
   return SUPPORTED_ITEMS.find(item => item.id === id);
+}
+
+export function getPerkType(id: string): PerkType | undefined {
+  return PERK_TYPES.find(perk => perk.id === id);
 }
 
 /**

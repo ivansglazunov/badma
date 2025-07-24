@@ -1051,6 +1051,40 @@ export abstract class ChessClient {
   }
 
   /**
+   * Converts chess position notation (e.g., "f3") to numeric coordinates.
+   * @param {string} position Chess position in algebraic notation (e.g., "f3", "a1", "h8")
+   * @returns {{ x: number, y: number }} Object with x and y coordinates (0-7)
+   * @throws {Error} If position format is invalid
+   * @public
+   * @static
+   */
+  public static positionToCoordinates(position: string): { x: number, y: number } {
+    // Validate input
+    if (typeof position !== 'string' || position.length !== 2) {
+      throw new Error('ChessClient:positionToCoordinates:invalid');
+    }
+
+    const file = position.charAt(0).toLowerCase();
+    const rank = position.charAt(1);
+
+    // Validate file (a-h)
+    if (file < 'a' || file > 'h') {
+      throw new Error('ChessClient:positionToCoordinates:invalid');
+    }
+
+    // Validate rank (1-8)
+    if (rank < '1' || rank > '8') {
+      throw new Error('ChessClient:positionToCoordinates:invalid');
+    }
+
+    // Convert to 0-7 coordinates
+    const x = file.charCodeAt(0) - 'a'.charCodeAt(0); // a=0, b=1, ..., h=7
+    const y = 8 - parseInt(rank); // 8=0, 7=1, ..., 1=7 (flipped for board representation)
+
+    return { x, y };
+  }
+
+  /**
    * Abstract method to be implemented by subclasses for handling the sync request.
    * @param {ChessClientRequest} request The sync request object.
    * @returns {Promise<ChessServerResponse>} The server's response.

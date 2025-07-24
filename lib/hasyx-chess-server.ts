@@ -6,6 +6,7 @@ import { Hasyx, GenerateOptions, GenerateResult } from 'hasyx'; // Assuming 'has
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid'; // For generating IDs
 import { HasyxChessClient } from './hasyx-chess-client';
+import { MinefieldPerk } from './items/minefield-perk';
 
 const debug = Debug('hasyx-server');
 
@@ -22,6 +23,12 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     this._hasyx = hasyx;
     // Bind getApplied method to existing _perks instance (don't create new one!)
     this._perks.getApplied = this.getApplied.bind(this);
+    
+    // Register minefield perk on server side
+    const minefieldPerk = new MinefieldPerk('server');
+    this._perks.registerPerk(minefieldPerk);
+    debug('Registered MinefieldPerk on server side');
+    
     debug('HasyxChessServer initialized (Stateful Client Management)');
   }
 
@@ -320,6 +327,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
           return await this.move(requestData);
         case 'sync':
           return await this.sync(requestData);
+        case 'perk':
+          return await this.perk(requestData);
         // Add cases for other potential operations like 'surrender' if distinct from 'leave'
         default:
           debug(`Unsupported operation requested: ${requestData.operation}`);
@@ -743,22 +752,31 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     }
 
     try {
+      // Prepare perk data with game FEN for server-side processing
+      const perkData = {
+        ...request.perk.data || {},
+        _serverFen: game.fen // Add current game FEN for server-side perk logic
+      };
+      
       // Apply perk in memory (register it with the perks system)
       await this._perks.applyPerk(
         request.perk.type,
         request.gameId,
         request.clientId,
-        request.perk.data || {}
+        perkData
       );
       
       debug(`Perk ${request.perk.type} applied in memory for game ${request.gameId}`);
+      
+      // Prepare data for database (exclude server-only fields)
+      const { _serverFen, ...dataForDatabase } = perkData;
       
       // Save perk application to database
       const perkRecord = {
         type: request.perk.type,
         game_id: request.gameId,
         user_id: request.userId,
-        data: request.perk.data || {},
+        data: dataForDatabase,
         created_at: Date.now()
       };
       

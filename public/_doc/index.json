@@ -5584,7 +5584,30 @@
       ],
       "content": "",
       "path": "lib/captured-pieces.md"
+    },
+    {
+      "filename": "perks.tasks.md",
+      "title": "Perks System Implementation Tasks",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Perks System Implementation Tasks",
+          "id": "perks-system-implementation-tasks"
+        },
+        {
+          "level": 2,
+          "text": "Phase 1: Core Infrastructure + Testing",
+          "id": "phase-1-core-infrastructure-testing"
+        },
+        {
+          "level": 2,
+          "text": "Phase 2: Implementation + Database Integration",
+          "id": "phase-2-implementation-database-integration"
+        }
+      ],
+      "content": "",
+      "path": "perks.tasks.md"
     }
   ],
-  "lastUpdated": "2025-07-24T12:28:45.796Z"
+  "lastUpdated": "2025-07-24T23:32:53.044Z"
 }

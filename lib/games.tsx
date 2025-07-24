@@ -14,8 +14,8 @@ interface GamesProps {
 export default function Games({ currentUserId, onGameClick, children }: GamesProps) {
   return (
     <>
-      <div className="flex flex-col items-center justify-start p-4 overflow-y-auto">
-        <div className="w-full space-y-8">
+      <div className="flex flex-col items-center justify-start p-4 overflow-y-auto h-full">
+        <div className="w-full space-y-8 flex flex-col items-center">
           {/* Заголовок */}
           <div className="flex items-center justify-center gap-2 mb-4">
             <Gamepad2 className="h-6 w-6 text-purple-500" />
@@ -27,8 +27,7 @@ export default function Games({ currentUserId, onGameClick, children }: GamesPro
             <ActiveGames onGameClick={onGameClick} />
           </div>
 
-          {/* Мои игры с табами */}
-          <div className="max-w-4xl">
+          <div className="flex flex-col items-center h-full w-full max-w-[1000px]">
             <h2 className="text-2xl font-bold mb-4 text-center">Мои игры</h2>
             <div className="w-full">
               {/* UserGames компонент с табами, содержимое табов будет скроллиться */}

@@ -244,6 +244,18 @@ async function createRelationshipsFunc() {
           column: 'game_id'
         }
       }
+    },
+    {
+      schema: publicSchema,
+      table: 'users',
+      name: 'perks',
+      type: 'array' as const,
+      using: {
+        foreign_key_constraint_on: {
+          table: { schema: badmaSchema, name: 'perks' },
+          column: 'user_id'
+        }
+      }
     }
   ];
   
