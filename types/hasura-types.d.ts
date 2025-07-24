@@ -2419,6 +2419,10 @@ export type Badma_Games = {
   moves: Array<Badma_Moves>;
   /** An aggregate relationship */
   moves_aggregate: Badma_Moves_Aggregate;
+  /** An array relationship */
+  perks: Array<Badma_Perks>;
+  /** An aggregate relationship */
+  perks_aggregate: Badma_Perks_Aggregate;
   side: Scalars["Int"]["output"];
   sides: Scalars["Int"]["output"];
   status: Scalars["String"]["output"];
@@ -2486,6 +2490,24 @@ export type Badma_GamesMoves_AggregateArgs = {
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   order_by?: InputMaybe<Array<Badma_Moves_Order_By>>;
   where?: InputMaybe<Badma_Moves_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.games" */
+export type Badma_GamesPerksArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+/** columns and relationships of "badma.games" */
+export type Badma_GamesPerks_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
 };
 
 /** columns and relationships of "badma.games" */
@@ -2607,6 +2629,8 @@ export type Badma_Games_Bool_Exp = {
   mode?: InputMaybe<String_Comparison_Exp>;
   moves?: InputMaybe<Badma_Moves_Bool_Exp>;
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Bool_Exp>;
+  perks?: InputMaybe<Badma_Perks_Bool_Exp>;
+  perks_aggregate?: InputMaybe<Badma_Perks_Aggregate_Bool_Exp>;
   side?: InputMaybe<Int_Comparison_Exp>;
   sides?: InputMaybe<Int_Comparison_Exp>;
   status?: InputMaybe<String_Comparison_Exp>;
@@ -2645,6 +2669,7 @@ export type Badma_Games_Insert_Input = {
   joins?: InputMaybe<Badma_Joins_Arr_Rel_Insert_Input>;
   mode?: InputMaybe<Scalars["String"]["input"]>;
   moves?: InputMaybe<Badma_Moves_Arr_Rel_Insert_Input>;
+  perks?: InputMaybe<Badma_Perks_Arr_Rel_Insert_Input>;
   side?: InputMaybe<Scalars["Int"]["input"]>;
   sides?: InputMaybe<Scalars["Int"]["input"]>;
   status?: InputMaybe<Scalars["String"]["input"]>;
@@ -2761,6 +2786,7 @@ export type Badma_Games_Order_By = {
   joins_aggregate?: InputMaybe<Badma_Joins_Aggregate_Order_By>;
   mode?: InputMaybe<Order_By>;
   moves_aggregate?: InputMaybe<Badma_Moves_Aggregate_Order_By>;
+  perks_aggregate?: InputMaybe<Badma_Perks_Aggregate_Order_By>;
   side?: InputMaybe<Order_By>;
   sides?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
@@ -4847,6 +4873,509 @@ export type Badma_Moves_Variance_Fields = {
 export type Badma_Moves_Variance_Order_By = {
   created_at?: InputMaybe<Order_By>;
   side?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "badma.perks" */
+export type Badma_Perks = {
+  __typename?: "badma_perks";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_at: Scalars["bigint"]["output"];
+  /** Custom perk data (mine positions, settings, etc.) */
+  data: Scalars["jsonb"]["output"];
+  /** An object relationship */
+  game: Badma_Games;
+  /** ID of the game to which the perk was applied */
+  game_id: Scalars["uuid"]["output"];
+  id: Scalars["uuid"]["output"];
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type: Scalars["String"]["output"];
+  updated_at: Scalars["bigint"]["output"];
+  /** An object relationship */
+  user: Users;
+  /** ID of the user who applied the perk */
+  user_id: Scalars["uuid"]["output"];
+};
+
+/** columns and relationships of "badma.perks" */
+export type Badma_PerksDataArgs = {
+  path?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** aggregated selection of "badma.perks" */
+export type Badma_Perks_Aggregate = {
+  __typename?: "badma_perks_aggregate";
+  aggregate?: Maybe<Badma_Perks_Aggregate_Fields>;
+  nodes: Array<Badma_Perks>;
+};
+
+export type Badma_Perks_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Badma_Perks_Aggregate_Bool_Exp_Count>;
+};
+
+export type Badma_Perks_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+  filter?: InputMaybe<Badma_Perks_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "badma.perks" */
+export type Badma_Perks_Aggregate_Fields = {
+  __typename?: "badma_perks_aggregate_fields";
+  avg?: Maybe<Badma_Perks_Avg_Fields>;
+  count: Scalars["Int"]["output"];
+  max?: Maybe<Badma_Perks_Max_Fields>;
+  min?: Maybe<Badma_Perks_Min_Fields>;
+  stddev?: Maybe<Badma_Perks_Stddev_Fields>;
+  stddev_pop?: Maybe<Badma_Perks_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Badma_Perks_Stddev_Samp_Fields>;
+  sum?: Maybe<Badma_Perks_Sum_Fields>;
+  var_pop?: Maybe<Badma_Perks_Var_Pop_Fields>;
+  var_samp?: Maybe<Badma_Perks_Var_Samp_Fields>;
+  variance?: Maybe<Badma_Perks_Variance_Fields>;
+};
+
+/** aggregate fields of "badma.perks" */
+export type Badma_Perks_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  distinct?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+/** order by aggregate values of table "badma.perks" */
+export type Badma_Perks_Aggregate_Order_By = {
+  avg?: InputMaybe<Badma_Perks_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Badma_Perks_Max_Order_By>;
+  min?: InputMaybe<Badma_Perks_Min_Order_By>;
+  stddev?: InputMaybe<Badma_Perks_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Badma_Perks_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Badma_Perks_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Badma_Perks_Sum_Order_By>;
+  var_pop?: InputMaybe<Badma_Perks_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Badma_Perks_Var_Samp_Order_By>;
+  variance?: InputMaybe<Badma_Perks_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Badma_Perks_Append_Input = {
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** input type for inserting array relation for remote table "badma.perks" */
+export type Badma_Perks_Arr_Rel_Insert_Input = {
+  data: Array<Badma_Perks_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Badma_Perks_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Badma_Perks_Avg_Fields = {
+  __typename?: "badma_perks_avg_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by avg() on columns of table "badma.perks" */
+export type Badma_Perks_Avg_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "badma.perks". All fields are combined with a logical 'AND'. */
+export type Badma_Perks_Bool_Exp = {
+  _and?: InputMaybe<Array<Badma_Perks_Bool_Exp>>;
+  _not?: InputMaybe<Badma_Perks_Bool_Exp>;
+  _or?: InputMaybe<Array<Badma_Perks_Bool_Exp>>;
+  applied_at?: InputMaybe<Bigint_Comparison_Exp>;
+  created_at?: InputMaybe<Bigint_Comparison_Exp>;
+  data?: InputMaybe<Jsonb_Comparison_Exp>;
+  game?: InputMaybe<Badma_Games_Bool_Exp>;
+  game_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  type?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Bigint_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "badma.perks" */
+export enum Badma_Perks_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  PerksPkey = "perks_pkey",
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Badma_Perks_Delete_At_Path_Input = {
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Array<Scalars["String"]["input"]>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Badma_Perks_Delete_Elem_Input = {
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Badma_Perks_Delete_Key_Input = {
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+/** input type for incrementing numeric columns in table "badma.perks" */
+export type Badma_Perks_Inc_Input = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+};
+
+/** input type for inserting data into table "badma.perks" */
+export type Badma_Perks_Insert_Input = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  game?: InputMaybe<Badma_Games_Obj_Rel_Insert_Input>;
+  /** ID of the game to which the perk was applied */
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  /** ID of the user who applied the perk */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate max on columns */
+export type Badma_Perks_Max_Fields = {
+  __typename?: "badma_perks_max_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID of the game to which the perk was applied */
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID of the user who applied the perk */
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by max() on columns of table "badma.perks" */
+export type Badma_Perks_Max_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  /** ID of the game to which the perk was applied */
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** ID of the user who applied the perk */
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Badma_Perks_Min_Fields = {
+  __typename?: "badma_perks_min_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID of the game to which the perk was applied */
+  game_id?: Maybe<Scalars["uuid"]["output"]>;
+  id?: Maybe<Scalars["uuid"]["output"]>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: Maybe<Scalars["String"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+  /** ID of the user who applied the perk */
+  user_id?: Maybe<Scalars["uuid"]["output"]>;
+};
+
+/** order by min() on columns of table "badma.perks" */
+export type Badma_Perks_Min_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  /** ID of the game to which the perk was applied */
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  /** ID of the user who applied the perk */
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "badma.perks" */
+export type Badma_Perks_Mutation_Response = {
+  __typename?: "badma_perks_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"]["output"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Badma_Perks>;
+};
+
+/** on_conflict condition type for table "badma.perks" */
+export type Badma_Perks_On_Conflict = {
+  constraint: Badma_Perks_Constraint;
+  update_columns?: Array<Badma_Perks_Update_Column>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "badma.perks". */
+export type Badma_Perks_Order_By = {
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  data?: InputMaybe<Order_By>;
+  game?: InputMaybe<Badma_Games_Order_By>;
+  game_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: badma.perks */
+export type Badma_Perks_Pk_Columns_Input = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Badma_Perks_Prepend_Input = {
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["jsonb"]["input"]>;
+};
+
+/** select columns of table "badma.perks" */
+export enum Badma_Perks_Select_Column {
+  /** column name */
+  AppliedAt = "applied_at",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Data = "data",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Type = "type",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** input type for updating data in table "badma.perks" */
+export type Badma_Perks_Set_Input = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** ID of the game to which the perk was applied */
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** ID of the user who applied the perk */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate stddev on columns */
+export type Badma_Perks_Stddev_Fields = {
+  __typename?: "badma_perks_stddev_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev() on columns of table "badma.perks" */
+export type Badma_Perks_Stddev_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Badma_Perks_Stddev_Pop_Fields = {
+  __typename?: "badma_perks_stddev_pop_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_pop() on columns of table "badma.perks" */
+export type Badma_Perks_Stddev_Pop_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Badma_Perks_Stddev_Samp_Fields = {
+  __typename?: "badma_perks_stddev_samp_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by stddev_samp() on columns of table "badma.perks" */
+export type Badma_Perks_Stddev_Samp_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "badma_perks" */
+export type Badma_Perks_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Badma_Perks_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Badma_Perks_Stream_Cursor_Value_Input = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  created_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** Custom perk data (mine positions, settings, etc.) */
+  data?: InputMaybe<Scalars["jsonb"]["input"]>;
+  /** ID of the game to which the perk was applied */
+  game_id?: InputMaybe<Scalars["uuid"]["input"]>;
+  id?: InputMaybe<Scalars["uuid"]["input"]>;
+  /** Type of perk (e.g., minefield, shield, etc.) */
+  type?: InputMaybe<Scalars["String"]["input"]>;
+  updated_at?: InputMaybe<Scalars["bigint"]["input"]>;
+  /** ID of the user who applied the perk */
+  user_id?: InputMaybe<Scalars["uuid"]["input"]>;
+};
+
+/** aggregate sum on columns */
+export type Badma_Perks_Sum_Fields = {
+  __typename?: "badma_perks_sum_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["bigint"]["output"]>;
+  created_at?: Maybe<Scalars["bigint"]["output"]>;
+  updated_at?: Maybe<Scalars["bigint"]["output"]>;
+};
+
+/** order by sum() on columns of table "badma.perks" */
+export type Badma_Perks_Sum_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "badma.perks" */
+export enum Badma_Perks_Update_Column {
+  /** column name */
+  AppliedAt = "applied_at",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  Data = "data",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Type = "type",
+  /** column name */
+  UpdatedAt = "updated_at",
+  /** column name */
+  UserId = "user_id",
+}
+
+export type Badma_Perks_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Badma_Perks_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Badma_Perks_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Badma_Perks_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Badma_Perks_Delete_Key_Input>;
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Badma_Perks_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Badma_Perks_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Badma_Perks_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Badma_Perks_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Badma_Perks_Var_Pop_Fields = {
+  __typename?: "badma_perks_var_pop_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_pop() on columns of table "badma.perks" */
+export type Badma_Perks_Var_Pop_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Badma_Perks_Var_Samp_Fields = {
+  __typename?: "badma_perks_var_samp_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by var_samp() on columns of table "badma.perks" */
+export type Badma_Perks_Var_Samp_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Badma_Perks_Variance_Fields = {
+  __typename?: "badma_perks_variance_fields";
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: Maybe<Scalars["Float"]["output"]>;
+  created_at?: Maybe<Scalars["Float"]["output"]>;
+  updated_at?: Maybe<Scalars["Float"]["output"]>;
+};
+
+/** order by variance() on columns of table "badma.perks" */
+export type Badma_Perks_Variance_Order_By = {
+  /** Timestamp when the perk was activated in the game */
+  applied_at?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "badma.servers" */
@@ -8625,6 +9154,10 @@ export type Mutation_Root = {
   delete_badma_moves?: Maybe<Badma_Moves_Mutation_Response>;
   /** delete single row from the table: "badma.moves" */
   delete_badma_moves_by_pk?: Maybe<Badma_Moves>;
+  /** delete data from the table: "badma.perks" */
+  delete_badma_perks?: Maybe<Badma_Perks_Mutation_Response>;
+  /** delete single row from the table: "badma.perks" */
+  delete_badma_perks_by_pk?: Maybe<Badma_Perks>;
   /** delete data from the table: "badma.servers" */
   delete_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** delete single row from the table: "badma.servers" */
@@ -8741,6 +9274,10 @@ export type Mutation_Root = {
   insert_badma_moves?: Maybe<Badma_Moves_Mutation_Response>;
   /** insert a single row into the table: "badma.moves" */
   insert_badma_moves_one?: Maybe<Badma_Moves>;
+  /** insert data into the table: "badma.perks" */
+  insert_badma_perks?: Maybe<Badma_Perks_Mutation_Response>;
+  /** insert a single row into the table: "badma.perks" */
+  insert_badma_perks_one?: Maybe<Badma_Perks>;
   /** insert data into the table: "badma.servers" */
   insert_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** insert a single row into the table: "badma.servers" */
@@ -8881,6 +9418,12 @@ export type Mutation_Root = {
   update_badma_moves_by_pk?: Maybe<Badma_Moves>;
   /** update multiples rows of table: "badma.moves" */
   update_badma_moves_many?: Maybe<Array<Maybe<Badma_Moves_Mutation_Response>>>;
+  /** update data of the table: "badma.perks" */
+  update_badma_perks?: Maybe<Badma_Perks_Mutation_Response>;
+  /** update single row of the table: "badma.perks" */
+  update_badma_perks_by_pk?: Maybe<Badma_Perks>;
+  /** update multiples rows of table: "badma.perks" */
+  update_badma_perks_many?: Maybe<Array<Maybe<Badma_Perks_Mutation_Response>>>;
   /** update data of the table: "badma.servers" */
   update_badma_servers?: Maybe<Badma_Servers_Mutation_Response>;
   /** update single row of the table: "badma.servers" */
@@ -9124,6 +9667,16 @@ export type Mutation_RootDelete_Badma_MovesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Badma_Moves_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_PerksArgs = {
+  where: Badma_Perks_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Badma_Perks_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -9436,6 +9989,18 @@ export type Mutation_RootInsert_Badma_MovesArgs = {
 export type Mutation_RootInsert_Badma_Moves_OneArgs = {
   object: Badma_Moves_Insert_Input;
   on_conflict?: InputMaybe<Badma_Moves_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_PerksArgs = {
+  objects: Array<Badma_Perks_Insert_Input>;
+  on_conflict?: InputMaybe<Badma_Perks_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Badma_Perks_OneArgs = {
+  object: Badma_Perks_Insert_Input;
+  on_conflict?: InputMaybe<Badma_Perks_On_Conflict>;
 };
 
 /** mutation root */
@@ -9885,6 +10450,35 @@ export type Mutation_RootUpdate_Badma_Moves_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Badma_Moves_ManyArgs = {
   updates: Array<Badma_Moves_Updates>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_PerksArgs = {
+  _append?: InputMaybe<Badma_Perks_Append_Input>;
+  _delete_at_path?: InputMaybe<Badma_Perks_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Badma_Perks_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Badma_Perks_Delete_Key_Input>;
+  _inc?: InputMaybe<Badma_Perks_Inc_Input>;
+  _prepend?: InputMaybe<Badma_Perks_Prepend_Input>;
+  _set?: InputMaybe<Badma_Perks_Set_Input>;
+  where: Badma_Perks_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Perks_By_PkArgs = {
+  _append?: InputMaybe<Badma_Perks_Append_Input>;
+  _delete_at_path?: InputMaybe<Badma_Perks_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Badma_Perks_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Badma_Perks_Delete_Key_Input>;
+  _inc?: InputMaybe<Badma_Perks_Inc_Input>;
+  _prepend?: InputMaybe<Badma_Perks_Prepend_Input>;
+  _set?: InputMaybe<Badma_Perks_Set_Input>;
+  pk_columns: Badma_Perks_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Badma_Perks_ManyArgs = {
+  updates: Array<Badma_Perks_Updates>;
 };
 
 /** mutation root */
@@ -16328,6 +16922,12 @@ export type Query_Root = {
   badma_moves_aggregate: Badma_Moves_Aggregate;
   /** fetch data from the table: "badma.moves" using primary key columns */
   badma_moves_by_pk?: Maybe<Badma_Moves>;
+  /** fetch data from the table: "badma.perks" */
+  badma_perks: Array<Badma_Perks>;
+  /** fetch aggregated fields from the table: "badma.perks" */
+  badma_perks_aggregate: Badma_Perks_Aggregate;
+  /** fetch data from the table: "badma.perks" using primary key columns */
+  badma_perks_by_pk?: Maybe<Badma_Perks>;
   /** fetch data from the table: "badma.servers" */
   badma_servers: Array<Badma_Servers>;
   /** fetch aggregated fields from the table: "badma.servers" */
@@ -16645,6 +17245,26 @@ export type Query_RootBadma_Moves_AggregateArgs = {
 };
 
 export type Query_RootBadma_Moves_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Query_RootBadma_PerksArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+export type Query_RootBadma_Perks_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+export type Query_RootBadma_Perks_By_PkArgs = {
   id: Scalars["uuid"]["input"];
 };
 
@@ -17134,6 +17754,14 @@ export type Subscription_Root = {
   badma_moves_by_pk?: Maybe<Badma_Moves>;
   /** fetch data from the table in a streaming manner: "badma.moves" */
   badma_moves_stream: Array<Badma_Moves>;
+  /** fetch data from the table: "badma.perks" */
+  badma_perks: Array<Badma_Perks>;
+  /** fetch aggregated fields from the table: "badma.perks" */
+  badma_perks_aggregate: Badma_Perks_Aggregate;
+  /** fetch data from the table: "badma.perks" using primary key columns */
+  badma_perks_by_pk?: Maybe<Badma_Perks>;
+  /** fetch data from the table in a streaming manner: "badma.perks" */
+  badma_perks_stream: Array<Badma_Perks>;
   /** fetch data from the table: "badma.servers" */
   badma_servers: Array<Badma_Servers>;
   /** fetch aggregated fields from the table: "badma.servers" */
@@ -17552,6 +18180,32 @@ export type Subscription_RootBadma_Moves_StreamArgs = {
   batch_size: Scalars["Int"]["input"];
   cursor: Array<InputMaybe<Badma_Moves_Stream_Cursor_Input>>;
   where?: InputMaybe<Badma_Moves_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_PerksArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Perks_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Badma_Perks_Select_Column>>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  order_by?: InputMaybe<Array<Badma_Perks_Order_By>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
+};
+
+export type Subscription_RootBadma_Perks_By_PkArgs = {
+  id: Scalars["uuid"]["input"];
+};
+
+export type Subscription_RootBadma_Perks_StreamArgs = {
+  batch_size: Scalars["Int"]["input"];
+  cursor: Array<InputMaybe<Badma_Perks_Stream_Cursor_Input>>;
+  where?: InputMaybe<Badma_Perks_Bool_Exp>;
 };
 
 export type Subscription_RootBadma_ServersArgs = {

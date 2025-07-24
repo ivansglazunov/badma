@@ -24,10 +24,13 @@
 - [ ] Add `'perks'` category to `ItemType` interface in `lib/items.tsx`
 - [ ] Create minefield perk definition in `SUPPORTED_ITEMS`
 - [ ] Create `lib/items/minefield-perk.tsx` with complete perk implementation (component + logic)
-- [ ] Create migration `1753365719226-badma-perks` for perks application tracking
-- [ ] Update `HasyxChessServer` to support perks with real database operations
-- [ ] Implement `getApplied()` method in `HasyxChessServer` to read from database instead of memory
-- [ ] Add axios-based chess client support for perk operations
-- [ ] Update API route handlers for perk operations
+- [x] Create migration for `badma_perks` table for perks application tracking
+- [x] Update `HasyxChessServer` to support perks with real database operations
+- [x] Implement `getApplied()` method in `HasyxChessServer` to read from database instead of memory
+- [x] Override `_perk()` method in `HasyxChessServer` to save perks to database
+- [x] Add axios-based chess client support for perk operations
+- [x] Update API route handlers for perk operations
 - [ ] Add perk support to WebSocket communication
 - [ ] Update database schemas and permissions for perks table
+- [x] Create comprehensive integration test `hasyx-chess-perks.test.ts`
+- [x] Integrate perks processing into HasyxChessServer._move() method

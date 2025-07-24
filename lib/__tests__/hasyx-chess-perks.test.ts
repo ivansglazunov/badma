@@ -196,20 +196,20 @@ describe('HasyxChessServer Perks Integration', () => {
 
     const server = new HasyxChessServer(hasyx);
     
-    const userId1 = await server.__addUser();
-    const userId2 = await server.__addUser();
+    const whiteUserId1 = await server.__addUser();
+    const blackUserId2 = await server.__addUser();
 
-    expect(userId1).toBeDefined();
-    expect(userId2).toBeDefined();
+    expect(whiteUserId1).toBeDefined();
+    expect(blackUserId2).toBeDefined();
 
     // 2. Setup Clients
     const whiteClient = new LocalChessClient<HasyxChessServer>(server);
     whiteClient.clientId = uuidv4();
-    whiteClient.userId = userId1;
+    whiteClient.userId = whiteUserId1;
     
     const blackClient = new LocalChessClient<HasyxChessServer>(server);
     blackClient.clientId = uuidv4();
-    blackClient.userId = userId2;
+    blackClient.userId = blackUserId2;
 
     debug(`White Client ID: ${whiteClient.clientId}, User ID: ${whiteClient.userId}`);
     debug(`Black Client ID: ${blackClient.clientId}, User ID: ${blackClient.userId}`);
@@ -360,7 +360,36 @@ describe('HasyxChessServer Perks Integration', () => {
     expect(finalFen.length).toBeGreaterThan(0);
     
     debug('✅ Mine collision test passed - piece was successfully removed from g3');
-
+    
+    // 16. Verify that the perk was saved to the database
+    debug('Checking database for applied perks...');
+    const appliedPerksFromDb = await server.getApplied(gameId);
+    debug('Applied perks from database:', appliedPerksFromDb);
+    
+    expect(appliedPerksFromDb).toBeDefined();
+    expect(appliedPerksFromDb.length).toBe(1);
+    expect(appliedPerksFromDb[0].type).toBe('minefield');
+    expect(appliedPerksFromDb[0].game_id).toBe(gameId);
+    expect(appliedPerksFromDb[0].data).toEqual({ minePositions: ['e4', 'f5', 'g3'] });
+    
+    // 17. Verify database record directly
+    debug('Querying database directly for perk records...');
+    const dbPerks = await hasyx.select({
+      table: 'badma_perks',
+      where: { game_id: { _eq: gameId } },
+      returning: ['id', 'type', 'game_id', 'user_id', 'data', 'created_at', 'applied_at']
+    });
+    
+    debug('Database perk records:', dbPerks);
+    expect(dbPerks).toBeDefined();
+    expect(dbPerks.length).toBe(1);
+    expect(dbPerks[0].type).toBe('minefield');
+    expect(dbPerks[0].game_id).toBe(gameId);
+    expect(dbPerks[0].user_id).toBe(whiteUserId1);
+    expect(dbPerks[0].data).toEqual({ minePositions: ['e4', 'f5', 'g3'] });
+    expect(dbPerks[0].created_at).toBeGreaterThan(0);
+    
+    debug('✅ Database verification passed - perk was correctly saved to badma_perks table');
     debug('Perks test completed successfully');
   }, 100000);
 });

@@ -697,21 +697,112 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
     debug(`Getting applied perks for game ${gameId}`);
     
     try {
-      // For now, return empty array as we haven't created the perks table yet
-      // In Phase 2, this will query the badma_perks table
-      debug(`No perks table yet, returning empty array for game ${gameId}`);
-      return [];
+      // Query the badma_perks table for applied perks
+      const result = await this._hasyx.select({
+        table: 'badma_perks',
+        where: { game_id: { _eq: gameId } },
+        returning: ['id', 'type', 'game_id', 'user_id', 'data', 'created_at', 'applied_at']
+      });
       
-      // TODO: Phase 2 implementation will be:
-      // const result = await this._hasyx.select({
-      //   table: 'badma_perks',
-      //   where: { game_id: { _eq: gameId } },
-      //   returning: ['type', 'game_id', 'client_id', 'data', 'created_at', 'updated_at']
-      // });
+      debug(`Found ${result.length} applied perks for game ${gameId}`);
+      
+      // Convert database records to ChessPerkApplication format
+      const applications: ChessPerkApplication[] = result.map((perk: any) => ({
+        type: perk.type,
+        game_id: perk.game_id,
+        client_id: perk.user_id, // Use user_id as client_id for now
+        data: perk.data || {},
+        created_at: perk.created_at,
+        updated_at: perk.applied_at || perk.created_at
+      }));
+      
+      return applications;
       // return Array.isArray(result) ? result : [];
     } catch (error: any) {
       debug(`Error getting applied perks for game ${gameId}:`, error);
       return [];
+    }
+  }
+
+  protected async _perk(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
+    debug('HasyxChessServer _perk processing', request);
+    
+    if (!request.clientId) return { error: '!clientId' };
+    if (!request.userId) return { error: '!userId' };
+    if (!request.gameId) return { error: '!gameId' };
+    if (!request.perk) return { error: '!perk' };
+
+    // Validate user and game
+    if (!(await this.__checkUser(request.userId))) {
+      return { error: '!user' };
+    }
+
+    const game = await this.__getGame(request.gameId);
+    if (!game) {
+      return { error: '!game' };
+    }
+
+    try {
+      // Apply perk in memory (register it with the perks system)
+      await this._perks.applyPerk(
+        request.perk.type,
+        request.gameId,
+        request.clientId,
+        request.perk.data || {}
+      );
+      
+      debug(`Perk ${request.perk.type} applied in memory for game ${request.gameId}`);
+      
+      // Save perk application to database
+      const perkRecord = {
+        type: request.perk.type,
+        game_id: request.gameId,
+        user_id: request.userId,
+        data: request.perk.data || {},
+        created_at: Date.now()
+      };
+      
+      const insertResult = await this._hasyx.insert({
+        table: 'badma_perks',
+        object: perkRecord,
+        returning: ['id', 'type', 'game_id', 'user_id', 'data', 'created_at']
+      });
+      
+      debug(`Perk ${request.perk.type} saved to database:`, insertResult);
+      
+      this._hasyx.debug({
+        route: 'HasyxChessServer:_perk',
+        gameId: request.gameId,
+        userId: request.userId,
+        perkType: request.perk.type,
+        message: 'Perk applied and saved to database',
+        data: { perkRecord, insertResult }
+      });
+      
+      return {
+        data: {
+          clientId: request.clientId,
+          gameId: request.gameId,
+          joinId: request.joinId,
+          side: request.side,
+          role: request.role,
+          fen: game.fen,
+          status: game.status,
+          updatedAt: game.updatedAt,
+          createdAt: game.createdAt
+        }
+      };
+      
+    } catch (error: any) {
+      debug('HasyxChessServer _perk: perk application failed', error);
+      await this._logDbError({
+        userId: request.userId,
+        gameId: request.gameId,
+        context: '_perk:application_failed',
+        requestPayload: request,
+        errorMessage: error.message || 'Perk application failed'
+      });
+      return { error: `Perk application failed: ${error.message}` };
     }
   }
 } 
