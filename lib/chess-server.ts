@@ -2,15 +2,18 @@ import { ChessClientRequest, ChessServerResponse, ChessClientSide, ChessClientRo
 import Debug from './debug';
 import { v4 as uuidv4 } from 'uuid';
 import { GameState } from './local-chess-server';
+import { ChessPerks } from './chess-perks';
 
 const debug = Debug('chess-server');
 
 export abstract class ChessServer<T extends ChessClient> {
     public _clients: Record<string, T> = {};
     public _ChessLogicClass: new (server: ChessServer<T>) => T;
+    public _perks: ChessPerks;
 
     constructor(ChessLogicClass: new (server: ChessServer<T>) => T) {
         this._ChessLogicClass = ChessLogicClass;
+        this._perks = new ChessPerks('server');
         debug('ChessServer initialized with ChessLogicClass:', ChessLogicClass.name);
     }
 
@@ -380,9 +383,46 @@ export abstract class ChessServer<T extends ChessClient> {
 
         // --- MOVE SIMULATION SUCCEEDED (according to base client logic) ---
         // Update the SHARED Server GameState FROM the BASE client simulation result
-        const updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
+        let updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
         const updatedStatus = clientMoveResponse.data.status; // Status from client after its internal move
         const updatedTime = Date.now();                   // Use server time for update
+
+        // Process move through perks on server side using two-phase approach
+        let perkBeforeData: Map<string, Record<string, any>> | null = null;
+        try {
+            // Phase 1: Handle move BEFORE (using original FEN before move)
+            perkBeforeData = await this._perks.handleMoveBefore(
+                gameId,
+                request.clientId,
+                request.move!,
+                game.fen // Use original FEN before move
+            );
+            if (perkBeforeData === null) {
+                debug('_move: move cancelled by perks in BEFORE phase');
+                return { error: 'Move cancelled by perks' };
+            }
+            debug('_move: perks BEFORE phase completed, data:', Array.from(perkBeforeData.entries()));
+            
+            // Phase 2: Handle move AFTER (using FEN after move simulation)
+            const perkModifiedFen = await this._perks.handleMoveAfter(
+                gameId,
+                request.clientId,
+                request.move!,
+                updatedFen, // FEN after client simulation
+                perkBeforeData
+            );
+            if (perkModifiedFen === null) {
+                debug('_move: move cancelled by perks in AFTER phase');
+                return { error: 'Move cancelled by perks' };
+            }
+            if (perkModifiedFen !== updatedFen) {
+                debug('_move: perks AFTER phase modified FEN:', perkModifiedFen);
+                updatedFen = perkModifiedFen;
+            }
+        } catch (error: any) {
+            debug('_move: perks error:', error);
+            // Continue with original FEN if perks fail
+        }
 
         await this.__updateGame(gameId, { fen: updatedFen, status: updatedStatus, updatedAt: updatedTime });
         debug(`Server game state updated based on BASE client simulation logic (${joinRecord.joinId}). New FEN: ${updatedFen}, New Status: ${updatedStatus}`);
@@ -563,6 +603,70 @@ export abstract class ChessServer<T extends ChessClient> {
         } catch (error: any) {
             debug('API: sync error', error);
             return { error: error.message || 'An unexpected error occurred during sync' };
+        }
+    }
+
+    protected async _perk(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
+        debug('_perk processing', request);
+        if (!request.clientId) return { error: '!clientId' };
+        if (!request.userId) return { error: '!userId' };
+        if (!request.gameId) return { error: '!gameId' };
+        if (!request.perk) return { error: '!perk' };
+
+        // Get the client
+        const client = await this.__registerClient(request.clientId);
+        if (!client) return { error: 'Client not found' };
+
+        // Apply perk on server side
+        try {
+            await this._perks.applyPerk(
+                request.perk.type,
+                request.gameId,
+                request.clientId,
+                request.perk.data || {}
+            );
+        } catch (error: any) {
+            debug('_perk: perk application failed', error);
+            return { error: `Perk application failed: ${error.message}` };
+        }
+
+        // Get current game state
+        const gameData = await this.__getGame(request.gameId);
+        if (!gameData) return { error: 'Game not found' };
+
+        return {
+            data: {
+                clientId: request.clientId,
+                gameId: request.gameId,
+                joinId: client.joinId,
+                side: client.side,
+                role: client.role,
+                fen: gameData.fen,
+                status: gameData.status,
+                updatedAt: gameData.updatedAt,
+                createdAt: gameData.createdAt,
+            }
+        };
+    }
+
+    async perk(request: Omit<ChessClientRequest, 'operation'>): Promise<ChessServerResponse> {
+        debug('API: perk request received', request);
+        // Validation
+        if (!request.clientId) return { error: 'clientId is required' };
+        if (!request.userId) return { error: 'userId is required' };
+        if (!request.gameId) return { error: 'gameId is required' };
+        if (!request.perk) return { error: 'perk is required' };
+        if (!request.perk.type) return { error: 'perk.type is required' };
+        if (!request.updatedAt || typeof request.updatedAt !== 'number') return { error: 'updatedAt (number) is required' };
+        if (!request.createdAt || typeof request.createdAt !== 'number') return { error: 'createdAt (number) is required' };
+
+        try {
+            const response = await this._perk(request);
+            debug('API: perk response', response);
+            return response;
+        } catch (error: any) {
+            debug('API: perk error', error);
+            return { error: error.message || 'An unexpected error occurred during perk application' };
         }
     }
 

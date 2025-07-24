@@ -73,4 +73,16 @@ export class LocalChessClient<Server extends ChessServer<ChessClient>> extends C
             return { error: error.message || 'Server communication error during sync' };
         }
     }
+
+    protected override async _perk(request: ChessClientRequest): Promise<ChessServerResponse> {
+        debug('LocalChessClient _perk sending request to server:', request);
+        try {
+            const response = await this._server.perk(request);
+            debug('LocalChessClient _perk received response from server:', response);
+            return response;
+        } catch (error: any) {
+            debug('LocalChessClient _perk error calling server:', error);
+            return { error: error.message || 'Server communication error during perk' };
+        }
+    }
 }
