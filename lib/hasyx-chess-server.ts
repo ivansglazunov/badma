@@ -1,5 +1,6 @@
 import { ChessClient, ChessClientRequest, ChessClientRole, ChessClientSide, ChessClientStatus, ChessServerResponse } from './chess-client';
 import { ChessServer } from './chess-server';
+import { ChessPerks, ChessPerkApplication } from './chess-perks';
 import Debug from './debug';
 import { Hasyx, GenerateOptions, GenerateResult } from 'hasyx'; // Assuming 'hasyx' package and 'Client', 'GenerateOptions' export
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
@@ -19,6 +20,8 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
   ) {
     super(ChessClass as any); // Call base constructor
     this._hasyx = hasyx;
+    // Bind getApplied method to existing _perks instance (don't create new one!)
+    this._perks.getApplied = this.getApplied.bind(this);
     debug('HasyxChessServer initialized (Stateful Client Management)');
   }
 
@@ -554,9 +557,53 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
 
     // --- MOVE SIMULATION SUCCEEDED (according to base client logic) --- 
     // Update the SHARED Server GameState FROM the BASE client simulation result
-    const updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
+    let updatedFen = clientMoveResponse.data.fen;     // FEN from client after its internal move
     const updatedStatus = clientMoveResponse.data.status; // Status from client after its internal move
     const updatedTime = Date.now();                   // Use server time for update
+
+    // --- PROCESS MOVE THROUGH PERKS SYSTEM ---
+    let perkBeforeData: Map<string, Record<string, any>> | null = null;
+    try {
+        // Phase 1: Handle move BEFORE (using original FEN before move)
+        perkBeforeData = await this._perks.handleMoveBefore(
+            gameId,
+            request.clientId,
+            request.move!,
+            game.fen // Use original FEN before move
+        );
+        
+        if (perkBeforeData === null) {
+            debug('_move: move cancelled by perks in BEFORE phase');
+            return { error: 'Move cancelled by perks' };
+        }
+        debug('_move: perks BEFORE phase completed, data:', Array.from(perkBeforeData.entries()));
+        
+        // Phase 2: Handle move AFTER (using FEN after move simulation)
+        const perkModifiedFen = await this._perks.handleMoveAfter(
+            gameId,
+            request.clientId,
+            request.move!,
+            updatedFen, // FEN after client simulation
+            perkBeforeData
+        );
+        
+        if (perkModifiedFen === null) {
+            debug('_move: move cancelled by perks in AFTER phase');
+            return { error: 'Move cancelled by perks' };
+        }
+        if (perkModifiedFen !== updatedFen) {
+            debug('_move: perks AFTER phase modified FEN:', perkModifiedFen);
+            updatedFen = perkModifiedFen;
+        }
+        
+    } catch (perkError: any) {
+        debug('_move: error in perks processing:', perkError);
+        await this._logDbError({
+            userId: request.userId, gameId: gameId, context: '_move:perks_processing_failed',
+            requestPayload: request, errorMessage: perkError.message || 'Perks processing failed'
+        });
+        return { error: 'Perks processing failed' };
+    }
 
     await this.__updateGame(gameId, { 
         fen: updatedFen, 
@@ -640,5 +687,31 @@ export class HasyxChessServer extends ChessServer<ChessClient> {
         data: responseData
     });
     return { data: responseData };
+  }
+
+  /**
+   * Get applied perks for a game from database
+   * This method is bound to ChessPerks instance to provide database access
+   */
+  async getApplied(gameId: string): Promise<ChessPerkApplication[]> {
+    debug(`Getting applied perks for game ${gameId}`);
+    
+    try {
+      // For now, return empty array as we haven't created the perks table yet
+      // In Phase 2, this will query the badma_perks table
+      debug(`No perks table yet, returning empty array for game ${gameId}`);
+      return [];
+      
+      // TODO: Phase 2 implementation will be:
+      // const result = await this._hasyx.select({
+      //   table: 'badma_perks',
+      //   where: { game_id: { _eq: gameId } },
+      //   returning: ['type', 'game_id', 'client_id', 'data', 'created_at', 'updated_at']
+      // });
+      // return Array.isArray(result) ? result : [];
+    } catch (error: any) {
+      debug(`Error getting applied perks for game ${gameId}:`, error);
+      return [];
+    }
   }
 } 

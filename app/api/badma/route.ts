@@ -142,7 +142,7 @@ export async function GET(request: NextRequest) {
 
     // Reconstruct the request object
     clientRequestData = {
-        operation: getParam<'create' | 'join' | 'leave' | 'move' | 'sync'>('operation'),
+        operation: getParam<'create' | 'join' | 'leave' | 'move' | 'sync' | 'perk'>('operation'),
         clientId: getParam<string>('clientId'),
         // userId is injected from token, no need to parse from params
         gameId: getParam<string>('gameId'),
@@ -150,6 +150,7 @@ export async function GET(request: NextRequest) {
         side: parseNumberParam('side') as ChessClientSide | undefined,
         role: parseNumberParam('role') as ChessClientRole | undefined,
         move: parseJsonParam<ChessClientMove>('move'), // Expect move to be JSON string
+        perk: parseJsonParam<{ type: string; data?: Record<string, any> }>('perk'), // Expect perk to be JSON string
         updatedAt: parseNumberParam('updatedAt'),
         createdAt: parseNumberParam('createdAt'),
     };
@@ -165,6 +166,7 @@ export async function GET(request: NextRequest) {
     if (clientRequestData.operation === 'move' && !clientRequestData.move) throw new Error ('move parameter is required for move operation');
     if (clientRequestData.operation === 'join' && clientRequestData.side === undefined) throw new Error ('side parameter is required for join operation');
     if (clientRequestData.operation === 'join' && clientRequestData.role === undefined) throw new Error ('role parameter is required for join operation');
+    if (clientRequestData.operation === 'perk' && !clientRequestData.perk) throw new Error ('perk parameter is required for perk operation');
     // ... add other validations
 
   } catch (error: any) {
@@ -190,6 +192,7 @@ export async function GET(request: NextRequest) {
       side: clientRequestData.side,
       role: clientRequestData.role,
       move: clientRequestData.move,
+      perk: clientRequestData.perk,
     };
 
     const server = new HasyxChessServer(hasyx);

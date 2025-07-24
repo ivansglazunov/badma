@@ -45,6 +45,10 @@ export class AxiosChessClient extends ChessClient {
         return this.sendRequest(request);
     }
 
+    protected override async _perk(request: ChessClientRequest): Promise<ChessServerResponse> {
+        return this.sendRequest(request);
+    }
+
     protected override async _join(request: ChessClientRequest): Promise<ChessServerResponse> {
         return this.sendRequest(request);
     }
