@@ -949,9 +949,9 @@ export default function App() {
       <Carousel 
         setApi={setCarouselApi} 
         opts={{ align: "start", loop: false }} 
-        className="flex-grow flex flex-col pt-0 pb-13 h-full"
+        className="flex-grow flex flex-col pt-0 pb-14 h-full"
       >
-        <CarouselContent className="h-full">
+        <CarouselContent className="h-full" root={{ className: 'h-full' }}>
           <CarouselItem key="profile" className="h-full overflow-y-auto pt-4">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex flex-col items-center mb-6">
@@ -1082,32 +1082,6 @@ export default function App() {
           </CarouselItem>
         </CarouselContent>
       </Carousel>
-
-      <div className={cn(
-        "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
-        selectedGameId ? "translate-y-0" : "translate-y-full"
-      )}>
-        {selectedGameId && (
-          <>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="absolute top-4 right-4 z-50 rounded-full"
-              onClick={handleCloseGame}
-            >
-              <X/>
-            </Button>
-            <div className="w-full h-full flex items-center justify-center p-4">
-              <Game 
-                gameId={selectedGameId} 
-                onClose={handleCloseGame}
-                gameInvite={gameInvite}
-                onJoinInvite={handleJoinGameFromInvite}
-              />
-            </div>
-          </>
-        )}
-      </div>
 
       {selectedTournament && (
         <Dialog open={isTournamentModalOpen} onOpenChange={setIsTournamentModalOpen}>
@@ -1279,7 +1253,7 @@ export default function App() {
       />
 
       <div className={cn(
-        "p-2 fixed -bottom-5 left-0 right-0 z-30 bg-transparent transition-transform duration-300 ease-in-out",
+        "p-2 fixed -bottom-3 left-0 right-0 z-30 bg-transparent transition-transform duration-300 ease-in-out",
         selectedGameId ? "translate-y-full" : "translate-y-0"
       )}>
         <div className="absolute -top-4 left-2 z-[9999] px-2 py-1 bg-black/20 backdrop-blur-sm rounded text-xs text-white/70 font-mono pointer-events-none">
@@ -1325,6 +1299,32 @@ export default function App() {
           </div>
         </div>
       </div>
+    </div>
+
+    <div className={cn(
+      "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
+      selectedGameId ? "translate-y-0" : "translate-y-full"
+    )}>
+      {selectedGameId && (
+        <>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="absolute top-4 right-4 z-50 rounded-full"
+            onClick={handleCloseGame}
+          >
+            <X/>
+          </Button>
+          <div className="w-full h-full flex items-center justify-center p-4">
+            <Game 
+              gameId={selectedGameId} 
+              onClose={handleCloseGame}
+              gameInvite={gameInvite}
+              onJoinInvite={handleJoinGameFromInvite}
+            />
+          </div>
+        </>
+      )}
     </div>
 
     {/* Check for available items to accept */}

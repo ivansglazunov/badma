@@ -197,8 +197,8 @@ export default function Skins({ children }: SkinsProps) {
         onComplete={() => setShowExplosion(false)}
       />
 
-      <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto">
-        <div className="w-full max-w-4xl space-y-8">
+      <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto h-full">
+        <div className="w-full max-w-4xl space-y-8 h-full">
           {/* Наборы */}
           <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>

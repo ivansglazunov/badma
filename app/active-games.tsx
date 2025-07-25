@@ -58,7 +58,7 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
           ]
         }
       ],
-      order_by: { updated_at: 'desc' },
+      order_by: { created_at: 'desc' },
       limit: 15,
     },
     { skip: !hasyx.userId }
@@ -104,11 +104,6 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
       >
         <CarouselContent className="">
           {games.map((game: GameData) => {
-            // Определяем участников
-            const players = game.joins.filter(join => join.role === 1); // role 1 = player
-            const whitePlayer = players.find(p => p.side === 1);
-            const blackPlayer = players.find(p => p.side === 2);
-            
             return (
               <CarouselItem 
                 key={game.id}
