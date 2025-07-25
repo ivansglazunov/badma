@@ -86,10 +86,10 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
   }
 
   return (
-    <div className="h-[300px] px-4">
-      <h3 className="text-xl font-semibold mb-4 text-center">Активные игры <span className="text-sm font-normal text-purple-500">({games.length == 15 ? '15+' : games.length})</span></h3>
+    <div className="h-[300px] w-full">
+      <h2 className="text-2xl font-semibold mb-4 text-center">Активные игры <span className="text-sm font-normal text-purple-500">({games.length == 15 ? '15+' : games.length})</span></h2>
       <Carousel
-        className="w-full max-w-5xl mx-auto"
+        className="w-full max-w-5xl mx-none"
         opts={{
           dragFree: false,
           containScroll: "trimSnaps",

@@ -197,7 +197,7 @@ export default function Skins({ children }: SkinsProps) {
         onComplete={() => setShowExplosion(false)}
       />
 
-      <div className="flex flex-col items-center justify-start p-4 overflow-y-auto">
+      <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto">
         <div className="w-full max-w-4xl space-y-8">
           {/* Наборы */}
           <div className="">

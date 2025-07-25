@@ -78,34 +78,30 @@ export default function Games({ currentUserId, onGameClick, children }: GamesPro
 
   return (
     <>
-      <div className="flex flex-col items-center justify-start p-4 overflow-y-auto h-full">
+      <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto h-full">
         <div className="w-full space-y-8 flex flex-col items-center">
-          {/* Заголовок */}
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Gamepad2 className="h-6 w-6 text-purple-500" />
-            <h2 className="text-2xl font-bold">Games</h2>
-            <Button
-              variant="outline"
-              size="icon"
-              className="text-white flex flex-col items-center justify-center aspect-square"
-              onClick={handleCreateGame}
-              disabled={isCreatingGame}
-            >
-              {isCreatingGame ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <PlusCircle className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-
           {/* Активные игры с фиксированной высотой */}
-          <div className="h-[300px] w-full">
+          <div className="h-[250px] w-full">
             <ActiveGames onGameClick={onGameClick} />
           </div>
 
-          <div className="flex flex-col items-center h-full w-full max-w-[1000px]">
-            <h2 className="text-2xl font-bold mb-4 text-center">Мои игры</h2>
+          <div className="flex flex-col items-center h-full w-full max-w-[1000px] px-4">
+            <h2 className="text-2xl font-bold mb-4 text-center flex items-center gap-2">
+              <Gamepad2 className="h-6 w-6 text-purple-500" /> Мои игры 
+              <Button
+                variant="outline"
+                size="icon"
+                className="text-foreground flex flex-col items-center justify-center aspect-square"
+                onClick={handleCreateGame}
+                disabled={isCreatingGame}
+              >
+                {isCreatingGame ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <PlusCircle className="h-4 w-4" />
+                )}
+              </Button>
+            </h2>
             <div className="w-full">
               {/* UserGames компонент с табами, содержимое табов будет скроллиться */}
               <div className="flex flex-col">

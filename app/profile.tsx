@@ -1,9 +1,6 @@
 'use client';
 
-import React from 'react';
-import { signOut } from 'next-auth/react';
-import { LogOut, Loader2 } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Accounts } from 'hasyx/components/accounts';
 import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar';
 import { Button } from 'hasyx/components/ui/button';
 import { Card } from 'hasyx/components/ui/card';
@@ -11,12 +8,14 @@ import { Dialog, DialogContent } from 'hasyx/components/ui/dialog';
 import { Label } from 'hasyx/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'hasyx/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'hasyx/components/ui/tabs';
-import { Accounts } from 'hasyx/components/accounts';
+import { LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 interface ProfileProps {
   isOpen: boolean;
   onClose: () => void;
   user: any;
+  theme?: string;
   setTheme: (theme: string) => void;
   isLoadingSession: boolean;
   selectedBoardStyle: string;
@@ -28,17 +27,16 @@ export function Profile({
   isOpen,
   onClose,
   user,
+  theme,
   setTheme,
   isLoadingSession,
   selectedBoardStyle,
   saveBoardStyleSetting,
   isSavingBoardStyle
 }: ProfileProps) {
-  const { theme } = useTheme();
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md w-full max-h-[90vh] p-0 gap-0">
+      <DialogContent className="max-w-md max-w-[90vw] w-full max-h-[90vh] p-0 gap-0">
         {/* Avatar над карточкой */}
         <div className="flex justify-center -mt-20 relative z-10">
           <Avatar className="border-4 border-background shadow-lg size-20 relative top-2 border-purple-500">
@@ -52,7 +50,7 @@ export function Profile({
         <Card className="border-0 shadow-none">
           {/* <div className="h-1 w-full bg-purple-500"/> */}
           <Tabs defaultValue="account" className="w-full h-full flex flex-col">
-            <div className="px-6">
+            <div className="px-6 pb-2">
               <TabsList className="w-full">
                 <TabsTrigger value="account">Account</TabsTrigger>
                 <TabsTrigger value="accounts">Accounts</TabsTrigger>

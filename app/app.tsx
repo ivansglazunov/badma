@@ -1270,6 +1270,7 @@ export default function App() {
         isOpen={profile}
         onClose={() => setProfile(false)}
         user={user}
+        theme={theme}
         setTheme={setTheme}
         isLoadingSession={isLoadingSession}
         selectedBoardStyle={selectedBoardStyle}
