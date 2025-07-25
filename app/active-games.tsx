@@ -12,6 +12,7 @@ import {
 } from 'hasyx/components/ui/carousel';
 import Board from '../lib/board';
 import { Badge } from 'hasyx/components/ui/badge';
+import { useTheme } from 'hasyx/components/theme-switcher';
 
 interface ActiveGamesProps {
   onGameClick?: (gameId: string) => void;
@@ -33,6 +34,7 @@ interface GameData {
 }
 
 export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
+  const { theme } = useTheme();
   const hasyx = useHasyx();
 
   // Подписка на активные игры (continue/ready) с сортировкой по updated_at
@@ -89,7 +91,7 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
     <div className="h-[300px] w-full">
       <h2 className="text-2xl font-semibold mb-4 text-center">Активные игры <span className="text-sm font-normal text-purple-500">({games.length == 15 ? '15+' : games.length})</span></h2>
       <Carousel
-        className="w-full max-w-5xl mx-none"
+        className="w-full mx-none"
         opts={{
           dragFree: false,
           containScroll: "trimSnaps",
@@ -134,6 +136,8 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
                       position={game.fen}
                       onMove={undefined} // Только для просмотра
                       orientation={1} // Всегда с точки зрения белых
+                      bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
+                      bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
                     />
                   </div>
                    

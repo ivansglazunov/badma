@@ -929,7 +929,7 @@ export default function App() {
 
   return (<>
     <div className="fixed -top-3 left-0 z-[9999] w-full flex justify-center">
-      <div className="flex w-full max-w-2xl">
+      <div className="flex w-full">
         <div className="w-full px-2 relative">
           <Progress value={30} className="bg-purple-500/30 h-6" indicator={{ className: 'bg-purple-500' }}/>
           <div className="bg-purple-500 p-1 rounded-full absolute top-3 left-0 color-foreground shadow-md" style={{ borderTopLeftRadius: 0 }}>
