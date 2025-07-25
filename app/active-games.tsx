@@ -132,7 +132,7 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
                       onMove={undefined} // Только для просмотра
                       orientation={1} // Всегда с точки зрения белых
                       bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
-                      bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+                      bgWhite={theme === "dark" ? '#581c87' : '#dfbfff'}
                     />
                   </div>
                    

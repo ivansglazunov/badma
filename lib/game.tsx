@@ -494,7 +494,7 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
             onMove={userJoins.length > 0 && !isWaitingForOpponent ? handleMove : undefined}
             orientation={boardOrientation}
             bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
-            bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+            bgWhite={theme === "dark" ? '#581c87' : '#dfbfff'}
             whitePiecesStyle={whitePiecesStyle}
             blackPiecesStyle={blackPiecesStyle}
             animation={true}

@@ -6,9 +6,8 @@ import { Button } from 'hasyx/components/ui/button';
 import { Card } from 'hasyx/components/ui/card';
 import { Dialog, DialogContent } from 'hasyx/components/ui/dialog';
 import { Label } from 'hasyx/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'hasyx/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'hasyx/components/ui/tabs';
-import { LogOut } from 'lucide-react';
+import { LogOut, Monitor } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
 interface ProfileProps {
@@ -66,19 +65,42 @@ export function Profile({
                   </div>
                   
                   <div>
-                    <Label htmlFor="themeSelect" className="block text-sm font-medium mb-2">
+                    <Label className="block text-sm font-medium mb-3">
                       Тема
                     </Label>
-                    <Select value={theme} onValueChange={setTheme}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тему" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="system">Системная</SelectItem>
-                        <SelectItem value="light">Светлая</SelectItem>
-                        <SelectItem value="dark">Темная</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center justify-center space-x-4">
+                      {/* Системная тема */}
+                      <button
+                        onClick={() => setTheme('system')}
+                        className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+                          theme === 'system' 
+                            ? 'border-purple-500 bg-transparent' 
+                            : 'border-border hover:border-purple-300'
+                        }`}
+                      >
+                        <Monitor className="w-5 h-5 text-foreground" />
+                      </button>
+
+                      {/* Светлая тема */}
+                      <button
+                        onClick={() => setTheme('light')}
+                        className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+                          theme === 'light' 
+                            ? 'border-purple-500 bg-white' 
+                            : 'border-border bg-white hover:border-purple-300'
+                        }`}
+                      />
+
+                      {/* Темная тема */}
+                      <button
+                        onClick={() => setTheme('dark')}
+                        className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+                          theme === 'dark' 
+                            ? 'border-purple-500 bg-black' 
+                            : 'border-border bg-black hover:border-purple-300'
+                        }`}
+                      />
+                    </div>
                   </div>
                 </div>
                 

@@ -86,7 +86,7 @@ export default function TestSettingsPage() {
             whitePiecesStyle={whitePiecesStyle}
             blackPiecesStyle={blackPiecesStyle}
             bgBlack="#c084fc"
-            bgWhite="#faf5ff"
+            bgWhite="#dfbfff"
           />
         </div>
       </div>

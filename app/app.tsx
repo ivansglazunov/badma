@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, Coins, Crown, Gamepad2, ListChecks, Loader2, LoaderCircle, PlusCircle, Shirt, Trophy, User, Users, X } from "lucide-react";
+import { Award, Coins, Crown, Gamepad2, Globe, ListChecks, Loader2, LoaderCircle, PlusCircle, Shirt, Trophy, User, Users, X } from "lucide-react";
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import packageJson from '../package.json';
@@ -35,6 +35,7 @@ import { useUserSettingsStore } from "@/lib/stores/user-settings-store";
 import { tournamentDescriptions, tournaments } from '@/lib/tournaments';
 import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
 import { cn } from "hasyx/lib/utils";
+import { ChessVerse } from "@/lib/verse";
 import CheckAvailableItems from "./check-available-items";
 import { CheckClub } from "./check-club";
 import { ClubTab } from "./club";
@@ -391,7 +392,7 @@ export function GameClassic() {
       <div className="aspect-square w-full h-full max-w-[min(70vw,70vh)] max-h-[min(70vw,70vh)]">
         <Board position="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
           bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
-          bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+          bgWhite={theme === "dark" ? '#581c87' : '#dfbfff'}
         />
       </div>
     </>
@@ -418,7 +419,7 @@ export function GameFree() {
       <div className="aspect-square w-full h-full max-w-[min(70vw,70vh)] max-h-[min(70vw,70vh)]">
         <Board position="qqqqkqqq/pppppppp/pppppppp/8/8/PPPPPPPP/PPPPPPPP/QQQQKQQQ w - - 0 1"
           bgBlack={theme === "dark" ? '#3b0764' : '#c084fc'}
-          bgWhite={theme === "dark" ? '#581c87' : '#faf5ff'}
+          bgWhite={theme === "dark" ? '#581c87' : '#dfbfff'}
         />
       </div>
       <GameCards className={`top-0 left-0 -rotate-180 transition-all duration-300 ${mounted ? "-translate-y-35" : "-translate-y-300"}`} disabled/>
@@ -603,6 +604,7 @@ export default function App() {
     side: number;
     role: number;
   } | null>(null);
+  const [isVerseOpen, setIsVerseOpen] = useState(false);
   
   // Board style settings
   const [selectedBoardStyle, setSelectedBoardStyle] = useState('classic_board');
@@ -936,6 +938,11 @@ export default function App() {
             <Award/>
           </div>
         </div>
+        <div className="flex-shrink-0 relative">
+          <div className={cn(`bg-background p-2 rounded-full absolute top-3 left-1/2 transform -translate-x-1/2 color-foreground shadow-md z-10 cursor-pointer hover:bg-purple-500 transition-all scale-150 border-3 border-purple-500`, { 'scale-200': isVerseOpen })} onClick={() => setIsVerseOpen(!isVerseOpen)}>
+            <Globe className="h-4 w-4 md:h-5 md:w-5"/>
+          </div>
+        </div>
         <div className="w-full px-2 relative">
           <Progress value={30} className="bg-yellow-500/30 rotate-180 h-6" indicator={{ className: 'bg-yellow-500' }}/>
           <div className="bg-yellow-500 p-1 rounded-full absolute top-3 right-0 color-foreground shadow-md" style={{ borderTopRightRadius: 0 }}>
@@ -952,7 +959,7 @@ export default function App() {
         className="flex-grow flex flex-col pt-0 pb-14 h-full"
       >
         <CarouselContent className="h-full" root={{ className: 'h-full' }}>
-          <CarouselItem key="profile" className="h-full overflow-y-auto pt-4">
+          <CarouselItem key="profile" className="h-full overflow-y-auto pt-10">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex flex-col items-center mb-6">
                 <Avatar className="h-24 w-24 mb-4">
@@ -985,7 +992,7 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="tournaments" className="h-full overflow-y-auto pt-4">
+          <CarouselItem key="tournaments" className="h-full overflow-y-auto pt-10">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
@@ -1071,10 +1078,10 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="skins" className="h-full overflow-y-auto pt-4">
+          <CarouselItem key="skins" className="h-full overflow-y-auto pt-10">
             {mainViewTab === 'skins' && <Skins />}
           </CarouselItem>
-          <CarouselItem key="games" className="h-full overflow-y-auto pt-4">
+          <CarouselItem key="games" className="h-full overflow-y-auto pt-10">
             {mainViewTab === 'games' && currentUserId && <Games 
               currentUserId={currentUserId} 
               onGameClick={handleOpenGameGlobal}
@@ -1365,6 +1372,28 @@ export default function App() {
       isOpen={isCreateClubDialogOpen}
       onClose={() => setIsCreateClubDialogOpen(false)}
     />
+
+    {/* Meta Screen */}
+    <div className={cn(
+      "fixed inset-0 z-60 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center transition-transform duration-500 ease-in-out",
+      isVerseOpen ? "translate-y-0" : "-translate-y-full"
+    )}>
+      {isVerseOpen && (
+        <>
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="absolute top-4 right-4 z-50 rounded-full"
+            onClick={() => setIsVerseOpen(false)}
+          >
+            <X/>
+          </Button>
+          <div className="w-full h-full flex items-center justify-center">
+            <ChessVerse />
+          </div>
+        </>
+      )}
+    </div>
   </>);
 }
 

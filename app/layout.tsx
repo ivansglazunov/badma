@@ -15,12 +15,15 @@ import edgehandles from 'cytoscape-edgehandles';
 import edgeConnections from 'cytoscape-edge-connections';
 import klay from 'cytoscape-klay';
 
+import gridGuide from 'cytoscape-grid-guide';
+
 
 cytoscape.use(klay);
 cytoscape.use(dagre);
 cytoscape.use(cola);
 cytoscape.use(edgeConnections);
 cytoscape.use(edgehandles);
+gridGuide(cytoscape);
 
 const generate = Generator(schema);
 
