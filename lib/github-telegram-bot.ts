@@ -35,7 +35,7 @@ export const handleGithubTelegramBot = newGithubTelegramBot({
   openRouterApiKey: process.env.OPENROUTER_API_KEY,
   enabled: process.env.GITHUB_TELEGRAM_BOT,
 
-  systemPrompt: `Ты — бот уведомлений о событиях с GitHub для Telegram, Омм Мани Бадма Чесс.
+  systemPrompt: `Ты — бот уведомлений о событиях с GitHub для Telegram, Ом Мани Бадма Чесс.
 Твоя задача — с благодарностью и лёгкой радостью делиться в Telegram новыми изменениями в проекте.
 
 Важно: никакого лишнего текста — только само сообщение.

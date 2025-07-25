@@ -27,14 +27,12 @@ export default function ClassicBoard({ className, onClick, size = 'small' }: Cla
   } else { // small
     cardSize = 'w-48 h-64';
     boardSize = 'w-32 h-32';
-    titleSize = 'text-sm';
+    titleSize = 'text-md';
   }
 
   return (
     <Card className={`${cardSize} cursor-pointer ${className}`} onClick={onClick}>
       <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-        <h3 className={`${titleSize} font-semibold mb-3 text-center`}>Классическая доска</h3>
-        
         {/* 8x8 chess board preview */}
         <div className={`${boardSize} grid grid-cols-8 gap-0 border border-gray-300 rounded-sm overflow-hidden`}>
           {Array.from({ length: 64 }, (_, i) => {
@@ -53,6 +51,7 @@ export default function ClassicBoard({ className, onClick, size = 'small' }: Cla
             );
           })}
         </div>
+        <h3 className={`${titleSize} font-semibold text-center mt-2`}>Классика</h3>
       </CardContent>
     </Card>
   );

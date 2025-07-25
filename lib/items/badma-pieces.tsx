@@ -26,7 +26,7 @@ export default function BadmaPieces({ className, onClick, size = 'small' }: Badm
     otherSize = 40;
   } else { // small
     cardSize = 'w-48 h-64';
-    titleSize = 'text-sm';
+    titleSize = 'text-md';
     kingSize = 40;
     otherSize = 32;
   }
@@ -58,7 +58,7 @@ export default function BadmaPieces({ className, onClick, size = 'small' }: Badm
           </div>
         </div>
 
-        <h3 className={`${titleSize} font-semibold mt-3 text-center`}>Омм Мани<br/>Бадма Чесс</h3>
+        <h3 className={`${titleSize} font-semibold mt-3 text-center`}>Ом Мани<br/>Бадма Чесс</h3>
       </CardContent>
     </Card>
   );

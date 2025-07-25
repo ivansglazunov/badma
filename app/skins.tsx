@@ -14,27 +14,28 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from 'hasyx/components/ui/carousel';
-import { SUPPORTED_ITEMS } from '../lib/items';
+import { BOARD_STYLES, PERK_TYPES, PIECES_STYLES, SUPPORTED_ITEMS } from '../lib/items';
 import { useUserSettings } from '../hooks/user-settings';
 import { setSetting } from '../lib/settings';
 import { Check, Lock, Gift, CheckCircle, Loader2 } from 'lucide-react';
 import Grant from './grant';
 import ChessExplodeEffect from '../lib/chess-explode-effect';
+import { ItemType } from '../lib/items';
 
 // Компонент для отдельного айтема
 interface SkinItemProps {
-  item: typeof SUPPORTED_ITEMS[0];
+  item: ItemType;
   itemsStatus: Record<string, 'not_owned' | 'owned' | 'accepted'>;
-  onItemClick: (item: typeof SUPPORTED_ITEMS[0]) => void;
+  onItemClick: (item: ItemType) => void;
   onExplosionTrigger: () => void;
 }
 
 function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinItemProps) {
   const { getSetting } = useUserSettings();
-  
+
   const getStatusBadge = (itemId: string) => {
     const status = itemsStatus[itemId] || 'not_owned';
-    
+
     switch (status) {
       case 'not_owned':
         return (
@@ -53,11 +54,10 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
       case 'accepted':
         const isSelected = getSetting(item.category as 'board' | 'pieces') === item.id;
         return (
-          <Badge 
-            variant="secondary" 
-            className={`absolute -top-2 -right-2 text-white text-xs px-2 py-1 z-10 ${
-              isSelected ? 'bg-purple-600' : 'bg-green-500'
-            }`}
+          <Badge
+            variant="secondary"
+            className={`absolute -top-2 -right-2 text-white text-xs px-2 py-1 z-10 ${isSelected ? 'bg-purple-600' : 'bg-green-500'
+              }`}
           >
             <Check className="w-3 h-3 mr-1" />
             {isSelected ? 'Активен' : 'Принят'}
@@ -67,10 +67,10 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
         return null;
     }
   };
-  
+
   const getSelectedIndicator = (itemId: string) => {
     const isSelected = getSetting(item.category as 'board' | 'pieces') === itemId;
-    
+
     if (isSelected) {
       return (
         <div className="absolute inset-0 border-4 border-purple-500 rounded-lg pointer-events-none" />
@@ -78,18 +78,18 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
     }
     return null;
   };
-  
-  const ItemComponent = item.Component;
-  
+
+  const ItemComponent = item.ItemComponent;
+
   return (
     <CarouselItem className="basis-[250px] flex-shrink-0">
-      <div 
+      <div
         className="flex flex-col items-center relative p-4 w-[250px]"
         onMouseDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
         <div className="relative">
-          <ItemComponent 
+          <ItemComponent
             onClick={() => {
               onItemClick(item);
               // Показываем эффект взрыва только для непринятых айтемов
@@ -97,7 +97,7 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
                 onExplosionTrigger();
               }
             }}
-            className="mb-2" 
+            className="mb-2"
           />
           {getStatusBadge(item.id)}
           {getSelectedIndicator(item.id)}
@@ -139,7 +139,7 @@ export default function Skins({ children }: SkinsProps) {
   // Create items status map
   const itemsStatus = React.useMemo(() => {
     const statusMap: Record<string, 'not_owned' | 'owned' | 'accepted'> = {};
-    
+
     SUPPORTED_ITEMS.forEach(item => {
       statusMap[item.id] = 'not_owned';
     });
@@ -165,20 +165,20 @@ export default function Skins({ children }: SkinsProps) {
   // Apply setting for selected item
   const handleApplySetting = async () => {
     if (!selectedItem) return;
-    
+
     setIsApplyingSetting(true);
-    
+
     try {
       // Determine setting key and value based on item category
       const settingKey = selectedItem.category as 'board' | 'pieces';
       const settingValue = selectedItem.id;
-      
+
       // Update zustand store immediately for instant UI update
       updateSetting(settingKey, settingValue);
-      
+
       // Save to database in background
       await setSetting(hasyx, settingKey, settingValue);
-      
+
       // Close dialog after successful application
       setSelectedItem(null);
     } catch (error) {
@@ -192,81 +192,114 @@ export default function Skins({ children }: SkinsProps) {
   return (
     <>
       {/* Explosion effect on skins load */}
-      <Grant 
-        show={showExplosion} 
-        onComplete={() => setShowExplosion(false)} 
+      <Grant
+        show={showExplosion}
+        onComplete={() => setShowExplosion(false)}
       />
-      
+
       <div className="flex flex-col items-center justify-start p-4 overflow-y-auto">
         <div className="w-full max-w-4xl space-y-8">
-          {/* Доски */}
-          <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
-            <div className="h-[300px] w-full">
-              <Carousel 
-                className="w-full max-w-5xl mx-auto"
-            opts={{
-              dragFree: false,
-              containScroll: "trimSnaps",
-              watchDrag: (emblaApi, event) => {
-                // Предотвращаем всплытие события к родительскому слайдеру
-                event.stopPropagation();
-                return true; // Разрешаем перетаскивание для этого слайдера
-              }
-            }}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {SUPPORTED_ITEMS.filter(item => item.category === 'board').map(item => (
-                <SkinItem
-                  key={item.id}
-                  item={item}
-                  itemsStatus={itemsStatus}
-                  onItemClick={setSelectedItem}
-                  onExplosionTrigger={() => setShowItemExplosion(true)}
-                />
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
-              </Carousel>
-            </div>
-          </div>
-          
           {/* Наборы */}
           <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>
             <div className="h-[300px] w-full">
-              <Carousel 
+              <Carousel
                 className="w-full max-w-5xl mx-auto"
-            opts={{
-              dragFree: false,
-              containScroll: "trimSnaps",
-              watchDrag: (emblaApi, event) => {
-                // Предотвращаем всплытие события к родительскому слайдеру
-                event.stopPropagation();
-                return true; // Разрешаем перетаскивание для этого слайдера
-              }
-            }}
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {SUPPORTED_ITEMS.filter(item => item.category === 'pieces').map(item => (
-                <SkinItem
-                  key={item.id}
-                  item={item}
-                  itemsStatus={itemsStatus}
-                  onItemClick={setSelectedItem}
-                  onExplosionTrigger={() => setShowItemExplosion(true)}
-                />
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
+                opts={{
+                  dragFree: false,
+                  containScroll: "trimSnaps",
+                  watchDrag: (emblaApi, event) => {
+                    // Предотвращаем всплытие события к родительскому слайдеру
+                    event.stopPropagation();
+                    return true; // Разрешаем перетаскивание для этого слайдера
+                  }
+                }}
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {PIECES_STYLES.map(item => (
+                    <SkinItem
+                      key={item.id}
+                      item={item}
+                      itemsStatus={itemsStatus}
+                      onItemClick={setSelectedItem}
+                      onExplosionTrigger={() => setShowItemExplosion(true)}
+                    />
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+            </div>
+          </div>
+
+          {/* Доски */}
+          <div className="">
+            <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
+            <div className="h-[300px] w-full">
+              <Carousel
+                className="w-full max-w-5xl mx-auto"
+                opts={{
+                  dragFree: false,
+                  containScroll: "trimSnaps",
+                  watchDrag: (emblaApi, event) => {
+                    // Предотвращаем всплытие события к родительскому слайдеру
+                    event.stopPropagation();
+                    return true; // Разрешаем перетаскивание для этого слайдера
+                  }
+                }}
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {BOARD_STYLES.map(item => (
+                    <SkinItem
+                      key={item.id}
+                      item={item}
+                      itemsStatus={itemsStatus}
+                      onItemClick={setSelectedItem}
+                      onExplosionTrigger={() => setShowItemExplosion(true)}
+                    />
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+            </div>
+          </div>
+
+          {/* Перки */}
+          <div className="">
+            <h2 className="text-2xl font-bold mb-4 text-center">Перки</h2>
+            <div className="h-[300px] w-full">
+              <Carousel
+                className="w-full max-w-5xl mx-auto"
+                opts={{
+                  dragFree: false,
+                  containScroll: "trimSnaps",
+                  watchDrag: (emblaApi, event) => {
+                    // Предотвращаем всплытие события к родительскому слайдеру
+                    event.stopPropagation();
+                    return true; // Разрешаем перетаскивание для этого слайдера
+                  }
+                }}
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {PERK_TYPES.map(item => (
+                    <SkinItem
+                      key={item.id}
+                      item={item}
+                      itemsStatus={itemsStatus}
+                      onItemClick={setSelectedItem}
+                      onExplosionTrigger={() => setShowItemExplosion(true)}
+                    />
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
               </Carousel>
             </div>
           </div>
         </div>
       </div>
-      
+
       {/* Item Selection Dialog */}
       {selectedItem && (
         <Dialog open={!!selectedItem} onOpenChange={() => {
@@ -276,11 +309,11 @@ export default function Skins({ children }: SkinsProps) {
           <DialogContent className="p-0 border-0 bg-transparent max-w-none w-auto">
             <div className="flex flex-col items-center justify-center">
               {/* Эффект взрыва для непринятых айтемов */}
-              <ChessExplodeEffect 
+              <ChessExplodeEffect
                 show={showItemExplosion}
                 onComplete={() => setShowItemExplosion(false)}
               />
-              
+
               <HoverCard
                 force={1.5}
                 maxRotation={25}
@@ -288,17 +321,17 @@ export default function Skins({ children }: SkinsProps) {
                 useDeviceOrientation={true}
                 orientationSensitivity={0.8}
               >
-                <selectedItem.Component size="medium" />
+                <selectedItem.ItemComponent size="medium" />
               </HoverCard>
               <p className="text-sm text-muted-foreground mt-4 text-center max-w-md">
                 {selectedItem.description}
               </p>
-              
+
               {/* Selection Button */}
               <div className="mt-6">
                 {isItemSelected(selectedItem.id) ? (
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="border-green-500 text-green-600 hover:bg-green-50"
                     disabled
                   >
@@ -306,7 +339,7 @@ export default function Skins({ children }: SkinsProps) {
                     Выбрано
                   </Button>
                 ) : itemsStatus[selectedItem.id] === 'not_owned' ? (
-                  <Button 
+                  <Button
                     variant="outline"
                     className="border-gray-400 text-gray-500 bg-gray-100"
                     disabled
@@ -316,7 +349,7 @@ export default function Skins({ children }: SkinsProps) {
                   </Button>
                 ) : itemsStatus[selectedItem.id] === 'owned' ? (
                   // Кнопка "Принять" для непринятых айтемов
-                  <Button 
+                  <Button
                     onClick={async () => {
                       setIsApplyingSetting(true);
                       try {
@@ -358,7 +391,7 @@ export default function Skins({ children }: SkinsProps) {
                   </Button>
                 ) : (
                   // Кнопка "Выбрать" для принятых айтемов
-                  <Button 
+                  <Button
                     onClick={handleApplySetting}
                     disabled={isApplyingSetting}
                     className="bg-green-600 hover:bg-green-700 text-white"
@@ -381,7 +414,7 @@ export default function Skins({ children }: SkinsProps) {
           </DialogContent>
         </Dialog>
       )}
-      
+
       {/* Render children components */}
       {children}
     </>

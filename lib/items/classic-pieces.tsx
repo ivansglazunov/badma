@@ -26,7 +26,7 @@ export default function ClassicPieces({ className, onClick, size = 'small' }: Cl
     otherSize = 40;
   } else { // small
     cardSize = 'w-48 h-64';
-    titleSize = 'text-sm';
+    titleSize = 'text-md';
     kingSize = 40;
     otherSize = 32;
   }

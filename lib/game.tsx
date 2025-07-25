@@ -346,7 +346,7 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
 
     try {
       debug('🧨 [MINEFIELD_TEST] Applying minefield perk...');
-      await activeClient.asyncPerk('minefield', {});
+      await activeClient.asyncPerk('minefield_perk', {});
       toast.success('Минное поле применено!');
       debug('🧨 [MINEFIELD_TEST] Minefield perk applied successfully');
     } catch (error) {

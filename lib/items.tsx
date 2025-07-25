@@ -5,97 +5,6 @@ import ClassicPieces from './items/classic-pieces';
 import BadmaPieces from './items/badma-pieces';
 import MinefieldPerkCard, { MinefieldPerk, MinefieldEffect } from './items/minefield-perk';
 
-export interface ItemType {
-  id: string;
-  name: string;
-  description: string;
-  category: 'pieces' | 'board' | 'perk';
-  Component: React.ComponentType<{ 
-    className?: string;
-    onClick?: () => void;
-    size?: 'small' | 'medium' | 'large';
-  }>;
-}
-
-export interface BoardStyle {
-  id: string;
-  name: string;
-  description: string;
-  lightColor: string;
-  darkColor: string;
-}
-
-export interface PiecesStyle {
-  id: string;
-  name: string;
-  description: string;
-  colors: {
-    white: string;
-    black: string;
-  };
-}
-
-export interface PerkType {
-  id: string;
-  name: string;
-  description: string;
-  perkClass: typeof MinefieldPerk;
-  EffectComponent?: React.ComponentType<{
-    gameData: any;
-  }>;
-}
-
-// Supported board styles
-export const BOARD_STYLES: BoardStyle[] = [
-  {
-    id: 'classic_board',
-    name: 'Классическая доска',
-    description: 'Стандартные цвета шахматной доски',
-    lightColor: '#ECCCA9',
-    darkColor: '#BD9375'
-  },
-  {
-    id: 'badma_board',
-    name: 'Доска Бадма',
-    description: 'В стиле проекта Бадма, благодарность за участие в Альфа тесте',
-    lightColor: '#e8d0ff',
-    darkColor: '#c084fc'
-  }
-];
-
-// Supported pieces styles
-export const PIECES_STYLES: PiecesStyle[] = [
-  {
-    id: 'classic_pieces',
-    name: 'Классические фигуры',
-    description: 'Набор шахмат без стилизации',
-    colors: {
-      white: '#ffffff',
-      black: '#000000'
-    }
-  },
-  {
-    id: 'badma_pieces',
-    name: 'Фигуры Бадма',
-    description: 'Набор шахмат в стиле проекта Бадма, благодарность за участие в Альфа тесте',
-    colors: {
-      white: '#ffffff',
-      black: '#000000'
-    }
-  }
-];
-
-// Supported perks
-export const PERK_TYPES: PerkType[] = [
-  {
-    id: 'minefield',
-    name: 'Минное поле',
-    description: 'Расставляет 4 случайные мины на пустых клетках доски. При попадании фигуры на мину она уничтожается.',
-    perkClass: MinefieldPerk,
-    EffectComponent: MinefieldEffect
-  }
-];
-
 // Component mapping
 export const COMPONENT_MAP: Record<string, React.ComponentType<{ 
   className?: string;
@@ -106,45 +15,112 @@ export const COMPONENT_MAP: Record<string, React.ComponentType<{
   'badma_board': BadmaBoard,
   'classic_pieces': ClassicPieces,
   'badma_pieces': BadmaPieces,
-  'minefield': MinefieldPerkCard
+  'minefield_perk': MinefieldPerkCard
 };
 
-// All supported items
-export const SUPPORTED_ITEMS: ItemType[] = [
-  ...BOARD_STYLES.map(style => ({
-    id: style.id,
-    name: style.name,
-    description: style.description,
-    category: 'board' as const,
-    Component: COMPONENT_MAP[style.id]
-  })),
-  ...PIECES_STYLES.map(style => ({
-    id: style.id,
-    name: style.name,
-    description: style.description,
+export type ItemComponent = React.ComponentType<{ 
+  className?: string;
+  onClick?: () => void;
+  size?: 'small' | 'medium' | 'large';
+}>;
+
+export interface ItemType {
+  id: string;
+  name: string;
+  description: string;
+  category: 'pieces' | 'board' | 'perk';
+  ItemComponent: ItemComponent;
+}
+
+export interface BoardStyle extends ItemType {
+  lightColor: string;
+  darkColor: string;
+}
+
+export interface PiecesStyle extends ItemType {
+  colors: {
+    white: string;
+    black: string;
+  };
+}
+
+export interface PerkType extends ItemType {
+  perkClass: typeof MinefieldPerk;
+  EffectComponent?: React.ComponentType<{
+    gameData: any;
+  }>;
+}
+
+
+
+// Supported pieces styles
+export const PIECES_STYLES: PiecesStyle[] = [
+  {
+    id: 'classic_pieces',
+    name: 'Классические фигуры',
+    description: 'Набор шахмат без стилизации',
+    colors: {
+      white: '#ffffff',
+      black: '#000000'
+    },
     category: 'pieces' as const,
-    Component: COMPONENT_MAP[style.id]
-  })),
-  ...PERK_TYPES.map(perk => ({
-    id: perk.id,
-    name: perk.name,
-    description: perk.description,
+    ItemComponent: COMPONENT_MAP['classic_pieces']
+  },
+  {
+    id: 'badma_pieces',
+    name: 'Фигуры Бадма',
+    description: 'Набор шахмат в стиле проекта Бадма, благодарность за участие в Альфа тесте',
+    colors: {
+      white: '#ffffff',
+      black: '#000000'
+    },
+    category: 'pieces' as const,
+    ItemComponent: COMPONENT_MAP['badma_pieces'],
+  }
+];
+
+// Supported perks
+export const PERK_TYPES: PerkType[] = [
+  {
+    id: 'minefield',
+    name: 'Минное поле',
+    description: 'Расставляет 4 случайные мины на пустых клетках доски. При попадании фигуры на мину она уничтожается.',
+    perkClass: MinefieldPerk,
+    EffectComponent: MinefieldEffect,
     category: 'perk' as const,
-    Component: COMPONENT_MAP[perk.id]
-  }))
+    ItemComponent: COMPONENT_MAP['minefield_perk'],
+  }
+];
+
+// Supported board styles
+export const BOARD_STYLES: BoardStyle[] = [
+  {
+    id: 'classic_board',
+    name: 'Классическая',
+    description: 'Стандартные цвета шахматной доски',
+    lightColor: '#ECCCA9',
+    darkColor: '#BD9375',
+    category: 'board' as const,
+    ItemComponent: COMPONENT_MAP['classic_board'],
+  },
+  {
+    id: 'badma_board',
+    name: 'Бадма',
+    description: 'Фиолетовая тема в стиле проекта',
+    lightColor: '#e8d0ff',
+    darkColor: '#c084fc',
+    category: 'board' as const,
+    ItemComponent: COMPONENT_MAP['badma_board'],
+  }
 ];
 
 // Helper functions
-export function getBoardStyle(id: string): BoardStyle | undefined {
-  return BOARD_STYLES.find(style => style.id === id);
+export function getBoardStyle(id: string): BoardStyle {
+  return BOARD_STYLES.find(style => style.id === id) || BOARD_STYLES[0];
 }
 
 export function getPiecesStyle(id: string): PiecesStyle | undefined {
   return PIECES_STYLES.find(style => style.id === id);
-}
-
-export function getItemType(id: string): ItemType | undefined {
-  return SUPPORTED_ITEMS.find(item => item.id === id);
 }
 
 export function getPerkType(id: string): PerkType | undefined {
@@ -200,3 +176,19 @@ export async function grantItem(
     throw error;
   }
 }
+
+// All supported items
+export const SUPPORTED_ITEMS: ItemType[] = [
+  ...BOARD_STYLES.map(style => ({
+    ...style,
+    category: 'board' as const,
+  })),
+  ...PIECES_STYLES.map(style => ({
+    ...style,
+    category: 'pieces' as const,
+  })),
+  ...PERK_TYPES.map(perk => ({
+    ...perk,
+    category: 'perk' as const,
+  }))
+];

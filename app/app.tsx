@@ -1,58 +1,54 @@
 "use client";
 
-import { LogOut, LoaderCircle, Crown, Joystick, X, Trophy, Gamepad2, PlusCircle, Users, ListChecks, Shirt, Sparkles, Globe, User, Loader2 } from "lucide-react";
-import { signOut, useSession, getSession } from "next-auth/react";
-import React, { useState, useEffect, useRef } from "react";
+import { Award, Coins, Crown, Gamepad2, ListChecks, Loader2, LoaderCircle, PlusCircle, Shirt, Trophy, User, Users, X } from "lucide-react";
+import { getSession, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import packageJson from '../package.json';
 
-import { useClient, useHasyx, useSubscription } from "hasyx";
-import { createApolloClient, Generator, Hasyx } from "hasyx";
+import { useHasyx, useSubscription } from "hasyx";
 import { Avatar, AvatarFallback, AvatarImage } from "hasyx/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "hasyx/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "hasyx/components/ui/carousel";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "hasyx/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "hasyx/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "hasyx/components/ui/tabs";
 
 import Board from "@/lib/board";
 import Game from "@/lib/game";
 import Games from "@/lib/games";
+import axios from "axios";
 import { OAuthButtons } from "hasyx/components/auth/oauth-buttons";
 import { useTheme } from "hasyx/components/theme-switcher";
-import { Button } from "hasyx/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "hasyx/components/ui/card"
-import { Badge } from "hasyx/components/ui/badge"
-import { Input } from "hasyx/components/ui/input";
+import { Badge } from "hasyx/components/ui/badge";
+import { Button } from "hasyx/components/ui/button";
+import { Card } from "hasyx/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "hasyx/components/ui/select";
-import { Label } from "hasyx/components/ui/label";
 import { Separator } from "hasyx/components/ui/separator";
-import axios from "axios";
+import { Progress } from "hasyx/components/ui/progress";
 import { toast } from "sonner";
 
-import { cn } from "hasyx/lib/utils"
-import { useMounted } from "@/hooks/mounted";
-import { useToastHandleParticipantsError, useToastHandleGamesError, useToastHandleTournamentsError } from "@/hooks/toasts";
-import schema from "@/public/hasura-schema.json";
-import { BOARD_STYLES, getBoardStyle, SUPPORTED_ITEMS } from "@/lib/items";
 import Skins from "@/app/skins";
-import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
-import { tournaments, tournamentDescriptions } from '@/lib/tournaments';
-import { HoverCard } from "@/components/hover-card";
 import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/hooks/device-permissions";
-import { ClubTab } from "./club";
-import { ClubsList } from "./clubs";
-import { CheckClub } from "./check-club";
-import CheckAvailableItems from "./check-available-items";
-import { CreateClubDialog } from "./create-club-dialog";
+import { useMounted } from "@/hooks/mounted";
+import { useToastHandleGamesError, useToastHandleParticipantsError, useToastHandleTournamentsError } from "@/hooks/toasts";
+import { AxiosChessClient } from "@/lib/axios-chess-client";
 import { useClubStore } from "@/lib/stores/club-store";
 import { useUserSettingsStore } from "@/lib/stores/user-settings-store";
-import { AxiosChessClient } from "@/lib/axios-chess-client";
+import { tournamentDescriptions, tournaments } from '@/lib/tournaments';
+import { Badma_Tournament_Games, Badma_Tournaments } from "@/types/hasura-types";
+import { cn } from "hasyx/lib/utils";
+import CheckAvailableItems from "./check-available-items";
+import { CheckClub } from "./check-club";
+import { ClubTab } from "./club";
+import { ClubsList } from "./clubs";
+import { CreateClubDialog } from "./create-club-dialog";
+import { Profile } from "./profile";
 
 import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
+import { Label } from "hasyx/components/ui/label";
 import { v4 as uuidv4 } from 'uuid';
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
     case 'await':
-
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-200';
     case 'ready':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200';
@@ -597,7 +593,6 @@ export default function App() {
   const [showPermissionToast, setShowPermissionToast] = useState(false);
   const [isCheckClubOpen, setIsCheckClubOpen] = useState(false);
   const [isCreateClubDialogOpen, setIsCreateClubDialogOpen] = useState(false);
-  const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [gameInvite, setGameInvite] = useState<{
     gameId: string;
     side: number;
@@ -612,8 +607,6 @@ export default function App() {
   // Board style settings
   const [selectedBoardStyle, setSelectedBoardStyle] = useState('classic_board');
   const [isSavingBoardStyle, setIsSavingBoardStyle] = useState(false);
-
-
   
   const isAuthenticated = sessionStatus === "authenticated";
   const isLoadingSession = sessionStatus === "loading";
@@ -700,8 +693,6 @@ export default function App() {
     }
     
     try {
-      setIsCreatingGame(true);
-      
       // Get fresh session for verification
       const freshSession = await getSession();
       console.log('🔑 Fresh session exists:', !!freshSession);
@@ -750,67 +741,12 @@ export default function App() {
     } catch (error: any) {
       console.error('Failed to join game from invite:', error);
       toast.error(`Failed to join game: ${error.message || 'Unknown error'}`);
-    } finally {
-      setIsCreatingGame(false);
     }
   };
 
   const handleTournamentClick = (tournament: Badma_Tournaments) => {
     setSelectedTournament(tournament);
     setIsTournamentModalOpen(true);
-  };
-
-  const handleCreateGame = async () => {
-    if (!currentUserId) {
-      toast.error("User not authenticated");
-      return;
-    }
-
-    setIsCreatingGame(true);
-    try {
-      // Create axios instance with session
-      const axiosInstance = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Include session cookies
-      });
-
-      // Create AxiosChessClient
-      const chessClient = new AxiosChessClient(axiosInstance);
-      chessClient.userId = currentUserId;
-      chessClient.clientId = uuidv4();
-
-      // Create game
-      const createResponse = await chessClient.asyncCreate(1); // White side
-      
-      if (createResponse.error) {
-        toast.error(`Failed to create game: ${createResponse.error}`);
-        return;
-      }
-
-      if (createResponse.data?.gameId) {
-        // Join the created game as a player
-        const joinResponse = await chessClient.asyncJoin(1, ChessClientRole.Player);
-        
-        if (joinResponse.error) {
-          toast.error(`Failed to join game: ${joinResponse.error}`);
-          return;
-        }
-
-        // Open the created game
-        handleOpenGame(createResponse.data.gameId);
-        toast.success("Game created and joined successfully!");
-      } else {
-        toast.error("Failed to create game: No game ID returned");
-      }
-    } catch (error: any) {
-      console.error('Error creating game:', error);
-      toast.error(`Failed to create game: ${error.message || 'Unknown error'}`);
-    } finally {
-      setIsCreatingGame(false);
-    }
   };
 
   const {
@@ -992,49 +928,31 @@ export default function App() {
   }
 
   return (<>
-    {/* Version indicator - fixed top left with very high z-index */}
-    <div className="fixed top-2 left-2 z-[9999] px-2 py-1 bg-black/20 backdrop-blur-sm rounded text-xs text-white/70 font-mono pointer-events-none">
-      v{packageJson.version}
+    <div className="fixed -top-3 left-0 z-[9999] w-full flex justify-center">
+      <div className="flex w-full max-w-2xl">
+        <div className="w-full px-2 relative">
+          <Progress value={30} className="bg-purple-500/30 h-6" indicator={{ className: 'bg-purple-500' }}/>
+          <div className="bg-purple-500 p-1 rounded-full absolute top-3 left-0 color-foreground shadow-md" style={{ borderTopLeftRadius: 0 }}>
+            <Award/>
+          </div>
+        </div>
+        <div className="w-full px-2 relative">
+          <Progress value={30} className="bg-yellow-500/30 rotate-180 h-6" indicator={{ className: 'bg-yellow-500' }}/>
+          <div className="bg-yellow-500 p-1 rounded-full absolute top-3 right-0 color-foreground shadow-md" style={{ borderTopRightRadius: 0 }}>
+            <Coins/>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div className="flex flex-1 flex-col bg-background relative h-screen max-h-screen overflow-hidden">
-      <div className="absolute top-3 right-3 z-50 flex flex-col gap-2">
-        {/* Device Permissions Status - Only show if supported */}
-        {(motionPermissions.isSupported || orientationPermissions.isSupported) && (
-          <>
-            <div className="flex gap-2 text-xs">
-              {motionPermissions.isSupported && (
-                <div className={`px-2 py-1 rounded-full text-white text-xs ${
-                  motionPermissions.permissionStatus === 'granted' ? 'bg-green-500' :
-                  motionPermissions.permissionStatus === 'denied' ? 'bg-red-500' :
-                  motionPermissions.permissionStatus === 'requesting' ? 'bg-yellow-500' :
-                  'bg-gray-500'
-                }`}>
-                  📱 {motionPermissions.permissionStatus}
-                </div>
-              )}
-              {orientationPermissions.isSupported && (
-                <div className={`px-2 py-1 rounded-full text-white text-xs ${
-                  orientationPermissions.permissionStatus === 'granted' ? 'bg-green-500' :
-                  orientationPermissions.permissionStatus === 'denied' ? 'bg-red-500' :
-                  orientationPermissions.permissionStatus === 'requesting' ? 'bg-yellow-500' :
-                  'bg-gray-500'
-                }`}>
-                  🧭 {orientationPermissions.permissionStatus}
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-      
       <Carousel 
         setApi={setCarouselApi} 
         opts={{ align: "start", loop: false }} 
-        className="flex-grow flex flex-col pt-12 pb-20 h-full"
+        className="flex-grow flex flex-col pt-0 pb-13 h-full"
       >
         <CarouselContent className="h-full">
-          <CarouselItem key="profile" className="h-full overflow-y-auto">
+          <CarouselItem key="profile" className="h-full overflow-y-auto pt-4">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex flex-col items-center mb-6">
                 <Avatar className="h-24 w-24 mb-4">
@@ -1067,7 +985,7 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="tournaments" className="h-full overflow-y-auto">
+          <CarouselItem key="tournaments" className="h-full overflow-y-auto pt-4">
             <div className="flex flex-col items-center justify-start h-full p-4 text-center overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
@@ -1153,10 +1071,10 @@ export default function App() {
               </div>
             </div>
           </CarouselItem>
-          <CarouselItem key="skins" className="h-full overflow-y-auto">
+          <CarouselItem key="skins" className="h-full overflow-y-auto pt-4">
             {mainViewTab === 'skins' && <Skins />}
           </CarouselItem>
-          <CarouselItem key="games" className="h-full overflow-y-auto">
+          <CarouselItem key="games" className="h-full overflow-y-auto pt-4">
             {mainViewTab === 'games' && currentUserId && <Games 
               currentUserId={currentUserId} 
               onGameClick={handleOpenGameGlobal}
@@ -1185,7 +1103,6 @@ export default function App() {
                 onClose={handleCloseGame}
                 gameInvite={gameInvite}
                 onJoinInvite={handleJoinGameFromInvite}
-                isJoining={isCreatingGame}
               />
             </div>
           </>
@@ -1349,101 +1266,24 @@ export default function App() {
         </DialogContent>
       </Dialog>
 
-      <div className={`absolute inset-0 w-full h-full transition-all duration-300 p-6 md:p-10 flex items-center justify-center ${profile
-        ? `opacity-100 z-40 bg-background/80 backdrop-blur-sm`
-        : `opacity-0 pointer-events-none` 
-      }`} onClick={(event) => {
-        if (event.currentTarget === event.target) {
-          setProfile(false);
-        }
-      }}>
-        <Card className={`max-w-md w-full h-auto max-h-[90vh] md:max-h-[80vh] p-3 shadow-xl/30 flex flex-col`}>
-          <Tabs defaultValue="account" className="w-full h-full flex flex-col">
-            <TabsList className="w-full">
-              <TabsTrigger value="account">Account</TabsTrigger>
-              <TabsTrigger value="payment">Payment</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            </TabsList>
-            <div className="flex-1 overflow-y-auto p-1">
-              <TabsContent value="account" className="h-full flex flex-col p-2">
-                <div className="flex-grow space-y-4">
-                  <p>User: {user?.name || 'N/A'}</p>
-                  <p>Email: {user?.email || 'N/A'}</p>
-                  <div>
-                    <Label htmlFor="themeSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Тема</Label>
-                    <Select value={theme} onValueChange={setTheme}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тему" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="system">Системная</SelectItem>
-                        <SelectItem value="light">Светлая</SelectItem>
-                        <SelectItem value="dark">Темная</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="boardStyleSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Стиль доски</Label>
-                    <Select 
-                      value={selectedBoardStyle} 
-                      onValueChange={saveBoardStyleSetting}
-                      disabled={isSavingBoardStyle}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите стиль доски" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {BOARD_STYLES.map((style) => (
-                          <SelectItem key={style.id} value={style.id}>
-                            <div className="flex items-center space-x-2">
-                              <div className="flex space-x-1">
-                                <div 
-                                  className="w-3 h-3 border border-gray-300 rounded-sm" 
-                                  style={{ backgroundColor: style.lightColor }}
-                                />
-                                <div 
-                                  className="w-3 h-3 border border-gray-300 rounded-sm" 
-                                  style={{ backgroundColor: style.darkColor }}
-                                />
-                              </div>
-                              <div>
-                                <div className="font-medium">{style.name}</div>
-                                <div className="text-xs text-gray-500">{style.description}</div>
-                              </div>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {isSavingBoardStyle && (
-                      <div className="flex items-center mt-2 text-sm text-gray-600">
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Сохранение...
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-auto pt-4">
-                  <Button variant="outline"
-                    className="w-full"
-                    onClick={() => signOut({ callbackUrl: '/' })} disabled={isLoadingSession}
-                    >
-                    <LogOut className="mr-2 h-4 w-4" /> Sign Out
-                  </Button>
-                </div>
-              </TabsContent>
-              <TabsContent value="payment" className="p-2">Payment Settings Placeholder</TabsContent>
-              <TabsContent value="notifications" className="p-2">Notifications Settings Placeholder</TabsContent>
-            </div>
-          </Tabs>
-        </Card>
-      </div>
+      <Profile
+        isOpen={profile}
+        onClose={() => setProfile(false)}
+        user={user}
+        setTheme={setTheme}
+        isLoadingSession={isLoadingSession}
+        selectedBoardStyle={selectedBoardStyle}
+        saveBoardStyleSetting={saveBoardStyleSetting}
+        isSavingBoardStyle={isSavingBoardStyle}
+      />
 
       <div className={cn(
-        "p-2 sticky bottom-0 left-0 right-0 z-30 bg-transparent transition-transform duration-300 ease-in-out",
+        "p-2 fixed -bottom-5 left-0 right-0 z-30 bg-transparent transition-transform duration-300 ease-in-out",
         selectedGameId ? "translate-y-full" : "translate-y-0"
       )}>
+        <div className="absolute -top-4 left-2 z-[9999] px-2 py-1 bg-black/20 backdrop-blur-sm rounded text-xs text-white/70 font-mono pointer-events-none">
+          v{packageJson.version}
+        </div>
         <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
           <div className="flex-1 flex justify-end items-center">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
@@ -1480,20 +1320,6 @@ export default function App() {
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("games")}>
               <Gamepad2 className="h-5 w-5 mb-0.5" />
               <span className="text-xs leading-tight">Games</span>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white flex flex-col items-center justify-center h-12 w-12 aspect-square"
-              onClick={handleCreateGame}
-              disabled={isCreatingGame}
-            >
-              {isCreatingGame ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <PlusCircle className="h-4 w-4" />
-              )}
-              <span className="text-xs">{isCreatingGame ? "Creating..." : "Create"}</span>
             </Button>
           </div>
         </div>

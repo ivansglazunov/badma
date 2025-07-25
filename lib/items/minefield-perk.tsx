@@ -5,7 +5,7 @@ import { ChessClient } from '../chess-client';
 import { Chess } from '../chess';
 import Debug from '../debug';
 
-const debug = Debug('minefield-perk');
+const debug = Debug('minefield_perk');
 
 interface MinefieldPerkCardProps {
   className?: string;
@@ -14,33 +14,29 @@ interface MinefieldPerkCardProps {
 }
 
 // Minefield Perk Card Component
-export default function MinefieldPerkCard({ className = '', onClick, size = 'medium' }: MinefieldPerkCardProps) {
-  const cardSize = size === 'small' ? 'w-32 h-40' : size === 'large' ? 'w-64 h-80' : 'w-48 h-64';
-  
+export default function MinefieldPerkCard({ className = '', onClick, size = 'small' }: MinefieldPerkCardProps) {
+  let cardSize, titleSize;
+
+  if (size === 'large') {
+    cardSize = 'w-80 h-96';
+    titleSize = 'text-xl';
+  } else if (size === 'medium') {
+    cardSize = 'w-64 h-80';
+    titleSize = 'text-lg';
+  } else { // small
+    cardSize = 'w-48 h-64';
+    titleSize = 'text-md';
+  }
+
   return (
-    <div 
+    <div
       className={`${cardSize} ${className} cursor-pointer`}
       onClick={onClick}
     >
-      <HoverCard 
-        className="w-full h-full"
-        force={1.2}
-        maxRotation={15}
-        maxLift={30}
-      >
       <div className="w-full h-full bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 rounded-lg border border-red-200 dark:border-red-800 p-4 flex flex-col items-center justify-center">
-        <div className="text-center mb-3">
-          <h3 className="text-lg font-bold text-red-800 dark:text-red-200 mb-1">
-            Минное поле
-          </h3>
-          <p className="text-xs text-red-600 dark:text-red-400">
-            Расставляет 4 мины на пустых клетках
-          </p>
-        </div>
-        
         {/* SVG Minefield Visualization */}
-        <div className="flex-1 flex items-center justify-center">
-          <svg width="120" height="120" viewBox="0 0 120 120" className="border border-red-300 dark:border-red-700 rounded">
+        <div>
+          <svg width="160" height="160" viewBox="0 0 120 120" className="border border-red-300 dark:border-red-700 rounded-sm">
             {/* Chess board background */}
             {Array.from({ length: 8 }, (_, row) =>
               Array.from({ length: 8 }, (_, col) => {
@@ -61,7 +57,7 @@ export default function MinefieldPerkCard({ className = '', onClick, size = 'med
                 );
               })
             )}
-            
+
             {/* Mine positions (example positions) */}
             {[
               { x: 2, y: 3 }, // c5
@@ -114,7 +110,7 @@ export default function MinefieldPerkCard({ className = '', onClick, size = 'med
                 </g>
               </g>
             ))}
-            
+
             {/* Warning text */}
             <text
               x="60"
@@ -128,8 +124,8 @@ export default function MinefieldPerkCard({ className = '', onClick, size = 'med
             </text>
           </svg>
         </div>
+        <h3 className={`${titleSize} font-semibold text-center mt-2`}>Минное поле</h3>
       </div>
-      </HoverCard>
     </div>
   );
 }
@@ -139,7 +135,7 @@ export class MinefieldPerk extends ChessPerk {
   private minePositions: string[] = [];
 
   constructor(side: 'client' | 'server') {
-    super('minefield', side);
+    super('minefield_perk', side);
   }
 
   async handlePerk(
@@ -154,13 +150,13 @@ export class MinefieldPerk extends ChessPerk {
       // Server generates random mine positions on empty squares using game FEN
       const chess = new Chess();
       chess.fen = data._serverFen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-      
+
       const emptySquares = this.getEmptySquares(chess.fen);
       this.minePositions = this.selectRandomMines(emptySquares, 4);
-      
+
       // Store mine positions in data for saving to database
       data.squares = this.minePositions;
-      
+
       this.log(`Server: Generated mine positions: ${this.minePositions.join(', ')}`);
     } else {
       // Client receives mine positions from server
@@ -181,7 +177,7 @@ export class MinefieldPerk extends ChessPerk {
 
     // Check if the destination square has a mine
     const hitMine = this.minePositions.includes(move.to);
-    
+
     if (hitMine) {
       this.log(`[BEFORE] 💥 Mine detected at ${move.to}!`);
       return { hitMine: true, mineSquare: move.to };
@@ -208,24 +204,24 @@ export class MinefieldPerk extends ChessPerk {
     // Remove the piece that stepped on the mine
     const chess = new Chess();
     chess.fen = fen;
-    
+
     // Remove the piece that stepped on the mine
     chess.remove(mineSquare);
-    
+
     const modifiedFen = chess.fen;
     this.log(`[AFTER] Modified FEN: ${modifiedFen}`);
-    
+
     return modifiedFen;
   }
 
   private getEmptySquares(fen: string): string[] {
     const chess = new Chess();
     chess.fen = fen;
-    
+
     const emptySquares: string[] = [];
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
-    
+
     for (const file of files) {
       for (const rank of ranks) {
         const square = file + rank;
@@ -235,7 +231,7 @@ export class MinefieldPerk extends ChessPerk {
         }
       }
     }
-    
+
     debug(`Found ${emptySquares.length} empty squares:`, emptySquares);
     return emptySquares;
   }
@@ -245,16 +241,16 @@ export class MinefieldPerk extends ChessPerk {
       debug(`Warning: Only ${emptySquares.length} empty squares available, requested ${count} mines`);
       return [...emptySquares]; // Return all available squares
     }
-    
+
     const selected: string[] = [];
     const available = [...emptySquares];
-    
+
     for (let i = 0; i < count; i++) {
       const randomIndex = Math.floor(Math.random() * available.length);
       selected.push(available[randomIndex]);
       available.splice(randomIndex, 1); // Remove selected square
     }
-    
+
     debug(`Selected ${selected.length} random mine positions:`, selected);
     return selected;
   }
@@ -271,8 +267,8 @@ interface MinefieldEffectProps {
 }
 
 export const MinefieldEffect: React.FC<MinefieldEffectProps> = ({ gameData }) => {
-  const minefieldPerks = gameData?.perks?.filter((perk: any) => perk.type === 'minefield') || [];
-  
+  const minefieldPerks = gameData?.perks?.filter((perk: any) => perk.type === 'minefield_perk') || [];
+
   // Get all mine squares from all minefield perks
   const allMineSquares: string[] = [];
   minefieldPerks.forEach((perk: any) => {
@@ -290,12 +286,12 @@ export const MinefieldEffect: React.FC<MinefieldEffectProps> = ({ gameData }) =>
       {allMineSquares.map((square, index) => {
         try {
           const coords = ChessClient.positionToCoordinates(square);
-          
+
           // Calculate position as percentage of board size
           const leftPercent = (coords.x / 8) * 100;
           const topPercent = (coords.y / 8) * 100;
           const sizePercent = (1 / 8) * 100;
-          
+
           return (
             <div
               key={`mine-${square}-${index}`}
