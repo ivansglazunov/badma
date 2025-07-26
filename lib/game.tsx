@@ -492,7 +492,7 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
         );
       })()}
       {/* pt-6 flex flex-col items-center space-y-4 w-full */}
-      <div className="absolute top-6 w-full flex flex-col items-center">
+      <div className="absolute top-16 w-full flex flex-col items-center">
         <div className="flex items-center gap-3">
           {isWaitingForOpponent && (<>
             <Badge className="bg-purple-900/90 text-white px-4 py-2 text-sm backdrop-blur-md shadow-lg">
@@ -619,8 +619,16 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
                     // Проверяем активацию: если подняли выше 30% от низа экрана
                     const activationThreshold = screenHeight * 0.3; // 30% от высоты экрана
                     const shouldActivate = Math.abs(dragY) > activationThreshold;
-                    
-                    if (shouldActivate && !isThisPerkActive) {
+
+                    // Применяем перк: если подняли выше 70% от низа экрана
+                    const applicationThreshold = screenHeight * 0.7; // 70% от высоты экрана
+                    const shouldApply = Math.abs(dragY) > applicationThreshold;
+
+                    if (shouldApply && isThisPerkActive) {
+                      // Применяем перк
+                      await handleApplyActivePerk();
+
+                    } else  if (shouldActivate && !isThisPerkActive) {
                       // Активируем перк - фиксируем в центре экрана
                       setActivePerk(perk.id);
                       await controls.start({
