@@ -368,22 +368,7 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
   );
 };
 
-export function GameCard({ disabled = false }: { disabled?: boolean }) {
-  return <Card className={`w-[min(15vw,15vh)] h-[min(30vw,30vh)] transform ${disabled ? "" : "hover:-translate-y-20 hover:scale-120"} transition-all duration-300 shadow-xl/30`}>
-  </Card>;
-}
 
-export function GameCards({ disabled = false, className }: { disabled?: boolean, className?: string }) {
-  return (
-    <div className={cn("absolute w-full flex items-center justify-center", className)}>
-      <div className="transform -rotate-35 translate-y-0"><GameCard disabled={disabled} /></div>
-      <div className="transform -rotate-20 translate-y-0"><GameCard disabled={disabled} /></div>
-      <div className="transform rotate-0 translate-y-0"><GameCard disabled={disabled} /></div>
-      <div className="transform rotate-20 translate-y-0"><GameCard disabled={disabled} /></div>
-      <div className="transform rotate-35 translate-y-0"><GameCard disabled={disabled} /></div>
-    </div>
-  );
-}
 
 export function GameClassic() {
   const { theme, setTheme } = useTheme();
@@ -422,8 +407,6 @@ export function GameFree() {
           bgWhite={theme === "dark" ? '#581c87' : '#dfbfff'}
         />
       </div>
-      <GameCards className={`top-0 left-0 -rotate-180 transition-all duration-300 ${mounted ? "-translate-y-35" : "-translate-y-300"}`} disabled/>
-      <GameCards className={`bottom-0 left-0 transition-all duration-300 ${mounted ? "translate-y-40" : "translate-y-300"}`}/>
     </>
   );
 }

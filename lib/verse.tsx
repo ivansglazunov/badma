@@ -85,7 +85,7 @@ export const ChessVerse: React.FC = () => {
       gridSpacing: 12,
       drawGrid: false,
     });
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 700));
     cy.elements().forEach(element => {
       element.position({ x: 6, y: 6 });
     });

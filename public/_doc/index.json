@@ -5586,28 +5586,48 @@
       "path": "lib/captured-pieces.md"
     },
     {
-      "filename": "perks.tasks.md",
-      "title": "Perks System Implementation Tasks",
+      "filename": "perks-view.tasks.md",
+      "title": "Perks View Implementation Tasks",
       "headings": [
         {
           "level": 1,
-          "text": "Perks System Implementation Tasks",
-          "id": "perks-system-implementation-tasks"
+          "text": "Perks View Implementation Tasks",
+          "id": "perks-view-implementation-tasks"
         },
         {
           "level": 2,
-          "text": "Phase 1: Core Infrastructure + Testing",
-          "id": "phase-1-core-infrastructure-testing"
+          "text": "Этап 1: Базовая разметка",
+          "id": "1"
         },
         {
           "level": 2,
-          "text": "Phase 2: Implementation + Database Integration",
-          "id": "phase-2-implementation-database-integration"
+          "text": "Этап 2: Базовая анимация",
+          "id": "2"
+        },
+        {
+          "level": 2,
+          "text": "Этап 3: Логика активации",
+          "id": "3"
+        },
+        {
+          "level": 2,
+          "text": "Этап 4: Логика деактивации",
+          "id": "4"
+        },
+        {
+          "level": 2,
+          "text": "Этап 5: Применение перков",
+          "id": "5"
+        },
+        {
+          "level": 2,
+          "text": "Технические детали:",
+          "id": ""
         }
       ],
       "content": "",
-      "path": "perks.tasks.md"
+      "path": "perks-view.tasks.md"
     }
   ],
-  "lastUpdated": "2025-07-25T14:20:53.401Z"
+  "lastUpdated": "2025-07-26T02:35:51.328Z"
 }

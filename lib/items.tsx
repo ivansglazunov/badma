@@ -82,7 +82,7 @@ export const PIECES_STYLES: PiecesStyle[] = [
 // Supported perks
 export const PERK_TYPES: PerkType[] = [
   {
-    id: 'minefield',
+    id: 'minefield_perk',
     name: 'Минное поле',
     description: 'Расставляет 4 случайные мины на пустых клетках доски. При попадании фигуры на мину она уничтожается.',
     perkClass: MinefieldPerk,

@@ -4986,23 +4986,43 @@
       "level": 1
     },
     {
-      "title": "Perks System Implementation Tasks",
-      "url": "/hasyx/doc/perks.tasks",
+      "title": "Perks View Implementation Tasks",
+      "url": "/hasyx/doc/perks-view.tasks",
       "collapse": true,
       "items": [
         {
-          "title": "Phase 1: Core Infrastructure + Testing",
-          "url": "/hasyx/doc/perks.tasks#phase-1-core-infrastructure-testing",
+          "title": "Этап 1: Базовая разметка",
+          "url": "/hasyx/doc/perks-view.tasks#1",
           "level": 2
         },
         {
-          "title": "Phase 2: Implementation + Database Integration",
-          "url": "/hasyx/doc/perks.tasks#phase-2-implementation-database-integration",
+          "title": "Этап 2: Базовая анимация",
+          "url": "/hasyx/doc/perks-view.tasks#2",
+          "level": 2
+        },
+        {
+          "title": "Этап 3: Логика активации",
+          "url": "/hasyx/doc/perks-view.tasks#3",
+          "level": 2
+        },
+        {
+          "title": "Этап 4: Логика деактивации",
+          "url": "/hasyx/doc/perks-view.tasks#4",
+          "level": 2
+        },
+        {
+          "title": "Этап 5: Применение перков",
+          "url": "/hasyx/doc/perks-view.tasks#5",
+          "level": 2
+        },
+        {
+          "title": "Технические детали:",
+          "url": "/hasyx/doc/perks-view.tasks#",
           "level": 2
         }
       ],
       "level": 1
     }
   ],
-  "lastUpdated": "2025-07-25T14:20:53.446Z"
+  "lastUpdated": "2025-07-26T02:35:51.340Z"
 }

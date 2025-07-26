@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react';
+import { motion, useMotionValue, useAnimation } from 'motion/react';
 import { useSession } from 'next-auth/react';
 import { useClient, useSubscription } from 'hasyx';
 import { LoaderCircle } from 'lucide-react';
@@ -337,21 +338,26 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
     return activeClient;
   }, [chessClients, gameData.fen, userJoins.length]);
 
-  // Test function for minefield perk
-  const handleMinefieldTest = async () => {
+  // Universal function for applying perks
+  const handleApplyPerk = async (perkId: string) => {
     if (!activeClient) {
       toast.error('Нет активного клиента для применения перка');
       return;
     }
 
     try {
-      debug('🧨 [MINEFIELD_TEST] Applying minefield perk...');
-      await activeClient.asyncPerk('minefield_perk', {});
-      toast.success('Минное поле применено!');
-      debug('🧨 [MINEFIELD_TEST] Minefield perk applied successfully');
+      debug(`🎯 [APPLY_PERK] Applying perk: ${perkId}`);
+      await activeClient.asyncPerk(perkId, {});
+      
+      // Find perk name for toast
+      const perk = PERK_TYPES.find(p => p.id === perkId);
+      const perkName = perk ? perk.name : perkId;
+      
+      toast.success(`${perkName} применен!`);
+      debug(`🎯 [APPLY_PERK] Perk ${perkId} applied successfully`);
     } catch (error) {
-      debug('🧨 [MINEFIELD_TEST] Error applying minefield perk:', error);
-      toast.error('Ошибка при применении минного поля');
+      debug(`🎯 [APPLY_PERK] Error applying perk ${perkId}:`, error);
+      toast.error('Ошибка при применении перка');
     }
   };
 
@@ -375,6 +381,9 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
     isSupported: boolean;
     isActive: boolean;
   } | null>(null);
+
+  // Perk positions state - каждый перк помнит свою исходную позицию
+  const [perkPositions, setPerkPositions] = useState<Record<string, { x: number; y: number }>>({});
 
   return (
     <div className="flex flex-col items-center w-full h-full min-h-screen relative">
@@ -514,20 +523,55 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
           })}
           {/* </HoverCard> */}
         </div>
-
-        {/* Test button for minefield perk */}
-        {activeClient && (
-          <div className="mt-4 flex justify-center">
-            <Button
-              onClick={handleMinefieldTest}
-              variant="outline"
-              className="bg-red-50 hover:bg-red-100 border-red-300 text-red-700 dark:bg-red-950 dark:hover:bg-red-900 dark:border-red-700 dark:text-red-300"
-            >
-              🧨 Минное поле (тест)
-            </Button>
-          </div>
-        )}
       </div>
+      
+      {/* Perks at bottom edge of screen */}
+      {activeClient && (
+        <div className="fixed bottom-0 left-0 right-0 flex justify-center items-end" style={{ gap: '100px' }}>
+          {PERK_TYPES.map((perk, index) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const x = useMotionValue(0);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const y = useMotionValue(0);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const controls = useAnimation();
+            
+            return (
+              <div key={perk.id} className="w-px h-px relative">
+                <motion.div 
+                  className="absolute left-0 top-0 transform -translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
+                  drag
+                  dragElastic={0.2}
+                  dragMomentum={false}
+                  style={{ x, y }}
+                  animate={controls}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30
+                  }}
+                  onDragEnd={async (event, info) => {
+                    // Принудительно возвращаем к исходной позиции
+                    await controls.start({
+                      x: 0,
+                      y: 0,
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30
+                      }
+                    });
+                  }}
+                >
+                  {perk.ItemComponent && (
+                    <perk.ItemComponent size="small" />
+                  )}
+                </motion.div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
