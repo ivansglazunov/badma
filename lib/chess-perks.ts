@@ -49,6 +49,21 @@ export abstract class ChessPerk {
   ): Promise<void>;
 
   /**
+   * Called when a perk is applied on the client side (UI interaction)
+   * This method should handle the client-side logic for applying the perk,
+   * including calling chessClient.asyncPerk() with custom data
+   * @param chessClient - Chess client instance for making API calls
+   * @param gameId - ID of the game
+   * @param customData - Custom data provided by the client UI
+   * @returns Promise that resolves when perk application is complete
+   */
+  abstract handleApply(
+    chessClient: any,
+    gameId: string,
+    customData?: Record<string, any>
+  ): Promise<void>;
+
+  /**
    * Called BEFORE a move is applied, allows perk to prepare for move or trigger animations
    * This is called on both client and server before the move is processed
    * @param gameId - ID of the game

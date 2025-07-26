@@ -384,6 +384,58 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
 
   // Perk positions state - каждый перк помнит свою исходную позицию
   const [perkPositions, setPerkPositions] = useState<Record<string, { x: number; y: number }>>({});
+  const [activePerk, setActivePerk] = useState<string | null>(null); // ID активного перка
+  const [availablePerks, setAvailablePerks] = useState(PERK_TYPES); // Доступные перки (убираются после применения)
+
+  // Создаем motion values для каждого типа перка как отдельные хуки
+  const minefieldX = useMotionValue(0);
+  const minefieldY = useMotionValue(0);
+  const minefieldControls = useAnimation();
+  
+  // Можно добавить другие перки по мере необходимости
+  
+  // Маппинг перков на их motion данные
+  const perkMotionData = useMemo(() => ({
+    'minefield_perk': {
+      x: minefieldX,
+      y: minefieldY,
+      controls: minefieldControls
+    }
+    // Можно добавить другие перки здесь
+  }), [minefieldX, minefieldY, minefieldControls]);
+
+  // Функция применения активного перка
+  const handleApplyActivePerk = async () => {
+    if (!activePerk || !activeClient) {
+      console.warn('Нет активного перка или клиента');
+      return;
+    }
+
+    const perkType = availablePerks.find(p => p.id === activePerk);
+    if (!perkType || !perkType.perkClass) {
+      console.warn('Перк не найден или не имеет perkClass');
+      return;
+    }
+
+    try {
+      // Создаем экземпляр перка для клиента
+      const perkInstance = new perkType.perkClass('client');
+      
+      // Применяем перк через handleApply
+      await perkInstance.handleApply(activeClient, gameData.id);
+      
+      // Удаляем перк из доступных после успешного применения
+      setAvailablePerks(prev => prev.filter(p => p.id !== activePerk));
+      
+      // Очищаем активный перк
+      setActivePerk(null);
+      
+      console.log(`Перк ${activePerk} успешно применен и удален из UI`);
+    } catch (error) {
+      console.error('Ошибка при применении перка:', error);
+      // Не удаляем перк при ошибке, позволяем повторить
+    }
+  };
 
   return (
     <div className="flex flex-col items-center w-full h-full min-h-screen relative">
@@ -528,19 +580,23 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
       {/* Perks at bottom edge of screen */}
       {activeClient && (
         <div className="fixed bottom-0 left-0 right-0 flex justify-center items-end" style={{ gap: '100px' }}>
-          {PERK_TYPES.map((perk, index) => {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const x = useMotionValue(0);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const y = useMotionValue(0);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const controls = useAnimation();
+          {availablePerks.map((perk, index) => {
+            const motionData = perkMotionData[perk.id];
+            if (!motionData) return null; // Защита от отсутствующих перков
+            
+            const { x, y, controls } = motionData;
+            const isThisPerkActive = activePerk === perk.id;
+            const isAnyPerkActive = activePerk !== null;
+            const isDragDisabled = isAnyPerkActive && !isThisPerkActive;
             
             return (
               <div key={perk.id} className="w-px h-px relative">
                 <motion.div 
-                  className="absolute left-0 top-0 transform -translate-x-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
-                  drag
+                  className={`absolute left-0 top-0 transform -translate-x-1/2 -translate-y-1/2 ${
+                    isDragDisabled ? 'cursor-not-allowed opacity-50' : 
+                    isThisPerkActive ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
+                  }`}
+                  drag={!isDragDisabled}
                   dragElastic={0.2}
                   dragMomentum={false}
                   style={{ x, y }}
@@ -550,17 +606,73 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
                     stiffness: 300,
                     damping: 30
                   }}
+                  onClick={() => {
+                    // Клик по активному перку применяет его
+                    if (isThisPerkActive) {
+                      handleApplyActivePerk();
+                    }
+                  }}
                   onDragEnd={async (event, info) => {
-                    // Принудительно возвращаем к исходной позиции
-                    await controls.start({
-                      x: 0,
-                      y: 0,
-                      transition: {
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30
+                    const screenHeight = window.innerHeight;
+                    const dragY = y.get(); // Получаем текущую Y позицию
+                    
+                    // Проверяем активацию: если подняли выше 30% от низа экрана
+                    const activationThreshold = screenHeight * 0.3; // 30% от высоты экрана
+                    const shouldActivate = Math.abs(dragY) > activationThreshold;
+                    
+                    if (shouldActivate && !isThisPerkActive) {
+                      // Активируем перк - фиксируем в центре экрана
+                      setActivePerk(perk.id);
+                      await controls.start({
+                        x: 0,
+                        y: -screenHeight / 2, // Центр экрана по Y
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30
+                        }
+                      });
+                    } else if (isThisPerkActive) {
+                      // Проверяем деактивацию: если опустили ниже 30%
+                      const deactivationThreshold = screenHeight * 0.3;
+                      const shouldDeactivate = Math.abs(dragY) < deactivationThreshold;
+                      
+                      if (shouldDeactivate) {
+                        // Деактивируем - возвращаем в строй
+                        setActivePerk(null);
+                        await controls.start({
+                          x: 0,
+                          y: 0,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30
+                          }
+                        });
+                      } else {
+                        // Остаемся в центре
+                        await controls.start({
+                          x: 0,
+                          y: -screenHeight / 2,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30
+                          }
+                        });
                       }
-                    });
+                    } else {
+                      // Обычный возврат на исходную позицию
+                      await controls.start({
+                        x: 0,
+                        y: 0,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30
+                        }
+                      });
+                    }
                   }}
                 >
                   {perk.ItemComponent && (

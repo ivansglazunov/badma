@@ -138,6 +138,23 @@ export class MinefieldPerk extends ChessPerk {
     super('minefield_perk', side);
   }
 
+  async handleApply(
+    chessClient: any,
+    gameId: string,
+    customData?: Record<string, any>
+  ): Promise<void> {
+    this.log(`Applying minefield perk on client for game ${gameId}`);
+    
+    try {
+      // Call the server to apply the minefield perk
+      await chessClient.asyncPerk('minefield_perk', customData || {});
+      this.log(`Successfully applied minefield perk`);
+    } catch (error) {
+      this.log(`Failed to apply minefield perk: ${error}`);
+      throw error;
+    }
+  }
+
   async handlePerk(
     gameId: string,
     clientId: string,
