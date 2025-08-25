@@ -7,7 +7,9 @@ if (process.env.NEXT_PUBLIC_WS === undefined) {
   console.log('WebSocket explicitly enabled for test: NEXT_PUBLIC_WS=1');
 }
 
-import { createApolloClient, Generator, Hasyx } from 'hasyx';
+import { createApolloClient } from 'hasyx/lib/apollo/apollo';
+import { Generator } from 'hasyx/lib/generator';
+import { Hasyx } from 'hasyx/lib/hasyx/hasyx';
 import schema from '@/public/hasura-schema.json'; 
 import Debug from '@/lib/debug';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,10 +38,23 @@ async function createFakeUser(adminHasyx: Hasyx, namePrefix: string = 'TestUser'
       id: userId,
       name: `${namePrefix} ${userId.substring(0, 4)}`,
       email: email,
-      password: hashedPassword,
       email_verified: now,
       is_admin: isOrganizer, 
       hasura_role: isOrganizer ? 'admin' : 'user', 
+      created_at: now,
+      updated_at: now,
+    },
+    returning: ['id']
+  });
+  // Link credentials in accounts table (new schema)
+  await adminHasyx.insert({
+    table: 'accounts',
+    object: {
+      user_id: userId,
+      type: 'credentials',
+      provider: 'credentials',
+      provider_account_id: email,
+      credential_hash: hashedPassword,
       created_at: now,
       updated_at: now,
     },

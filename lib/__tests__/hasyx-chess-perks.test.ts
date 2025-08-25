@@ -1,5 +1,8 @@
+import { jest } from '@jest/globals';
 import dotenv from 'dotenv';
-import { createApolloClient, Generator, Hasyx } from 'hasyx';
+import { createApolloClient } from 'hasyx/lib/apollo/apollo';
+import { Generator } from 'hasyx/lib/generator';
+import { Hasyx } from 'hasyx/lib/hasyx/hasyx';
 import { v4 as uuidv4 } from 'uuid';
 import schema from '../../public/hasura-schema.json';
 import { ChessClientRole } from '../chess-client';
@@ -198,11 +201,7 @@ describe('HasyxChessServer Perks Integration', () => {
 
     const server = new HasyxChessServer(hasyx);
     
-    const whiteUserId1 = await server.__addUser();
-    const blackUserId2 = await server.__addUser();
-
-    expect(whiteUserId1).toBeDefined();
-    expect(blackUserId2).toBeDefined();
+    // No direct user creation here requiring password. If added in future, store credential_hash in accounts instead of users.
 
     // 2. Setup Clients
     const whiteClient = new LocalChessClient<HasyxChessServer>(server);

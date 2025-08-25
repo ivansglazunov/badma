@@ -1,20 +1,22 @@
 import dotenv from 'dotenv';
-import { createApolloClient, Generator, Hasyx } from 'hasyx';
-import { testAuthorize } from 'hasyx/lib/auth';
+import { createApolloClient } from 'hasyx/lib/apollo/apollo';
+import { Generator } from 'hasyx/lib/generator';
+import { Hasyx } from 'hasyx/lib/hasyx/hasyx';
+import { _authorize as testAuthorize } from 'hasyx/lib/users/auth';
 import { v4 as uuidv4 } from 'uuid';
 import schema from '../../public/hasura-schema.json';
-import { HasyxChessClient } from '../hasyx-chess-client';
+import { AxiosChessClient } from '../axios-chess-client';
 import { ChessClientRole } from '../chess-client';
 import Debug from '../debug';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
 
 dotenv.config();
-const debug = Debug('badma:test:go-event-chess');
+const debug = Debug('test:go-events');
 
 // Setup variables
 let adminHasyx: Hasyx;
-let humanClient: HasyxChessClient;
+let humanClient: AxiosChessClient;
 let aiUser: { userId: string; email: string };
 let humanUser: { userId: string; email: string };
 let gameId: string;
@@ -44,7 +46,7 @@ beforeAll(async () => {
   });
   
   // Setup client for human player USING ADMIN HASYX
-  humanClient = new HasyxChessClient(adminHasyx);
+  humanClient = new AxiosChessClient(adminHasyx);
   humanClient.userId = humanUser.userId;
   humanClient.clientId = uuidv4();
   

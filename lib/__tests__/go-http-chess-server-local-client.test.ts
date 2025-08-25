@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
-import { createApolloClient, Generator, Hasyx } from 'hasyx';
-import { testAuthorize } from 'hasyx/lib/auth'; // Import testAuthorize
+import { createApolloClient } from 'hasyx/lib/apollo/apollo';
+import { Generator } from 'hasyx/lib/generator';
+import { Hasyx } from 'hasyx/lib/hasyx/hasyx';
+import { _authorize as testAuthorize } from 'hasyx/lib/users/auth'; // Import testAuthorize
 import { v4 as uuidv4 } from 'uuid';
 import schema from '../../public/hasura-schema.json'; // Adjust path if needed
 import { AxiosChessClient } from '../axios-chess-client'; // Import Axios client
@@ -8,7 +10,7 @@ import { ChessClientRole, ChessClientStatus } from '../chess-client';
 import Debug from '../debug';
 import { go } from '../go'; // Import the go function
 import { AxiosInstance } from 'axios'; // Import AxiosInstance type
-import { HasyxApolloClient } from 'hasyx'; // Import HasyxApolloClient type from hasyx package
+import { HasyxApolloClient } from 'hasyx/lib/apollo/apollo'; // Import HasyxApolloClient type
 import bcrypt from 'bcrypt'; // Import bcrypt here as createFakeUser needs it
 
 
@@ -248,12 +250,25 @@ async function createFakeUser({ adminHasyx, password }: { adminHasyx: Hasyx, pas
       id: userId,
       name: `Test User ${userId.substring(0, 4)}`,
       email: email,
-      password: hashedPassword, // Store hashed password
       email_verified: now, // Unix timestamp
       is_admin: false,
       hasura_role: 'user',
       created_at: now, // Unix timestamp
       updated_at: now, // Unix timestamp
+    },
+    returning: ['id']
+  });
+  // Link credentials in accounts table (new schema)
+  await adminHasyx.insert({
+    table: 'accounts',
+    object: {
+      user_id: userId,
+      type: 'credentials',
+      provider: 'credentials',
+      provider_account_id: email,
+      credential_hash: hashedPassword,
+      created_at: now,
+      updated_at: now,
     },
     returning: ['id']
   });

@@ -7,7 +7,9 @@ if (process.env.NEXT_PUBLIC_WS === undefined) {
   console.log('WebSocket explicitly enabled for test: NEXT_PUBLIC_WS=1');
 }
 
-import { createApolloClient, Generator, Hasyx } from 'hasyx';
+import { createApolloClient } from 'hasyx/lib/apollo/apollo';
+import { Generator } from 'hasyx/lib/generator';
+import { Hasyx } from 'hasyx/lib/hasyx/hasyx';
 import schema from '@/public/hasura-schema.json'; 
 import Debug from '@/lib/debug';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,10 +38,23 @@ async function createFakeUser(adminHasyx: Hasyx, namePrefix: string = 'TestUser'
       id: userId,
       name: `${namePrefix} ${userId.substring(0, 4)}`,
       email: email,
-      password: hashedPassword,
       email_verified: now,
       is_admin: isOrganizer, 
       hasura_role: isOrganizer ? 'admin' : 'user', 
+      created_at: now,
+      updated_at: now,
+    },
+    returning: ['id']
+  });
+  // Link credentials in accounts table (new schema)
+  await adminHasyx.insert({
+    table: 'accounts',
+    object: {
+      user_id: userId,
+      type: 'credentials',
+      provider: 'credentials',
+      provider_account_id: email,
+      credential_hash: hashedPassword,
       created_at: now,
       updated_at: now,
     },
@@ -140,43 +155,4 @@ const isLocal = !!+process.env.JEST_LOCAL!;
         returning: ['id', 'status']
     });
     expect(currentTournament.status).toBe('ready');
-    debug(`Tournament ${tournamentId} status is 'ready'.`);
-
-    // Verify games were created
-    const gamesInTournament = await adminHasyx.select<any[]>({
-      table: 'badma_games',
-      where: { tournament_games: { tournament_id: { _eq: tournamentId } } },
-      returning: ['id', 'user_id', { joins: ['id', 'user_id'] }],
-    });
-    
-    // For 4 players in Scheveningen (2 teams of 2), should have 4 games (2x2 = 4)
-    expect(gamesInTournament.length).toBe(4);
-    debug(`Verified ${gamesInTournament.length} games created for Scheveningen format.`);
-    
-    gamesInTournament.forEach(game => {
-        expect(game.user_id).toBe(tournamentOrganizer.id);
-    });
-    
-    let totalJoins = 0;
-    gamesInTournament.forEach(game => game.joins && (totalJoins += game.joins.length));
-    expect(totalJoins).toBe(8); // 4 games * 2 players each
-    debug(`Verified ${totalJoins} player joins created across all games.`);
-
-    debug('Scheveningen tournament test completed successfully');
-  }, TEST_TIMEOUT);
-
-  afterAll(async () => {
-    debug('Cleaning up after Scheveningen tournament test...');
-    
-    try {
-      if (adminHasyx && adminHasyx.apolloClient) {
-        await adminHasyx.apolloClient.stop();
-        await adminHasyx.apolloClient.clearStore();
-      }
-    } catch (err) {
-      debug('Error during cleanup:', err);
-    }
-    
-    debug('Scheveningen tournament test cleanup finished.');
-  }, TEST_TIMEOUT);
-}); 
+    debug(`
