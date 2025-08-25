@@ -5,6 +5,7 @@ import React from 'react';
 // Import all available entity components
 import * as UsersEntity from 'hasyx/components/entities/users';
 import * as AccountsEntity from 'hasyx/components/entities/accounts';
+import * as GitHubIssuesEntity from 'hasyx/components/entities/github_issues';
 import * as DefaultEntity from 'hasyx/components/entities/default';
 
 interface EntityData {
@@ -33,6 +34,7 @@ interface EntityCardProps {
 const ENTITY_REGISTRY = {
   'users': UsersEntity,
   'accounts': AccountsEntity,
+  'issues': GitHubIssuesEntity,
   'default': DefaultEntity,
   // Add more entities here as they are created
   // 'notifications': NotificationsEntity,
@@ -66,8 +68,8 @@ export function Button({ data, ...props }: EntityButtonProps) {
   const typename = entityData?.__typename;
   
   const EntityComponent = getEntityComponent(typename);
-  
-  return <EntityComponent.Button data={data as any} {...props} />;
+  const Comp: any = (EntityComponent as any).Button;
+  return <Comp data={data as any} {...props} />;
 }
 
 export function Card({ data, onClose, ...props }: EntityCardProps) {
@@ -75,8 +77,8 @@ export function Card({ data, onClose, ...props }: EntityCardProps) {
   const typename = entityData?.__typename;
   
   const EntityComponent = getEntityComponent(typename);
-  
-  return <EntityComponent.Card data={data as any} onClose={onClose} {...props} />;
+  const Comp: any = (EntityComponent as any).Card;
+  return <Comp data={data as any} onClose={onClose} {...props} />;
 } 
 
 export function CytoNode({ data, ...props }: EntityCytoNodeProps) {
@@ -84,6 +86,6 @@ export function CytoNode({ data, ...props }: EntityCytoNodeProps) {
   const typename = entityData?.__typename;
   
   const EntityComponent = getEntityComponent(typename);
-  
-  return <EntityComponent.CytoNode data={data as any} {...props} />;
+  const Comp: any = (EntityComponent as any).CytoNode;
+  return <Comp data={data as any} {...props} />;
 } 

@@ -10,7 +10,7 @@ import { verifyJWT } from 'hasyx/lib/jwt'; // Adjusted path assuming it comes fr
 import schema from '@/public/hasura-schema.json';
 import Debug from '@/lib/debug';
 import { ChessClientRequest, ChessServerResponse, ChessClientMove, ChessClientSide, ChessClientRole } from '@/lib/chess-client';
-import { getTokenFromRequest, WsClientsManager } from 'hasyx/lib/auth-next';
+import { getTokenFromRequest, WsClientsManager } from 'hasyx/lib/users/auth-next';
 
 const debug = Debug('api:badma');
 

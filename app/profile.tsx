@@ -1,6 +1,6 @@
 'use client';
 
-import { Accounts } from 'hasyx/components/accounts';
+import { Accounts } from 'hasyx/components/hasyx/users/accounts';
 import { Avatar, AvatarFallback, AvatarImage } from 'hasyx/components/ui/avatar';
 import { Button } from 'hasyx/components/ui/button';
 import { Card } from 'hasyx/components/ui/card';

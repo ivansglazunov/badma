@@ -5338,6 +5338,531 @@
           "level": 3,
           "text": "Adding Tests for New Features (e.g., Database Operators)",
           "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
         }
       ],
       "content": "",
@@ -5629,5 +6154,5 @@
       "path": "perks-view.tasks.md"
     }
   ],
-  "lastUpdated": "2025-07-26T02:35:51.328Z"
+  "lastUpdated": "2025-08-25T15:16:17.800Z"
 }

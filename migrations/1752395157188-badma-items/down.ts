@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Hasura } from 'hasyx/lib/hasura';
+import { Hasura } from 'hasyx/lib/hasura/hasura';
 import Debug from '../../lib/debug';
 
 const debug = Debug('migration:badma-items:down');

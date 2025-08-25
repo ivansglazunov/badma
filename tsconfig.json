@@ -47,6 +47,8 @@
   "exclude": [
     "node_modules",
     "**/*.temp",
-    ".mastra"
+    ".mastra",
+    "_components",
+    "_lib"
   ]
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import Debug from '@/lib/debug';
+import Debug from 'hasyx/lib/debug';
 import { Cyto, CytoStyle } from "hasyx/lib/cyto";
 import { Card as EntityCard, Button as EntityButton } from '../../../lib/entities';
 import { QueriesManager, QueriesRenderer } from 'hasyx/lib/renderer';
@@ -9,7 +9,7 @@ import projectSchema from '../../../public/hasura-schema.json';
 
 const debug = Debug('cyto');
 
-// Стили для Cytoscape
+// Styles for Cytoscape
 const stylesheet = [
   {
     selector: 'node',
@@ -97,7 +97,7 @@ export default function Client() {
         onLoaded={onGraphLoaded}
         buttons={true}
         layout={layoutConfig}
-        // leftTop={<QueriesManager queries={queries} setQueries={setQueries} schema={projectSchema} />}
+        leftTop={<QueriesManager queries={queries} setQueries={setQueries} schema={projectSchema} />}
       >
         <CytoStyle stylesheet={stylesheet} />
         <QueriesRenderer
