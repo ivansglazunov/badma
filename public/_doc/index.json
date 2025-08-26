@@ -5863,6 +5863,181 @@
           "level": 3,
           "text": "Adding Tests for New Features (e.g., Database Operators)",
           "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
         }
       ],
       "content": "",
@@ -6020,6 +6195,6159 @@
       "path": "README.md"
     },
     {
+      "filename": "CONTRIBUTING.md",
+      "title": "Contributing to Badma",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Contributing to Badma",
+          "id": "contributing-to-badma"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing to Hasyx",
+          "id": "contributing-to-hasyx"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing to Hasyx",
+          "id": "contributing-to-hasyx"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing to Hasyx",
+          "id": "contributing-to-hasyx"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing to Hasyx",
+          "id": "contributing-to-hasyx"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing to Hasyx",
+          "id": "contributing-to-hasyx"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 3,
+          "text": "Quick Testing with `npx hasyx js`",
+          "id": "quick-testing-with-npx-hasyx-js"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 3,
+          "text": "Common Aggregation Patterns to Test",
+          "id": "common-aggregation-patterns-to-test"
+        },
+        {
+          "level": 3,
+          "text": "Debugging Aggregation Issues",
+          "id": "debugging-aggregation-issues"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 4,
+          "text": "Filter Examples",
+          "id": "filter-examples"
+        },
+        {
+          "level": 4,
+          "text": "Directory Naming Conventions",
+          "id": "directory-naming-conventions"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 4,
+          "text": "3. **Implement Proper Down Migrations**",
+          "id": "3-implement-proper-down-migrations"
+        },
+        {
+          "level": 2,
+          "text": "Contribution Guidelines",
+          "id": "contribution-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "CloudFlare DNS Management (`lib/cloudflare.ts`)",
+          "id": "cloudflare-dns-management-libcloudflarets"
+        },
+        {
+          "level": 3,
+          "text": "SSL Certificate Management (`lib/ssl.ts`)",
+          "id": "ssl-certificate-management-libsslts"
+        },
+        {
+          "level": 3,
+          "text": "Nginx Configuration (`lib/nginx.ts`)",
+          "id": "nginx-configuration-libnginxts"
+        },
+        {
+          "level": 3,
+          "text": "Integrated Subdomain Management (`lib/subdomain.ts`)",
+          "id": "integrated-subdomain-management-libsubdomaints"
+        },
+        {
+          "level": 3,
+          "text": "Configuration and Usage",
+          "id": "configuration-and-usage"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        },
+        {
+          "level": 1,
+          "text": "Contributing",
+          "id": "contributing"
+        },
+        {
+          "level": 2,
+          "text": "Development Setup",
+          "id": "development-setup"
+        },
+        {
+          "level": 2,
+          "text": "Debug Information",
+          "id": "debug-information"
+        },
+        {
+          "level": 3,
+          "text": "Database Debug Logging",
+          "id": "database-debug-logging"
+        },
+        {
+          "level": 2,
+          "text": "Running Tests",
+          "id": "running-tests"
+        },
+        {
+          "level": 3,
+          "text": "Test Environment Guidelines",
+          "id": "test-environment-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Code Style",
+          "id": "code-style"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: Table Naming in Hasyx",
+          "id": "critical-table-naming-in-hasyx"
+        },
+        {
+          "level": 3,
+          "text": "✅ CORRECT - Use underscores:",
+          "id": "correct-use-underscores"
+        },
+        {
+          "level": 3,
+          "text": "❌ INCORRECT - Do NOT use dots:",
+          "id": "incorrect-do-not-use-dots"
+        },
+        {
+          "level": 3,
+          "text": "Schema to Table Name Mapping:",
+          "id": "schema-to-table-name-mapping"
+        },
+        {
+          "level": 2,
+          "text": "Commit Messages",
+          "id": "commit-messages"
+        },
+        {
+          "level": 2,
+          "text": "Pull Requests",
+          "id": "pull-requests"
+        },
+        {
+          "level": 2,
+          "text": "Debugging Data Issues",
+          "id": "debugging-data-issues"
+        },
+        {
+          "level": 2,
+          "text": "Testing Aggregation Features",
+          "id": "testing-aggregation-features"
+        },
+        {
+          "level": 3,
+          "text": "Quick Aggregation Tests",
+          "id": "quick-aggregation-tests"
+        },
+        {
+          "level": 3,
+          "text": "Aggregation Testing Guidelines",
+          "id": "aggregation-testing-guidelines"
+        },
+        {
+          "level": 2,
+          "text": "Writing Database Migrations",
+          "id": "writing-database-migrations"
+        },
+        {
+          "level": 3,
+          "text": "Migration File Structure",
+          "id": "migration-file-structure"
+        },
+        {
+          "level": 3,
+          "text": "Running Migrations with Filters",
+          "id": "running-migrations-with-filters"
+        },
+        {
+          "level": 3,
+          "text": "Core Migration Principles",
+          "id": "core-migration-principles"
+        },
+        {
+          "level": 4,
+          "text": "1. **Always Use `define*` Methods for Idempotency**",
+          "id": "1-always-use-define-methods-for-idempotency"
+        },
+        {
+          "level": 4,
+          "text": "2. **Use Transactions for Related Operations**",
+          "id": "2-use-transactions-for-related-operations"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure Philosophy",
+          "id": "project-structure-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "⚠️ CRITICAL: API Architecture Principle",
+          "id": "critical-api-architecture-principle"
+        },
+        {
+          "level": 3,
+          "text": "Why This Matters",
+          "id": "why-this-matters"
+        },
+        {
+          "level": 3,
+          "text": "Example Implementation",
+          "id": "example-implementation"
+        },
+        {
+          "level": 3,
+          "text": "Benefits of This Approach",
+          "id": "benefits-of-this-approach"
+        },
+        {
+          "level": 2,
+          "text": "Specific Guidance for `app/payments/tbank/options.ts`",
+          "id": "specific-guidance-for-apppaymentstbankoptionsts"
+        },
+        {
+          "level": 3,
+          "text": "`generateReceipt` Function Stub",
+          "id": "generatereceipt-function-stub"
+        },
+        {
+          "level": 2,
+          "text": "DNS and SSL Management",
+          "id": "dns-and-ssl-management"
+        },
+        {
+          "level": 3,
+          "text": "Quick Setup",
+          "id": "quick-setup"
+        },
+        {
+          "level": 3,
+          "text": "Testing Philosophy",
+          "id": "testing-philosophy"
+        },
+        {
+          "level": 2,
+          "text": "Testing",
+          "id": "testing"
+        },
+        {
+          "level": 3,
+          "text": "Adding Tests for New Features (e.g., Database Operators)",
+          "id": "adding-tests-for-new-features-eg-database-operators"
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/CONTRIBUTING.md"
+    },
+    {
+      "filename": "DEVICE_PERMISSIONS_GUIDE.md",
+      "title": "Device Permissions Guide",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Device Permissions Guide",
+          "id": "device-permissions-guide"
+        },
+        {
+          "level": 2,
+          "text": "Обзор",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Файлы и компоненты",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "1. `hooks/device-permissions.tsx`",
+          "id": "1-hooksdevice-permissionstsx"
+        },
+        {
+          "level": 3,
+          "text": "2. `app/app.tsx`",
+          "id": "2-appapptsx"
+        },
+        {
+          "level": 3,
+          "text": "3. Тестовые страницы",
+          "id": "3"
+        },
+        {
+          "level": 2,
+          "text": "Как это работает",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "Автоматический запрос",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "Ручной запрос",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "Статусы разрешений",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Особенности платформ",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "iOS Safari",
+          "id": "ios-safari"
+        },
+        {
+          "level": 3,
+          "text": "Android Chrome",
+          "id": "android-chrome"
+        },
+        {
+          "level": 3,
+          "text": "Desktop",
+          "id": "desktop"
+        },
+        {
+          "level": 2,
+          "text": "Визуальные индикаторы",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "Статус в правом верхнем углу",
+          "id": ""
+        },
+        {
+          "level": 3,
+          "text": "Toast уведомление",
+          "id": "toast"
+        },
+        {
+          "level": 3,
+          "text": "Кнопка запроса",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Отладка",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Использование в компонентах",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Тестирование",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Рекомендации",
+          "id": ""
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/DEVICE_PERMISSIONS_GUIDE.md"
+    },
+    {
+      "filename": "README.md",
+      "title": "Badma",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Badma",
+          "id": "badma"
+        },
+        {
+          "level": 2,
+          "text": "Development",
+          "id": "development"
+        },
+        {
+          "level": 2,
+          "text": "Building",
+          "id": "building"
+        },
+        {
+          "level": 3,
+          "text": "Important note about NODE_ENV",
+          "id": "important-note-about-node-env"
+        },
+        {
+          "level": 2,
+          "text": "Project Structure",
+          "id": "project-structure"
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/README.md"
+    },
+    {
+      "filename": "captured-pieces.md",
+      "title": "Captured Pieces Utility",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Captured Pieces Utility",
+          "id": "captured-pieces-utility"
+        },
+        {
+          "level": 2,
+          "text": "Основные возможности",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Быстрый старт",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Ценности фигур",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Основные функции",
+          "id": ""
+        },
+        {
+          "level": 2,
+          "text": "Пример использования в UI",
+          "id": "ui"
+        },
+        {
+          "level": 2,
+          "text": "Интеграция с игровым движком",
+          "id": ""
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/captured-pieces.md"
+    },
+    {
+      "filename": "hover-card.md",
+      "title": "HoverCard Component",
+      "headings": [
+        {
+          "level": 1,
+          "text": "HoverCard Component",
+          "id": "hovercard-component"
+        },
+        {
+          "level": 2,
+          "text": "Features",
+          "id": "features"
+        },
+        {
+          "level": 2,
+          "text": "Usage",
+          "id": "usage"
+        },
+        {
+          "level": 2,
+          "text": "Props",
+          "id": "props"
+        },
+        {
+          "level": 2,
+          "text": "Force Levels Guide",
+          "id": "force-levels-guide"
+        },
+        {
+          "level": 2,
+          "text": "Demo",
+          "id": "demo"
+        },
+        {
+          "level": 2,
+          "text": "Technical Implementation",
+          "id": "technical-implementation"
+        },
+        {
+          "level": 2,
+          "text": "Performance",
+          "id": "performance"
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/hover-card.md"
+    },
+    {
+      "filename": "perks-view.tasks.md",
+      "title": "Perks View Implementation Tasks",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Perks View Implementation Tasks",
+          "id": "perks-view-implementation-tasks"
+        },
+        {
+          "level": 2,
+          "text": "Этап 1: Базовая разметка",
+          "id": "1"
+        },
+        {
+          "level": 2,
+          "text": "Этап 2: Базовая анимация",
+          "id": "2"
+        },
+        {
+          "level": 2,
+          "text": "Этап 3: Логика активации",
+          "id": "3"
+        },
+        {
+          "level": 2,
+          "text": "Этап 4: Логика деактивации",
+          "id": "4"
+        },
+        {
+          "level": 2,
+          "text": "Этап 5: Применение перков",
+          "id": "5"
+        },
+        {
+          "level": 2,
+          "text": "Технические детали:",
+          "id": ""
+        }
+      ],
+      "content": "",
+      "path": "client/_doc/perks-view.tasks.md"
+    },
+    {
       "filename": "hover-card.md",
       "title": "HoverCard Component",
       "headings": [
@@ -6154,5 +12482,5 @@
       "path": "perks-view.tasks.md"
     }
   ],
-  "lastUpdated": "2025-08-26T18:20:37.083Z"
+  "lastUpdated": "2025-08-26T20:13:40.425Z"
 }

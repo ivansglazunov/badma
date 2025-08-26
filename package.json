@@ -1,11 +1,12 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.31",
+  "version": "0.1.0-alpha.32",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "npm run unbuild; NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --runInBand",
     "dev": "NODE_OPTIONS=\"--experimental-vm-modules\" npx -y hasyx dev",
+    "client": "npx hasyx client",
     "build": "NODE_ENV=production npx -y hasyx build",
     "unbuild": "npx -y hasyx unbuild",
     "start": "NODE_ENV=production NODE_OPTIONS=\"--experimental-vm-modules\" npx -y hasyx start",
@@ -16,6 +17,10 @@
     "npm-publish": "npm run build && npm publish",
     "events": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx events",
     "schema": "npx hasyx schema",
+    "build:android": "npm run init:android && npm run client && npm run cli -- assets && npx cap sync android",
+    "open:android": "npx cap open android",
+    "build:ios": "npm run init:ios && npm run client && npm run cli -- assets && npx cap sync ios",
+    "open:ios": "npx cap open ios",
     "doc:build": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx doc",
     "cli": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx",
     "assist": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx assist",
@@ -27,7 +32,10 @@
     "telegram": "NODE_OPTIONS=\"--experimental-vm-modules\" npx hasyx telegram",
     "config": "npx hasyx config",
     "env": "npx hasyx env",
-    "gitpod": "npx hasyx gitpod"
+    "gitpod": "npx hasyx gitpod",
+    "build:css": "tailwindcss -i ./app/globals.css -o ./lib/styles.css",
+    "init:android": "node -e \"process.exit(require('fs').existsSync('android')?0:1)\" || npx cap add android",
+    "init:ios": "node -e \"process.exit(require('fs').existsSync('ios/App')?0:1)\" || npx cap add ios"
   },
   "repository": {
     "type": "git",
@@ -45,7 +53,7 @@
     "cytoscape-grid-guide": "^2.3.3",
     "eruda": "^3.4.3",
     "events": "^3.3.0",
-    "hasyx": "^0.2.0-alpha.33",
+    "hasyx": "^0.2.0-alpha.34",
     "js-chess-engine": "^1.0.2",
     "motion": "^12.23.9",
     "react": "19.1.1",
