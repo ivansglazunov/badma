@@ -186,10 +186,9 @@ class TestMinefieldPerk extends ChessPerk {
     return result;
   }
 }
-// AFTER FULLY TESTED
-// const isLocal = !!+process.env.JEST_LOCAL!;
-// (!isLocal ? describe : describe.skip)
-describe('HasyxChessServer Perks Integration', () => {
+
+const isLocal = !!+process.env.JEST_LOCAL!;
+(!isLocal ? describe : describe.skip)('HasyxChessServer Perks Integration', () => {
 
   it('should handle perk application and move processing with minefield perk', async () => {
     debug('Starting HasyxChessServer perks test');
