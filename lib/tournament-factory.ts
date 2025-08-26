@@ -3,7 +3,6 @@ import { Tournament } from './tournament';
 import { TournamentRoundRobin } from './tournament-round-robin';
 import { TournamentSwiss } from './tournament-swiss';
 import { TournamentKnockout } from './tournament-knockout';
-import { TournamentScheveningen } from './tournament-scheveningen';
 import Debug from './debug';
 
 const debug = Debug('tournament-factory');
@@ -33,9 +32,6 @@ export function createTournament(
     case 'knockout':
       return new TournamentKnockout(hasyx, tournamentId, organizerId);
     
-    case 'scheveningen':
-      return new TournamentScheveningen(hasyx, tournamentId, organizerId);
-    
     default:
       throw new Error(`Unknown tournament type: ${type}`);
   }
@@ -52,8 +48,6 @@ export function getTournamentClass(type: TournamentType) {
       return TournamentSwiss;
     case 'knockout':
       return TournamentKnockout;
-    case 'scheveningen':
-      return TournamentScheveningen;
     default:
       throw new Error(`Unknown tournament type: ${type}`);
   }
