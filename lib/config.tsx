@@ -62,7 +62,8 @@ hasyxConfig.host = z.object({
     .describe('Public base URL for your app (maps to NEXT_PUBLIC_MAIN_URL), e.g., https://example.com or http://localhost:3000.'),
   clientOnly: z
     .boolean()
-    .describe('Client-only build flag (maps to NEXT_PUBLIC_CLIENT_ONLY). Enable only if server features are disabled.'),
+    .describe('Client-only build flag (maps to NEXT_PUBLIC_CLIENT_ONLY). Enable only if server features are disabled.')
+    .meta({ numericBoolean: true }),
   jwtAuth: z
     .boolean()
     .default(false)

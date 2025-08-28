@@ -494,7 +494,7 @@ export const ClubTab: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Вы уверены, что хотите покинуть клуб?</DialogTitle>
             <DialogDescription>
-              {currentClub?.user_id === hasyx.userId 
+              {currentClub?.owner?.id === hasyx.userId 
                 ? 'Как владелец клуба, вы передадите управление клубом. Клуб станет бесхозным.' 
                 : 'Вы перестанете быть членом этого клуба.'
               }

@@ -64,15 +64,6 @@ async function createItemsTable(hasura: Hasura) {
   await hasura.defineColumn({
     schema: badmaSchema,
     table: 'items',
-    name: 'club_id',
-    type: ColumnType.UUID,
-    postfix: 'NULL',
-    comment: 'Владелец может передать права владения клубу'
-  });
-  
-  await hasura.defineColumn({
-    schema: badmaSchema,
-    table: 'items',
     name: 'accepted',
     type: ColumnType.BOOLEAN,
     postfix: 'NOT NULL DEFAULT false',
@@ -96,45 +87,12 @@ async function createItemsTable(hasura: Hasura) {
     on_update: 'CASCADE'
   });
   
-  await hasura.defineForeignKey({
-    from: { schema: badmaSchema, table: 'items', column: 'club_id' },
-    to: { schema: badmaSchema, table: 'clubs', column: 'id' },
-    on_delete: 'SET NULL',
-    on_update: 'CASCADE'
-  });
-  
   debug('✅ Badma.items table created successfully.');
 }
 
 async function createItemsTriggers(hasura: Hasura) {
   debug('🔧 Creating items triggers...');
   
-  // Create trigger function for clearing user_id when club_id is set
-  await hasura.defineFunction({
-    schema: badmaSchema,
-    name: 'clear_user_id_on_club_assignment',
-    definition: `()
-      RETURNS TRIGGER AS $$
-      BEGIN
-        -- If club_id is being set and user_id is not null, clear user_id
-        IF NEW.club_id IS NOT NULL AND NEW.user_id IS NOT NULL THEN
-          NEW.user_id = NULL;
-        END IF;
-        RETURN NEW;
-      END;
-      $$`,
-    language: 'plpgsql'
-  });
-  
-  // Create trigger for clearing user_id when club_id is set
-  await hasura.defineTrigger({
-    schema: badmaSchema,
-    table: 'items',
-    name: 'trigger_clear_user_id_on_club_assignment',
-    function_name: `${badmaSchema}.clear_user_id_on_club_assignment`,
-    timing: 'BEFORE',
-    event: 'UPDATE'
-  });
   
   // Create trigger function for setting accepted_at when accepted becomes true
   await hasura.defineFunction({
@@ -177,11 +135,6 @@ const relationships = [
     name: 'user',
     type: 'object' as const,
     using: { foreign_key_constraint_on: 'user_id' }
-  },
-  {
-    name: 'club',
-    type: 'object' as const,
-    using: { foreign_key_constraint_on: 'club_id' }
   }
 ];
 
@@ -200,20 +153,8 @@ const publicRelationships = [
   }
 ];
 
-// Define clubs schema relationships
-const clubsRelationships = [
-  {
-    table: 'clubs',
-    name: 'items',
-    type: 'array' as const,
-    using: { 
-      foreign_key_constraint_on: { 
-        table: { schema: badmaSchema, name: 'items' }, 
-        column: 'club_id'
-      } 
-    }
-  }
-];
+// Define clubs schema relationships (removed: items no longer reference clubs)
+const clubsRelationships: any[] = [];
 
 const permissions = [
   // items - admin
@@ -228,25 +169,9 @@ const permissions = [
     check: { user_id: { _eq: 'X-Hasura-User-Id' } } 
   } },
   { role: 'user', table: 'items', type: 'update', permission: { 
-    columns: ['accepted', 'club_id'], 
-    filter: { 
-      _or: [
-        { user_id: { _eq: 'X-Hasura-User-Id' } },
-        {
-          club_id: { _is_null: false },
-          user_id: { _eq: 'X-Hasura-User-Id' }
-        }
-      ]
-    },
-    check: { 
-      _or: [
-        { user_id: { _eq: 'X-Hasura-User-Id' } },
-        {
-          club_id: { _is_null: false },
-          user_id: { _eq: 'X-Hasura-User-Id' }
-        }
-      ]
-    }
+    columns: ['accepted'], 
+    filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
+    check: { user_id: { _eq: 'X-Hasura-User-Id' } }
   } },
   // items - anonymous
   { role: 'anonymous', table: 'items', type: 'select', permission: { columns: ['*'], filter: {} } },
