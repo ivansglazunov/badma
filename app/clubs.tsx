@@ -14,7 +14,7 @@ interface Club {
   id: string;
   title: string;
   created_at: string;
-  user: {
+  owner?: {
     id: string;
     name: string;
     image?: string;
@@ -39,13 +39,14 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
   // Get all clubs
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
     {
-      table: 'badma_clubs',
+      table: 'groups',
+      where: { kind: { _eq: 'club' } },
       returning: [
         'id',
         'title',
         'created_at',
         {
-          user: ['id', 'name', 'image']
+          owner: ['id', 'name', 'image']
         }
       ],
       order_by: { created_at: 'desc' }
@@ -54,7 +55,7 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
 
   const clubs: Club[] = React.useMemo(() => {
     if (Array.isArray(clubsData)) return clubsData as Club[];
-    if (clubsData && (clubsData as any).badma_clubs) return (clubsData as any).badma_clubs as Club[];
+    if (clubsData && (clubsData as any).groups) return (clubsData as any).groups as Club[];
     return [];
   }, [clubsData]);
 
@@ -96,12 +97,9 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
     setIsSubmittingApplication(true);
     try {
       await hasyx.insert({
-        table: 'badma_in_clubs',
+        table: 'memberships',
         object: {
-          club_id: selectedClub.id,
-          user_id: hasyx.userId,
-          created_by_id: hasyx.userId,
-          status: 'request'
+          group_id: selectedClub.id
         }
       });
       console.log('Application submitted successfully');
@@ -139,13 +137,13 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
           >
             <div className="flex items-center space-x-3">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={club.user?.image ?? undefined} alt={club.user?.name ?? 'Club'} />
-                <AvatarFallback>{club.user?.name?.charAt(0)?.toUpperCase() ?? 'C'}</AvatarFallback>
+                <AvatarImage src={club.owner?.image ?? undefined} alt={club.owner?.name ?? 'Club'} />
+                <AvatarFallback>{club.owner?.name?.charAt(0)?.toUpperCase() ?? 'C'}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-foreground">{club.title || 'Untitled Club'}</span>
                 <span className="text-xs text-muted-foreground">
-                  Created by {club.user?.name ?? 'Unknown'} • {club.created_at && new Date(club.created_at).toLocaleDateString()}
+                  Created by {club.owner?.name ?? 'Unknown'} • {club.created_at && new Date(club.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>

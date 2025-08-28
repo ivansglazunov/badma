@@ -462,33 +462,30 @@ export default function App() {
   // Get clubs data for current user
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
     {
-      table: 'badma_clubs',
+      table: 'groups',
       where: { 
+        kind: { _eq: 'club' },
         _or: [
-          { user_id: { _eq: hasyx.userId } }, 
-          { in_clubs: { user_id: { _eq: hasyx.userId } } }
+          { owner_id: { _eq: hasyx.userId } }, 
+          { memberships: { user_id: { _eq: hasyx.userId }, status: { _in: ['approved','request'] } } }
         ] 
       },
       returning: [
         'id',
-        'user_id',
         'title',
         'created_at',
         'updated_at',
         {
-          user: ['id', 'name', 'image']
+          owner: ['id', 'name', 'image']
         },
         {
-          in_clubs: [
+          memberships: [
             'id',
             'user_id',
             'status',
             'created_by_id',
             'created_at',
             'updated_at',
-            {
-              user: ['id', 'name', 'image']
-            },
             {
               created_by: ['id', 'name', 'image']
             }
@@ -532,8 +529,8 @@ export default function App() {
     let formattedData;
     if (Array.isArray(clubsData)) {
       formattedData = clubsData;
-    } else if (clubsData && (clubsData as any).badma_clubs) {
-      formattedData = (clubsData as any).badma_clubs;
+    } else if (clubsData && (clubsData as any).groups) {
+      formattedData = (clubsData as any).groups;
     } else {
       formattedData = clubsData;
     }

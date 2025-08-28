@@ -31,13 +31,30 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess }: CreateClubDialo
     
     setIsCreatingClub(true);
     try {
-      await hasyx.insert({ 
-        table: 'badma_clubs', 
+      // 1) Create group with kind='club' (owner inferred by trigger)
+      const created = await hasyx.insert({ 
+        table: 'groups', 
         object: { 
-          user_id: hasyx.userId,
-          title: clubName.trim()
+          title: clubName.trim(),
+          kind: 'club'
         } 
       });
+      const createdGroup = Array.isArray(created) ? created[0] : (created as any)?.insert_groups_one || (created as any)?.groups?.[0] || created;
+      if (!createdGroup?.id) throw new Error('Group was not created');
+      
+      // 2) Link group in thin badma_clubs row if needed (kept for compatibility)
+      try {
+        await hasyx.insert({
+          table: 'badma_clubs',
+          object: {
+            id: createdGroup.id,
+            title: clubName.trim(),
+            user_id: hasyx.userId
+          }
+        });
+      } catch (e) {
+        // ignore if table/permission not present; UI works off groups
+      }
       
       console.log('✅ [CREATE_CLUB] Club created successfully');
       

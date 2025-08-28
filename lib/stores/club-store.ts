@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
 interface Club {
-  id: string;
+  id: string; // group id
   title: string;
   created_at: string;
-  user: {
+  owner?: {
     id: string;
     name: string;
     image?: string;

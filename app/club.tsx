@@ -23,39 +23,32 @@ export const ClubTab: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isProcessingMember, setIsProcessingMember] = useState(false);
 
-  // Get clubs data for current user
+  // Get groups (clubs) data for current user: owner or member
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
     {
-      table: 'badma_clubs',
-      where: { 
+      table: 'groups',
+      where: {
+        kind: { _eq: 'club' },
         _or: [
-          { user_id: { _eq: hasyx.userId } }, 
-          { in_clubs: { user_id: { _eq: hasyx.userId } } }
-        ] 
+          { owner_id: { _eq: hasyx.userId } },
+          { memberships: { user_id: { _eq: hasyx.userId }, status: { _in: ['approved', 'request'] } } }
+        ]
       },
       returning: [
         'id',
-        'user_id',
         'title',
         'created_at',
         'updated_at',
-        {
-          user: ['id', 'name', 'image']
-        },
-        {
-          in_clubs: [
+        { owner: ['id', 'name', 'image'] },
+        { 
+          memberships: [
             'id',
             'user_id',
             'status',
             'created_by_id',
             'created_at',
             'updated_at',
-            {
-              user: ['id', 'name', 'image']
-            },
-            {
-              created_by: ['id', 'name', 'image']
-            }
+            { user: ['id', 'name', 'image'] }
           ]
         }
       ]
@@ -69,13 +62,8 @@ export const ClubTab: React.FC = () => {
   // Format clubs data
   const clubsDataFormatted = React.useMemo(() => {
     if (!clubsData) return null;
-    
-    if (Array.isArray(clubsData)) {
-      return clubsData;
-    }
-    if (clubsData && (clubsData as any).badma_clubs) {
-      return (clubsData as any).badma_clubs;
-    }
+    if (Array.isArray(clubsData)) return clubsData;
+    if ((clubsData as any).groups) return (clubsData as any).groups;
     return clubsData;
   }, [clubsData]);
 
@@ -99,12 +87,9 @@ export const ClubTab: React.FC = () => {
     setIsSavingTitle(true);
     try {
       await hasyx.update({
-        table: 'badma_clubs',
+        table: 'groups',
         where: { id: { _eq: currentClub.id } },
-        _set: { 
-          title: titleValue,
-          updated_at: Date.now()
-        }
+        _set: { title: titleValue }
       });
     } catch (error) {
       console.error('Error saving club title:', error);
@@ -120,12 +105,9 @@ export const ClubTab: React.FC = () => {
     setIsProcessingMember(true);
     try {
       await hasyx.update({
-        table: 'badma_in_clubs',
+        table: 'memberships',
         where: { id: { _eq: member.id } },
-        _set: { 
-          status: 'denied',
-          updated_at: Date.now()
-        }
+        _set: { status: 'denied' }
       });
       console.log('Member application rejected');
     } catch (error) {
@@ -148,12 +130,9 @@ export const ClubTab: React.FC = () => {
     setIsProcessingMember(true);
     try {
       await hasyx.update({
-        table: 'badma_in_clubs',
+        table: 'memberships',
         where: { id: { _eq: selectedMember.id } },
-        _set: { 
-          status: 'approved',
-          updated_at: Date.now()
-        }
+        _set: { status: 'approved' }
       });
       console.log('Member application approved');
     } catch (error) {
@@ -178,7 +157,7 @@ export const ClubTab: React.FC = () => {
     setIsProcessingMember(true);
     try {
       await hasyx.delete({
-        table: 'badma_in_clubs',
+        table: 'memberships',
         where: { id: { _eq: selectedMember.id } }
       });
       console.log('Member removed from club');
@@ -202,26 +181,22 @@ export const ClubTab: React.FC = () => {
     
     setIsProcessingMember(true);
     try {
-      if (currentClub.user_id === hasyx.userId) {
-        // If user is club owner, remove user_id from club (make club ownerless)
+      const isOwner = currentClub.owner?.id === hasyx.userId;
+      if (isOwner) {
+        // owner resign: set owner_id to null (Hasyx triggers handle ownership policy)
         await hasyx.update({
-          table: 'badma_clubs',
+          table: 'groups',
           where: { id: { _eq: currentClub.id } },
-          _set: { 
-            user_id: null,
-            updated_at: Date.now()
-          }
+          _set: { owner_id: null }
         });
-        console.log('Left club as owner - club is now ownerless');
       } else {
-        // If user is regular member, delete their membership record
-        const userMembership = members.find(m => m.user_id === hasyx.userId);
+        const userMembership = members.find((m: any) => m.user_id === hasyx.userId);
         if (userMembership) {
-          await hasyx.delete({
-            table: 'badma_in_clubs',
-            where: { id: { _eq: userMembership.id } }
+          await hasyx.update({
+            table: 'memberships',
+            where: { id: { _eq: userMembership.id } },
+            _set: { status: 'left' }
           });
-          console.log('Left club as member');
         }
       }
     } catch (error) {
@@ -250,8 +225,8 @@ export const ClubTab: React.FC = () => {
     );
   }
 
-  const owner = currentClub.user;
-  const members = currentClub.in_clubs || [];
+  const owner = currentClub.owner;
+  const members = currentClub.memberships || [];
   const isOwner = owner?.id === hasyx.userId;
 
   return (
@@ -385,7 +360,7 @@ export const ClubTab: React.FC = () => {
                   )}
                   
                   {/* Remove button for approved members - only for club owner */}
-                  {currentClub.user_id === hasyx.userId && member.status === 'approved' && !isMemberOwner && (
+                  {currentClub.owner?.id === hasyx.userId && member.status === 'approved' && !isMemberOwner && (
                     <div className="flex items-center">
                       <Button
                         size="sm"
