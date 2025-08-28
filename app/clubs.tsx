@@ -23,9 +23,10 @@ interface Club {
 
 interface ClubsListProps {
   onNavigateToClubHall?: () => void;
+  kind?: 'club' | 'school';
 }
 
-export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
+export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProps) {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isJoiningClub, setIsJoiningClub] = useState(false);
@@ -36,11 +37,11 @@ export function ClubsList({ onNavigateToClubHall }: ClubsListProps) {
   const { getUserClubById } = useClubStore();
   const hasyx = useHasyx();
 
-  // Get all clubs
+  // Get all groups by kind
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
     {
       table: 'groups',
-      where: { kind: { _eq: 'club' } },
+      where: { kind: { _eq: kind } },
       returning: [
         'id',
         'title',

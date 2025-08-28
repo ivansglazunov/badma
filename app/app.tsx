@@ -958,15 +958,19 @@ export default function App() {
               
               <div className="w-full max-w-2xl">
                 <Tabs value={profileTab} onValueChange={setProfileTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
                     <TabsTrigger value="club" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Club</TabsTrigger>
+                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />School</TabsTrigger>
                   </TabsList>
                   <TabsContent value="tournaments" className="pt-4">
                     {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
                   </TabsContent>
                   <TabsContent value="club" className="pt-4">
                     <ClubTab />
+                  </TabsContent>
+                  <TabsContent value="schools" className="pt-4">
+                    <ClubsList kind='school' />
                   </TabsContent>
                 </Tabs>
               </div>
@@ -983,8 +987,9 @@ export default function App() {
               
               <div className="w-full max-w-2xl">
                 <Tabs defaultValue="clubs" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
+                  <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="clubs" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Clubs</TabsTrigger>
+                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Schools</TabsTrigger>
                     <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
                   </TabsList>
                   <TabsContent value="clubs" className="pt-4">
@@ -1000,6 +1005,9 @@ export default function App() {
                       Создать клуб
                     </Button>
                     <ClubsList onNavigateToClubHall={navigateToClubHall} />
+                  </TabsContent>
+                  <TabsContent value="schools" className="pt-4">
+                    <ClubsList kind='school' />
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
                     <Button 
