@@ -495,7 +495,7 @@ export default function App() {
         }
       ]
     },
-    { skip: !hasyx.userId }
+    { skip: !hasyx.userId, role: 'user' }
   );
 
   // Get all user settings

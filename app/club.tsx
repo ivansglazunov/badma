@@ -53,7 +53,7 @@ export const ClubTab: React.FC = () => {
         }
       ]
     },
-    { skip: !hasyx.userId }
+    { skip: !hasyx.userId, role: 'user' }
   );
 
   // Обрабатываем ошибки через тост

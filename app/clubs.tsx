@@ -52,7 +52,7 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
       ],
       order_by: { created_at: 'desc' }
     }
-  );
+  , { role: 'user' });
 
   const clubs: Club[] = React.useMemo(() => {
     if (Array.isArray(clubsData)) return clubsData as Club[];
