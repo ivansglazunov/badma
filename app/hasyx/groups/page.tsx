@@ -14,6 +14,8 @@ import { MultiSelectHasyx } from 'hasyx/components/multi-select-hasyx';
 import { Plus } from 'lucide-react';
 import { Groups } from 'hasyx/lib/groups/groups';
 import { v4 as uuidv4 } from 'uuid';
+import { Button as UserButton } from 'hasyx/components/entities/users';
+import { GroupManager } from 'hasyx/components/entities/groups';
 
 export default function GroupsPage() {
   const hasyx = useHasyx();
@@ -187,48 +189,10 @@ export default function GroupsPage() {
         <div className="flex-1 p-4 flex flex-col gap-4">
           {!selected && <div className="text-gray-500">Select a group…</div>}
           {selected && (
-            <>
-              {/* Top: group settings */}
-              <div className="space-y-2">
-                <div className="text-xl font-medium">{selected.title}</div>
-                <div className="text-sm text-gray-600">Owner: {selected.owner_id || '—'} · Visibility: {selected.visibility} · Join: {selected.join_policy}</div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={async () => {
-                    const newTitle = prompt('New title', selected.title) || selected.title;
-                    await groupsApi.updateGroup(selected.id, { title: newTitle });
-                    await refetch();
-                  }}>Rename</Button>
-                  <Button variant="outline" size="sm" onClick={async () => {
-                    await groupsApi.deleteGroup(selected.id);
-                    setSelectedId(null);
-                    await refetch();
-                  }}>Delete</Button>
-                </div>
-              </div>
-
-              {/* Bottom: members */}
-              <div className="flex-1 overflow-auto border rounded p-3 space-y-3">
-                <div className="font-medium">Members ({selected.memberships?.length || 0})</div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {(selected.memberships || []).map((m: any) => (
-                    <div key={m.id} className="border rounded p-3 space-y-2">
-                      <div className="text-sm">User: {m.user_id}</div>
-                      <div className="text-sm">Role: {m.role} · Status: {m.status}</div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={async () => {
-                          await groupsApi.changeMemberRole(selected.id, m.user_id, 'admin');
-                          await refetch();
-                        }}>Make admin</Button>
-                        <Button variant="outline" size="sm" onClick={async () => {
-                          await groupsApi.leaveMembership(m.id);
-                          await refetch();
-                        }}>Set left</Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
+            <GroupManager
+              groupId={selected.id}
+              onDeleted={async () => { setSelectedId(null); await refetch(); }}
+            />
           )}
         </div>
       </div>

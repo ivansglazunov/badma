@@ -9,7 +9,7 @@ import edgehandles from 'cytoscape-edgehandles';
 import edgeConnections from 'cytoscape-edge-connections';
 import klay from 'cytoscape-klay';
 import { getLocale } from 'hasyx/lib/i18n';
-import schema from '../public/hasura-schema.json';
+import schema from "../public/hasura-schema.json";
 
 
 cytoscape.use(klay);
