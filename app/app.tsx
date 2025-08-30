@@ -46,6 +46,8 @@ import { Profile } from "./profile";
 import { ChessClientRole, ChessClientSide } from "@/lib/chess-client";
 import { Label } from "hasyx/components/ui/label";
 import { v4 as uuidv4 } from 'uuid';
+import { ColorProvider, useColor } from "@/lib/color";
+import { getBottomMenuBgClass } from "@/lib/colors";
 
 const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
   switch (status) {
@@ -910,6 +912,7 @@ export default function App() {
   }
 
   return (<>
+    <ColorProvider>
     <div className="fixed -top-3 left-0 z-[9999] w-full flex justify-center">
       <div className="flex w-full">
         <div className="w-full px-2 relative">
@@ -1254,7 +1257,8 @@ export default function App() {
         <div className="absolute -top-4 left-2 z-[9999] px-2 py-1 bg-black/20 backdrop-blur-sm rounded text-xs text-white/70 font-mono pointer-events-none">
           v{packageJson.version}
         </div>
-        <div className="w-full h-16 bg-purple-900/90 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
+        <BottomMenuBg>
+          <div className="w-full h-16 backdrop-blur-md rounded-lg flex items-center justify-between shadow-lg px-1">
           <div className="flex-1 flex justify-end items-center">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
               <User className="h-5 w-5 mb-0.5" />
@@ -1292,7 +1296,8 @@ export default function App() {
               <span className="text-xs leading-tight">Games</span>
             </Button>
           </div>
-        </div>
+          </div>
+        </BottomMenuBg>
       </div>
     </div>
 
@@ -1382,6 +1387,17 @@ export default function App() {
         </>
       )}
     </div>
+    </ColorProvider>
   </>);
+}
+
+function BottomMenuBg({ children }: { children: React.ReactNode }) {
+  const { colorId } = useColor();
+  const bgClass = getBottomMenuBgClass(colorId);
+  return (
+    <div className={cn("w-full h-16 rounded-lg", bgClass)}>
+      {children}
+    </div>
+  );
 }
 

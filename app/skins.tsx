@@ -21,6 +21,8 @@ import { Check, Lock, Gift, CheckCircle, Loader2 } from 'lucide-react';
 import Grant from './grant';
 import ChessExplodeEffect from '../lib/chess-explode-effect';
 import { ItemType } from '../lib/items';
+import { COLORS, COLOR_CIRCLE_BG_CLASS } from '../lib/colors';
+import { useColor } from '../lib/color';
 
 // Компонент для отдельного айтема
 interface SkinItemProps {
@@ -123,6 +125,7 @@ export default function Skins({ children }: SkinsProps) {
 
   // Get user settings from zustand store
   const { settings: userSettings, loading: settingsLoading, getSetting, updateSetting } = useUserSettings();
+  const { colorId, setColor } = useColor();
 
   // Subscribe to user items
   const { data: itemsData } = useSubscription(
@@ -199,6 +202,23 @@ export default function Skins({ children }: SkinsProps) {
 
       <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto h-full">
         <div className="w-full max-w-4xl space-y-8 h-full">
+          {/* Цвета интерфейса */}
+          <div className="">
+            <h2 className="text-2xl font-bold mb-4 text-center">Colors</h2>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              {Object.keys(COLORS).map((id) => (
+                <button
+                  key={id}
+                  onClick={() => setColor(id as any)}
+                  className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
+                    (colorId === id) ? 'border-purple-500' : 'border-border hover:border-purple-300'
+                  }`}
+                >
+                  <span className={`w-8 h-8 rounded-full ${COLOR_CIRCLE_BG_CLASS[id as keyof typeof COLOR_CIRCLE_BG_CLASS]}`} />
+                </button>
+              ))}
+            </div>
+          </div>
           {/* Наборы */}
           <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>

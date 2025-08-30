@@ -7,12 +7,14 @@ export interface UserSetting {
 export interface UserSettings {
   board: string;
   pieces: string;
+  color?: string;
   [key: string]: string;
 }
 
 export const DEFAULT_SETTINGS: UserSettings = {
   board: 'classic',
-  pieces: 'classic'
+  pieces: 'classic',
+  color: 'badma'
 };
 
 /**
