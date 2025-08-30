@@ -8,7 +8,7 @@ export interface UserSettings {
   board: string;
   pieces: string;
   color?: string;
-  [key: string]: string;
+  [key: string]: string | undefined;
 }
 
 export const DEFAULT_SETTINGS: UserSettings = {
