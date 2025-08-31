@@ -15,7 +15,7 @@ export function useUserSettings(): {
   settings: UserSettings;
   loading: boolean;
   error: any;
-  getSetting: (key: keyof UserSettings) => string;
+  getSetting: (key: keyof UserSettings) => string | undefined;
   updateSetting: (key: keyof UserSettings, value: string) => void;
 } {
   const { settings, isLoading, error, getSetting, updateSetting } = useUserSettingsStore();

@@ -11,7 +11,6 @@ import klay from 'cytoscape-klay';
 import { getLocale } from 'hasyx/lib/i18n';
 import schema from "../public/hasura-schema.json";
 
-
 cytoscape.use(klay);
 cytoscape.use(dagre);
 cytoscape.use(cola);

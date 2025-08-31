@@ -202,13 +202,27 @@ export default function Skins({ children }: SkinsProps) {
 
       <div className="flex flex-col items-center justify-start pt-4 overflow-y-auto h-full">
         <div className="w-full max-w-4xl space-y-8 h-full">
-          {/* Цвета интерфейса */}
+          {/* Цвета интерфейса (горизонтальный слайдер) */}
           <div className="">
             <h2 className="text-2xl font-bold mb-4 text-center">Colors</h2>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="h-[60px] w-full">
+              <Carousel
+                className="w-full max-w-5xl mx-auto"
+                opts={{
+                  dragFree: false,
+                  containScroll: "trimSnaps",
+                  watchDrag: (emblaApi, event) => {
+                    // Предотвращаем всплытие события к родительскому слайдеру
+                    event.stopPropagation();
+                    return true;
+                  }
+                }}
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
               {Object.keys(COLORS).map((id) => (
+                    <CarouselItem key={id} className="basis-[90px] flex-shrink-0">
+                      <div className="flex items-center justify-center">
                 <button
-                  key={id}
                   onClick={() => setColor(id as any)}
                   className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
                     (colorId === id) ? 'border-purple-500' : 'border-border hover:border-purple-300'
@@ -216,7 +230,13 @@ export default function Skins({ children }: SkinsProps) {
                 >
                   <span className={`w-8 h-8 rounded-full ${COLOR_CIRCLE_BG_CLASS[id as keyof typeof COLOR_CIRCLE_BG_CLASS]}`} />
                 </button>
+                      </div>
+                    </CarouselItem>
               ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
             </div>
           </div>
           {/* Наборы */}

@@ -11,9 +11,10 @@ interface CreateClubDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  kind?: 'club' | 'school';
 }
 
-export function CreateClubDialog({ isOpen, onClose, onSuccess }: CreateClubDialogProps) {
+export function CreateClubDialog({ isOpen, onClose, onSuccess, kind = 'club' }: CreateClubDialogProps) {
   const hasyx = useHasyx();
   const [isCreatingClub, setIsCreatingClub] = useState(false);
   const [clubName, setClubName] = useState('');
@@ -31,18 +32,18 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess }: CreateClubDialo
     
     setIsCreatingClub(true);
     try {
-      // 1) Create group with kind='club' (owner inferred by trigger)
+      // 1) Create group with provided kind (owner inferred by trigger)
       const created = await hasyx.insert({ 
         table: 'groups', 
         object: { 
           title: clubName.trim(),
-          kind: 'club'
+          kind
         } 
       });
       const createdGroup = Array.isArray(created) ? created[0] : (created as any)?.insert_groups_one || (created as any)?.groups?.[0] || created;
       if (!createdGroup?.id) throw new Error('Group was not created');
       
-      console.log('✅ [CREATE_CLUB] Club created successfully');
+      console.log('✅ [CREATE_GROUP] Group created successfully');
       
       // Reset form
       setClubName('');
@@ -55,7 +56,7 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess }: CreateClubDialo
       // Close dialog
       onClose();
     } catch (error) {
-      console.error('❌ [CREATE_CLUB] Error creating club:', error);
+      console.error('❌ [CREATE_GROUP] Error creating group:', error);
     } finally {
       setIsCreatingClub(false);
     }
@@ -78,15 +79,15 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess }: CreateClubDialo
       <DialogContent className="max-w-sm">
         <div className="space-y-4">
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Создать новый клуб</h3>
+            <h3 className="text-lg font-semibold">{kind === 'club' ? 'Создать новый клуб' : 'Создать новую школу'}</h3>
             <p className="text-sm text-gray-600">
-              Введите название для вашего клуба
+              {kind === 'club' ? 'Введите название для вашего клуба' : 'Введите название для вашей школы'}
             </p>
           </div>
           
           <div className="space-y-2">
             <Input
-              placeholder="Название клуба"
+              placeholder={kind === 'club' ? 'Название клуба' : 'Название школы'}
               value={clubName}
               onChange={(e) => setClubName(e.target.value)}
               disabled={isCreatingClub}

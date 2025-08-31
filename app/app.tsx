@@ -520,7 +520,7 @@ export default function App() {
       setSettings(settingsData);
       // Update selected board style from store
       const boardStyle = getSetting('board');
-      setSelectedBoardStyle(boardStyle);
+      setSelectedBoardStyle(boardStyle || 'classic_board');
     }
   }, [settingsData, setSettings, getSetting]);
 
@@ -558,12 +558,17 @@ export default function App() {
   const viewOrder = React.useMemo(() => ['profile', 'tournaments', 'skins', 'games'], []);
   const [mainViewTab, setMainViewTab] = useState(viewOrder[1]);
   const [profileTab, setProfileTab] = useState('tournaments');
+  const [ratingTab, setRatingTab] = useState<'clubs' | 'schools' | 'tournaments'>('clubs');
   const [profile, setProfile] = useState(false);
 
   // Function to navigate to club hall
   const navigateToClubHall = () => {
     setMainViewTab('profile');
     setProfileTab('club');
+  };
+  const navigateToRatingTab = (tab: 'clubs' | 'schools' | 'tournaments') => {
+    setMainViewTab('tournaments');
+    setRatingTab(tab);
   };
   const [selectedTournament, setSelectedTournament] = useState<Badma_Tournaments | null>(null);
   const [isTournamentModalOpen, setIsTournamentModalOpen] = useState(false);
@@ -970,10 +975,18 @@ export default function App() {
                     {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
                   </TabsContent>
                   <TabsContent value="club" className="pt-4">
-                    <ClubTab />
+                    <ClubTab 
+                      kind="club"
+                      onFind={() => navigateToRatingTab('clubs')}
+                      onCreate={() => setIsCreateClubDialogOpen(true)}
+                    />
                   </TabsContent>
                   <TabsContent value="schools" className="pt-4">
-                    <ClubsList kind='school' />
+                    <ClubTab 
+                      kind="school"
+                      onFind={() => navigateToRatingTab('schools')}
+                      onCreate={() => setIsCreateClubDialogOpen(true)}
+                    />
                   </TabsContent>
                 </Tabs>
               </div>
@@ -989,7 +1002,7 @@ export default function App() {
               </div>
               
               <div className="w-full max-w-2xl">
-                <Tabs defaultValue="clubs" className="w-full">
+                <Tabs value={ratingTab} onValueChange={(v) => setRatingTab(v as any)} className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="clubs" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Clubs</TabsTrigger>
                     <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Schools</TabsTrigger>
@@ -1010,7 +1023,10 @@ export default function App() {
                     <ClubsList onNavigateToClubHall={navigateToClubHall} />
                   </TabsContent>
                   <TabsContent value="schools" className="pt-4">
-                    <ClubsList kind='school' />
+                    <ClubsList kind='school' onNavigateToSchoolHall={() => {
+                      setMainViewTab('profile');
+                      setProfileTab('schools');
+                    }} />
                   </TabsContent>
                   <TabsContent value="tournaments" className="pt-4">
                     <Button 
@@ -1364,6 +1380,7 @@ export default function App() {
     <CreateClubDialog 
       isOpen={isCreateClubDialogOpen}
       onClose={() => setIsCreateClubDialogOpen(false)}
+      kind={ratingTab === 'schools' ? 'school' : 'club'}
     />
 
     {/* Meta Screen */}

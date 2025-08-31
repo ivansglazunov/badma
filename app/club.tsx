@@ -8,7 +8,7 @@ import { LoaderCircle, Crown, Check, X, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from 'hasyx/components/ui/dialog';
 import { useToastHandleClubError } from '@/hooks/toasts';
 
-export const ClubTab: React.FC = () => {
+export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; onCreate?: () => void }> = ({ kind = 'club', onFind, onCreate }) => {
   const { data: session } = useSession();
   const hasyx = useHasyx();
   
@@ -23,12 +23,12 @@ export const ClubTab: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isProcessingMember, setIsProcessingMember] = useState(false);
 
-  // Get groups (clubs) data for current user: owner or member
+  // Get groups (clubs/schools) data for current user: owner or member
   const { data: clubsData, loading: clubsLoading, error: clubsError } = useSubscription(
     {
       table: 'groups',
       where: {
-        kind: { _eq: 'club' },
+        kind: { _eq: kind },
         _or: [
           { owner_id: { _eq: hasyx.userId } },
           { memberships: { user_id: { _eq: hasyx.userId }, status: { _in: ['approved', 'request'] } } }
@@ -67,7 +67,7 @@ export const ClubTab: React.FC = () => {
     return clubsData;
   }, [clubsData]);
 
-  // Get the first club (assuming user is in one club)
+  // Get the first entity (assuming user is in one)
   const currentClub = clubsDataFormatted?.[0];
 
   // Sync title value with database data
@@ -219,8 +219,25 @@ export const ClubTab: React.FC = () => {
   if (!currentClub) {
     return (
       <div className="p-4 text-center text-muted-foreground">
-        <p>You are not a member of any club yet.</p>
-        <p className="text-sm mt-2">Join or create a club to see club information here.</p>
+        <div className="flex flex-col gap-2 items-center">
+          <p>
+            {kind === 'club' ? 'You are not a member of any club yet.' : 'You are not a member of any school yet.'}
+          </p>
+          <div className="flex gap-2">
+            <button
+              className="px-3 py-1 rounded-full text-xs border border-purple-500 text-purple-600 hover:bg-purple-50"
+              onClick={onFind}
+            >
+              {kind === 'club' ? 'Найти клуб' : 'Найти школу'}
+            </button>
+            <button
+              className="px-3 py-1 rounded-full text-xs bg-yellow-500 hover:bg-yellow-600 text-white"
+              onClick={onCreate}
+            >
+              {kind === 'club' ? 'Создать клуб' : 'Создать школу'}
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -231,14 +248,14 @@ export const ClubTab: React.FC = () => {
 
   return (
     <div className="space-y-4 p-1">
-      {/* Club Title */}
+      {/* Title */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">Club Title</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Title' : 'School Title'}</h3>
         <div className="flex items-center space-x-2">
           <Input
             value={titleValue}
             onChange={(e) => setTitleValue(e.target.value)}
-            placeholder="Enter club title..."
+            placeholder={kind === 'club' ? 'Enter club title...' : 'Enter school title...'}
             disabled={isSavingTitle}
             className="flex-1"
           />
@@ -259,9 +276,9 @@ export const ClubTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Club Owner */}
+      {/* Owner */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">Club Owner</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Owner' : 'School Owner'}</h3>
         <div className={`flex items-center space-x-3 p-3 rounded-md border-2 ${isOwner ? 'border-yellow-400 bg-yellow-50/20' : 'border-muted/20'}`}>
           <div className="relative">
             <Avatar className="h-12 w-12">
@@ -294,9 +311,9 @@ export const ClubTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Club Members */}
+      {/* Members */}
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">Club Members ({members.length})</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Members' : 'School Members'} ({members.length})</h3>
         <div className="space-y-2">
           {members.length > 0 ? (
             members.map((member: any) => {
@@ -416,6 +433,25 @@ export const ClubTab: React.FC = () => {
             <span>{members.length + 1}</span>
           </div>
         </div>
+      </div>
+
+      {/* Apply button (always visible on profile page) */}
+      <div className="mt-4">
+        <Button 
+          onClick={async () => {
+            try {
+              await hasyx.insert({
+                table: 'memberships',
+                object: { group_id: currentClub.id }
+              });
+            } catch (e) {
+              console.error('Error submitting application:', e);
+            }
+          }}
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+        >
+          Подать заявку
+        </Button>
       </div>
       
       {/* Confirmation Dialog */}

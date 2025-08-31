@@ -23,6 +23,7 @@ import { useMultipleUserSettings } from '../hooks/user-settings';
 import { getPiecesStyle } from './items';
 import { MinefieldPerk } from './items/minefield-perk';
 import { useHasyx } from 'hasyx';
+import Boracay from 'react-explode/Boracay';
 
 const debug = Debug('game');
 
@@ -386,6 +387,8 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
   const [perkPositions, setPerkPositions] = useState<Record<string, { x: number; y: number }>>({});
   const [activePerk, setActivePerk] = useState<string | null>(null); // ID активного перка
   const [availablePerks, setAvailablePerks] = useState(PERK_TYPES); // Доступные перки (убираются после применения)
+  const [explosionPerkId, setExplosionPerkId] = useState<string | null>(null); // Перк для Boracay вспышки
+  const [animatingPerkId, setAnimatingPerkId] = useState<string | null>(null); // Перк в стадии финальной анимации
 
   // Создаем motion values для каждого типа перка как отдельные хуки
   const minefieldX = useMotionValue(0);
@@ -418,22 +421,62 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
     }
 
     try {
-      // Создаем экземпляр перка для клиента
       const perkInstance = new perkType.perkClass('client');
-      
-      // Применяем перк через handleApply
-      await perkInstance.handleApply(activeClient, gameData.id);
-      
-      // Удаляем перк из доступных после успешного применения
+
+      // Стартуем анимацию взлета немедленно, параллельно с серверным вызовом
+      const motionData = perkMotionData[activePerk];
+      const screenHeight = window.innerHeight;
+      let upAnimPromise: Promise<any> | null = null;
+      if (motionData) {
+        const { controls } = motionData;
+        setAnimatingPerkId(activePerk);
+        const screenWidth = window.innerWidth;
+        const overshoot = Math.max(screenHeight, screenWidth) + 300; // гарантированно выше экрана с учетом scale
+        upAnimPromise = controls.start({
+          y: -(screenHeight + overshoot),
+          scale: 2,
+          transition: { type: 'spring', stiffness: 360, damping: 30 }
+        });
+      }
+
+      const serverPromise = perkInstance.handleApply(activeClient, gameData.id);
+
+      if (upAnimPromise) await upAnimPromise;
+      await serverPromise;
+
+      if (motionData) {
+        const { controls } = motionData;
+        // Запускаем вспышку и падение в центр
+        setExplosionPerkId(activePerk);
+        await controls.start({
+          y: -screenHeight / 2,
+          scale: 0.8,
+          transition: { type: 'spring', stiffness: 180, damping: 12 }
+        });
+        await controls.start({
+          opacity: 0,
+          transition: { duration: 0.35, easing: 'ease-out' as any }
+        });
+      }
+
+      // Удаляем перк из доступных
       setAvailablePerks(prev => prev.filter(p => p.id !== activePerk));
-      
-      // Очищаем активный перк
       setActivePerk(null);
-      
-      console.log(`Перк ${activePerk} успешно применен и удален из UI`);
+      setAnimatingPerkId(null);
+      setExplosionPerkId(null);
+
+      console.log(`Перк ${activePerk} успешно применен с анимацией`);
     } catch (error) {
       console.error('Ошибка при применении перка:', error);
-      // Не удаляем перк при ошибке, позволяем повторить
+      // В случае ошибки вернем карту на исходную позицию, чтобы не зависала
+      const motionData = perkMotionData[activePerk];
+      if (motionData) {
+        const { controls } = motionData;
+        await controls.start({ x: 0, y: 0, scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 28 } });
+      }
+      setAnimatingPerkId(null);
+      setExplosionPerkId(null);
+      // Перек оставляем активным, чтобы можно было повторить
     }
   };
 
@@ -579,7 +622,7 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
       
       {/* Perks at bottom edge of screen */}
       {activeClient && (
-        <div className="fixed bottom-0 left-0 right-0 flex justify-center items-end" style={{ gap: '100px' }}>
+        <div className="fixed bottom-0 left-0 right-0 flex justify-center items-end z-40" style={{ gap: '100px' }}>
           {availablePerks.map((perk, index) => {
             const motionData = perkMotionData[perk.id];
             if (!motionData) return null; // Защита от отсутствующих перков
@@ -593,13 +636,14 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
               <div key={perk.id} className="w-px h-px relative">
                 <motion.div 
                   className={`absolute left-0 top-0 transform -translate-x-1/2 -translate-y-1/2 ${
-                    isDragDisabled ? 'cursor-not-allowed opacity-50' : 
+                    (isDragDisabled || animatingPerkId === perk.id) ? 'cursor-not-allowed opacity-50' : 
                     isThisPerkActive ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
-                  }`}
-                  drag={!isDragDisabled}
+                  } z-40`}
+                  drag={!isDragDisabled && animatingPerkId !== perk.id}
                   dragElastic={0.2}
                   dragMomentum={false}
                   style={{ x, y }}
+                  initial={{ opacity: 1, scale: 1 }}
                   animate={controls}
                   transition={{
                     type: "spring",
@@ -608,11 +652,12 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
                   }}
                   onClick={() => {
                     // Клик по активному перку применяет его
-                    if (isThisPerkActive) {
+                    if (isThisPerkActive && animatingPerkId !== perk.id) {
                       handleApplyActivePerk();
                     }
                   }}
                   onDragEnd={async (event, info) => {
+                    if (animatingPerkId === perk.id) return;
                     const screenHeight = window.innerHeight;
                     const dragY = y.get(); // Получаем текущую Y позицию
                     
@@ -683,9 +728,27 @@ export function GameCore({ gameData, gameInvite, onJoinInvite, isJoining }: Game
                     }
                   }}
                 >
-                  {perk.ItemComponent && (
-                    <perk.ItemComponent size="small" />
-                  )}
+                  <div className="relative">
+                    {/* Вспышка под картой во время падения (движется вместе с картой) */}
+                    {explosionPerkId === perk.id && (
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
+                        <Boracay 
+                          size={360}
+                          repeat={1}
+                          delay={0}
+                          color="#c084fc"
+                          onComplete={() => {
+                            if (explosionPerkId === perk.id) setExplosionPerkId(null);
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div className="relative z-10">
+                      {perk.ItemComponent && (
+                        <perk.ItemComponent size="small" />
+                      )}
+                    </div>
+                  </div>
                 </motion.div>
               </div>
             );

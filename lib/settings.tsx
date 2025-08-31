@@ -12,8 +12,8 @@ export interface UserSettings {
 }
 
 export const DEFAULT_SETTINGS: UserSettings = {
-  board: 'classic',
-  pieces: 'classic',
+  board: 'classic_board',
+  pieces: 'classic_pieces',
   color: 'badma'
 };
 

@@ -23,10 +23,11 @@ interface Club {
 
 interface ClubsListProps {
   onNavigateToClubHall?: () => void;
+  onNavigateToSchoolHall?: () => void;
   kind?: 'club' | 'school';
 }
 
-export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProps) {
+export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind = 'club' }: ClubsListProps) {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isJoiningClub, setIsJoiningClub] = useState(false);
@@ -116,14 +117,14 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
     return (
       <div className="flex items-center justify-center p-4">
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
-        Loading clubs...
+        {kind === 'club' ? 'Loading clubs...' : 'Loading schools...'}
       </div>
     );
   }
 
   if (!clubs.length) {
     return (
-      <p className="p-4 text-muted-foreground">No clubs found.</p>
+      <p className="p-4 text-muted-foreground">{kind === 'club' ? 'No clubs found.' : 'No schools found.'}</p>
     );
   }
 
@@ -176,18 +177,22 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
                       <div className="flex flex-col items-center space-y-3">
                         <div className="text-6xl mb-2">🎉</div>
                         <span className="text-lg font-semibold text-purple-600">
-                          Это наш клуб!
+                          {kind === 'club' ? 'Это наш клуб!' : 'Это наша школа!'}
                         </span>
                         <Button 
                           className="h-[60px] w-[200px] bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center shadow-xl mt-4"
                           onClick={() => {
                             setIsDialogOpen(false);
-                            onNavigateToClubHall?.();
+                            if (kind === 'school') {
+                              onNavigateToSchoolHall?.();
+                            } else {
+                              onNavigateToClubHall?.();
+                            }
                           }}
                         >
                           <Crown className="h-5 w-5 mb-1" />
                           <span className="text-sm font-medium">
-                            Перейти в клуб-холл
+                            {kind === 'club' ? 'Перейти в клуб-холл' : 'Перейти в школьную приемную'}
                           </span>
                         </Button>
                       </div>
@@ -196,20 +201,22 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
                   
                   return (
                     <div className="flex flex-col space-y-3">
-                      <Button 
-                        className="h-[80px] w-[200px] bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center shadow-xl"
-                        disabled={isJoiningClub}
-                        onClick={handleJoinClub}
-                      >
-                        {isJoiningClub ? (
-                          <LoaderCircle className="animate-spin h-5 w-5 mb-1" />
-                        ) : (
-                          <Sword className="h-5 w-5 mb-1" />
-                        )}
-                        <span className="text-sm font-medium">
-                          {isJoiningClub ? 'Отправка...' : 'Бросить вызов'}
-                        </span>
-                      </Button>
+                      {kind === 'club' && (
+                        <Button 
+                          className="h-[80px] w-[200px] bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center shadow-xl"
+                          disabled={isJoiningClub}
+                          onClick={handleJoinClub}
+                        >
+                          {isJoiningClub ? (
+                            <LoaderCircle className="animate-spin h-5 w-5 mb-1" />
+                          ) : (
+                            <Sword className="h-5 w-5 mb-1" />
+                          )}
+                          <span className="text-sm font-medium">
+                            {isJoiningClub ? 'Отправка...' : 'Бросить вызов'}
+                          </span>
+                        </Button>
+                      )}
                       <Button 
                         variant="outline"
                         className="h-[60px] w-[200px] border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 flex flex-col items-center justify-center"
@@ -217,6 +224,21 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
                       >
                         <UserPlus className="h-4 w-4 mb-1" />
                         <span className="text-xs">Подать заявку</span>
+                      </Button>
+                      <Button 
+                        className="h-[60px] w-[200px] bg-purple-100 hover:bg-purple-200 text-purple-700 flex flex-col items-center justify-center shadow"
+                        onClick={() => {
+                          setIsDialogOpen(false);
+                          if (kind === 'school') {
+                            onNavigateToSchoolHall?.();
+                          } else {
+                            onNavigateToClubHall?.();
+                          }
+                        }}
+                      >
+                        <span className="text-xs font-medium">
+                          {kind === 'club' ? 'Клаб холл' : 'Школьная приемная'}
+                        </span>
                       </Button>
                     </div>
                   );
@@ -232,9 +254,11 @@ export function ClubsList({ onNavigateToClubHall, kind = 'club' }: ClubsListProp
         <DialogTitle></DialogTitle>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Подать заявку на вступление в клуб?</DialogTitle>
+            <DialogTitle>{kind === 'club' ? 'Подать заявку на вступление в клуб?' : 'Подать заявку на вступление в школу?'}</DialogTitle>
             <DialogDescription>
-              Если заявку примут - вы покинете клуб в котором находитесь.
+              {kind === 'club' 
+                ? 'Если заявку примут - вы покинете клуб в котором находитесь.' 
+                : 'Если заявку примут - вы покинете школу в которой находитесь.'}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2">

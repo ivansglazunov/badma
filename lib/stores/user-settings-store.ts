@@ -8,7 +8,7 @@ interface UserSettingsStore {
   setSettings: (settingsData: UserSetting[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  getSetting: (key: keyof UserSettings) => string;
+  getSetting: (key: keyof UserSettings) => string | undefined;
   updateSetting: (key: keyof UserSettings, value: string) => void;
 }
 
