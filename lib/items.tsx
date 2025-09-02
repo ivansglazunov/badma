@@ -57,8 +57,8 @@ export interface PerkType extends ItemType {
 export const PIECES_STYLES: PiecesStyle[] = [
   {
     id: 'classic_pieces',
-    name: 'Классические фигуры',
-    description: 'Набор шахмат без стилизации',
+    name: 'badma.app.classicPieces',
+    description: 'badma.app.classicPiecesDescription',
     colors: {
       white: '#ffffff',
       black: '#000000'
@@ -68,8 +68,8 @@ export const PIECES_STYLES: PiecesStyle[] = [
   },
   {
     id: 'badma_pieces',
-    name: 'Фигуры Бадма',
-    description: 'Набор шахмат в стиле проекта Бадма, благодарность за участие в Альфа тесте',
+    name: 'badma.app.badmaPieces',
+    description: 'badma.app.badmaPiecesDescription',
     colors: {
       white: '#ffffff',
       black: '#000000'
@@ -83,8 +83,8 @@ export const PIECES_STYLES: PiecesStyle[] = [
 export const PERK_TYPES: PerkType[] = [
   {
     id: 'minefield_perk',
-    name: 'Минное поле',
-    description: 'Расставляет 4 случайные мины на пустых клетках доски. При попадании фигуры на мину она уничтожается.',
+    name: 'badma.app.minefield',
+    description: 'badma.app.minefieldDescription',
     perkClass: MinefieldPerk,
     EffectComponent: MinefieldEffect,
     category: 'perk' as const,
@@ -96,8 +96,8 @@ export const PERK_TYPES: PerkType[] = [
 export const BOARD_STYLES: BoardStyle[] = [
   {
     id: 'classic_board',
-    name: 'Классическая',
-    description: 'Стандартные цвета шахматной доски',
+    name: 'badma.app.classicBoard',
+    description: 'badma.app.classicBoardDescription',
     lightColor: '#ECCCA9',
     darkColor: '#BD9375',
     category: 'board' as const,
@@ -105,8 +105,8 @@ export const BOARD_STYLES: BoardStyle[] = [
   },
   {
     id: 'badma_board',
-    name: 'Бадма',
-    description: 'Фиолетовая тема в стиле проекта',
+    name: 'badma.app.badmaBoard',
+    description: 'badma.app.badmaBoardDescription',
     lightColor: '#e8d0ff',
     darkColor: '#c084fc',
     category: 'board' as const,

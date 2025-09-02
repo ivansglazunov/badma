@@ -7,8 +7,10 @@ import { Button } from 'hasyx/components/ui/button';
 import { LoaderCircle, Crown, Check, X, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from 'hasyx/components/ui/dialog';
 import { useToastHandleClubError } from '@/hooks/toasts';
+import { useTranslations } from 'hasyx';
 
 export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; onCreate?: () => void }> = ({ kind = 'club', onFind, onCreate }) => {
+  const t = useTranslations();
   const { data: session } = useSession();
   const hasyx = useHasyx();
   
@@ -211,7 +213,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
     return (
       <div className="flex items-center justify-center p-4">
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
-        Loading club data...
+        {t('badma.app.loading')}
       </div>
     );
   }
@@ -221,20 +223,20 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
       <div className="p-4 text-center text-muted-foreground">
         <div className="flex flex-col gap-2 items-center">
           <p>
-            {kind === 'club' ? 'You are not a member of any club yet.' : 'You are not a member of any school yet.'}
+            {kind === 'club' ? t('badma.app.clubs') : t('badma.app.schools')}
           </p>
           <div className="flex gap-2">
             <button
               className="px-3 py-1 rounded-full text-xs border border-purple-500 text-purple-600 hover:bg-purple-50"
               onClick={onFind}
             >
-              {kind === 'club' ? 'Найти клуб' : 'Найти школу'}
+              {kind === 'club' ? t('badma.app.club') : t('badma.app.school')}
             </button>
             <button
               className="px-3 py-1 rounded-full text-xs bg-yellow-500 hover:bg-yellow-600 text-white"
               onClick={onCreate}
             >
-              {kind === 'club' ? 'Создать клуб' : 'Создать школу'}
+              {kind === 'club' ? t('badma.app.createClub') : t('badma.app.createClub')}
             </button>
           </div>
         </div>
@@ -250,12 +252,12 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
     <div className="space-y-4 p-1">
       {/* Title */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Title' : 'School Title'}</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? t('badma.app.club') : t('badma.app.school')} Title</h3>
         <div className="flex items-center space-x-2">
           <Input
             value={titleValue}
             onChange={(e) => setTitleValue(e.target.value)}
-            placeholder={kind === 'club' ? 'Enter club title...' : 'Enter school title...'}
+            placeholder={kind === 'club' ? t('badma.app.club') : t('badma.app.school')}
             disabled={isSavingTitle}
             className="flex-1"
           />
@@ -278,7 +280,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
 
       {/* Owner */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Owner' : 'School Owner'}</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? t('badma.app.club') : t('badma.app.school')} Owner</h3>
         <div className={`flex items-center space-x-3 p-3 rounded-md border-2 ${isOwner ? 'border-yellow-400 bg-yellow-50/20' : 'border-muted/20'}`}>
           <div className="relative">
             <Avatar className="h-12 w-12">
@@ -288,7 +290,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
             <Crown className="absolute -top-1 -right-1 h-4 w-4 text-yellow-500 fill-yellow-500" />
           </div>
           <div className="flex-1">
-            <span className="text-sm font-medium text-foreground">{owner?.name ?? 'Unknown Owner'}</span>
+            <span className="text-sm font-medium text-foreground">{owner?.name ?? t('badma.app.unknown')}</span>
             <div className="text-xs text-muted-foreground">
               Club ID: {currentClub.id.substring(0, 8)}...
             </div>
@@ -313,7 +315,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
 
       {/* Members */}
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? 'Club Members' : 'School Members'} ({members.length})</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">{kind === 'club' ? t('badma.app.club') : t('badma.app.school')} Members ({members.length})</h3>
         <div className="space-y-2">
           {members.length > 0 ? (
             members.map((member: any) => {
@@ -410,7 +412,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
             })
           ) : (
             <div className="text-center text-muted-foreground py-4">
-              <p className="text-sm">No members yet</p>
+              <p className="text-sm">{t('badma.app.noMembers')}</p>
             </div>
           )}
         </div>
@@ -418,18 +420,18 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
 
       {/* Club Info */}
       <div className="mt-6 p-3 bg-muted/20 rounded-md">
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">Club Information</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('badma.app.clubInformation')}</h3>
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Created:</span>
-            <span>{currentClub.created_at ? new Date(currentClub.created_at).toLocaleDateString() : 'Unknown'}</span>
+            <span className="text-muted-foreground">{t('badma.app.created')}:</span>
+            <span>{currentClub.created_at ? new Date(currentClub.created_at).toLocaleDateString() : t('badma.app.unknown')}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Last Updated:</span>
-            <span>{currentClub.updated_at ? new Date(currentClub.updated_at).toLocaleDateString() : 'Unknown'}</span>
+            <span className="text-muted-foreground">{t('badma.app.lastUpdated')}:</span>
+            <span>{currentClub.updated_at ? new Date(currentClub.updated_at).toLocaleDateString() : t('badma.app.unknown')}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Total Members:</span>
+            <span className="text-muted-foreground">{t('badma.app.totalMembers')}:</span>
             <span>{members.length + 1}</span>
           </div>
         </div>
@@ -450,7 +452,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
           }}
           className="bg-purple-600 hover:bg-purple-700 text-white"
         >
-          Подать заявку
+          {t('badma.app.submitApplication')}
         </Button>
       </div>
       
@@ -458,9 +460,9 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
       <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Вы точно хотите принять {selectedMember?.user?.name || 'этого пользователя'} в клуб?</DialogTitle>
+            <DialogTitle>{t('badma.app.confirmAcceptUser', { name: selectedMember?.user?.name || 'этого пользователя' })}</DialogTitle>
             <DialogDescription>
-              После принятия пользователь станет полноправным членом клуба.
+              {t('badma.app.acceptUserDescription')}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2">
@@ -469,7 +471,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               onClick={() => setIsConfirmDialogOpen(false)}
               disabled={isProcessingMember}
             >
-              Отмена
+              {t('badma.app.cancel')}
             </Button>
             <Button 
               onClick={handleApproveMember}
@@ -479,10 +481,10 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               {isProcessingMember ? (
                 <>
                   <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Принятие...
+                  {t('badma.app.accepting')}
                 </>
               ) : (
-                'Принять в клуб'
+                t('badma.app.acceptToClub')
               )}
             </Button>
           </DialogFooter>
@@ -493,9 +495,9 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
       <Dialog open={isRemovalDialogOpen} onOpenChange={setIsRemovalDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Вы точно хотите удалить {selectedMember?.user?.name || 'этого пользователя'} из клуба?</DialogTitle>
+            <DialogTitle>{t('badma.app.confirmRemoveUser', { name: selectedMember?.user?.name || 'этого пользователя' })}</DialogTitle>
             <DialogDescription>
-              После удаления пользователь перестанет быть членом клуба.
+              {t('badma.app.removeUserDescription')}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2">
@@ -504,7 +506,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               onClick={() => setIsRemovalDialogOpen(false)}
               disabled={isProcessingMember}
             >
-              Отмена
+              {t('badma.app.cancel')}
             </Button>
             <Button 
               onClick={handleRemoveMember}
@@ -514,10 +516,10 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               {isProcessingMember ? (
                 <>
                   <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Удаление...
+                  {t('badma.app.removing')}
                 </>
               ) : (
-                'Удалить из клуба'
+                t('badma.app.removeFromClub')
               )}
             </Button>
           </DialogFooter>
@@ -528,11 +530,11 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
       <Dialog open={isLeaveDialogOpen} onOpenChange={setIsLeaveDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Вы уверены, что хотите покинуть клуб?</DialogTitle>
+            <DialogTitle>{t('badma.app.confirmLeaveClub')}</DialogTitle>
             <DialogDescription>
               {currentClub?.owner?.id === hasyx.userId 
-                ? 'Как владелец клуба, вы передадите управление клубом. Клуб станет бесхозным.' 
-                : 'Вы перестанете быть членом этого клуба.'
+                ? t('badma.app.leaveClubOwnerDescription')
+                : t('badma.app.leaveClubMemberDescription')
               }
             </DialogDescription>
           </DialogHeader>
@@ -542,7 +544,7 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               onClick={() => setIsLeaveDialogOpen(false)}
               disabled={isProcessingMember}
             >
-              Отмена
+              {t('badma.app.cancel')}
             </Button>
             <Button 
               onClick={handleLeaveClub}
@@ -552,10 +554,10 @@ export const ClubTab: React.FC<{ kind?: 'club' | 'school'; onFind?: () => void; 
               {isProcessingMember ? (
                 <>
                   <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Выход...
+                  {t('badma.app.leaving')}
                 </>
               ) : (
-                'Покинуть клуб'
+                t('badma.app.leaveClub')
               )}
             </Button>
           </DialogFooter>

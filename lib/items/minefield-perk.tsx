@@ -124,7 +124,7 @@ export default function MinefieldPerkCard({ className = '', onClick, size = 'sma
             </text>
           </svg>
         </div>
-        <h3 className={`${titleSize} font-semibold text-center mt-2`}>Минное поле</h3>
+        <h3 className={`${titleSize} font-semibold text-center mt-2`}>⚠ DANGER ⚠</h3>
       </div>
     </div>
   );

@@ -7,8 +7,11 @@ import { Card } from 'hasyx/components/ui/card';
 import { Dialog, DialogContent } from 'hasyx/components/ui/dialog';
 import { Label } from 'hasyx/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'hasyx/components/ui/tabs';
-import { LogOut, Monitor } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'hasyx/components/ui/select';
+import { LogOut, Monitor, Languages } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import { useTranslations } from 'hasyx';
+import { useLocaleStore } from 'hasyx/components/locale-switcher';
 
 interface ProfileProps {
   isOpen: boolean;
@@ -33,6 +36,8 @@ export function Profile({
   saveBoardStyleSetting,
   isSavingBoardStyle
 }: ProfileProps) {
+  const t = useTranslations();
+  const { locale, setLocale } = useLocaleStore();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md max-w-[90vw] w-full max-h-[90vh] p-0 gap-0">
@@ -51,8 +56,8 @@ export function Profile({
           <Tabs defaultValue="account" className="w-full h-full flex flex-col">
             <div className="px-6 pb-2">
               <TabsList className="w-full">
-                <TabsTrigger value="account">Account</TabsTrigger>
-                <TabsTrigger value="accounts">Accounts</TabsTrigger>
+                <TabsTrigger value="account">{t('badma.app.account')}</TabsTrigger>
+                <TabsTrigger value="accounts">{t('badma.app.accounts')}</TabsTrigger>
               </TabsList>
             </div>
             
@@ -66,7 +71,7 @@ export function Profile({
                   
                   <div>
                     <Label className="block text-sm font-medium mb-3">
-                      Тема
+                      {t('badma.app.theme')}
                     </Label>
                     <div className="flex items-center justify-center space-x-4">
                       {/* Системная тема */}
@@ -102,6 +107,24 @@ export function Profile({
                       />
                     </div>
                   </div>
+                  
+                  <div>
+                    <Label className="block text-sm font-medium mb-3">
+                      {t('badma.app.language')}
+                    </Label>
+                    <Select value={locale} onValueChange={setLocale}>
+                      <SelectTrigger className="w-full">
+                        <div className="flex items-center gap-2">
+                          <Languages className="w-4 h-4" />
+                          <SelectValue />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="ru">Русский</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 
                 <div className="pt-4">
@@ -111,7 +134,7 @@ export function Profile({
                     onClick={() => signOut({ callbackUrl: '/' })} 
                     disabled={isLoadingSession}
                   >
-                    <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                    <LogOut className="mr-2 h-4 w-4" /> {t('badma.app.signOut')}
                   </Button>
                 </div>
               </TabsContent>

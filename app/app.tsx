@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "h
 import { Separator } from "hasyx/components/ui/separator";
 import { Progress } from "hasyx/components/ui/progress";
 import { toast } from "sonner";
+import { useTranslations } from 'hasyx';
 
 import Skins from "@/app/skins";
 import { useDeviceMotionPermissions, useDeviceOrientationPermissions } from "@/hooks/device-permissions";
@@ -65,6 +66,7 @@ const getStatusBadgeClass = (status: Badma_Tournaments['status']): string => {
 };
 
 const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournamentId }) => {
+  const t = useTranslations();
   const { data, loading, error } = useSubscription(
     {
       table: 'badma_tournament_participants',
@@ -138,8 +140,8 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
   // Обрабатываем ошибки через тост
   useToastHandleParticipantsError(error);
 
-  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading participants...</div>;
-  if (!participants.length) return <p className="p-4 text-muted-foreground">No active participants found for this tournament.</p>;
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> {t('badma.app.loadingParticipants')}</div>;
+  if (!participants.length) return <p className="p-4 text-muted-foreground">{t('badma.app.noParticipants')}</p>;
 
   return (
     <div className="space-y-4 p-1">
@@ -157,13 +159,13 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
               <div className="flex-1">
                 <span className="text-sm font-medium text-foreground">{participant.user?.name ?? 'Anonymous User'}</span>
                 <div className="text-xs text-muted-foreground">
-                  Total Score: <span className="font-medium text-green-600">{totalScore}</span>
+                  {t('badma.app.totalScore')}: <span className="font-medium text-green-600">{totalScore}</span>
                 </div>
               </div>
             </div>
             {userGames.length > 0 && (
               <div className="ml-11 space-y-1">
-                <div className="text-xs font-medium text-muted-foreground mb-1">Games ({userGames.length}):</div>
+                <div className="text-xs font-medium text-muted-foreground mb-1">{t('badma.app.games')} ({userGames.length}):</div>
                 {userGames.map((game: any) => (
                   <div 
                     key={game.id} 
@@ -176,7 +178,7 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
                     <span className="font-mono">{game.id.substring(0, 8)}...</span>
                     <div className="flex items-center space-x-2">
                       <span className="text-muted-foreground">
-                        {game.moves?.length || 0} moves
+                        {game.moves?.length || 0} {t('badma.app.moves')}
                       </span>
                       <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                         game.status === 'finished' || game.status === 'checkmate' 
@@ -200,6 +202,7 @@ const TournamentParticipantsTab: React.FC<{ tournamentId: string }> = ({ tournam
 let handleOpenGameGlobal: (gameId: string) => void = () => {};
 
 const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }) => {
+  const t = useTranslations();
   const { data, loading, error } = useSubscription(
     {
       table: 'badma_tournament_games',
@@ -228,8 +231,8 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
   // Обрабатываем ошибки через тост
   useToastHandleGamesError(error);
 
-  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading games...</div>;
-  if (!games.length) return <p className="p-4 text-muted-foreground">No games found for this tournament.</p>;
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> {t('badma.app.loadingGames')}</div>;
+  if (!games.length) return <p className="p-4 text-muted-foreground">{t('badma.app.noGames')}</p>;
 
   return (
     <div className="space-y-2 p-1">
@@ -243,8 +246,8 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
             onClick={() => handleOpenGameGlobal(tg.game.id)}
           >
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-foreground">Game ID: {tg.game.id.substring(0, 8)}...</span>
-              <span className="text-xs text-muted-foreground">{moveCount} moves played</span>
+              <span className="text-sm font-medium text-foreground">{t('badma.app.gameId')}: {tg.game.id.substring(0, 8)}...</span>
+              <span className="text-xs text-muted-foreground">{moveCount} {t('badma.app.movesPlayed')}</span>
             </div>
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${
               tg.game.status === 'finished' || tg.game.status === 'checkmate'
@@ -265,6 +268,7 @@ const TournamentGamesTab: React.FC<{ tournamentId: string }> = ({ tournamentId }
 // User Profile Components
 
 const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => {
+  const t = useTranslations();
   const { data, loading, error } = useSubscription(
     {
       table: 'badma_tournament_participants',
@@ -330,8 +334,8 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
   // Обрабатываем ошибки через тост
   useToastHandleTournamentsError(error);
 
-  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> Loading tournaments...</div>;
-  if (!tournaments.length) return <p className="p-4 text-muted-foreground">No tournaments found.</p>;
+  if (loading) return <div className="flex items-center justify-center p-4"><LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" /> {t('badma.app.loadingTournaments')}</div>;
+  if (!tournaments.length) return <p className="p-4 text-muted-foreground">{t('badma.app.noTournaments')}</p>;
 
   return (
     <div className="space-y-2 p-1">
@@ -350,12 +354,12 @@ const UserProfileTournamentsTab: React.FC<{ userId: string }> = ({ userId }) => 
                 <span className="text-sm font-medium text-foreground">{tournament.type}</span>
                 <span className="text-xs text-muted-foreground">ID: {tournament.id.substring(0, 8)}...</span>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Score: <span className="font-medium text-green-600">{userScore}</span>
+                  {t('badma.app.score')}: <span className="font-medium text-green-600">{userScore}</span>
                   {maxScore > 0 && (
-                    <span> / <span className="text-yellow-600">{maxScore}</span> max</span>
+                    <span> / <span className="text-yellow-600">{maxScore}</span> {t('badma.app.max')}</span>
                   )}
                   {tournament.created_at && (
-                    <span className="ml-3">Created: {new Date(tournament.created_at).toLocaleDateString()}</span>
+                    <span className="ml-3">{t('badma.app.created')}: {new Date(tournament.created_at).toLocaleDateString()}</span>
                   )}
                 </div>
               </div>
@@ -418,6 +422,7 @@ export default function App() {
   const user = session?.user;
   const { theme, setTheme } = useTheme();
   const hasyx = useHasyx();
+  const t = useTranslations();
   
   // Function to save board style settings
   const saveBoardStyleSetting = async (boardStyleId: string) => {
@@ -438,10 +443,10 @@ export default function App() {
         }
       });
       
-      toast.success('Настройки доски сохранены');
+      toast.success(t('success.saved'));
     } catch (error) {
       console.error('Error saving board style setting:', error);
-      toast.error('Ошибка при сохранении настроек доски');
+      toast.error(t('errors.updateFailed'));
     } finally {
       setIsSavingBoardStyle(false);
     }
@@ -872,7 +877,7 @@ export default function App() {
       
       // Show success toast if tournament started successfully
       if (response.data.success) {
-        toast.success("Tournament Started");
+        toast.success(t('success.saved'));
       }
       
       // The subscription should automatically update the tournament status
@@ -880,7 +885,7 @@ export default function App() {
       console.error('Error starting tournament:', error);
       
       // Show error toast
-      toast.error("Failed to Start Tournament");
+      toast.error(t('errors.updateFailed'));
     } finally {
       setIsStartingTournament(false);
     }
@@ -955,7 +960,7 @@ export default function App() {
                   <AvatarFallback className="text-2xl">{user?.name?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
                 </Avatar>
                 <h2 className="text-2xl font-semibold mb-1">
-                  {user?.name || (user?.email ? user.email.substring(0, 8) + '...' : 'Anonymous')}
+                  {user?.name || (user?.email ? user.email.substring(0, 8) + '...' : t('badma.app.anonymous'))}
                 </h2>
                 {user?.email && (
                   <p className="text-sm text-muted-foreground">
@@ -967,9 +972,9 @@ export default function App() {
               <div className="w-full max-w-2xl">
                 <Tabs value={profileTab} onValueChange={setProfileTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
-                    <TabsTrigger value="club" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Club</TabsTrigger>
-                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />School</TabsTrigger>
+                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />{t('badma.app.tournaments')}</TabsTrigger>
+                    <TabsTrigger value="club" className="flex items-center"><Crown className="h-4 w-4 mr-2" />{t('badma.app.club')}</TabsTrigger>
+                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />{t('badma.app.school')}</TabsTrigger>
                   </TabsList>
                   <TabsContent value="tournaments" className="pt-4">
                     {currentUserId && <UserProfileTournamentsTab userId={currentUserId} />}
@@ -997,16 +1002,16 @@ export default function App() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <Trophy className="h-10 w-10 mr-3 text-purple-500" />
-                  <h2 className="text-3xl font-semibold">Rating</h2>
+                  <h2 className="text-3xl font-semibold">{t('badma.app.rating')}</h2>
                 </div>
               </div>
               
               <div className="w-full max-w-2xl">
                 <Tabs value={ratingTab} onValueChange={(v) => setRatingTab(v as any)} className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="clubs" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Clubs</TabsTrigger>
-                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Schools</TabsTrigger>
-                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />Tournaments</TabsTrigger>
+                    <TabsTrigger value="clubs" className="flex items-center"><Crown className="h-4 w-4 mr-2" />{t('badma.app.clubs')}</TabsTrigger>
+                    <TabsTrigger value="schools" className="flex items-center"><Crown className="h-4 w-4 mr-2" />{t('badma.app.schools')}</TabsTrigger>
+                    <TabsTrigger value="tournaments" className="flex items-center"><Trophy className="h-4 w-4 mr-2" />{t('badma.app.tournaments')}</TabsTrigger>
                   </TabsList>
                   <TabsContent value="clubs" className="pt-4">
                     <Button 
@@ -1018,7 +1023,7 @@ export default function App() {
                       }}
                     >
                       <PlusCircle className="h-4 w-4 mr-2" />
-                      Создать клуб
+                      {t('badma.app.createClub')}
                     </Button>
                     <ClubsList onNavigateToClubHall={navigateToClubHall} />
                   </TabsContent>
@@ -1035,9 +1040,9 @@ export default function App() {
                       onClick={() => setIsCreateTournamentModalOpen(true)}
                     >
                       <PlusCircle className="h-4 w-4 mr-2" />
-                      Создать турнир
+                      {t('badma.app.createTournament')}
                     </Button>
-                    {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>Loading tournaments...</p></div>}
+                    {tournamentsLoading && <div className="flex items-center space-x-2"><LoaderCircle className="animate-spin h-5 w-5" /> <p>{t('badma.app.loadingTournaments')}</p></div>}
                     {!tournamentsLoading && actualTournaments.length > 0 ? (
                 <div className="w-full max-w-2xl space-y-1">
                   {actualTournaments.map((tournament) => {
@@ -1060,8 +1065,8 @@ export default function App() {
                           <span className="text-xs text-muted-foreground truncate">ID: {tournament.id.substring(0, 8)}...</span>
                         </div>
                         <div className="flex flex-col flex-1 items-center flex-shrink-0 px-3 min-w-0">
-                          <span className="text-xs text-muted-foreground">Games: <span className="text-green-600 font-medium">{finishedGames}</span>/{totalGames}</span>
-                          <span className="text-xs text-muted-foreground">Players: <span className="font-medium">{participantCount}</span></span>
+                          <span className="text-xs text-muted-foreground">{t('badma.app.games')}: <span className="text-green-600 font-medium">{finishedGames}</span>/{totalGames}</span>
+                          <span className="text-xs text-muted-foreground">{t('badma.app.players')}: <span className="font-medium">{participantCount}</span></span>
                         </div>
                         <div className="flex flex-col flex-1 items-end flex-shrink-0 space-y-1 min-w-0">
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(tournament.status)}`}>
@@ -1078,7 +1083,7 @@ export default function App() {
                   })}
                 </div>
                     ) : (
-                       !tournamentsLoading && <p>No tournaments found.</p>
+                       !tournamentsLoading && <p>{t('badma.app.noTournaments')}</p>
                     )}
                   </TabsContent>
                 </Tabs>
@@ -1103,15 +1108,15 @@ export default function App() {
             <DialogHeader>
               <DialogTitle>{selectedTournament.type}</DialogTitle>
               <DialogDescription>
-                Status: {selectedTournament.status} {selectedTournament.created_at && `- Created: ${new Date(selectedTournament.created_at).toLocaleDateString()}`}
+                {t('badma.app.status')}: {selectedTournament.status} {selectedTournament.created_at && `- ${t('badma.app.created')}: ${new Date(selectedTournament.created_at).toLocaleDateString()}`}
               </DialogDescription>
             </DialogHeader>
             <div className="flex-grow overflow-y-auto py-4">
               <Tabs defaultValue="participants" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="participants" className="flex items-center"><Users className="h-4 w-4 mr-2" />Participants</TabsTrigger>
-                  <TabsTrigger value="games" className="flex items-center"><ListChecks className="h-4 w-4 mr-2" />Games</TabsTrigger>
-                  <TabsTrigger value="settings" className="flex items-center"><Crown className="h-4 w-4 mr-2" />Settings</TabsTrigger>
+                  <TabsTrigger value="participants" className="flex items-center"><Users className="h-4 w-4 mr-2" />{t('badma.app.participants')}</TabsTrigger>
+                  <TabsTrigger value="games" className="flex items-center"><ListChecks className="h-4 w-4 mr-2" />{t('badma.app.games')}</TabsTrigger>
+                  <TabsTrigger value="settings" className="flex items-center"><Crown className="h-4 w-4 mr-2" />{t('badma.app.settings')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="participants" className="pt-4">
                   <TournamentParticipantsTab tournamentId={selectedTournament.id} />
@@ -1122,7 +1127,7 @@ export default function App() {
                 <TabsContent value="settings" className="pt-4">
                   <div className="space-y-6 p-1">
                     <div>
-                      <Label className="text-sm font-medium">Tournament Type</Label>
+                      <Label className="text-sm font-medium">{t('badma.app.tournamentType')}</Label>
                       <Select value={selectedTournament.type} disabled>
                         <SelectTrigger className="w-full mt-1">
                           <SelectValue />
@@ -1144,7 +1149,7 @@ export default function App() {
 
                     
                     <div>
-                      <Label className="text-sm font-medium mb-2 block">Tournament Status</Label>
+                      <Label className="text-sm font-medium mb-2 block">{t('badma.app.tournamentStatus')}</Label>
                       <div className="flex items-center space-x-3">
                         <Badge className={getStatusBadgeClass(selectedTournament.status)}>
                           {selectedTournament.status.charAt(0).toUpperCase() + selectedTournament.status.slice(1)}
@@ -1160,7 +1165,7 @@ export default function App() {
                             {isStartingTournament ? (
                               <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
                             ) : null}
-                            Start Tournament
+                            {t('badma.app.startTournament')}
                           </Button>
                         )}
                       </div>
@@ -1169,7 +1174,7 @@ export default function App() {
                     <Separator />
                     
                     <div>
-                      <Label className="text-sm font-medium mb-3 block">AI Players</Label>
+                      <Label className="text-sm font-medium mb-3 block">{t('badma.app.aiPlayers')}</Label>
                       <div className="flex items-center space-x-3">
                         <Button 
                           onClick={handleAddAiPlayers}
@@ -1182,10 +1187,10 @@ export default function App() {
                           ) : (
                             <PlusCircle className="h-4 w-4 mr-2" />
                           )}
-                          Add AI Players
+                          {t('badma.app.addAiPlayers')}
                         </Button>
                         <span className="text-xs text-muted-foreground">
-                          Adds 4 AI players to the tournament
+                          {t('badma.app.addingAiPlayers')}
                         </span>
                       </div>
                     </div>
@@ -1195,7 +1200,7 @@ export default function App() {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline">Close</Button>
+                <Button type="button" variant="outline">{t('badma.app.close')}</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -1205,20 +1210,20 @@ export default function App() {
       <Dialog open={isCreateTournamentModalOpen} onOpenChange={setIsCreateTournamentModalOpen}>
         <DialogContent className="max-w-[300px]">
           <DialogHeader>
-            <DialogTitle>Create New Tournament</DialogTitle>
+            <DialogTitle>{t('badma.app.createNewTournament')}</DialogTitle>
             <DialogDescription>
-              Set up a new tournament with your preferred settings.
+              {t('badma.app.selectTournamentType')}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <div className="space-y-4">
               <div>
                 <Label htmlFor="tournament-type" className="text-sm font-medium">
-                  Tournament Type
+                  {t('badma.app.tournamentType')}
                 </Label>
                 <Select value={newTournamentType} onValueChange={setNewTournamentType}>
                   <SelectTrigger className="w-full mt-1">
-                    <SelectValue placeholder="Select tournament type" />
+                    <SelectValue placeholder={t('badma.app.selectTournamentType')} />
                   </SelectTrigger>
                   <SelectContent>
                     {tournaments.map(type => (
@@ -1236,7 +1241,7 @@ export default function App() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">Cancel</Button>
+              <Button type="button" variant="outline">{t('badma.app.cancel')}</Button>
             </DialogClose>
             <Button 
               onClick={handleCreateTournament}
@@ -1248,7 +1253,7 @@ export default function App() {
               ) : (
                 <PlusCircle className="h-4 w-4 mr-2" />
               )}
-              Create Tournament
+              {t('badma.app.create')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1278,11 +1283,11 @@ export default function App() {
           <div className="flex-1 flex justify-end items-center">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("profile")}>
               <User className="h-5 w-5 mb-0.5" />
-              <span className="text-xs leading-tight">Profile</span>
+              <span className="text-xs leading-tight">{t('badma.app.profile')}</span>
             </Button>
             <Button variant="ghost" className="flex-grow-0 text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("tournaments")}>
               <Trophy className="h-5 w-5 mb-0.5" />
-              <span className="text-xs leading-tight">Rating</span>
+              <span className="text-xs leading-tight">{t('badma.app.rating')}</span>
             </Button>
             {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Globe className="h-5 w-5 mb-0.5" />
@@ -1301,7 +1306,7 @@ export default function App() {
           <div className="flex-1 flex justify-start items-center space-x-1">
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("skins")}>
               <Shirt className="h-5 w-5 mb-0.5" />
-              <span className="text-xs leading-tight">Skins</span>
+              <span className="text-xs leading-tight">{t('badma.app.skins')}</span>
             </Button>
             {/* <Button variant="ghost" className="text-white/70 flex flex-col items-center justify-center h-full px-2 cursor-not-allowed opacity-50">
               <Sparkles className="h-5 w-5 mb-0.5" />
@@ -1309,7 +1314,7 @@ export default function App() {
             </Button> */}
             <Button variant="ghost" className="text-white flex flex-col items-center justify-center h-full px-2" onClick={() => setMainViewTab("games")}>
               <Gamepad2 className="h-5 w-5 mb-0.5" />
-              <span className="text-xs leading-tight">Games</span>
+              <span className="text-xs leading-tight">{t('badma.app.games')}</span>
             </Button>
           </div>
           </div>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useHasyx, useSubscription } from 'hasyx';
+import { useTranslations } from 'hasyx';
 import { LoaderCircle } from 'lucide-react';
 import {
   Carousel,
@@ -34,6 +35,7 @@ interface GameData {
 }
 
 export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
+  const t = useTranslations();
   const { theme } = useTheme();
   const hasyx = useHasyx();
 
@@ -74,7 +76,7 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
     return (
       <div className="h-[300px] flex items-center justify-center">
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
-        <span>Загрузка активных игр...</span>
+        <span>{t('badma.app.loadingActiveGames')}</span>
       </div>
     );
   }
@@ -82,14 +84,14 @@ export default function ActiveGames({ onGameClick }: ActiveGamesProps) {
   if (!games.length) {
     return (
       <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-        Нет активных игр
+        {t('badma.app.noActiveGames')}
       </div>
     );
   }
 
   return (
     <div className="h-[300px] w-full">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Активные игры <span className="text-sm font-normal text-purple-500">({games.length == 15 ? '15+' : games.length})</span></h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">{t('badma.app.activeGames')} <span className="text-sm font-normal text-purple-500">({games.length == 15 ? '15+' : games.length})</span></h2>
       <Carousel
         className="w-full mx-none"
         opts={{

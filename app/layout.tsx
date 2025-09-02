@@ -1,15 +1,16 @@
 import "@/app/globals.css";
+import { AppClientLayout } from '@/lib/app-client-layout';
 import "hasyx/lib/styles.css";
-import { ClientLayout } from "hasyx/components/client-layout";
 
 import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
 import cola from 'cytoscape-cola';
-import edgehandles from 'cytoscape-edgehandles';
+import dagre from 'cytoscape-dagre';
 import edgeConnections from 'cytoscape-edge-connections';
+import edgehandles from 'cytoscape-edgehandles';
 import klay from 'cytoscape-klay';
 import { getLocale } from 'hasyx/lib/i18n';
 import schema from "../public/hasura-schema.json";
+
 
 cytoscape.use(klay);
 cytoscape.use(dagre);
@@ -69,9 +70,9 @@ export default function RootLayout({
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         </head>
         <body>
-          <ClientLayout defaultLocale={defaultLocale} schema={schema}>
+          <AppClientLayout defaultLocale={defaultLocale} schema={schema}>
             {children}
-          </ClientLayout>
+          </AppClientLayout>
         </body>
       </html>
     </>

@@ -1,6 +1,6 @@
 {
   "name": "badma",
-  "version": "0.1.0-alpha.37",
+  "version": "0.1.0-alpha.38",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -35,7 +35,9 @@
     "gitpod": "npx hasyx gitpod",
     "build:css": "tailwindcss -i ./app/globals.css -o ./lib/styles.css",
     "init:android": "node -e \"process.exit(require('fs').existsSync('android')?0:1)\" || npx cap add android",
-    "init:ios": "node -e \"process.exit(require('fs').existsSync('ios/App')?0:1)\" || npx cap add ios"
+    "init:ios": "node -e \"process.exit(require('fs').existsSync('ios/App')?0:1)\" || npx cap add ios",
+    "vercel": "npx hasyx vercel",
+    "github": "npx hasyx github"
   },
   "repository": {
     "type": "git",
@@ -53,7 +55,7 @@
     "cytoscape-grid-guide": "^2.3.3",
     "eruda": "^3.4.3",
     "events": "^3.3.0",
-    "hasyx": "^0.2.0-alpha.42",
+    "hasyx": "^0.2.0-alpha.45",
     "js-chess-engine": "^1.0.2",
     "motion": "^12.23.9",
     "react": "19.1.1",

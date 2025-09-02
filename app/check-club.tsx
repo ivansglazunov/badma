@@ -10,6 +10,7 @@ import { LoaderCircle, PlusCircle } from "lucide-react";
 import { HoverCard } from "@/components/hover-card";
 import { useClubStore } from "@/lib/stores/club-store";
 import { CreateClubDialog } from "./create-club-dialog";
+import { useTranslations } from 'hasyx';
 
 interface CheckClubProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface CheckClubProps {
 }
 
 export function CheckClub({ isOpen, onClose }: CheckClubProps) {
+  const t = useTranslations();
   
   const { data: session } = useSession();
   const hasyx = useHasyx();
@@ -62,12 +64,12 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
               <div className="text-white text-center pointer-events-auto">
                 <div className="space-y-2 text-xs opacity-60">
                   <h1 style={{ fontSize: '4rem' }}>🫶</h1>
-                  <p className="text-xl">Om Mani Badma Chess</p>
-                  <p>Для игры вам нужно:</p>
+                  <p className="text-xl">{t('badma.app.omManiBadmaChess')}</p>
+                  <p>{t('badma.app.needToJoinClub')}</p>
                   <div className="flex flex-row items-center justify-center gap-4">
                     <Button className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl opacity-20" disabled>
                       <span className="text-2xl mb-1">🤝</span>
-                      <span className="text-xs">Вступить в клуб</span>
+                      <span className="text-xs">{t('badma.app.joinClub')}</span>
                     </Button>
                     <Button 
                       className="h-[120px] w-[120px] bg-white flex flex-col items-center justify-center shadow-xl"
@@ -82,7 +84,7 @@ export function CheckClub({ isOpen, onClose }: CheckClubProps) {
                       ) : (
                         <span className="text-2xl mb-1">➕</span>
                       )}
-                      <span className="text-xs">{clubsLoading ? 'Загрузка...' : 'Создать клуб'}</span>
+                      <span className="text-xs">{clubsLoading ? t('badma.app.loading') : t('badma.app.createClub')}</span>
                     </Button>
                   </div>
                   

@@ -203,6 +203,48 @@ const settingsPermissions = [
       columns: ['value'],
       check: {}
     }
+  },
+  // Insert permission - me can only create settings for themselves
+  {
+    role: 'me',
+    table: 'settings',
+    type: 'insert',
+    permission: {
+      check: { user_id: { _eq: 'X-Hasura-User-Id' } },
+      columns: ['user_id', 'key', 'value'],
+      set: { user_id: 'X-Hasura-User-Id' }
+    }
+  },
+  // Select permission - me can only read their own settings
+  {
+    role: 'me',
+    table: 'settings',
+    type: 'select',
+    permission: {
+      filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
+      columns: ['id', 'user_id', 'key', 'value', 'created_at', 'updated_at']
+    }
+  },
+  // Update permission - me can only update value of their own settings
+  {
+    role: 'me',
+    table: 'settings',
+    type: 'update',
+    permission: {
+      filter: { user_id: { _eq: 'X-Hasura-User-Id' } },
+      columns: ['value'],
+      check: {}
+    }
+  },
+  // Select permission - anonymous sees nothing (id is null which is impossible)
+  {
+    role: 'anonymous',
+    table: 'settings',
+    type: 'select',
+    permission: {
+      filter: { id: { _is_null: true } },
+      columns: ['id', 'user_id', 'key', 'value', 'created_at', 'updated_at']
+    }
   }
   // No delete permission - settings cannot be deleted
 ];

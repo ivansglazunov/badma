@@ -6,6 +6,7 @@ import { HoverCard } from '@/components/hover-card';
 import { SUPPORTED_ITEMS, COMPONENT_MAP } from '../lib/items';
 import { Loader2 } from 'lucide-react';
 import ChessExplodeEffect from '../lib/chess-explode-effect';
+import { useTranslations } from 'hasyx';
 
 interface ItemData {
   id: string;
@@ -23,6 +24,7 @@ interface ItemAcceptCardProps {
  * Компонент для отображения одного айтема с эффектом взрыва
  */
 function ItemAcceptCard({ item, onAccept }: ItemAcceptCardProps) {
+  const t = useTranslations();
   const [showExplosion, setShowExplosion] = React.useState(true);
   const [isAccepting, setIsAccepting] = React.useState(false);
   
@@ -57,7 +59,7 @@ function ItemAcceptCard({ item, onAccept }: ItemAcceptCardProps) {
       <div className="flex flex-col items-center gap-4">
         <div className="text-center">
           <h3 className="text-lg font-semibold text-white mb-2">
-            Новый айтем получен!
+            {t('badma.app.received')}
           </h3>
           <p className="text-sm text-white/80">
             {item.definition.description}
@@ -72,10 +74,10 @@ function ItemAcceptCard({ item, onAccept }: ItemAcceptCardProps) {
           {isAccepting ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Принимаем...
+              {t('badma.app.accepting')}
             </>
           ) : (
-            'Принять'
+            t('badma.app.accept')
           )}
         </Button>
       </div>
@@ -89,6 +91,7 @@ interface CheckAvailableItemsProps {
 
 export default function CheckAvailableItems({ children }: CheckAvailableItemsProps) {
   const hasyx = useHasyx();
+  const t = useTranslations();
   const [processedItemIds, setProcessedItemIds] = React.useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = React.useState(true);
 

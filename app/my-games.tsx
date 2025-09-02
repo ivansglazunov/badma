@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSubscription } from 'hasyx';
+import { useTranslations } from 'hasyx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "hasyx/components/ui/tabs";
 import { LoaderCircle, GamepadIcon, CheckCircle, Clock, Mail } from 'lucide-react';
 import { useToastHandleGamesError } from "@/hooks/toasts";
@@ -26,6 +27,7 @@ interface UserGamesProps {
 }
 
 const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
+  const t = useTranslations();
   const [activeTab, setActiveTab] = React.useState('all');
 
   // Генератор запроса на основе активной вкладки
@@ -107,7 +109,7 @@ const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
       return (
         <div className="flex items-center justify-center p-4">
           <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
-          Loading games...
+          {t('badma.app.loadingGames')}
         </div>
       );
     }
@@ -115,10 +117,10 @@ const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
     if (!games.length) {
       return (
         <p className="p-4 text-muted-foreground text-center">
-          {activeTab === 'all' && 'No games found.'}
-          {activeTab === 'completed' && 'No completed games found.'}
-          {activeTab === 'active' && 'No active games found.'}
-          {activeTab === 'invitations' && 'No pending invitations found.'}
+          {activeTab === 'all' && t('badma.app.noGamesFound')}
+          {activeTab === 'completed' && t('badma.app.noCompletedGames')}
+          {activeTab === 'active' && t('badma.app.noActiveGamesFound')}
+          {activeTab === 'invitations' && t('badma.app.noPendingInvitations')}
         </p>
       );
     }
@@ -131,7 +133,7 @@ const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
           const isFinished = ['finished', 'checkmate', 'stalemate', 'draw', 'white_surrender', 'black_surrender'].includes(game.status);
           const isActive = ['ready', 'continue'].includes(game.status);
           const isInvitation = game.status === 'await';
-          const sideText = join.side === 1 ? 'White' : 'Black';
+          const sideText = join.side === 1 ? t('badma.app.white') : t('badma.app.black');
           
           return (
             <div 
@@ -141,16 +143,16 @@ const UserGames: React.FC<UserGamesProps> = ({ userId, onGameClick }) => {
             >
               <div className="flex flex-col flex-1">
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm font-medium text-foreground">Game ID: {game.id.substring(0, 8)}...</span>
+                  <span className="text-sm font-medium text-foreground">{t('badma.app.gameId')}: {game.id.substring(0, 8)}...</span>
                   <span className="text-xs px-1.5 py-0.5 bg-muted rounded">{sideText}</span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  <span>{moveCount} moves</span>
+                  <span>{moveCount} {t('badma.app.moves')}</span>
                   {game.created_at && (
-                    <span className="ml-3">Created: {new Date(game.created_at).toLocaleDateString()}</span>
+                    <span className="ml-3">{t('badma.app.created')}: {new Date(game.created_at).toLocaleDateString()}</span>
                   )}
                   {game.updated_at && game.updated_at !== game.created_at && (
-                    <span className="ml-3">Updated: {new Date(game.updated_at).toLocaleDateString()}</span>
+                    <span className="ml-3">{t('badma.app.updated')}: {new Date(game.updated_at).toLocaleDateString()}</span>
                   )}
                 </div>
               </div>

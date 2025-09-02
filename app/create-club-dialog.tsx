@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useHasyx } from "hasyx";
+import { useTranslations } from 'hasyx';
 import { Button } from "hasyx/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "hasyx/components/ui/dialog";
 import { Input } from "hasyx/components/ui/input";
@@ -15,6 +16,7 @@ interface CreateClubDialogProps {
 }
 
 export function CreateClubDialog({ isOpen, onClose, onSuccess, kind = 'club' }: CreateClubDialogProps) {
+  const t = useTranslations();
   const hasyx = useHasyx();
   const [isCreatingClub, setIsCreatingClub] = useState(false);
   const [clubName, setClubName] = useState('');
@@ -79,15 +81,15 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess, kind = 'club' }: 
       <DialogContent className="max-w-sm">
         <div className="space-y-4">
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">{kind === 'club' ? 'Создать новый клуб' : 'Создать новую школу'}</h3>
+            <h3 className="text-lg font-semibold">{kind === 'club' ? t('badma.app.createNewClub') : t('badma.app.createNewSchool')}</h3>
             <p className="text-sm text-gray-600">
-              {kind === 'club' ? 'Введите название для вашего клуба' : 'Введите название для вашей школы'}
+              {kind === 'club' ? t('badma.app.enterClubName') : t('badma.app.enterSchoolName')}
             </p>
           </div>
           
           <div className="space-y-2">
             <Input
-              placeholder={kind === 'club' ? 'Название клуба' : 'Название школы'}
+              placeholder={kind === 'club' ? t('badma.app.clubNamePlaceholder') : t('badma.app.schoolNamePlaceholder')}
               value={clubName}
               onChange={(e) => setClubName(e.target.value)}
               disabled={isCreatingClub}
@@ -102,7 +104,7 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess, kind = 'club' }: 
               onClick={handleCancel}
               disabled={isCreatingClub}
             >
-              Отмена
+              {t('badma.app.cancel')}
             </Button>
             <Button
               onClick={handleCreateClub}
@@ -112,10 +114,10 @@ export function CreateClubDialog({ isOpen, onClose, onSuccess, kind = 'club' }: 
               {isCreatingClub ? (
                 <>
                   <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Создание...
+                  {t('badma.app.creating')}
                 </>
               ) : (
-                'Создать'
+                t('badma.app.create')
               )}
             </Button>
           </div>

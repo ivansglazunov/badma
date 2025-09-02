@@ -23,6 +23,7 @@ import ChessExplodeEffect from '../lib/chess-explode-effect';
 import { ItemType } from '../lib/items';
 import { COLORS, COLOR_CIRCLE_BG_CLASS } from '../lib/colors';
 import { useColor } from '../lib/color';
+import { useTranslations } from 'hasyx';
 
 // Компонент для отдельного айтема
 interface SkinItemProps {
@@ -34,6 +35,7 @@ interface SkinItemProps {
 
 function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinItemProps) {
   const { getSetting } = useUserSettings();
+  const t = useTranslations();
 
   const getStatusBadge = (itemId: string) => {
     const status = itemsStatus[itemId] || 'not_owned';
@@ -43,14 +45,14 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
         return (
           <Badge variant="secondary" className="absolute -top-2 -right-2 bg-gray-500 text-white text-xs px-2 py-1 z-10">
             <Lock className="w-3 h-3 mr-1" />
-            Не в коллекции
+            {t('badma.app.notInCollection')}
           </Badge>
         );
       case 'owned':
         return (
           <Badge variant="secondary" className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 z-10">
             <Gift className="w-3 h-3 mr-1" />
-            Получен
+            {t('badma.app.received')}
           </Badge>
         );
       case 'accepted':
@@ -62,7 +64,7 @@ function SkinItem({ item, itemsStatus, onItemClick, onExplosionTrigger }: SkinIt
               }`}
           >
             <Check className="w-3 h-3 mr-1" />
-            {isSelected ? 'Активен' : 'Принят'}
+            {isSelected ? t('badma.app.active') : t('badma.app.accepted')}
           </Badge>
         );
       default:
@@ -118,6 +120,7 @@ interface SkinsProps {
 
 export default function Skins({ children }: SkinsProps) {
   const hasyx = useHasyx();
+  const t = useTranslations();
   const [showExplosion, setShowExplosion] = React.useState(true);
   const [selectedItem, setSelectedItem] = React.useState<typeof SUPPORTED_ITEMS[0] | null>(null);
   const [isApplyingSetting, setIsApplyingSetting] = React.useState(false);
@@ -204,7 +207,7 @@ export default function Skins({ children }: SkinsProps) {
         <div className="w-full max-w-4xl space-y-8 h-full">
           {/* Цвета интерфейса (горизонтальный слайдер) */}
           <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-center">Colors</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('badma.app.colorsTitle')}</h2>
             <div className="h-[60px] w-full">
               <Carousel
                 className="w-full max-w-5xl mx-auto"
@@ -241,7 +244,7 @@ export default function Skins({ children }: SkinsProps) {
           </div>
           {/* Наборы */}
           <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-center">Наборы фигур</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('badma.app.piecesTitle')}</h2>
             <div className="h-[300px] w-full">
               <Carousel
                 className="w-full max-w-5xl mx-auto"
@@ -274,7 +277,7 @@ export default function Skins({ children }: SkinsProps) {
 
           {/* Доски */}
           <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-center">Доски</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('badma.app.boardsTitle')}</h2>
             <div className="h-[300px] w-full">
               <Carousel
                 className="w-full max-w-5xl mx-auto"
@@ -307,7 +310,7 @@ export default function Skins({ children }: SkinsProps) {
 
           {/* Перки */}
           <div className="">
-            <h2 className="text-2xl font-bold mb-4 text-center">Перки</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t('badma.app.perksTitle')}</h2>
             <div className="h-[300px] w-full">
               <Carousel
                 className="w-full max-w-5xl mx-auto"
@@ -376,7 +379,7 @@ export default function Skins({ children }: SkinsProps) {
                     disabled
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
-                    Выбрано
+                    {t('badma.app.selected')}
                   </Button>
                 ) : itemsStatus[selectedItem.id] === 'not_owned' ? (
                   <Button
@@ -385,7 +388,7 @@ export default function Skins({ children }: SkinsProps) {
                     disabled
                   >
                     <Lock className="w-4 h-4 mr-2" />
-                    Не в коллекции
+                    {t('badma.app.notInCollection')}
                   </Button>
                 ) : itemsStatus[selectedItem.id] === 'owned' ? (
                   // Кнопка "Принять" для непринятых айтемов
@@ -420,12 +423,12 @@ export default function Skins({ children }: SkinsProps) {
                     {isApplyingSetting ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Принимаем...
+                        {t('badma.app.accepting')}
                       </>
                     ) : (
                       <>
                         <Gift className="w-4 h-4 mr-2" />
-                        Принять
+                        {t('badma.app.accept')}
                       </>
                     )}
                   </Button>
@@ -439,12 +442,12 @@ export default function Skins({ children }: SkinsProps) {
                     {isApplyingSetting ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Применяется...
+                        {t('badma.app.applying')}
                       </>
                     ) : (
                       <>
                         <Check className="w-4 h-4 mr-2" />
-                        Выбрать
+                        {t('badma.app.choose')}
                       </>
                     )}
                   </Button>

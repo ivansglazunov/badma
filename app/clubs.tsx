@@ -9,6 +9,7 @@ import { LoaderCircle, PlusCircle, Trophy, Sword, UserPlus, Crown } from 'lucide
 import { HoverCard } from '@/components/hover-card';
 import { useClubStore } from '@/lib/stores/club-store';
 import { useToastHandleClubsError } from '@/hooks/toasts';
+import { useTranslations } from 'hasyx';
 
 interface Club {
   id: string;
@@ -28,6 +29,7 @@ interface ClubsListProps {
 }
 
 export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind = 'club' }: ClubsListProps) {
+  const t = useTranslations();
   const [selectedClub, setSelectedClub] = useState<Club | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isJoiningClub, setIsJoiningClub] = useState(false);
@@ -117,14 +119,14 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
     return (
       <div className="flex items-center justify-center p-4">
         <LoaderCircle className="animate-spin h-6 w-6 text-purple-500 mr-2" />
-        {kind === 'club' ? 'Loading clubs...' : 'Loading schools...'}
+        {kind === 'club' ? t('badma.app.loadingClubs') : t('badma.app.loadingSchools')}
       </div>
     );
   }
 
   if (!clubs.length) {
     return (
-      <p className="p-4 text-muted-foreground">{kind === 'club' ? 'No clubs found.' : 'No schools found.'}</p>
+      <p className="p-4 text-muted-foreground">{kind === 'club' ? t('badma.app.noClubsFound') : t('badma.app.noSchoolsFound')}</p>
     );
   }
 
@@ -143,9 +145,9 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                 <AvatarFallback>{club.owner?.name?.charAt(0)?.toUpperCase() ?? 'C'}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-foreground">{club.title || 'Untitled Club'}</span>
+                <span className="text-sm font-medium text-foreground">{club.title || t('badma.app.untitledClub')}</span>
                 <span className="text-xs text-muted-foreground">
-                  Created by {club.owner?.name ?? 'Unknown'} • {club.created_at && new Date(club.created_at).toLocaleDateString()}
+                  {t('badma.app.createdBy')} {club.owner?.name ?? t('badma.app.unknown')} • {club.created_at && new Date(club.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -166,7 +168,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
             <div className="w-[300px] h-[400px] bg-background border-2 border-purple-500 rounded-lg shadow-xl flex flex-col items-center justify-center p-6">
               <div className="text-center">
                 <h2 className="text-xl font-semibold mb-6 text-foreground">
-                  {selectedClub?.title || 'Untitled Club'}
+                  {selectedClub?.title || t('badma.app.untitledClub')}
                 </h2>
                 {(() => {
                   const userClub = selectedClub ? getUserClubById(selectedClub.id) : null;
@@ -177,7 +179,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                       <div className="flex flex-col items-center space-y-3">
                         <div className="text-6xl mb-2">🎉</div>
                         <span className="text-lg font-semibold text-purple-600">
-                          {kind === 'club' ? 'Это наш клуб!' : 'Это наша школа!'}
+                          {kind === 'club' ? t('badma.app.ourClub') : t('badma.app.ourSchool')}
                         </span>
                         <Button 
                           className="h-[60px] w-[200px] bg-purple-600 hover:bg-purple-700 text-white flex flex-col items-center justify-center shadow-xl mt-4"
@@ -192,7 +194,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                         >
                           <Crown className="h-5 w-5 mb-1" />
                           <span className="text-sm font-medium">
-                            {kind === 'club' ? 'Перейти в клуб-холл' : 'Перейти в школьную приемную'}
+                            {kind === 'club' ? t('badma.app.goToClubHall') : t('badma.app.goToSchoolHall')}
                           </span>
                         </Button>
                       </div>
@@ -213,7 +215,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                             <Sword className="h-5 w-5 mb-1" />
                           )}
                           <span className="text-sm font-medium">
-                            {isJoiningClub ? 'Отправка...' : 'Бросить вызов'}
+                            {isJoiningClub ? t('badma.app.sendingChallenge') : t('badma.app.challengeClub')}
                           </span>
                         </Button>
                       )}
@@ -223,7 +225,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                         onClick={handleApplicationClick}
                       >
                         <UserPlus className="h-4 w-4 mb-1" />
-                        <span className="text-xs">Подать заявку</span>
+                        <span className="text-xs">{t('badma.app.applyToJoin')}</span>
                       </Button>
                       <Button 
                         className="h-[60px] w-[200px] bg-purple-100 hover:bg-purple-200 text-purple-700 flex flex-col items-center justify-center shadow"
@@ -237,7 +239,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
                         }}
                       >
                         <span className="text-xs font-medium">
-                          {kind === 'club' ? 'Клаб холл' : 'Школьная приемная'}
+                          {kind === 'club' ? t('badma.app.clubHall') : t('badma.app.schoolHall')}
                         </span>
                       </Button>
                     </div>
@@ -254,11 +256,11 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
         <DialogTitle></DialogTitle>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>{kind === 'club' ? 'Подать заявку на вступление в клуб?' : 'Подать заявку на вступление в школу?'}</DialogTitle>
+            <DialogTitle>{kind === 'club' ? t('badma.app.applyToClub') : t('badma.app.applyToSchool')}</DialogTitle>
             <DialogDescription>
               {kind === 'club' 
-                ? 'Если заявку примут - вы покинете клуб в котором находитесь.' 
-                : 'Если заявку примут - вы покинете школу в которой находитесь.'}
+                ? t('badma.app.applyDescription') 
+                : t('badma.app.applySchoolDescription')}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex gap-2">
@@ -267,7 +269,7 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
               onClick={() => setIsConfirmDialogOpen(false)}
               disabled={isSubmittingApplication}
             >
-              Отмена
+              {t('badma.app.cancel')}
             </Button>
             <Button 
               onClick={handleSubmitApplication}
@@ -277,10 +279,10 @@ export function ClubsList({ onNavigateToClubHall, onNavigateToSchoolHall, kind =
               {isSubmittingApplication ? (
                 <>
                   <LoaderCircle className="animate-spin h-4 w-4 mr-2" />
-                  Отправка...
+                  {t('badma.app.submitting')}
                 </>
               ) : (
-                'Подать заявку'
+                t('badma.app.submitApplication')
               )}
             </Button>
           </DialogFooter>
